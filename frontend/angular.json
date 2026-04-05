@@ -2,12 +2,11 @@
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
   "cli": {
-    "packageManager": "npm",
-    "analytics": false
+    "packageManager": "npm"
   },
   "newProjectRoot": "projects",
   "projects": {
-    "sistema_pago_de_nomina": {
+    "frontend": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -57,10 +56,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "sistema_pago_de_nomina:build:production"
+              "buildTarget": "frontend:build:production"
             },
             "development": {
-              "buildTarget": "sistema_pago_de_nomina:build:development"
+              "buildTarget": "frontend:build:development"
             }
           },
           "defaultConfiguration": "development"

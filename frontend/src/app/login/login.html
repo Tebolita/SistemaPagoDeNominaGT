@@ -1,0 +1,148 @@
+<div class="relative min-h-screen w-full flex items-center justify-center overflow-hidden">
+
+  <!-- Fondo a pantalla completa con el paisaje -->
+  <div class="absolute inset-0 z-0"
+       style="background: linear-gradient(145deg, #2d1b69 0%, #1a1145 40%, #0f0a2e 100%);">
+
+    <!-- Estrellas -->
+    <div class="absolute w-1 h-1 bg-white rounded-full opacity-70" style="top: 15%; left: 20%;"></div>
+    <div class="absolute w-1 h-1 bg-white rounded-full opacity-50" style="top: 25%; left: 65%;"></div>
+    <div class="absolute w-0.5 h-0.5 bg-white rounded-full opacity-60" style="top: 10%; left: 45%;"></div>
+    <div class="absolute w-0.5 h-0.5 bg-white rounded-full opacity-40" style="top: 35%; left: 30%;"></div>
+    <div class="absolute w-1 h-1 bg-white rounded-full opacity-50" style="top: 20%; left: 80%;"></div>
+    <div class="absolute w-0.5 h-0.5 bg-white rounded-full opacity-60" style="top: 45%; left: 55%;"></div>
+    <div class="absolute w-1 h-1 bg-white rounded-full opacity-30" style="top: 60%; left: 15%;"></div>
+    <div class="absolute w-0.5 h-0.5 bg-white rounded-full opacity-40" style="top: 70%; left: 75%;"></div>
+    <div class="absolute w-1 h-1 bg-white rounded-full opacity-50" style="top: 8%; left: 88%;"></div>
+    <div class="absolute w-0.5 h-0.5 bg-white rounded-full opacity-60" style="top: 55%; left: 40%;"></div>
+
+    <!-- Meteoros -->
+    <svg class="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
+      <line x1="60%" y1="8%" x2="72%" y2="20%" stroke="white" stroke-width="1" opacity="0.35"/>
+      <line x1="48%" y1="12%" x2="58%" y2="22%" stroke="white" stroke-width="0.8" opacity="0.25"/>
+      <line x1="75%" y1="5%" x2="83%" y2="14%" stroke="white" stroke-width="0.8" opacity="0.3"/>
+    </svg>
+
+    <!-- Luna -->
+    <div class="absolute" style="top: 30%; left: 30%; transform: translate(-50%, -50%);">
+      <div class="w-20 h-20 rounded-full" style="background: radial-gradient(circle at 40% 40%, #fbbf24, #f59e0b);"></div>
+    </div>
+
+    <!-- Colinas SVG -->
+    <div class="absolute bottom-0 left-0 right-0">
+      <svg viewBox="0 0 1440 400" xmlns="http://www.w3.org/2000/svg" class="w-full" preserveAspectRatio="none">
+        <ellipse cx="720" cy="480" rx="900" ry="300" fill="#1e1250" opacity="0.9"/>
+        <ellipse cx="150"  cy="480" rx="400" ry="260" fill="#16103d"/>
+        <ellipse cx="1300" cy="480" rx="400" ry="260" fill="#16103d"/>
+        <ellipse cx="500"  cy="500" rx="300" ry="200" fill="#120d38"/>
+        <ellipse cx="950"  cy="500" rx="300" ry="200" fill="#120d38"/>
+        <!-- Agua -->
+        <rect x="480" y="330" width="480" height="40" rx="6" fill="#0f0a2e" opacity="0.5"/>
+        <!-- Árboles -->
+        <polygon points="200,320 215,270 230,320" fill="#0f0a2e"/>
+        <polygon points="220,320 232,278 244,320" fill="#0f0a2e"/>
+        <polygon points="1200,315 1215,265 1230,315" fill="#0f0a2e"/>
+        <polygon points="1220,315 1232,273 1244,315" fill="#0f0a2e"/>
+      </svg>
+    </div>
+
+    <!-- Texto branding inferior izquierdo -->
+    <div class="absolute bottom-6 left-8 z-10">
+      <p class="text-indigo-300 text-sm opacity-70">Inicia sesión para acceder al sistema completo</p>
+      <p class="text-indigo-400 text-xs opacity-50 mt-1">Tip: Usa tus credenciales corporativas</p>
+    </div>
+
+    <!-- Título centrado en el fondo -->
+    <div class="absolute inset-0 flex flex-col items-center justify-center z-0 pointer-events-none">
+      <h1 class="text-white text-5xl font-light tracking-widest opacity-20">NÓMINA</h1>
+    </div>
+
+  </div>
+
+  <!-- Tarjeta del formulario con backdrop blur -->
+  <div class="relative z-10 w-full max-w-sm mx-4 rounded-2xl overflow-hidden shadow-2xl"
+       style="background: rgba(255, 255, 255, 0.12); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.2);">
+
+    <div class="px-8 py-10">
+
+      <!-- Saludo -->
+      <div class="mb-8 text-center">
+        <p class="text-indigo-200 text-sm font-light tracking-wide">¡Bienvenido!</p>
+        <h2 class="text-white text-3xl font-bold mt-1">{{ saludo }}</h2>
+        <h5 class="text-grey-200 mt-1">{{ horaActual }}</h5>
+        <div class="mt-3 w-10 h-px bg-indigo-400 mx-auto opacity-60"></div>
+      </div>
+
+      <div class="flex flex-col gap-5">
+
+        <!-- Usuario -->
+        <div class="flex flex-col gap-1">
+            <p-floatlabel variant="in">
+                <p-iconfield>
+                    <p-inputicon class="pi pi-search" />
+                    <input pInputText 
+                    id="userInput" 
+                    autocomplete="off"
+                    class="w-full"
+                    style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; border-radius: 8px;" />
+                </p-iconfield>
+                <label for="userInput"
+                style=" color: white;">Usuario</label>
+            </p-floatlabel>
+        </div>
+
+        <!-- Contraseña -->
+        <div class="flex flex-col gap-1">
+          <p-floatlabel variant="in">
+            <p-iconfield>
+              <p-inputicon class="pi pi-shield" />
+              <p-password
+                id="inputPassw"
+                [toggleMask]="true"
+                styleClass="w-full"
+                inputStyleClass="w-full"
+                [feedback]="false"
+                [inputStyle]="{'background': 'rgba(255,255,255,0.1)', 'border': '1px solid rgba(255,255,255,0.2)', 'color': 'white', 'border-radius': '8px'}"
+              />
+            </p-iconfield>
+            <label for="inputPassw" style="color: white;">Contraseña</label>
+          </p-floatlabel>
+        </div>
+
+        <!-- Clave -->
+        <div class="flex flex-col gap-1">
+          <p-floatlabel variant="in">
+            <p-iconfield>
+              <p-inputicon class="pi pi-key" />
+              <input pInputText 
+                id="codeInput" 
+                autocomplete="off"
+                class="w-full"
+                style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; border-radius: 8px;" />
+              </p-iconfield>
+              <label for="codeInput"
+              style=" color: white;">Clave</label>
+          </p-floatlabel>
+        </div>
+
+        <!-- Olvidé contraseña -->
+        <div class="text-right -mt-2">
+          <a href="#" class="text-indigo-300 text-xs hover:text-white transition-colors">¿Olvidaste tu contraseña?</a>
+        </div>
+
+        <!-- Botón -->
+        <button
+          pButton
+          label="Ingresar"
+          icon="pi pi-sign-in"
+          iconPos="right"
+          class="w-full mt-1"
+          style="background: #6366f1; border: none; border-radius: 8px; font-weight: 600; letter-spacing: 0.05em;"
+        ></button>
+
+      </div>
+
+    </div>
+  </div>
+
+</div>
