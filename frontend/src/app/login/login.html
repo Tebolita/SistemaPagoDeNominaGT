@@ -79,12 +79,13 @@
         <div class="flex flex-col gap-1">
             <p-floatlabel variant="in">
                 <p-iconfield>
-                    <p-inputicon class="pi pi-search" />
+                    <p-inputicon class="pi pi-user" />
                     <input pInputText 
                     id="userInput" 
                     autocomplete="off"
                     class="w-full"
-                    style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; border-radius: 8px;" />
+                    style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; border-radius: 8px;"
+                    [(ngModel)]="datos.Username" />
                 </p-iconfield>
                 <label for="userInput"
                 style=" color: white;">Usuario</label>
@@ -98,6 +99,7 @@
               <p-inputicon class="pi pi-shield" />
               <p-password
                 id="inputPassw"
+                [(ngModel)]="datos.Contrasena"
                 [toggleMask]="true"
                 styleClass="w-full"
                 inputStyleClass="w-full"
@@ -118,7 +120,9 @@
                 id="codeInput" 
                 autocomplete="off"
                 class="w-full"
-                style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; border-radius: 8px;" />
+                style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; border-radius: 8px;"
+                [(ngModel)]="datos.Clave"
+                />
               </p-iconfield>
               <label for="codeInput"
               style=" color: white;">Clave</label>
@@ -130,6 +134,9 @@
           <a href="#" class="text-indigo-300 text-xs hover:text-white transition-colors">¿Olvidaste tu contraseña?</a>
         </div>
 
+        <!-- Error devuelto -->
+        <p *ngIf="errorMsg" class="text-red-300 text-xs text-center">{{ errorMsg }}</p>
+
         <!-- Botón -->
         <button
           pButton
@@ -138,6 +145,8 @@
           iconPos="right"
           class="w-full mt-1"
           style="background: #6366f1; border: none; border-radius: 8px; font-weight: 600; letter-spacing: 0.05em;"
+          [loading]="loading"
+          (click)="onIngresar()"
         ></button>
 
       </div>

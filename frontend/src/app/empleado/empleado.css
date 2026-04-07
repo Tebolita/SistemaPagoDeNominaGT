@@ -1,0 +1,22 @@
+.inicio-layout {
+  display: flex;
+  height: 100%;
+  overflow: hidden;
+}
+
+.sidebarUser {
+  width: 15%;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.content-area {
+  flex: 1;
+  height: 100%;
+  overflow-y: auto;
+  background: var(--p-white-50);
+}
+
+.cardUser:hover{
+  background-color: rgba(44, 97, 232, 0.4);
+}

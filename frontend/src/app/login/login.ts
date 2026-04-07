@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, Input } from '@angular/core';
 import { CardModule } from 'primeng/card';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
@@ -7,6 +7,10 @@ import { CommonModule, formatDate } from '@angular/common';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { FloatLabelModule } from 'primeng/floatlabel';
+import { LoginService } from '../services/login.service';
+import { LoginRequest, LoginResponse } from '../models/login.model';
+import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -15,26 +19,35 @@ import { FloatLabelModule } from 'primeng/floatlabel';
     CommonModule,
     CardModule,
     InputTextModule,
+    FormsModule,
     PasswordModule,
     ButtonModule,
     FloatLabelModule,
     IconFieldModule,
-    InputIconModule
+    InputIconModule,
+    PasswordModule
   ],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
-export class Login implements OnInit, OnDestroy {
+export class Login implements OnInit {
   saludo: string  = '';
   horaActual: string = ''
-  private intervalo: any;
+  loading = false;
+  errorMsg = '';
+  datos = {
+    Username: '',
+    Contrasena: '',
+    Clave: ''
+  };
+
+  constructor(
+    private authService: LoginService,
+    private router: Router
+  ) {}
 
   ngOnInit(){
     this.actualizarSaludo()
-
-    this.intervalo = setInterval(() => {
-      this.actualizarSaludo();
-    }, 60000)
   }
 
   actualizarSaludo(){
@@ -50,9 +63,30 @@ export class Login implements OnInit, OnDestroy {
     }
   }
 
-  ngOnDestroy(): void {
-    if (this.intervalo) {
-      clearInterval(this.intervalo);
+  onIngresar(): void {
+    if (!this.datos.Username || !this.datos.Contrasena || !this.datos.Clave) {
+      this.errorMsg = 'Todos los campos son requeridos';
+      return;
     }
+
+    const payload: LoginRequest = {
+      Username: this.datos.Username,
+      Contrasena: this.datos.Contrasena,
+      Clave: Number(this.datos.Clave)
+    };
+
+    this.loading = true;
+    this.errorMsg = '';
+
+    this.authService.signIn(payload).subscribe({
+      next: (res: LoginResponse) => {
+        localStorage.setItem('access_token', res.access_token);
+        this.router.navigate(['/home']);
+      },
+      error: (err) => {
+        this.errorMsg = err.message;
+        this.loading = false;
+      }
+    });
   }
 }

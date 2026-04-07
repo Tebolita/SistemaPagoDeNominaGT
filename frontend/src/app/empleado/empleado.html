@@ -1,0 +1,65 @@
+<div class="inicio-layout">
+  <aside class="sidebarUser">
+    <h1 class="text-xl">Empleados</h1>
+    <p-divider>
+        <b>Opciones</b>
+    </p-divider>
+
+    <div class="card w-[98%]">
+        <p-menubar [model]="items">
+            <ng-template #item let-item>
+                <p-button 
+                    class="flex items-center px-3 py-2 cursor-pointer" 
+                    [severity]="item.severity">
+                    <span [class]="item.icon"></span>
+                </p-button>
+            </ng-template>
+        </p-menubar>
+    </div>
+    <p-divider>
+        <b>Usuarios</b>
+    </p-divider>
+    <div class="card flex sm:justify-center">
+        <p-toast />
+        <ul class="m-0 p-2 list-none flex flex-col gap-1 w-full">
+            @for (user of users; track user.id) {
+                <li
+                    class="flex items-center gap-3 px-3 py-2 rounded-lg border cursor-pointer transition-all duration-150 cardUser"
+                    [class.border-transparent]="selectedUser?.id !== user.id"
+                    [class.bg-transparent]="selectedUser?.id !== user.id"
+                    [class.hover:bg-surface-100]="selectedUser?.id !== user.id"
+                    [class.border-primary]="selectedUser?.id === user.id"
+                    [class.bg-primary-50]="selectedUser?.id === user.id"
+                    [class.dark:bg-primary-900-20]="selectedUser?.id === user.id"
+                    (click)="onSelectUser(user)"
+                    (contextmenu)="onContextMenu($event, user)"
+                >
+                    <!-- Avatar -->
+                    <img
+                        class="w-9 h-9 rounded-full flex-shrink-0 border border-surface-200 dark:border-surface-700 object-cover"
+                        [src]="'https://primefaces.org/cdn/primeng/images/demo/avatar/' + user.image"
+                        [alt]="user.name"
+                    />
+
+                    <!-- Nombre -->
+                    <span 
+                        class="flex-1 text-sm font-medium truncate"
+                        [class.text-primary]="selectedUser?.id === user.id">
+                        {{ user.name }}
+                    </span>
+
+                    <!-- Badge rol -->
+                    <p-tag 
+                        [value]="user.role" 
+                        [severity]="user.severity"
+                        styleClass="text-xs" />
+                </li>
+            }
+        </ul>
+
+        <p-contextmenu #cm [model]="usuarios" (onHide)="onHide()" />
+    </div>
+  </aside>
+
+  <main class="content-area"></main>
+</div>
