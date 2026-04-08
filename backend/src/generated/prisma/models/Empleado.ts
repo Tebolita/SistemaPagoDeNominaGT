@@ -53,6 +53,7 @@ export type EmpleadoMinAggregateOutputType = {
   Genero: boolean | null
   EstadoCivil: string | null
   Direccion: string | null
+  Fotografia: string | null
 }
 
 export type EmpleadoMaxAggregateOutputType = {
@@ -70,6 +71,7 @@ export type EmpleadoMaxAggregateOutputType = {
   Genero: boolean | null
   EstadoCivil: string | null
   Direccion: string | null
+  Fotografia: string | null
 }
 
 export type EmpleadoCountAggregateOutputType = {
@@ -87,6 +89,7 @@ export type EmpleadoCountAggregateOutputType = {
   Genero: number
   EstadoCivil: number
   Direccion: number
+  Fotografia: number
   _all: number
 }
 
@@ -118,6 +121,7 @@ export type EmpleadoMinAggregateInputType = {
   Genero?: true
   EstadoCivil?: true
   Direccion?: true
+  Fotografia?: true
 }
 
 export type EmpleadoMaxAggregateInputType = {
@@ -135,6 +139,7 @@ export type EmpleadoMaxAggregateInputType = {
   Genero?: true
   EstadoCivil?: true
   Direccion?: true
+  Fotografia?: true
 }
 
 export type EmpleadoCountAggregateInputType = {
@@ -152,6 +157,7 @@ export type EmpleadoCountAggregateInputType = {
   Genero?: true
   EstadoCivil?: true
   Direccion?: true
+  Fotografia?: true
   _all?: true
 }
 
@@ -256,6 +262,7 @@ export type EmpleadoGroupByOutputType = {
   Genero: boolean
   EstadoCivil: string | null
   Direccion: string | null
+  Fotografia: string | null
   _count: EmpleadoCountAggregateOutputType | null
   _avg: EmpleadoAvgAggregateOutputType | null
   _sum: EmpleadoSumAggregateOutputType | null
@@ -296,6 +303,7 @@ export type EmpleadoWhereInput = {
   Genero?: Prisma.BoolFilter<"Empleado"> | boolean
   EstadoCivil?: Prisma.StringNullableFilter<"Empleado"> | string | null
   Direccion?: Prisma.StringNullableFilter<"Empleado"> | string | null
+  Fotografia?: Prisma.StringNullableFilter<"Empleado"> | string | null
   Asistencia?: Prisma.AsistenciaListRelationFilter
   ControlVacacion?: Prisma.ControlVacacionListRelationFilter
   Puesto?: Prisma.XOR<Prisma.PuestoScalarRelationFilter, Prisma.PuestoWhereInput>
@@ -321,6 +329,7 @@ export type EmpleadoOrderByWithRelationInput = {
   Genero?: Prisma.SortOrder
   EstadoCivil?: Prisma.SortOrderInput | Prisma.SortOrder
   Direccion?: Prisma.SortOrderInput | Prisma.SortOrder
+  Fotografia?: Prisma.SortOrderInput | Prisma.SortOrder
   Asistencia?: Prisma.AsistenciaOrderByRelationAggregateInput
   ControlVacacion?: Prisma.ControlVacacionOrderByRelationAggregateInput
   Puesto?: Prisma.PuestoOrderByWithRelationInput
@@ -349,6 +358,7 @@ export type EmpleadoWhereUniqueInput = Prisma.AtLeast<{
   Genero?: Prisma.BoolFilter<"Empleado"> | boolean
   EstadoCivil?: Prisma.StringNullableFilter<"Empleado"> | string | null
   Direccion?: Prisma.StringNullableFilter<"Empleado"> | string | null
+  Fotografia?: Prisma.StringNullableFilter<"Empleado"> | string | null
   Asistencia?: Prisma.AsistenciaListRelationFilter
   ControlVacacion?: Prisma.ControlVacacionListRelationFilter
   Puesto?: Prisma.XOR<Prisma.PuestoScalarRelationFilter, Prisma.PuestoWhereInput>
@@ -374,6 +384,7 @@ export type EmpleadoOrderByWithAggregationInput = {
   Genero?: Prisma.SortOrder
   EstadoCivil?: Prisma.SortOrderInput | Prisma.SortOrder
   Direccion?: Prisma.SortOrderInput | Prisma.SortOrder
+  Fotografia?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.EmpleadoCountOrderByAggregateInput
   _avg?: Prisma.EmpleadoAvgOrderByAggregateInput
   _max?: Prisma.EmpleadoMaxOrderByAggregateInput
@@ -399,6 +410,7 @@ export type EmpleadoScalarWhereWithAggregatesInput = {
   Genero?: Prisma.BoolWithAggregatesFilter<"Empleado"> | boolean
   EstadoCivil?: Prisma.StringNullableWithAggregatesFilter<"Empleado"> | string | null
   Direccion?: Prisma.StringNullableWithAggregatesFilter<"Empleado"> | string | null
+  Fotografia?: Prisma.StringNullableWithAggregatesFilter<"Empleado"> | string | null
 }
 
 export type EmpleadoCreateInput = {
@@ -414,6 +426,7 @@ export type EmpleadoCreateInput = {
   Genero: boolean
   EstadoCivil?: string | null
   Direccion?: string | null
+  Fotografia?: string | null
   Asistencia?: Prisma.AsistenciaCreateNestedManyWithoutEmpleadoInput
   ControlVacacion?: Prisma.ControlVacacionCreateNestedManyWithoutEmpleadoInput
   Puesto: Prisma.PuestoCreateNestedOneWithoutEmpleadoInput
@@ -439,6 +452,7 @@ export type EmpleadoUncheckedCreateInput = {
   Genero: boolean
   EstadoCivil?: string | null
   Direccion?: string | null
+  Fotografia?: string | null
   Asistencia?: Prisma.AsistenciaUncheckedCreateNestedManyWithoutEmpleadoInput
   ControlVacacion?: Prisma.ControlVacacionUncheckedCreateNestedManyWithoutEmpleadoInput
   Incidencia?: Prisma.IncidenciaUncheckedCreateNestedManyWithoutEmpleadoInput
@@ -461,6 +475,7 @@ export type EmpleadoUpdateInput = {
   Genero?: Prisma.BoolFieldUpdateOperationsInput | boolean
   EstadoCivil?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Direccion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Fotografia?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Asistencia?: Prisma.AsistenciaUpdateManyWithoutEmpleadoNestedInput
   ControlVacacion?: Prisma.ControlVacacionUpdateManyWithoutEmpleadoNestedInput
   Puesto?: Prisma.PuestoUpdateOneRequiredWithoutEmpleadoNestedInput
@@ -486,6 +501,7 @@ export type EmpleadoUncheckedUpdateInput = {
   Genero?: Prisma.BoolFieldUpdateOperationsInput | boolean
   EstadoCivil?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Direccion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Fotografia?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Asistencia?: Prisma.AsistenciaUncheckedUpdateManyWithoutEmpleadoNestedInput
   ControlVacacion?: Prisma.ControlVacacionUncheckedUpdateManyWithoutEmpleadoNestedInput
   Incidencia?: Prisma.IncidenciaUncheckedUpdateManyWithoutEmpleadoNestedInput
@@ -509,6 +525,7 @@ export type EmpleadoCreateManyInput = {
   Genero: boolean
   EstadoCivil?: string | null
   Direccion?: string | null
+  Fotografia?: string | null
 }
 
 export type EmpleadoUpdateManyMutationInput = {
@@ -524,6 +541,7 @@ export type EmpleadoUpdateManyMutationInput = {
   Genero?: Prisma.BoolFieldUpdateOperationsInput | boolean
   EstadoCivil?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Direccion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Fotografia?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type EmpleadoUncheckedUpdateManyInput = {
@@ -541,6 +559,7 @@ export type EmpleadoUncheckedUpdateManyInput = {
   Genero?: Prisma.BoolFieldUpdateOperationsInput | boolean
   EstadoCivil?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Direccion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Fotografia?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type EmpleadoScalarRelationFilter = {
@@ -563,6 +582,7 @@ export type EmpleadoCountOrderByAggregateInput = {
   Genero?: Prisma.SortOrder
   EstadoCivil?: Prisma.SortOrder
   Direccion?: Prisma.SortOrder
+  Fotografia?: Prisma.SortOrder
 }
 
 export type EmpleadoAvgOrderByAggregateInput = {
@@ -586,6 +606,7 @@ export type EmpleadoMaxOrderByAggregateInput = {
   Genero?: Prisma.SortOrder
   EstadoCivil?: Prisma.SortOrder
   Direccion?: Prisma.SortOrder
+  Fotografia?: Prisma.SortOrder
 }
 
 export type EmpleadoMinOrderByAggregateInput = {
@@ -603,6 +624,7 @@ export type EmpleadoMinOrderByAggregateInput = {
   Genero?: Prisma.SortOrder
   EstadoCivil?: Prisma.SortOrder
   Direccion?: Prisma.SortOrder
+  Fotografia?: Prisma.SortOrder
 }
 
 export type EmpleadoSumOrderByAggregateInput = {
@@ -786,6 +808,7 @@ export type EmpleadoCreateWithoutAsistenciaInput = {
   Genero: boolean
   EstadoCivil?: string | null
   Direccion?: string | null
+  Fotografia?: string | null
   ControlVacacion?: Prisma.ControlVacacionCreateNestedManyWithoutEmpleadoInput
   Puesto: Prisma.PuestoCreateNestedOneWithoutEmpleadoInput
   Incidencia?: Prisma.IncidenciaCreateNestedManyWithoutEmpleadoInput
@@ -810,6 +833,7 @@ export type EmpleadoUncheckedCreateWithoutAsistenciaInput = {
   Genero: boolean
   EstadoCivil?: string | null
   Direccion?: string | null
+  Fotografia?: string | null
   ControlVacacion?: Prisma.ControlVacacionUncheckedCreateNestedManyWithoutEmpleadoInput
   Incidencia?: Prisma.IncidenciaUncheckedCreateNestedManyWithoutEmpleadoInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUncheckedCreateNestedManyWithoutEmpleadoInput
@@ -847,6 +871,7 @@ export type EmpleadoUpdateWithoutAsistenciaInput = {
   Genero?: Prisma.BoolFieldUpdateOperationsInput | boolean
   EstadoCivil?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Direccion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Fotografia?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ControlVacacion?: Prisma.ControlVacacionUpdateManyWithoutEmpleadoNestedInput
   Puesto?: Prisma.PuestoUpdateOneRequiredWithoutEmpleadoNestedInput
   Incidencia?: Prisma.IncidenciaUpdateManyWithoutEmpleadoNestedInput
@@ -871,6 +896,7 @@ export type EmpleadoUncheckedUpdateWithoutAsistenciaInput = {
   Genero?: Prisma.BoolFieldUpdateOperationsInput | boolean
   EstadoCivil?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Direccion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Fotografia?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ControlVacacion?: Prisma.ControlVacacionUncheckedUpdateManyWithoutEmpleadoNestedInput
   Incidencia?: Prisma.IncidenciaUncheckedUpdateManyWithoutEmpleadoNestedInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUncheckedUpdateManyWithoutEmpleadoNestedInput
@@ -892,6 +918,7 @@ export type EmpleadoCreateWithoutControlVacacionInput = {
   Genero: boolean
   EstadoCivil?: string | null
   Direccion?: string | null
+  Fotografia?: string | null
   Asistencia?: Prisma.AsistenciaCreateNestedManyWithoutEmpleadoInput
   Puesto: Prisma.PuestoCreateNestedOneWithoutEmpleadoInput
   Incidencia?: Prisma.IncidenciaCreateNestedManyWithoutEmpleadoInput
@@ -916,6 +943,7 @@ export type EmpleadoUncheckedCreateWithoutControlVacacionInput = {
   Genero: boolean
   EstadoCivil?: string | null
   Direccion?: string | null
+  Fotografia?: string | null
   Asistencia?: Prisma.AsistenciaUncheckedCreateNestedManyWithoutEmpleadoInput
   Incidencia?: Prisma.IncidenciaUncheckedCreateNestedManyWithoutEmpleadoInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUncheckedCreateNestedManyWithoutEmpleadoInput
@@ -953,6 +981,7 @@ export type EmpleadoUpdateWithoutControlVacacionInput = {
   Genero?: Prisma.BoolFieldUpdateOperationsInput | boolean
   EstadoCivil?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Direccion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Fotografia?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Asistencia?: Prisma.AsistenciaUpdateManyWithoutEmpleadoNestedInput
   Puesto?: Prisma.PuestoUpdateOneRequiredWithoutEmpleadoNestedInput
   Incidencia?: Prisma.IncidenciaUpdateManyWithoutEmpleadoNestedInput
@@ -977,6 +1006,7 @@ export type EmpleadoUncheckedUpdateWithoutControlVacacionInput = {
   Genero?: Prisma.BoolFieldUpdateOperationsInput | boolean
   EstadoCivil?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Direccion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Fotografia?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Asistencia?: Prisma.AsistenciaUncheckedUpdateManyWithoutEmpleadoNestedInput
   Incidencia?: Prisma.IncidenciaUncheckedUpdateManyWithoutEmpleadoNestedInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUncheckedUpdateManyWithoutEmpleadoNestedInput
@@ -998,6 +1028,7 @@ export type EmpleadoCreateWithoutIncidenciaInput = {
   Genero: boolean
   EstadoCivil?: string | null
   Direccion?: string | null
+  Fotografia?: string | null
   Asistencia?: Prisma.AsistenciaCreateNestedManyWithoutEmpleadoInput
   ControlVacacion?: Prisma.ControlVacacionCreateNestedManyWithoutEmpleadoInput
   Puesto: Prisma.PuestoCreateNestedOneWithoutEmpleadoInput
@@ -1022,6 +1053,7 @@ export type EmpleadoUncheckedCreateWithoutIncidenciaInput = {
   Genero: boolean
   EstadoCivil?: string | null
   Direccion?: string | null
+  Fotografia?: string | null
   Asistencia?: Prisma.AsistenciaUncheckedCreateNestedManyWithoutEmpleadoInput
   ControlVacacion?: Prisma.ControlVacacionUncheckedCreateNestedManyWithoutEmpleadoInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUncheckedCreateNestedManyWithoutEmpleadoInput
@@ -1059,6 +1091,7 @@ export type EmpleadoUpdateWithoutIncidenciaInput = {
   Genero?: Prisma.BoolFieldUpdateOperationsInput | boolean
   EstadoCivil?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Direccion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Fotografia?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Asistencia?: Prisma.AsistenciaUpdateManyWithoutEmpleadoNestedInput
   ControlVacacion?: Prisma.ControlVacacionUpdateManyWithoutEmpleadoNestedInput
   Puesto?: Prisma.PuestoUpdateOneRequiredWithoutEmpleadoNestedInput
@@ -1083,6 +1116,7 @@ export type EmpleadoUncheckedUpdateWithoutIncidenciaInput = {
   Genero?: Prisma.BoolFieldUpdateOperationsInput | boolean
   EstadoCivil?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Direccion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Fotografia?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Asistencia?: Prisma.AsistenciaUncheckedUpdateManyWithoutEmpleadoNestedInput
   ControlVacacion?: Prisma.ControlVacacionUncheckedUpdateManyWithoutEmpleadoNestedInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUncheckedUpdateManyWithoutEmpleadoNestedInput
@@ -1104,6 +1138,7 @@ export type EmpleadoCreateWithoutMovimientoEmpleadoInput = {
   Genero: boolean
   EstadoCivil?: string | null
   Direccion?: string | null
+  Fotografia?: string | null
   Asistencia?: Prisma.AsistenciaCreateNestedManyWithoutEmpleadoInput
   ControlVacacion?: Prisma.ControlVacacionCreateNestedManyWithoutEmpleadoInput
   Puesto: Prisma.PuestoCreateNestedOneWithoutEmpleadoInput
@@ -1128,6 +1163,7 @@ export type EmpleadoUncheckedCreateWithoutMovimientoEmpleadoInput = {
   Genero: boolean
   EstadoCivil?: string | null
   Direccion?: string | null
+  Fotografia?: string | null
   Asistencia?: Prisma.AsistenciaUncheckedCreateNestedManyWithoutEmpleadoInput
   ControlVacacion?: Prisma.ControlVacacionUncheckedCreateNestedManyWithoutEmpleadoInput
   Incidencia?: Prisma.IncidenciaUncheckedCreateNestedManyWithoutEmpleadoInput
@@ -1165,6 +1201,7 @@ export type EmpleadoUpdateWithoutMovimientoEmpleadoInput = {
   Genero?: Prisma.BoolFieldUpdateOperationsInput | boolean
   EstadoCivil?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Direccion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Fotografia?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Asistencia?: Prisma.AsistenciaUpdateManyWithoutEmpleadoNestedInput
   ControlVacacion?: Prisma.ControlVacacionUpdateManyWithoutEmpleadoNestedInput
   Puesto?: Prisma.PuestoUpdateOneRequiredWithoutEmpleadoNestedInput
@@ -1189,6 +1226,7 @@ export type EmpleadoUncheckedUpdateWithoutMovimientoEmpleadoInput = {
   Genero?: Prisma.BoolFieldUpdateOperationsInput | boolean
   EstadoCivil?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Direccion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Fotografia?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Asistencia?: Prisma.AsistenciaUncheckedUpdateManyWithoutEmpleadoNestedInput
   ControlVacacion?: Prisma.ControlVacacionUncheckedUpdateManyWithoutEmpleadoNestedInput
   Incidencia?: Prisma.IncidenciaUncheckedUpdateManyWithoutEmpleadoNestedInput
@@ -1210,6 +1248,7 @@ export type EmpleadoCreateWithoutNominaDetalleInput = {
   Genero: boolean
   EstadoCivil?: string | null
   Direccion?: string | null
+  Fotografia?: string | null
   Asistencia?: Prisma.AsistenciaCreateNestedManyWithoutEmpleadoInput
   ControlVacacion?: Prisma.ControlVacacionCreateNestedManyWithoutEmpleadoInput
   Puesto: Prisma.PuestoCreateNestedOneWithoutEmpleadoInput
@@ -1234,6 +1273,7 @@ export type EmpleadoUncheckedCreateWithoutNominaDetalleInput = {
   Genero: boolean
   EstadoCivil?: string | null
   Direccion?: string | null
+  Fotografia?: string | null
   Asistencia?: Prisma.AsistenciaUncheckedCreateNestedManyWithoutEmpleadoInput
   ControlVacacion?: Prisma.ControlVacacionUncheckedCreateNestedManyWithoutEmpleadoInput
   Incidencia?: Prisma.IncidenciaUncheckedCreateNestedManyWithoutEmpleadoInput
@@ -1271,6 +1311,7 @@ export type EmpleadoUpdateWithoutNominaDetalleInput = {
   Genero?: Prisma.BoolFieldUpdateOperationsInput | boolean
   EstadoCivil?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Direccion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Fotografia?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Asistencia?: Prisma.AsistenciaUpdateManyWithoutEmpleadoNestedInput
   ControlVacacion?: Prisma.ControlVacacionUpdateManyWithoutEmpleadoNestedInput
   Puesto?: Prisma.PuestoUpdateOneRequiredWithoutEmpleadoNestedInput
@@ -1295,6 +1336,7 @@ export type EmpleadoUncheckedUpdateWithoutNominaDetalleInput = {
   Genero?: Prisma.BoolFieldUpdateOperationsInput | boolean
   EstadoCivil?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Direccion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Fotografia?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Asistencia?: Prisma.AsistenciaUncheckedUpdateManyWithoutEmpleadoNestedInput
   ControlVacacion?: Prisma.ControlVacacionUncheckedUpdateManyWithoutEmpleadoNestedInput
   Incidencia?: Prisma.IncidenciaUncheckedUpdateManyWithoutEmpleadoNestedInput
@@ -1316,6 +1358,7 @@ export type EmpleadoCreateWithoutPuestoInput = {
   Genero: boolean
   EstadoCivil?: string | null
   Direccion?: string | null
+  Fotografia?: string | null
   Asistencia?: Prisma.AsistenciaCreateNestedManyWithoutEmpleadoInput
   ControlVacacion?: Prisma.ControlVacacionCreateNestedManyWithoutEmpleadoInput
   Incidencia?: Prisma.IncidenciaCreateNestedManyWithoutEmpleadoInput
@@ -1339,6 +1382,7 @@ export type EmpleadoUncheckedCreateWithoutPuestoInput = {
   Genero: boolean
   EstadoCivil?: string | null
   Direccion?: string | null
+  Fotografia?: string | null
   Asistencia?: Prisma.AsistenciaUncheckedCreateNestedManyWithoutEmpleadoInput
   ControlVacacion?: Prisma.ControlVacacionUncheckedCreateNestedManyWithoutEmpleadoInput
   Incidencia?: Prisma.IncidenciaUncheckedCreateNestedManyWithoutEmpleadoInput
@@ -1391,6 +1435,7 @@ export type EmpleadoScalarWhereInput = {
   Genero?: Prisma.BoolFilter<"Empleado"> | boolean
   EstadoCivil?: Prisma.StringNullableFilter<"Empleado"> | string | null
   Direccion?: Prisma.StringNullableFilter<"Empleado"> | string | null
+  Fotografia?: Prisma.StringNullableFilter<"Empleado"> | string | null
 }
 
 export type EmpleadoCreateWithoutSalarioInput = {
@@ -1406,6 +1451,7 @@ export type EmpleadoCreateWithoutSalarioInput = {
   Genero: boolean
   EstadoCivil?: string | null
   Direccion?: string | null
+  Fotografia?: string | null
   Asistencia?: Prisma.AsistenciaCreateNestedManyWithoutEmpleadoInput
   ControlVacacion?: Prisma.ControlVacacionCreateNestedManyWithoutEmpleadoInput
   Puesto: Prisma.PuestoCreateNestedOneWithoutEmpleadoInput
@@ -1430,6 +1476,7 @@ export type EmpleadoUncheckedCreateWithoutSalarioInput = {
   Genero: boolean
   EstadoCivil?: string | null
   Direccion?: string | null
+  Fotografia?: string | null
   Asistencia?: Prisma.AsistenciaUncheckedCreateNestedManyWithoutEmpleadoInput
   ControlVacacion?: Prisma.ControlVacacionUncheckedCreateNestedManyWithoutEmpleadoInput
   Incidencia?: Prisma.IncidenciaUncheckedCreateNestedManyWithoutEmpleadoInput
@@ -1467,6 +1514,7 @@ export type EmpleadoUpdateWithoutSalarioInput = {
   Genero?: Prisma.BoolFieldUpdateOperationsInput | boolean
   EstadoCivil?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Direccion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Fotografia?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Asistencia?: Prisma.AsistenciaUpdateManyWithoutEmpleadoNestedInput
   ControlVacacion?: Prisma.ControlVacacionUpdateManyWithoutEmpleadoNestedInput
   Puesto?: Prisma.PuestoUpdateOneRequiredWithoutEmpleadoNestedInput
@@ -1491,6 +1539,7 @@ export type EmpleadoUncheckedUpdateWithoutSalarioInput = {
   Genero?: Prisma.BoolFieldUpdateOperationsInput | boolean
   EstadoCivil?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Direccion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Fotografia?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Asistencia?: Prisma.AsistenciaUncheckedUpdateManyWithoutEmpleadoNestedInput
   ControlVacacion?: Prisma.ControlVacacionUncheckedUpdateManyWithoutEmpleadoNestedInput
   Incidencia?: Prisma.IncidenciaUncheckedUpdateManyWithoutEmpleadoNestedInput
@@ -1512,6 +1561,7 @@ export type EmpleadoCreateWithoutUsuarioInput = {
   Genero: boolean
   EstadoCivil?: string | null
   Direccion?: string | null
+  Fotografia?: string | null
   Asistencia?: Prisma.AsistenciaCreateNestedManyWithoutEmpleadoInput
   ControlVacacion?: Prisma.ControlVacacionCreateNestedManyWithoutEmpleadoInput
   Puesto: Prisma.PuestoCreateNestedOneWithoutEmpleadoInput
@@ -1536,6 +1586,7 @@ export type EmpleadoUncheckedCreateWithoutUsuarioInput = {
   Genero: boolean
   EstadoCivil?: string | null
   Direccion?: string | null
+  Fotografia?: string | null
   Asistencia?: Prisma.AsistenciaUncheckedCreateNestedManyWithoutEmpleadoInput
   ControlVacacion?: Prisma.ControlVacacionUncheckedCreateNestedManyWithoutEmpleadoInput
   Incidencia?: Prisma.IncidenciaUncheckedCreateNestedManyWithoutEmpleadoInput
@@ -1573,6 +1624,7 @@ export type EmpleadoUpdateWithoutUsuarioInput = {
   Genero?: Prisma.BoolFieldUpdateOperationsInput | boolean
   EstadoCivil?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Direccion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Fotografia?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Asistencia?: Prisma.AsistenciaUpdateManyWithoutEmpleadoNestedInput
   ControlVacacion?: Prisma.ControlVacacionUpdateManyWithoutEmpleadoNestedInput
   Puesto?: Prisma.PuestoUpdateOneRequiredWithoutEmpleadoNestedInput
@@ -1597,6 +1649,7 @@ export type EmpleadoUncheckedUpdateWithoutUsuarioInput = {
   Genero?: Prisma.BoolFieldUpdateOperationsInput | boolean
   EstadoCivil?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Direccion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Fotografia?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Asistencia?: Prisma.AsistenciaUncheckedUpdateManyWithoutEmpleadoNestedInput
   ControlVacacion?: Prisma.ControlVacacionUncheckedUpdateManyWithoutEmpleadoNestedInput
   Incidencia?: Prisma.IncidenciaUncheckedUpdateManyWithoutEmpleadoNestedInput
@@ -1618,6 +1671,7 @@ export type EmpleadoCreateManyPuestoInput = {
   Genero: boolean
   EstadoCivil?: string | null
   Direccion?: string | null
+  Fotografia?: string | null
 }
 
 export type EmpleadoUpdateWithoutPuestoInput = {
@@ -1633,6 +1687,7 @@ export type EmpleadoUpdateWithoutPuestoInput = {
   Genero?: Prisma.BoolFieldUpdateOperationsInput | boolean
   EstadoCivil?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Direccion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Fotografia?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Asistencia?: Prisma.AsistenciaUpdateManyWithoutEmpleadoNestedInput
   ControlVacacion?: Prisma.ControlVacacionUpdateManyWithoutEmpleadoNestedInput
   Incidencia?: Prisma.IncidenciaUpdateManyWithoutEmpleadoNestedInput
@@ -1656,6 +1711,7 @@ export type EmpleadoUncheckedUpdateWithoutPuestoInput = {
   Genero?: Prisma.BoolFieldUpdateOperationsInput | boolean
   EstadoCivil?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Direccion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Fotografia?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Asistencia?: Prisma.AsistenciaUncheckedUpdateManyWithoutEmpleadoNestedInput
   ControlVacacion?: Prisma.ControlVacacionUncheckedUpdateManyWithoutEmpleadoNestedInput
   Incidencia?: Prisma.IncidenciaUncheckedUpdateManyWithoutEmpleadoNestedInput
@@ -1679,6 +1735,7 @@ export type EmpleadoUncheckedUpdateManyWithoutPuestoInput = {
   Genero?: Prisma.BoolFieldUpdateOperationsInput | boolean
   EstadoCivil?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Direccion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Fotografia?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -1781,6 +1838,7 @@ export type EmpleadoSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   Genero?: boolean
   EstadoCivil?: boolean
   Direccion?: boolean
+  Fotografia?: boolean
   Asistencia?: boolean | Prisma.Empleado$AsistenciaArgs<ExtArgs>
   ControlVacacion?: boolean | Prisma.Empleado$ControlVacacionArgs<ExtArgs>
   Puesto?: boolean | Prisma.PuestoDefaultArgs<ExtArgs>
@@ -1809,9 +1867,10 @@ export type EmpleadoSelectScalar = {
   Genero?: boolean
   EstadoCivil?: boolean
   Direccion?: boolean
+  Fotografia?: boolean
 }
 
-export type EmpleadoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"IdEmpleado" | "DPI" | "NIT" | "Nombres" | "Apellidos" | "CorreoPersonal" | "FechaIngresa" | "IdPuesto" | "Estado" | "FechaEliminacion" | "Telefono" | "Genero" | "EstadoCivil" | "Direccion", ExtArgs["result"]["empleado"]>
+export type EmpleadoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"IdEmpleado" | "DPI" | "NIT" | "Nombres" | "Apellidos" | "CorreoPersonal" | "FechaIngresa" | "IdPuesto" | "Estado" | "FechaEliminacion" | "Telefono" | "Genero" | "EstadoCivil" | "Direccion" | "Fotografia", ExtArgs["result"]["empleado"]>
 export type EmpleadoInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   Asistencia?: boolean | Prisma.Empleado$AsistenciaArgs<ExtArgs>
   ControlVacacion?: boolean | Prisma.Empleado$ControlVacacionArgs<ExtArgs>
@@ -1851,6 +1910,7 @@ export type $EmpleadoPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     Genero: boolean
     EstadoCivil: string | null
     Direccion: string | null
+    Fotografia: string | null
   }, ExtArgs["result"]["empleado"]>
   composites: {}
 }
@@ -2242,6 +2302,7 @@ export interface EmpleadoFieldRefs {
   readonly Genero: Prisma.FieldRef<"Empleado", 'Boolean'>
   readonly EstadoCivil: Prisma.FieldRef<"Empleado", 'String'>
   readonly Direccion: Prisma.FieldRef<"Empleado", 'String'>
+  readonly Fotografia: Prisma.FieldRef<"Empleado", 'String'>
 }
     
 

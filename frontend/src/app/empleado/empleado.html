@@ -19,40 +19,41 @@
     <p-divider>
         <b>Usuarios</b>
     </p-divider>
+    <p *ngIf="error" class="text-red-300 text-xs text-center">{{ error }}</p>
     <div class="card flex sm:justify-center">
         <p-toast />
         <ul class="m-0 p-2 list-none flex flex-col gap-1 w-full">
-            @for (user of users; track user.id) {
+            @for (user of users; track user.IdEmpleado) {
                 <li
                     class="flex items-center gap-3 px-3 py-2 rounded-lg border cursor-pointer transition-all duration-150 cardUser"
-                    [class.border-transparent]="selectedUser?.id !== user.id"
-                    [class.bg-transparent]="selectedUser?.id !== user.id"
-                    [class.hover:bg-surface-100]="selectedUser?.id !== user.id"
-                    [class.border-primary]="selectedUser?.id === user.id"
-                    [class.bg-primary-50]="selectedUser?.id === user.id"
-                    [class.dark:bg-primary-900-20]="selectedUser?.id === user.id"
-                    (click)="onSelectUser(user)"
+                    [class.border-transparent]="selectedUser?.IdEmpleado !== user.IdEmpleado"
+                    [class.bg-transparent]="selectedUser?.IdEmpleado !== user.IdEmpleado"
+                    [class.hover:bg-surface-100]="selectedUser?.IdEmpleado !== user.IdEmpleado"
+                    [class.border-primary]="selectedUser?.IdEmpleado === user.IdEmpleado"
+                    [class.bg-primary-50]="selectedUser?.IdEmpleado === user.IdEmpleado"
+                    [class.dark:bg-primary-900-20]="selectedUser?.IdEmpleado === user.IdEmpleado"
+                    (click)="onSelectUser(user)"  
                     (contextmenu)="onContextMenu($event, user)"
                 >
-                    <!-- Avatar -->
-                    <img
-                        class="w-9 h-9 rounded-full flex-shrink-0 border border-surface-200 dark:border-surface-700 object-cover"
-                        [src]="'https://primefaces.org/cdn/primeng/images/demo/avatar/' + user.image"
-                        [alt]="user.name"
-                    />
+                
+                <!-- Avatar -->
+                <img
+                    class="w-9 h-9 rounded-full flex-shrink-0 border border-surface-200 dark:border-surface-700 object-cover"
+                    [src]="user.Fotografia"
+                    [alt]="user.Nombres"
+                />
 
-                    <!-- Nombre -->
-                    <span 
-                        class="flex-1 text-sm font-medium truncate"
-                        [class.text-primary]="selectedUser?.id === user.id">
-                        {{ user.name }}
-                    </span>
+                <!-- Nombre -->
+                <span 
+                    class="flex-1 text-sm font-medium truncate"
+                    [class.text-primary]="selectedUser?.IdEmpleado === user.IdEmpleado">
+                    {{ user.Nombres }} {{ user.Apellidos }}
+                </span>
 
-                    <!-- Badge rol -->
-                    <p-tag 
-                        [value]="user.role" 
-                        [severity]="user.severity"
-                        styleClass="text-xs" />
+                <!-- Badge rol -->
+                <p-tag 
+                    [value]="user.Usuario[0].RolUsuario.NombreRol" 
+                    styleClass="text-sm" />
                 </li>
             }
         </ul>
@@ -61,5 +62,102 @@
     </div>
   </aside>
 
-  <main class="content-area"></main>
+  <main class="content-area">
+    @if (selectedUser) {
+        <div class="card">
+            <p-fieldset class="w-full" legend="Información General">
+                <div class="flex gap-2">
+
+                    <!-- Columna izquierda — Avatar -->
+                    <div class="flex flex-col items-center gap-3 w-[300px] flex-shrink-0">
+                        <p-avatar 
+                            shape="circle"
+                            [image]="selectedUser.Fotografia"
+                            [style]="{ width: '120px', height: '120px' }" />
+                        <span class="font-semibold text-lg">
+                            {{ selectedUser.Nombres }} {{ selectedUser.Apellidos }}
+                        </span>
+                        <p-tag 
+                            [value]="selectedUser.Usuario[0]?.RolUsuario?.NombreRol ?? 'Sin rol'" 
+                            severity="info" />
+                        <div class="flex justify-center flex-wrap gap-4">
+                            <p-tag 
+                                [value]="selectedUser.Estado ? 'Activo' : 'Inactivo'" 
+                                [severity]="selectedUser.Estado ? 'success' : 'danger'" />
+                            <p-tag 
+                                [value]="selectedUser.Genero ? 'Femenino' : 'Masculino'" 
+                                [severity]="selectedUser.Genero ? 'success' : 'danger'" />    
+                        </div>
+
+                        <p *ngIf="messageResponsive" class="text-red-300 text-xs text-center">{{ messageResponsive }}</p>
+                        <p-divider   />
+                        <div class="flex justify-center flex-wrap gap-4">
+                            <p-button icon="pi pi-save" severity="success" (click)="onUpdateUser()"   />
+                            <p-button icon="pi pi-times" severity="danger"  (click)="onDeleteUser()"/>
+                        </div>                     
+                    </div>
+
+                    <p-divider layout="vertical" />
+
+                    <!-- Columna derecha — Información -->
+                    <div class="flex flex-col gap-4 flex-1">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="flex flex-col gap-1">
+                                <label class="text-xs text-surface-500">DPI</label>
+                                <input pInputText [value]="selectedUser.DPI" [readonly]="editarUsuario ? false : true"   />
+                            </div>
+                            <div class="flex flex-col gap-1">
+                                <label class="text-xs text-surface-500">NIT</label>
+                                <input pInputText [value]="selectedUser.NIT" [readonly]="editarUsuario ? false : true"  />
+                            </div>
+                            <div class="flex flex-col gap-1">
+                                <label class="text-xs text-surface-500">Correo</label>
+                                <input pInputText [value]="selectedUser.CorreoPersonal" [readonly]="editarUsuario ? false : true"  />
+                            </div>
+                            <div class="flex flex-col gap-1">
+                                <label class="text-xs text-surface-500">Teléfono</label>
+                                <input pInputText [value]="selectedUser.Telefono" [readonly]="editarUsuario ? false : true"  />
+                            </div>
+                            <div class="flex flex-col gap-1">
+                                <label class="text-xs text-surface-500">Dirección</label>
+                                <input pInputText [value]="selectedUser.Direccion" [readonly]="editarUsuario ? false : true"  />
+                            </div>
+                            <div class="flex flex-col gap-1">
+                                <label class="text-xs text-surface-500">Estado civil</label>
+                                <input pInputText [value]="selectedUser.EstadoCivil" [readonly]="editarUsuario ? false : true"  />
+                            </div>
+                            <div class="flex flex-col gap-1">
+                                <label class="text-xs text-surface-500">Fecha de ingreso</label>
+                                <input pInputText [value]="selectedUser.FechaIngresa | date:'dd/MM/yyyy'" [readonly]="editarUsuario ? false : true"  />
+                            </div>
+                            <div class="flex flex-col gap-1">
+                                <label class="text-xs text-surface-500">Fecha de eliminicación</label>
+                                <input pInputText [value]="selectedUser.FechaEliminacion ? (selectedUser.FechaEliminacion | date:'dd/MM/yyyy') : 'Sin fecha'" [readonly]="editarUsuario && selectedUser.FechaEliminacion ? false : true"  />
+                            </div>                            
+                        </div>
+                    </div>
+
+                </div>
+            </p-fieldset>
+        </div>
+        <div class="card mt-4">
+            <p-fieldset class="w-full" legend="Incidencias">
+
+            </p-fieldset>
+        </div>
+
+        <div class="card mt-4">
+            <p-fieldset class="w-full" legend="Vacaciones">
+
+            </p-fieldset>
+        </div> 
+
+        <div class="card mt-4">
+            <p-fieldset class="w-full" legend="Asistencias">
+
+            </p-fieldset>
+        </div> 
+
+    }
+  </main>
 </div>

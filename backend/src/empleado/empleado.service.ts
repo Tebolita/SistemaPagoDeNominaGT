@@ -18,7 +18,9 @@ export class EmpleadoService {
   }
 
   async findAll() {
-    return await this.prismaService.empleado.findMany();
+    return await this.prismaService.empleado.findMany({
+      include: {Usuario: {select: {RolUsuario: {select: {NombreRol:true}}}}}
+    });
   }
 
   async findOne(idEmpleado: number) {

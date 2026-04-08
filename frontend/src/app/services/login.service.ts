@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import { catchError, Observable, throwError } from "rxjs";
 import { LoginRequest,LoginResponse } from "../models/login.model";
 
@@ -18,7 +18,6 @@ export class LoginService{
     }
 
   private handleError(error: any): Observable<never> {
-    console.error('Error en la API:', error);
     return throwError(() => new Error('Error del servidor'));
   }    
 }

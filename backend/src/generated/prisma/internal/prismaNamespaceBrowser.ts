@@ -130,7 +130,8 @@ export const EmpleadoScalarFieldEnum = {
   Telefono: 'Telefono',
   Genero: 'Genero',
   EstadoCivil: 'EstadoCivil',
-  Direccion: 'Direccion'
+  Direccion: 'Direccion',
+  Fotografia: 'Fotografia'
 } as const
 
 export type EmpleadoScalarFieldEnum = (typeof EmpleadoScalarFieldEnum)[keyof typeof EmpleadoScalarFieldEnum]

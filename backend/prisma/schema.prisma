@@ -48,6 +48,7 @@ model Empleado {
   Genero             Boolean
   EstadoCivil        String?              @db.VarChar(100)
   Direccion          String?              @db.VarChar(100)
+  Fotografia         String?              @db.VarChar(200)
   Asistencia         Asistencia[]
   ControlVacacion    ControlVacacion[]
   Puesto             Puesto               @relation(fields: [IdPuesto], references: [IdPuesto], onUpdate: NoAction, map: "FK_Empleado_Puesto")

@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, ViewChild } from '@angular/core';
+import { Component, OnInit, inject, ViewChild, OnDestroy, ChangeDetectorRef  } from '@angular/core';
 import { MenubarModule } from 'primeng/menubar';
 import { MenuItem, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
@@ -7,32 +7,45 @@ import { ContextMenu, ContextMenuModule } from 'primeng/contextmenu';
 import { TagModule } from 'primeng/tag';
 import { ToastModule } from 'primeng/toast';
 import { CommonModule } from '@angular/common';
+import { EmpleadoService } from '../services/empleado.service';
+import { EmpleadoInterface, EmpleadoResponse } from '../models/Empleado.model';
+import { Subject, takeUntil } from 'rxjs';
+import { AvatarModule } from 'primeng/avatar';
+import { FieldsetModule } from 'primeng/fieldset';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+import { InputTextModule } from 'primeng/inputtext';
 
 type Severity = "success" | "info" | "warn" | "danger" | "secondary" | "contrast" | null | undefined
 
-interface Users {
-    id: number;
-    name: string;
-    image: string;
-    role: string;
-    severity: Severity;
-}
-
 @Component({
     selector: 'app-empleado',
-    imports: [MenubarModule, ButtonModule, Divider, ContextMenuModule, TagModule, ToastModule, CommonModule],
+    imports: [MenubarModule, ButtonModule, Divider, ContextMenuModule, 
+        TagModule, ToastModule, CommonModule, AvatarModule, FieldsetModule, IconFieldModule,
+        InputIconModule, InputTextModule],
     providers: [MessageService],
     templateUrl: './empleado.html',
     styleUrl: './empleado.css',
 })
-export class Empleado implements OnInit {
-    @ViewChild('cm') cm!: ContextMenu;  
+export class Empleado implements OnInit, OnDestroy {
+    @ViewChild('cm') cm!: ContextMenu;
+    loading = false;  
+    error ='';
+    messageResponsive = '';
+    private destroy$ = new Subject<void>();
+
     items: MenuItem[] | undefined;
     usuarios: MenuItem[] | undefined;
-    users: Users[] = [];                       
-    selectedUser: Users | null = null;  
+    users: EmpleadoInterface[] = [];                       
+    selectedUser: EmpleadoInterface | null = null;
+    editarUsuario: boolean = false;
 
     private messageService = inject(MessageService);
+
+    constructor(
+        private empleadoService: EmpleadoService,
+        private cdr: ChangeDetectorRef
+    ) {}
 
     ngOnInit() {
         this.items = [
@@ -40,22 +53,14 @@ export class Empleado implements OnInit {
             { icon: 'pi pi-file-export', severity: 'warn' },
         ];
 
-        this.users = [
-            { id: 0, name: 'Kevin Alejandro Reyes Revolorio', image: 'amyelsner.png', role: 'Admin', severity: 'danger' },
-            { id: 1, name: 'Anna Fali',         image: 'annafali.png',         role: 'Member', severity: 'secondary' },
-            { id: 2, name: 'Asiya Javayant',    image: 'asiyajavayant.png',    role: 'Member', severity: 'secondary' },
-            { id: 3, name: 'Bernardo Dominic',  image: 'bernardodominic.png',  role: 'Guest', severity: 'warn'  },
-            { id: 4, name: 'Elwin Sharvill',    image: 'elwinsharvill.png',    role: 'Member', severity: 'secondary' }
-        ];
-
         this.usuarios = [
             {
                 label: 'Roles',
                 icon: 'pi pi-users',
                 items: [
-                    { label: 'Admin',  command: () => { if (this.selectedUser) this.selectedUser.role = 'Admin', this.selectedUser.severity = 'danger';  } },
-                    { label: 'Member', command: () => { if (this.selectedUser) this.selectedUser.role = 'Member', this.selectedUser.severity = 'secondary'; } },
-                    { label: 'Guest',  command: () => { if (this.selectedUser) this.selectedUser.role = 'Guest', this.selectedUser.severity = 'warn';  } }
+                    { label: 'Admin',  command: () => { if (this.selectedUser) this.selectedUser.Usuario[0].RolUsuario.NombreRol = 'Admin' } },
+                    { label: 'Member', command: () => { if (this.selectedUser) this.selectedUser.Usuario[0].RolUsuario.NombreRol = 'Member' } },
+                    { label: 'Guest',  command: () => { if (this.selectedUser) this.selectedUser.Usuario[0].RolUsuario.NombreRol = 'Guest'  } }
                 ]
             },
             {
@@ -71,15 +76,17 @@ export class Empleado implements OnInit {
                 }
             }
         ];
+
+        this.cargarEmpleados();
     }
 
-    getBadge(user: Users): string | null {  
-        if (user.role === 'Member') return 'info';
-        if (user.role === 'Guest')  return 'warn';
+    getBadge(user: EmpleadoInterface): string | null {  
+        if (user.Usuario[0].RolUsuario.NombreRol === 'Member') return 'info';
+        if (user.Usuario[0].RolUsuario.NombreRol === 'Guest')  return 'warn';
         return null;
     }
 
-    onContextMenu(event: MouseEvent, user: Users) {  
+    onContextMenu(event: MouseEvent, user: EmpleadoInterface) {  
         this.selectedUser = user;
         this.cm.show(event);
     }
@@ -88,8 +95,56 @@ export class Empleado implements OnInit {
         this.selectedUser = null;
     }
 
-    onSelectUser(user: Users) {
-        console.log(user)
+    onSelectUser(user: EmpleadoInterface) {
+        this.editarUsuario = true;
         this.selectedUser = user;
     }
+
+    // Consumir empleados
+    cargarEmpleados(): void{
+        this.loading = true;
+        this.empleadoService.ObtenerEmplados()
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+            next: (data) => {
+                this.users = data;
+                this.loading = false;
+                this.cdr.detectChanges();
+            },
+            error: (err) => {
+                this.error = err.message;
+                this.loading = false;
+                this.cdr.detectChanges();
+            }
+        });
+    }
+
+    onUpdateUser(){
+        let idEmplado = this.selectedUser!.IdEmpleado;
+        let empleadoData = this.selectedUser!;
+        this.empleadoService.ActualizarEmpleado(idEmplado, empleadoData)
+        .pipe(takeUntil(this.destroy$)) 
+        .subscribe({
+            next: (res: EmpleadoResponse) => {
+                this.messageResponsive = res.message;
+                this.loading = false;
+                this.cdr.detectChanges();
+            },
+            error: (err) => {
+                this.error = err.message;
+                this.loading = false;
+                this.cdr.detectChanges();
+            }
+        })
+    }
+
+    ngOnDestroy(): void{
+        this.destroy$.next();
+        this.destroy$.complete();
+    }
+
+    onDeleteUser(){
+        console.log(this.selectedUser?.Apellidos)
+    }
+
 }

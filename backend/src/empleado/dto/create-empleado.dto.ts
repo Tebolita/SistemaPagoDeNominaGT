@@ -59,4 +59,8 @@ export class CreateEmpleadoDto {
     @ApiProperty()
     @IsString()
     Direccion!: string 
+
+    @ApiProperty()
+    @IsString()
+    Fotografia!: string
 }

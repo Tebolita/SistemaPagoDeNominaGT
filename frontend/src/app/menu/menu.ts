@@ -22,7 +22,16 @@ export class MenuPrincipal implements OnInit {
         this.items = [ 
             {
                 separator: true
-            },           
+            },
+            {
+                items: [
+                    {
+                        label: 'Inicio',
+                        icon: 'pi pi-home',
+                        routerLink: '/home'
+                    }
+                ]
+            },    
             {
                 label: 'Recursos Humanos',
                 items: [
