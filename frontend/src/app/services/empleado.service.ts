@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { catchError, Observable, throwError } from "rxjs";
-import { EmpleadoInterface, EmpleadoResponse } from "../models/Empleado.model";
+import { EmpleadoResponse, EmpleadoResponseCUD, EmpleadoRequest } from "../models/Empleado.model";
 
 @Injectable({
     providedIn: 'root'
@@ -11,14 +11,14 @@ export class EmpleadoService{
 
     constructor(private http: HttpClient) {}
 
-    ObtenerEmplados(): Observable<EmpleadoInterface[]> {
-        return this.http.get<EmpleadoInterface[]>(this.apiUrl).pipe(
+    ObtenerEmplados(): Observable<EmpleadoResponse[]> {
+        return this.http.get<EmpleadoResponse[]>(this.apiUrl).pipe(
             catchError(this.handleError)
         )
     }
 
-    ActualizarEmpleado(id: number,empleado: EmpleadoInterface): Observable<EmpleadoResponse>{
-        return this.http.patch<EmpleadoResponse>(`${this.apiUrl}/${id}`, empleado).pipe(
+    ActualizarEmpleado(id: number,empleado: EmpleadoRequest): Observable<EmpleadoResponseCUD>{
+        return this.http.patch<EmpleadoResponseCUD>(`${this.apiUrl}/${id}`, empleado).pipe(
            catchError(this.handleError) 
         )
     }

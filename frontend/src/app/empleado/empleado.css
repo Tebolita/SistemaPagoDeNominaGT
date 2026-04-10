@@ -16,6 +16,7 @@
   overflow-y: auto;
   background: var(--p-white-50);
   margin-left: 30px;
+  margin-right: 50px;
 }
 
 .cardUser:hover{

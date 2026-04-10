@@ -28,7 +28,7 @@ export class MenuPrincipal implements OnInit {
                     {
                         label: 'Inicio',
                         icon: 'pi pi-home',
-                        routerLink: '/home'
+                        routerLink: '/home/inicio'
                     }
                 ]
             },    
@@ -39,6 +39,16 @@ export class MenuPrincipal implements OnInit {
                         label: 'Empleados',
                         icon: 'pi pi-user',
                         routerLink: '/home/empleado'
+                    },
+                    {
+                        label: 'Vacaciones',
+                        icon: 'pi pi-calendar-times',
+                        routerLink: '/home/vacacion'
+                    },
+                    {
+                        label: 'Asistencias',
+                        icon: 'pi pi-clock',
+                        routerLink: '/home/asistencia'
                     },
                 ]
             },

@@ -18,9 +18,22 @@ export class EmpleadoService {
   }
 
   async findAll() {
-    return await this.prismaService.empleado.findMany({
-      include: {Usuario: {select: {RolUsuario: {select: {NombreRol:true}}}}}
+    const empleados = await this.prismaService.empleado.findMany({
+        include: {
+            Usuario: { select: { RolUsuario: { select: { NombreRol: true } } } },
+            Puesto: { select: { NombrePuesto: true } }
+        }
     });
+
+    return empleados.map(emp => ({
+        ...emp,
+        FechaEliminacion: emp.FechaEliminacion
+            ? emp.FechaEliminacion.toISOString().slice(0, 19).replace('T', ' ')
+            : null,
+        FechaIngresa: emp.FechaIngresa
+            ? emp.FechaIngresa.toISOString().slice(0, 19).replace('T', ' ')
+            : null,
+    }));
   }
 
   async findOne(idEmpleado: number) {
