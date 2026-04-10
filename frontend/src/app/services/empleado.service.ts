@@ -23,6 +23,12 @@ export class EmpleadoService{
         )
     }
 
+    CrearEmpleado(empleado: EmpleadoRequest): Observable<EmpleadoResponseCUD>{
+        return this.http.post<EmpleadoResponseCUD>(`${this.apiUrl}/CrearEmpleado`, empleado).pipe(
+           catchError(this.handleError) 
+        )
+    }    
+
     private handleError(error: any): Observable<never> {
         return throwError(() => new Error('Error interno del servidor'));
     }   

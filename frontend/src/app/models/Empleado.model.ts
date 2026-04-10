@@ -7,7 +7,7 @@ export interface EmpleadoResponse {
   CorreoPersonal: string;
   FechaIngresa: Date | null;
   IdPuesto: 0;
-  Estado: true;
+  Estado: boolean;
   FechaEliminacion: Date | null;
   Telefono: 0;
   Genero: false;
@@ -31,15 +31,16 @@ export interface EmpleadoRequest {
   Apellidos: string;
   CorreoPersonal: string;
   FechaIngresa: Date | null;
-  IdPuesto: 0;
-  Estado: true;
+  IdPuesto: number;
+  Estado: boolean;
   FechaEliminacion: Date | null;
-  Telefono: 0;
+  Telefono: number;
   Genero: false;
   EstadoCivil: string;
   Direccion: string;
-  Fotografia: string;
+  Fotografia: string; 
 }
 export interface EmpleadoResponseCUD {
   message: string;
+  id: string
 }

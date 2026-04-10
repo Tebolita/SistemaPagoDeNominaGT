@@ -1,4 +1,4 @@
-import { IsString, IsNumber, IsNotEmpty, IsEmail, IsDate, IsBoolean } from "class-validator";
+import { IsString, IsNumber, IsNotEmpty, IsEmail, IsDate, IsBoolean, IsOptional } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 import { Type } from "class-transformer";
 
@@ -38,10 +38,11 @@ export class CreateEmpleadoDto {
     @IsBoolean()
     Estado!: boolean;
 
-    @ApiProperty()
+    @ApiProperty({ nullable: true, required: false })
+    @IsOptional()
     @Type(() => Date)
     @IsDate()
-    FechaEliminacion!: Date;
+    FechaEliminacion!: Date | null;
 
  
     @ApiProperty()

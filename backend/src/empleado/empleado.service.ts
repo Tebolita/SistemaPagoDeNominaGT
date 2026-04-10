@@ -11,10 +11,11 @@ export class EmpleadoService {
     const nuevoEmpleado = await this.prismaService.empleado.create({
       data: createEmpleadoDto,
       select: {
-        Nombres: true
+        Nombres: true,
+        IdEmpleado: true
       }
     })
-    return {message: `Se creo el empleado ${nuevoEmpleado.Nombres} correctamente.`};
+    return {message: `Se creo el empleado ${nuevoEmpleado.Nombres} correctamente.`, id:nuevoEmpleado.IdEmpleado};
   }
 
   async findAll() {

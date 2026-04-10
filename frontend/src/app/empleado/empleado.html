@@ -10,7 +10,8 @@
             <ng-template #item let-item>
                 <p-button 
                     class="flex items-center px-3 py-2 cursor-pointer" 
-                    [severity]="item.severity">
+                    [severity]="item.severity"
+                    (click)="onCreateUser()">
                     <span [class]="item.icon"></span>
                 </p-button>
             </ng-template>
@@ -99,8 +100,18 @@
 
                         <p-divider   />
                         <div class="flex justify-center flex-wrap gap-4">
-                            <p-button icon="pi pi-save" severity="success" (click)="onUpdateUser()"   />
-                            <p-button icon="pi pi-times" severity="danger"  (click)="onDeleteUser()"/>
+                            <p-button 
+                                icon="pi pi-save" 
+                                severity="success" 
+                                (click)="onUpdateUser()"
+                                [disabled]="loading"
+                                [loading]="loading" />
+                            <p-button 
+                                [icon]="selectedUser.Estado ? 'pi pi-times' : 'pi pi-check'" 
+                                [severity]="selectedUser.Estado ? 'danger' : 'success'"  
+                                (click)="onDeleteUser()"
+                                [disabled]="loading"
+                                [loading]="loading" />
                         </div>                     
                     </div>
 
@@ -192,3 +203,162 @@
     }
   </main>
 </div>
+
+<p-dialog 
+  header="Nuevo empleado" 
+  [(visible)]="dialogVisible" 
+  [modal]="true" 
+  [style]="{ width: '100%', maxWidth: '700px' }"
+  [breakpoints]="{ '768px': '95vw' }"
+  [draggable]="false"
+  [resizable]="false">
+
+  <div class="flex flex-col gap-6 pt-4">
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+      <div class="flex flex-col gap-2">
+        <label class="text-sm font-medium text-surface-600">Nombres</label>
+        <input pInputText class="w-full" [(ngModel)]="nuevoEmpleado.Nombres" placeholder="Juan Carlos" />
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <label class="text-sm font-medium text-surface-600">Apellidos</label>
+        <input pInputText class="w-full" [(ngModel)]="nuevoEmpleado.Apellidos" placeholder="López Pérez" />
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <label class="text-sm font-medium text-surface-600">DPI</label>
+        <input pInputText class="w-full" [(ngModel)]="nuevoEmpleado.DPI" placeholder="1234567890101" />
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <label class="text-sm font-medium text-surface-600">NIT</label>
+        <input pInputText class="w-full" [(ngModel)]="nuevoEmpleado.NIT" placeholder="12345678-9" />
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <label class="text-sm font-medium text-surface-600">Correo personal</label>
+        <input pInputText class="w-full" [(ngModel)]="nuevoEmpleado.CorreoPersonal" placeholder="correo@ejemplo.com" />
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <label class="text-sm font-medium text-surface-600">Teléfono</label>
+        <input pInputText class="w-full" [(ngModel)]="nuevoEmpleado.Telefono" placeholder="55551234" type="number" />
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <label class="text-sm font-medium text-surface-600">Dirección</label>
+        <input pInputText class="w-full" [(ngModel)]="nuevoEmpleado.Direccion" placeholder="Zona 10, Guatemala" />
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <label class="text-sm font-medium text-surface-600">Estado civil</label>
+        <input pInputText class="w-full" [(ngModel)]="nuevoEmpleado.EstadoCivil" placeholder="Soltero" />
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <label class="text-sm font-medium text-surface-600">Fecha de ingreso</label>
+        <p-datepicker 
+          [(ngModel)]="nuevoEmpleado.FechaIngresa" 
+          dateFormat="dd/mm/yy" 
+          [showIcon]="true"
+          class="w-full"
+          styleClass="w-full" />
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <label class="text-sm font-medium text-surface-600">Fotografía (URL)</label>
+        <input pInputText class="w-full" [(ngModel)]="nuevoEmpleado.Fotografia" placeholder="https://..." />
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <label class="text-sm font-medium text-surface-600">Género</label>
+        <p-select 
+          [options]="generos" 
+          [(ngModel)]="nuevoEmpleado.Genero" 
+          optionLabel="label" 
+          optionValue="value" 
+          placeholder="Seleccionar" 
+          class="w-full" />
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <label class="text-sm font-medium text-surface-600">Puesto</label>
+        <p-select 
+          [options]="puestos" 
+          [(ngModel)]="nuevoEmpleado.IdPuesto" 
+          optionLabel="NombrePuesto" 
+          optionValue="IdPuesto" 
+          placeholder="Seleccionar puesto" 
+          class="w-full" />
+      </div>
+
+    </div>
+
+    <p-divider align="center" type="solid">
+      <span class="text-surface-500 text-sm font-semibold">Configuración de usuario (Opcional)</span>
+    </p-divider>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      
+      <div class="flex flex-col gap-2">
+        <label class="text-sm font-medium text-surface-600">Username</label>
+        <input pInputText class="w-full" [(ngModel)]="nuevoUsuario.Username" placeholder="jlopez" />
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <label class="text-sm font-medium text-surface-600">Rol de usuario</label>
+        <p-select 
+          [options]="roles" 
+          [(ngModel)]="nuevoUsuario.IdRol" 
+          optionLabel="NombreRol" 
+          optionValue="IdRol" 
+          placeholder="Seleccionar rol" 
+          class="w-full" />
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <label class="text-sm font-medium text-surface-600">Contraseña</label>
+        <p-password 
+          [(ngModel)]="nuevoUsuario.Contrasena" 
+          [toggleMask]="true" 
+          [feedback]="false"
+          placeholder="********"
+          styleClass="w-full" 
+          inputStyleClass="w-full"></p-password>
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <label class="text-sm font-medium text-surface-600">Clave</label>
+        <p-password 
+          [(ngModel)]="nuevoUsuario.Clave" 
+          [toggleMask]="true" 
+          [feedback]="false"
+          placeholder="********"
+          styleClass="w-full" 
+          inputStyleClass="w-full"></p-password>
+      </div>
+
+    </div>
+
+    <p *ngIf="errorDialog" class="text-red-500 text-sm text-center font-medium mt-2">
+      {{ errorDialog }}
+    </p>
+
+  </div>
+
+  <ng-template #footer>
+    <div class="flex justify-end gap-2 mt-4">
+      <p-button label="Cancelar" severity="secondary" [outlined]="true" (click)="onCancelDialog()" />
+      <p-button 
+        label="Guardar" 
+        severity="success" 
+        icon="pi pi-save" 
+        [loading]="loading" 
+        [disabled]="loading"
+        (click)="onSaveUser()" />
+    </div>
+  </ng-template>
+
+</p-dialog>
