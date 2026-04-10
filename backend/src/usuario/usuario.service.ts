@@ -8,18 +8,17 @@ export class UsuarioService {
 
   constructor(private prismaService: PrismaService) {}
 
-  // Buscamos al usuario especifico por usuario y password
-  async findOne(username: string, contrasena: string, clave: number) {
-    const hashedContrasena = await bcryptjs.hash(contrasena, 10);
-    const hashedClave = await bcryptjs.hash(clave.toString(), 10);
+  // Buscamos al usuario especifico SOLO por username
+  async findOne(username: string) {
+    
     const userFound = await this.prismaService.usuario.findFirst({
       where: {
-          Username: username, Contrasena: hashedContrasena, Clave: hashedClave
+        Username: username // Buscamos únicamente por el nombre de usuario
       },
       select: {
         Username: true,
-        Contrasena: true,
-        Clave: true,
+        Contrasena: true, // Necesitamos traer esto para compararlo después
+        Clave: true,      // Necesitamos traer esto para compararlo después
         IdUsuario: true,
         RolUsuario: {
           select: {
@@ -27,7 +26,7 @@ export class UsuarioService {
           }
         }
       }
-    })
+    });
 
     return userFound;
   }
@@ -35,7 +34,9 @@ export class UsuarioService {
 
   async create(createUsuarioDto: CreateUsuarioDto) {
       const nuevoEmpleado = await this.prismaService.usuario.create({
-        data: createUsuarioDto
+        data: {...createUsuarioDto, 
+          Contrasena:  await bcryptjs.hash(createUsuarioDto.Contrasena, 12),
+          Clave: await bcryptjs.hash(createUsuarioDto.Clave, 12),}
       })
       return {message: `Se creo el usuario.`};
   }  

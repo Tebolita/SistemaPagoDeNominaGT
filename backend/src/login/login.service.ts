@@ -10,15 +10,15 @@ export class LoginService {
     private jwtService: JwtService) {}
 
   async SignIn(username: string, contrasena: string, clave: number): Promise<any>{
-    const user = await this.userService.findOne(username, contrasena, clave);
+    const user = await this.userService.findOne(username);
+    console.log(user)
     if (!user) {
       throw new UnauthorizedException('Credenciales inválidas');
     }
     const isPasswordValid = await bcryptjs.compare(contrasena, user?.Contrasena!);
     const isClaveValid = await bcryptjs.compare(clave.toString(), user?.Clave!);
-
-
-    if(isPasswordValid || isClaveValid){
+    
+    if(!isPasswordValid || !isClaveValid){
       throw new UnauthorizedException();
     }
     const payload = {sub: user?.IdUsuario, username: user?.Username};
