@@ -419,7 +419,7 @@ export type EmpleadoCreateInput = {
   Nombres: string
   Apellidos: string
   CorreoPersonal: string
-  FechaIngresa: Date | string
+  FechaIngresa?: Date | string
   Estado?: boolean | null
   FechaEliminacion?: Date | string | null
   Telefono: number
@@ -444,7 +444,7 @@ export type EmpleadoUncheckedCreateInput = {
   Nombres: string
   Apellidos: string
   CorreoPersonal: string
-  FechaIngresa: Date | string
+  FechaIngresa?: Date | string
   IdPuesto: number
   Estado?: boolean | null
   FechaEliminacion?: Date | string | null
@@ -517,7 +517,7 @@ export type EmpleadoCreateManyInput = {
   Nombres: string
   Apellidos: string
   CorreoPersonal: string
-  FechaIngresa: Date | string
+  FechaIngresa?: Date | string
   IdPuesto: number
   Estado?: boolean | null
   FechaEliminacion?: Date | string | null
@@ -801,7 +801,7 @@ export type EmpleadoCreateWithoutAsistenciaInput = {
   Nombres: string
   Apellidos: string
   CorreoPersonal: string
-  FechaIngresa: Date | string
+  FechaIngresa?: Date | string
   Estado?: boolean | null
   FechaEliminacion?: Date | string | null
   Telefono: number
@@ -825,7 +825,7 @@ export type EmpleadoUncheckedCreateWithoutAsistenciaInput = {
   Nombres: string
   Apellidos: string
   CorreoPersonal: string
-  FechaIngresa: Date | string
+  FechaIngresa?: Date | string
   IdPuesto: number
   Estado?: boolean | null
   FechaEliminacion?: Date | string | null
@@ -911,7 +911,7 @@ export type EmpleadoCreateWithoutControlVacacionInput = {
   Nombres: string
   Apellidos: string
   CorreoPersonal: string
-  FechaIngresa: Date | string
+  FechaIngresa?: Date | string
   Estado?: boolean | null
   FechaEliminacion?: Date | string | null
   Telefono: number
@@ -935,7 +935,7 @@ export type EmpleadoUncheckedCreateWithoutControlVacacionInput = {
   Nombres: string
   Apellidos: string
   CorreoPersonal: string
-  FechaIngresa: Date | string
+  FechaIngresa?: Date | string
   IdPuesto: number
   Estado?: boolean | null
   FechaEliminacion?: Date | string | null
@@ -1021,7 +1021,7 @@ export type EmpleadoCreateWithoutIncidenciaInput = {
   Nombres: string
   Apellidos: string
   CorreoPersonal: string
-  FechaIngresa: Date | string
+  FechaIngresa?: Date | string
   Estado?: boolean | null
   FechaEliminacion?: Date | string | null
   Telefono: number
@@ -1045,7 +1045,7 @@ export type EmpleadoUncheckedCreateWithoutIncidenciaInput = {
   Nombres: string
   Apellidos: string
   CorreoPersonal: string
-  FechaIngresa: Date | string
+  FechaIngresa?: Date | string
   IdPuesto: number
   Estado?: boolean | null
   FechaEliminacion?: Date | string | null
@@ -1131,7 +1131,7 @@ export type EmpleadoCreateWithoutMovimientoEmpleadoInput = {
   Nombres: string
   Apellidos: string
   CorreoPersonal: string
-  FechaIngresa: Date | string
+  FechaIngresa?: Date | string
   Estado?: boolean | null
   FechaEliminacion?: Date | string | null
   Telefono: number
@@ -1155,7 +1155,7 @@ export type EmpleadoUncheckedCreateWithoutMovimientoEmpleadoInput = {
   Nombres: string
   Apellidos: string
   CorreoPersonal: string
-  FechaIngresa: Date | string
+  FechaIngresa?: Date | string
   IdPuesto: number
   Estado?: boolean | null
   FechaEliminacion?: Date | string | null
@@ -1241,7 +1241,7 @@ export type EmpleadoCreateWithoutNominaDetalleInput = {
   Nombres: string
   Apellidos: string
   CorreoPersonal: string
-  FechaIngresa: Date | string
+  FechaIngresa?: Date | string
   Estado?: boolean | null
   FechaEliminacion?: Date | string | null
   Telefono: number
@@ -1265,7 +1265,7 @@ export type EmpleadoUncheckedCreateWithoutNominaDetalleInput = {
   Nombres: string
   Apellidos: string
   CorreoPersonal: string
-  FechaIngresa: Date | string
+  FechaIngresa?: Date | string
   IdPuesto: number
   Estado?: boolean | null
   FechaEliminacion?: Date | string | null
@@ -1351,7 +1351,7 @@ export type EmpleadoCreateWithoutPuestoInput = {
   Nombres: string
   Apellidos: string
   CorreoPersonal: string
-  FechaIngresa: Date | string
+  FechaIngresa?: Date | string
   Estado?: boolean | null
   FechaEliminacion?: Date | string | null
   Telefono: number
@@ -1375,7 +1375,7 @@ export type EmpleadoUncheckedCreateWithoutPuestoInput = {
   Nombres: string
   Apellidos: string
   CorreoPersonal: string
-  FechaIngresa: Date | string
+  FechaIngresa?: Date | string
   Estado?: boolean | null
   FechaEliminacion?: Date | string | null
   Telefono: number
@@ -1444,7 +1444,7 @@ export type EmpleadoCreateWithoutSalarioInput = {
   Nombres: string
   Apellidos: string
   CorreoPersonal: string
-  FechaIngresa: Date | string
+  FechaIngresa?: Date | string
   Estado?: boolean | null
   FechaEliminacion?: Date | string | null
   Telefono: number
@@ -1468,7 +1468,7 @@ export type EmpleadoUncheckedCreateWithoutSalarioInput = {
   Nombres: string
   Apellidos: string
   CorreoPersonal: string
-  FechaIngresa: Date | string
+  FechaIngresa?: Date | string
   IdPuesto: number
   Estado?: boolean | null
   FechaEliminacion?: Date | string | null
@@ -1554,7 +1554,7 @@ export type EmpleadoCreateWithoutUsuarioInput = {
   Nombres: string
   Apellidos: string
   CorreoPersonal: string
-  FechaIngresa: Date | string
+  FechaIngresa?: Date | string
   Estado?: boolean | null
   FechaEliminacion?: Date | string | null
   Telefono: number
@@ -1578,7 +1578,7 @@ export type EmpleadoUncheckedCreateWithoutUsuarioInput = {
   Nombres: string
   Apellidos: string
   CorreoPersonal: string
-  FechaIngresa: Date | string
+  FechaIngresa?: Date | string
   IdPuesto: number
   Estado?: boolean | null
   FechaEliminacion?: Date | string | null
@@ -1664,7 +1664,7 @@ export type EmpleadoCreateManyPuestoInput = {
   Nombres: string
   Apellidos: string
   CorreoPersonal: string
-  FechaIngresa: Date | string
+  FechaIngresa?: Date | string
   Estado?: boolean | null
   FechaEliminacion?: Date | string | null
   Telefono: number

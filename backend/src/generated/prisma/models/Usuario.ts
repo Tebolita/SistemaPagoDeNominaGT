@@ -44,7 +44,6 @@ export type UsuarioMinAggregateOutputType = {
   Contrasena: string | null
   IdRol: number | null
   IdEmpleado: number | null
-  Clave: string | null
 }
 
 export type UsuarioMaxAggregateOutputType = {
@@ -53,7 +52,6 @@ export type UsuarioMaxAggregateOutputType = {
   Contrasena: string | null
   IdRol: number | null
   IdEmpleado: number | null
-  Clave: string | null
 }
 
 export type UsuarioCountAggregateOutputType = {
@@ -62,7 +60,6 @@ export type UsuarioCountAggregateOutputType = {
   Contrasena: number
   IdRol: number
   IdEmpleado: number
-  Clave: number
   _all: number
 }
 
@@ -85,7 +82,6 @@ export type UsuarioMinAggregateInputType = {
   Contrasena?: true
   IdRol?: true
   IdEmpleado?: true
-  Clave?: true
 }
 
 export type UsuarioMaxAggregateInputType = {
@@ -94,7 +90,6 @@ export type UsuarioMaxAggregateInputType = {
   Contrasena?: true
   IdRol?: true
   IdEmpleado?: true
-  Clave?: true
 }
 
 export type UsuarioCountAggregateInputType = {
@@ -103,7 +98,6 @@ export type UsuarioCountAggregateInputType = {
   Contrasena?: true
   IdRol?: true
   IdEmpleado?: true
-  Clave?: true
   _all?: true
 }
 
@@ -199,7 +193,6 @@ export type UsuarioGroupByOutputType = {
   Contrasena: string
   IdRol: number
   IdEmpleado: number
-  Clave: string | null
   _count: UsuarioCountAggregateOutputType | null
   _avg: UsuarioAvgAggregateOutputType | null
   _sum: UsuarioSumAggregateOutputType | null
@@ -231,7 +224,6 @@ export type UsuarioWhereInput = {
   Contrasena?: Prisma.StringFilter<"Usuario"> | string
   IdRol?: Prisma.IntFilter<"Usuario"> | number
   IdEmpleado?: Prisma.IntFilter<"Usuario"> | number
-  Clave?: Prisma.StringNullableFilter<"Usuario"> | string | null
   Incidencia?: Prisma.IncidenciaListRelationFilter
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoListRelationFilter
   NominaEncabezado?: Prisma.NominaEncabezadoListRelationFilter
@@ -246,7 +238,6 @@ export type UsuarioOrderByWithRelationInput = {
   Contrasena?: Prisma.SortOrder
   IdRol?: Prisma.SortOrder
   IdEmpleado?: Prisma.SortOrder
-  Clave?: Prisma.SortOrderInput | Prisma.SortOrder
   Incidencia?: Prisma.IncidenciaOrderByRelationAggregateInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoOrderByRelationAggregateInput
   NominaEncabezado?: Prisma.NominaEncabezadoOrderByRelationAggregateInput
@@ -264,7 +255,6 @@ export type UsuarioWhereUniqueInput = Prisma.AtLeast<{
   Contrasena?: Prisma.StringFilter<"Usuario"> | string
   IdRol?: Prisma.IntFilter<"Usuario"> | number
   IdEmpleado?: Prisma.IntFilter<"Usuario"> | number
-  Clave?: Prisma.StringNullableFilter<"Usuario"> | string | null
   Incidencia?: Prisma.IncidenciaListRelationFilter
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoListRelationFilter
   NominaEncabezado?: Prisma.NominaEncabezadoListRelationFilter
@@ -279,7 +269,6 @@ export type UsuarioOrderByWithAggregationInput = {
   Contrasena?: Prisma.SortOrder
   IdRol?: Prisma.SortOrder
   IdEmpleado?: Prisma.SortOrder
-  Clave?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.UsuarioCountOrderByAggregateInput
   _avg?: Prisma.UsuarioAvgOrderByAggregateInput
   _max?: Prisma.UsuarioMaxOrderByAggregateInput
@@ -296,13 +285,11 @@ export type UsuarioScalarWhereWithAggregatesInput = {
   Contrasena?: Prisma.StringWithAggregatesFilter<"Usuario"> | string
   IdRol?: Prisma.IntWithAggregatesFilter<"Usuario"> | number
   IdEmpleado?: Prisma.IntWithAggregatesFilter<"Usuario"> | number
-  Clave?: Prisma.StringNullableWithAggregatesFilter<"Usuario"> | string | null
 }
 
 export type UsuarioCreateInput = {
   Username: string
   Contrasena: string
-  Clave?: string | null
   Incidencia?: Prisma.IncidenciaCreateNestedManyWithoutUsuarioInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoCreateNestedManyWithoutUsuarioInput
   NominaEncabezado?: Prisma.NominaEncabezadoCreateNestedManyWithoutUsuarioInput
@@ -317,7 +304,6 @@ export type UsuarioUncheckedCreateInput = {
   Contrasena: string
   IdRol: number
   IdEmpleado: number
-  Clave?: string | null
   Incidencia?: Prisma.IncidenciaUncheckedCreateNestedManyWithoutUsuarioInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUncheckedCreateNestedManyWithoutUsuarioInput
   NominaEncabezado?: Prisma.NominaEncabezadoUncheckedCreateNestedManyWithoutUsuarioInput
@@ -327,7 +313,6 @@ export type UsuarioUncheckedCreateInput = {
 export type UsuarioUpdateInput = {
   Username?: Prisma.StringFieldUpdateOperationsInput | string
   Contrasena?: Prisma.StringFieldUpdateOperationsInput | string
-  Clave?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Incidencia?: Prisma.IncidenciaUpdateManyWithoutUsuarioNestedInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUpdateManyWithoutUsuarioNestedInput
   NominaEncabezado?: Prisma.NominaEncabezadoUpdateManyWithoutUsuarioNestedInput
@@ -342,7 +327,6 @@ export type UsuarioUncheckedUpdateInput = {
   Contrasena?: Prisma.StringFieldUpdateOperationsInput | string
   IdRol?: Prisma.IntFieldUpdateOperationsInput | number
   IdEmpleado?: Prisma.IntFieldUpdateOperationsInput | number
-  Clave?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Incidencia?: Prisma.IncidenciaUncheckedUpdateManyWithoutUsuarioNestedInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUncheckedUpdateManyWithoutUsuarioNestedInput
   NominaEncabezado?: Prisma.NominaEncabezadoUncheckedUpdateManyWithoutUsuarioNestedInput
@@ -354,13 +338,11 @@ export type UsuarioCreateManyInput = {
   Contrasena: string
   IdRol: number
   IdEmpleado: number
-  Clave?: string | null
 }
 
 export type UsuarioUpdateManyMutationInput = {
   Username?: Prisma.StringFieldUpdateOperationsInput | string
   Contrasena?: Prisma.StringFieldUpdateOperationsInput | string
-  Clave?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type UsuarioUncheckedUpdateManyInput = {
@@ -369,7 +351,6 @@ export type UsuarioUncheckedUpdateManyInput = {
   Contrasena?: Prisma.StringFieldUpdateOperationsInput | string
   IdRol?: Prisma.IntFieldUpdateOperationsInput | number
   IdEmpleado?: Prisma.IntFieldUpdateOperationsInput | number
-  Clave?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type UsuarioListRelationFilter = {
@@ -398,7 +379,6 @@ export type UsuarioCountOrderByAggregateInput = {
   Contrasena?: Prisma.SortOrder
   IdRol?: Prisma.SortOrder
   IdEmpleado?: Prisma.SortOrder
-  Clave?: Prisma.SortOrder
 }
 
 export type UsuarioAvgOrderByAggregateInput = {
@@ -413,7 +393,6 @@ export type UsuarioMaxOrderByAggregateInput = {
   Contrasena?: Prisma.SortOrder
   IdRol?: Prisma.SortOrder
   IdEmpleado?: Prisma.SortOrder
-  Clave?: Prisma.SortOrder
 }
 
 export type UsuarioMinOrderByAggregateInput = {
@@ -422,7 +401,6 @@ export type UsuarioMinOrderByAggregateInput = {
   Contrasena?: Prisma.SortOrder
   IdRol?: Prisma.SortOrder
   IdEmpleado?: Prisma.SortOrder
-  Clave?: Prisma.SortOrder
 }
 
 export type UsuarioSumOrderByAggregateInput = {
@@ -576,7 +554,6 @@ export type UsuarioUncheckedUpdateManyWithoutRolUsuarioNestedInput = {
 export type UsuarioCreateWithoutEmpleadoInput = {
   Username: string
   Contrasena: string
-  Clave?: string | null
   Incidencia?: Prisma.IncidenciaCreateNestedManyWithoutUsuarioInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoCreateNestedManyWithoutUsuarioInput
   NominaEncabezado?: Prisma.NominaEncabezadoCreateNestedManyWithoutUsuarioInput
@@ -589,7 +566,6 @@ export type UsuarioUncheckedCreateWithoutEmpleadoInput = {
   Username: string
   Contrasena: string
   IdRol: number
-  Clave?: string | null
   Incidencia?: Prisma.IncidenciaUncheckedCreateNestedManyWithoutUsuarioInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUncheckedCreateNestedManyWithoutUsuarioInput
   NominaEncabezado?: Prisma.NominaEncabezadoUncheckedCreateNestedManyWithoutUsuarioInput
@@ -630,13 +606,11 @@ export type UsuarioScalarWhereInput = {
   Contrasena?: Prisma.StringFilter<"Usuario"> | string
   IdRol?: Prisma.IntFilter<"Usuario"> | number
   IdEmpleado?: Prisma.IntFilter<"Usuario"> | number
-  Clave?: Prisma.StringNullableFilter<"Usuario"> | string | null
 }
 
 export type UsuarioCreateWithoutIncidenciaInput = {
   Username: string
   Contrasena: string
-  Clave?: string | null
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoCreateNestedManyWithoutUsuarioInput
   NominaEncabezado?: Prisma.NominaEncabezadoCreateNestedManyWithoutUsuarioInput
   RegistroEnvioBoleta?: Prisma.RegistroEnvioBoletaCreateNestedManyWithoutUsuarioInput
@@ -650,7 +624,6 @@ export type UsuarioUncheckedCreateWithoutIncidenciaInput = {
   Contrasena: string
   IdRol: number
   IdEmpleado: number
-  Clave?: string | null
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUncheckedCreateNestedManyWithoutUsuarioInput
   NominaEncabezado?: Prisma.NominaEncabezadoUncheckedCreateNestedManyWithoutUsuarioInput
   RegistroEnvioBoleta?: Prisma.RegistroEnvioBoletaUncheckedCreateNestedManyWithoutUsuarioInput
@@ -675,7 +648,6 @@ export type UsuarioUpdateToOneWithWhereWithoutIncidenciaInput = {
 export type UsuarioUpdateWithoutIncidenciaInput = {
   Username?: Prisma.StringFieldUpdateOperationsInput | string
   Contrasena?: Prisma.StringFieldUpdateOperationsInput | string
-  Clave?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUpdateManyWithoutUsuarioNestedInput
   NominaEncabezado?: Prisma.NominaEncabezadoUpdateManyWithoutUsuarioNestedInput
   RegistroEnvioBoleta?: Prisma.RegistroEnvioBoletaUpdateManyWithoutUsuarioNestedInput
@@ -689,7 +661,6 @@ export type UsuarioUncheckedUpdateWithoutIncidenciaInput = {
   Contrasena?: Prisma.StringFieldUpdateOperationsInput | string
   IdRol?: Prisma.IntFieldUpdateOperationsInput | number
   IdEmpleado?: Prisma.IntFieldUpdateOperationsInput | number
-  Clave?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUncheckedUpdateManyWithoutUsuarioNestedInput
   NominaEncabezado?: Prisma.NominaEncabezadoUncheckedUpdateManyWithoutUsuarioNestedInput
   RegistroEnvioBoleta?: Prisma.RegistroEnvioBoletaUncheckedUpdateManyWithoutUsuarioNestedInput
@@ -698,7 +669,6 @@ export type UsuarioUncheckedUpdateWithoutIncidenciaInput = {
 export type UsuarioCreateWithoutMovimientoEmpleadoInput = {
   Username: string
   Contrasena: string
-  Clave?: string | null
   Incidencia?: Prisma.IncidenciaCreateNestedManyWithoutUsuarioInput
   NominaEncabezado?: Prisma.NominaEncabezadoCreateNestedManyWithoutUsuarioInput
   RegistroEnvioBoleta?: Prisma.RegistroEnvioBoletaCreateNestedManyWithoutUsuarioInput
@@ -712,7 +682,6 @@ export type UsuarioUncheckedCreateWithoutMovimientoEmpleadoInput = {
   Contrasena: string
   IdRol: number
   IdEmpleado: number
-  Clave?: string | null
   Incidencia?: Prisma.IncidenciaUncheckedCreateNestedManyWithoutUsuarioInput
   NominaEncabezado?: Prisma.NominaEncabezadoUncheckedCreateNestedManyWithoutUsuarioInput
   RegistroEnvioBoleta?: Prisma.RegistroEnvioBoletaUncheckedCreateNestedManyWithoutUsuarioInput
@@ -737,7 +706,6 @@ export type UsuarioUpdateToOneWithWhereWithoutMovimientoEmpleadoInput = {
 export type UsuarioUpdateWithoutMovimientoEmpleadoInput = {
   Username?: Prisma.StringFieldUpdateOperationsInput | string
   Contrasena?: Prisma.StringFieldUpdateOperationsInput | string
-  Clave?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Incidencia?: Prisma.IncidenciaUpdateManyWithoutUsuarioNestedInput
   NominaEncabezado?: Prisma.NominaEncabezadoUpdateManyWithoutUsuarioNestedInput
   RegistroEnvioBoleta?: Prisma.RegistroEnvioBoletaUpdateManyWithoutUsuarioNestedInput
@@ -751,7 +719,6 @@ export type UsuarioUncheckedUpdateWithoutMovimientoEmpleadoInput = {
   Contrasena?: Prisma.StringFieldUpdateOperationsInput | string
   IdRol?: Prisma.IntFieldUpdateOperationsInput | number
   IdEmpleado?: Prisma.IntFieldUpdateOperationsInput | number
-  Clave?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Incidencia?: Prisma.IncidenciaUncheckedUpdateManyWithoutUsuarioNestedInput
   NominaEncabezado?: Prisma.NominaEncabezadoUncheckedUpdateManyWithoutUsuarioNestedInput
   RegistroEnvioBoleta?: Prisma.RegistroEnvioBoletaUncheckedUpdateManyWithoutUsuarioNestedInput
@@ -760,7 +727,6 @@ export type UsuarioUncheckedUpdateWithoutMovimientoEmpleadoInput = {
 export type UsuarioCreateWithoutNominaEncabezadoInput = {
   Username: string
   Contrasena: string
-  Clave?: string | null
   Incidencia?: Prisma.IncidenciaCreateNestedManyWithoutUsuarioInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoCreateNestedManyWithoutUsuarioInput
   RegistroEnvioBoleta?: Prisma.RegistroEnvioBoletaCreateNestedManyWithoutUsuarioInput
@@ -774,7 +740,6 @@ export type UsuarioUncheckedCreateWithoutNominaEncabezadoInput = {
   Contrasena: string
   IdRol: number
   IdEmpleado: number
-  Clave?: string | null
   Incidencia?: Prisma.IncidenciaUncheckedCreateNestedManyWithoutUsuarioInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUncheckedCreateNestedManyWithoutUsuarioInput
   RegistroEnvioBoleta?: Prisma.RegistroEnvioBoletaUncheckedCreateNestedManyWithoutUsuarioInput
@@ -799,7 +764,6 @@ export type UsuarioUpdateToOneWithWhereWithoutNominaEncabezadoInput = {
 export type UsuarioUpdateWithoutNominaEncabezadoInput = {
   Username?: Prisma.StringFieldUpdateOperationsInput | string
   Contrasena?: Prisma.StringFieldUpdateOperationsInput | string
-  Clave?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Incidencia?: Prisma.IncidenciaUpdateManyWithoutUsuarioNestedInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUpdateManyWithoutUsuarioNestedInput
   RegistroEnvioBoleta?: Prisma.RegistroEnvioBoletaUpdateManyWithoutUsuarioNestedInput
@@ -813,7 +777,6 @@ export type UsuarioUncheckedUpdateWithoutNominaEncabezadoInput = {
   Contrasena?: Prisma.StringFieldUpdateOperationsInput | string
   IdRol?: Prisma.IntFieldUpdateOperationsInput | number
   IdEmpleado?: Prisma.IntFieldUpdateOperationsInput | number
-  Clave?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Incidencia?: Prisma.IncidenciaUncheckedUpdateManyWithoutUsuarioNestedInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUncheckedUpdateManyWithoutUsuarioNestedInput
   RegistroEnvioBoleta?: Prisma.RegistroEnvioBoletaUncheckedUpdateManyWithoutUsuarioNestedInput
@@ -822,7 +785,6 @@ export type UsuarioUncheckedUpdateWithoutNominaEncabezadoInput = {
 export type UsuarioCreateWithoutRegistroEnvioBoletaInput = {
   Username: string
   Contrasena: string
-  Clave?: string | null
   Incidencia?: Prisma.IncidenciaCreateNestedManyWithoutUsuarioInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoCreateNestedManyWithoutUsuarioInput
   NominaEncabezado?: Prisma.NominaEncabezadoCreateNestedManyWithoutUsuarioInput
@@ -836,7 +798,6 @@ export type UsuarioUncheckedCreateWithoutRegistroEnvioBoletaInput = {
   Contrasena: string
   IdRol: number
   IdEmpleado: number
-  Clave?: string | null
   Incidencia?: Prisma.IncidenciaUncheckedCreateNestedManyWithoutUsuarioInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUncheckedCreateNestedManyWithoutUsuarioInput
   NominaEncabezado?: Prisma.NominaEncabezadoUncheckedCreateNestedManyWithoutUsuarioInput
@@ -861,7 +822,6 @@ export type UsuarioUpdateToOneWithWhereWithoutRegistroEnvioBoletaInput = {
 export type UsuarioUpdateWithoutRegistroEnvioBoletaInput = {
   Username?: Prisma.StringFieldUpdateOperationsInput | string
   Contrasena?: Prisma.StringFieldUpdateOperationsInput | string
-  Clave?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Incidencia?: Prisma.IncidenciaUpdateManyWithoutUsuarioNestedInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUpdateManyWithoutUsuarioNestedInput
   NominaEncabezado?: Prisma.NominaEncabezadoUpdateManyWithoutUsuarioNestedInput
@@ -875,7 +835,6 @@ export type UsuarioUncheckedUpdateWithoutRegistroEnvioBoletaInput = {
   Contrasena?: Prisma.StringFieldUpdateOperationsInput | string
   IdRol?: Prisma.IntFieldUpdateOperationsInput | number
   IdEmpleado?: Prisma.IntFieldUpdateOperationsInput | number
-  Clave?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Incidencia?: Prisma.IncidenciaUncheckedUpdateManyWithoutUsuarioNestedInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUncheckedUpdateManyWithoutUsuarioNestedInput
   NominaEncabezado?: Prisma.NominaEncabezadoUncheckedUpdateManyWithoutUsuarioNestedInput
@@ -884,7 +843,6 @@ export type UsuarioUncheckedUpdateWithoutRegistroEnvioBoletaInput = {
 export type UsuarioCreateWithoutRolUsuarioInput = {
   Username: string
   Contrasena: string
-  Clave?: string | null
   Incidencia?: Prisma.IncidenciaCreateNestedManyWithoutUsuarioInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoCreateNestedManyWithoutUsuarioInput
   NominaEncabezado?: Prisma.NominaEncabezadoCreateNestedManyWithoutUsuarioInput
@@ -897,7 +855,6 @@ export type UsuarioUncheckedCreateWithoutRolUsuarioInput = {
   Username: string
   Contrasena: string
   IdEmpleado: number
-  Clave?: string | null
   Incidencia?: Prisma.IncidenciaUncheckedCreateNestedManyWithoutUsuarioInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUncheckedCreateNestedManyWithoutUsuarioInput
   NominaEncabezado?: Prisma.NominaEncabezadoUncheckedCreateNestedManyWithoutUsuarioInput
@@ -933,13 +890,11 @@ export type UsuarioCreateManyEmpleadoInput = {
   Username: string
   Contrasena: string
   IdRol: number
-  Clave?: string | null
 }
 
 export type UsuarioUpdateWithoutEmpleadoInput = {
   Username?: Prisma.StringFieldUpdateOperationsInput | string
   Contrasena?: Prisma.StringFieldUpdateOperationsInput | string
-  Clave?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Incidencia?: Prisma.IncidenciaUpdateManyWithoutUsuarioNestedInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUpdateManyWithoutUsuarioNestedInput
   NominaEncabezado?: Prisma.NominaEncabezadoUpdateManyWithoutUsuarioNestedInput
@@ -952,7 +907,6 @@ export type UsuarioUncheckedUpdateWithoutEmpleadoInput = {
   Username?: Prisma.StringFieldUpdateOperationsInput | string
   Contrasena?: Prisma.StringFieldUpdateOperationsInput | string
   IdRol?: Prisma.IntFieldUpdateOperationsInput | number
-  Clave?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Incidencia?: Prisma.IncidenciaUncheckedUpdateManyWithoutUsuarioNestedInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUncheckedUpdateManyWithoutUsuarioNestedInput
   NominaEncabezado?: Prisma.NominaEncabezadoUncheckedUpdateManyWithoutUsuarioNestedInput
@@ -964,20 +918,17 @@ export type UsuarioUncheckedUpdateManyWithoutEmpleadoInput = {
   Username?: Prisma.StringFieldUpdateOperationsInput | string
   Contrasena?: Prisma.StringFieldUpdateOperationsInput | string
   IdRol?: Prisma.IntFieldUpdateOperationsInput | number
-  Clave?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type UsuarioCreateManyRolUsuarioInput = {
   Username: string
   Contrasena: string
   IdEmpleado: number
-  Clave?: string | null
 }
 
 export type UsuarioUpdateWithoutRolUsuarioInput = {
   Username?: Prisma.StringFieldUpdateOperationsInput | string
   Contrasena?: Prisma.StringFieldUpdateOperationsInput | string
-  Clave?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Incidencia?: Prisma.IncidenciaUpdateManyWithoutUsuarioNestedInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUpdateManyWithoutUsuarioNestedInput
   NominaEncabezado?: Prisma.NominaEncabezadoUpdateManyWithoutUsuarioNestedInput
@@ -990,7 +941,6 @@ export type UsuarioUncheckedUpdateWithoutRolUsuarioInput = {
   Username?: Prisma.StringFieldUpdateOperationsInput | string
   Contrasena?: Prisma.StringFieldUpdateOperationsInput | string
   IdEmpleado?: Prisma.IntFieldUpdateOperationsInput | number
-  Clave?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Incidencia?: Prisma.IncidenciaUncheckedUpdateManyWithoutUsuarioNestedInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUncheckedUpdateManyWithoutUsuarioNestedInput
   NominaEncabezado?: Prisma.NominaEncabezadoUncheckedUpdateManyWithoutUsuarioNestedInput
@@ -1002,7 +952,6 @@ export type UsuarioUncheckedUpdateManyWithoutRolUsuarioInput = {
   Username?: Prisma.StringFieldUpdateOperationsInput | string
   Contrasena?: Prisma.StringFieldUpdateOperationsInput | string
   IdEmpleado?: Prisma.IntFieldUpdateOperationsInput | number
-  Clave?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -1069,7 +1018,6 @@ export type UsuarioSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   Contrasena?: boolean
   IdRol?: boolean
   IdEmpleado?: boolean
-  Clave?: boolean
   Incidencia?: boolean | Prisma.Usuario$IncidenciaArgs<ExtArgs>
   MovimientoEmpleado?: boolean | Prisma.Usuario$MovimientoEmpleadoArgs<ExtArgs>
   NominaEncabezado?: boolean | Prisma.Usuario$NominaEncabezadoArgs<ExtArgs>
@@ -1087,10 +1035,9 @@ export type UsuarioSelectScalar = {
   Contrasena?: boolean
   IdRol?: boolean
   IdEmpleado?: boolean
-  Clave?: boolean
 }
 
-export type UsuarioOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"IdUsuario" | "Username" | "Contrasena" | "IdRol" | "IdEmpleado" | "Clave", ExtArgs["result"]["usuario"]>
+export type UsuarioOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"IdUsuario" | "Username" | "Contrasena" | "IdRol" | "IdEmpleado", ExtArgs["result"]["usuario"]>
 export type UsuarioInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   Incidencia?: boolean | Prisma.Usuario$IncidenciaArgs<ExtArgs>
   MovimientoEmpleado?: boolean | Prisma.Usuario$MovimientoEmpleadoArgs<ExtArgs>
@@ -1117,7 +1064,6 @@ export type $UsuarioPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     Contrasena: string
     IdRol: number
     IdEmpleado: number
-    Clave: string | null
   }, ExtArgs["result"]["usuario"]>
   composites: {}
 }
@@ -1498,7 +1444,6 @@ export interface UsuarioFieldRefs {
   readonly Contrasena: Prisma.FieldRef<"Usuario", 'String'>
   readonly IdRol: Prisma.FieldRef<"Usuario", 'Int'>
   readonly IdEmpleado: Prisma.FieldRef<"Usuario", 'Int'>
-  readonly Clave: Prisma.FieldRef<"Usuario", 'String'>
 }
     
 
