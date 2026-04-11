@@ -183,22 +183,70 @@
         </div>
 
         <div class="card mt-4">
-            <p-fieldset class="w-full" legend="Incidencias">
-
+            <p-fieldset class="w-full" legend="Vacaciones">
+                <p-table [value]="vacacionesEmpleado" [rows]="5" [paginator]="true" [rowHover]="true" 
+                    emptyMessage="Este empleado no tiene registros de vacaciones.">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>Fecha Inicio</th>
+                            <th>Fecha Fin</th>
+                            <th>Goce de Sueldo</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-vacacion>
+                        <tr>
+                            <td><i class="pi pi-calendar mr-2 text-surface-500"></i>{{ vacacion.FechaInicio | date:'dd/MM/yyyy' }}</td>
+                            <td><i class="pi pi-calendar-times mr-2 text-surface-500"></i>{{ vacacion.FechaFin | date:'dd/MM/yyyy' }}</td>
+                            <td>
+                                @if (vacacion.ConGoceSueldo) {
+                                    <p-tag severity="success" value="Sí" icon="pi pi-check"></p-tag>
+                                } @else {
+                                    <p-tag severity="danger" value="No" icon="pi pi-times"></p-tag>
+                                }
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
             </p-fieldset>
         </div>
 
         <div class="card mt-4">
-            <p-fieldset class="w-full" legend="Vacaciones">
-
-            </p-fieldset>
-        </div> 
-
-        <div class="card mt-4">
             <p-fieldset class="w-full" legend="Asistencias">
-
+                <p-table [value]="asistenciasEmpleado" [rows]="5" [paginator]="true" [rowHover]="true"
+                    emptyMessage="Este empleado no tiene registros de asistencia.">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Entrada</th>
+                            <th>Salida</th>
+                            <th>Horas Extra</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-asistencia>
+                        <tr>
+                            <td class="font-medium">{{ asistencia.Fecha | date:'dd/MM/yyyy' }}</td>
+                            <td>
+                                <span class="text-green-600 font-medium"><i class="pi pi-sign-in mr-1"></i>{{ asistencia.HoraEntrada | date:'shortTime' }}</span>
+                            </td>
+                            <td>
+                                @if (asistencia.HoraSalida) {
+                                    <span class="text-red-600 font-medium"><i class="pi pi-sign-out mr-1"></i>{{ asistencia.HoraSalida | date:'shortTime' }}</span>
+                                } @else {
+                                    <p-tag severity="warn" value="Sin marcar"></p-tag>
+                                }
+                            </td>
+                            <td>
+                                @if (asistencia.HorasExtra > 0) {
+                                    <p-tag severity="info" value="+{{ asistencia.HorasExtra }} hrs" icon="pi pi-star-fill"></p-tag>
+                                } @else {
+                                    <span class="text-500">0</span>
+                                }
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
             </p-fieldset>
-        </div> 
+        </div>
 
     }
   </main>

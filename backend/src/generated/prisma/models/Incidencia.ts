@@ -240,6 +240,7 @@ export type IncidenciaWhereInput = {
   FechaFin?: Prisma.DateTimeFilter<"Incidencia"> | Date | string
   ConGoceSueldo?: Prisma.BoolNullableFilter<"Incidencia"> | boolean | null
   IdUsuarioAutoriza?: Prisma.IntFilter<"Incidencia"> | number
+  DetalleControlVacacion?: Prisma.DetalleControlVacacionListRelationFilter
   Empleado?: Prisma.XOR<Prisma.EmpleadoScalarRelationFilter, Prisma.EmpleadoWhereInput>
   Usuario?: Prisma.XOR<Prisma.UsuarioScalarRelationFilter, Prisma.UsuarioWhereInput>
 }
@@ -252,6 +253,7 @@ export type IncidenciaOrderByWithRelationInput = {
   FechaFin?: Prisma.SortOrder
   ConGoceSueldo?: Prisma.SortOrderInput | Prisma.SortOrder
   IdUsuarioAutoriza?: Prisma.SortOrder
+  DetalleControlVacacion?: Prisma.DetalleControlVacacionOrderByRelationAggregateInput
   Empleado?: Prisma.EmpleadoOrderByWithRelationInput
   Usuario?: Prisma.UsuarioOrderByWithRelationInput
 }
@@ -267,6 +269,7 @@ export type IncidenciaWhereUniqueInput = Prisma.AtLeast<{
   FechaFin?: Prisma.DateTimeFilter<"Incidencia"> | Date | string
   ConGoceSueldo?: Prisma.BoolNullableFilter<"Incidencia"> | boolean | null
   IdUsuarioAutoriza?: Prisma.IntFilter<"Incidencia"> | number
+  DetalleControlVacacion?: Prisma.DetalleControlVacacionListRelationFilter
   Empleado?: Prisma.XOR<Prisma.EmpleadoScalarRelationFilter, Prisma.EmpleadoWhereInput>
   Usuario?: Prisma.XOR<Prisma.UsuarioScalarRelationFilter, Prisma.UsuarioWhereInput>
 }, "IdIncidencia">
@@ -304,6 +307,7 @@ export type IncidenciaCreateInput = {
   FechaInicio: Date | string
   FechaFin: Date | string
   ConGoceSueldo?: boolean | null
+  DetalleControlVacacion?: Prisma.DetalleControlVacacionCreateNestedManyWithoutIncidenciaInput
   Empleado: Prisma.EmpleadoCreateNestedOneWithoutIncidenciaInput
   Usuario: Prisma.UsuarioCreateNestedOneWithoutIncidenciaInput
 }
@@ -316,6 +320,7 @@ export type IncidenciaUncheckedCreateInput = {
   FechaFin: Date | string
   ConGoceSueldo?: boolean | null
   IdUsuarioAutoriza: number
+  DetalleControlVacacion?: Prisma.DetalleControlVacacionUncheckedCreateNestedManyWithoutIncidenciaInput
 }
 
 export type IncidenciaUpdateInput = {
@@ -323,6 +328,7 @@ export type IncidenciaUpdateInput = {
   FechaInicio?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   FechaFin?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ConGoceSueldo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  DetalleControlVacacion?: Prisma.DetalleControlVacacionUpdateManyWithoutIncidenciaNestedInput
   Empleado?: Prisma.EmpleadoUpdateOneRequiredWithoutIncidenciaNestedInput
   Usuario?: Prisma.UsuarioUpdateOneRequiredWithoutIncidenciaNestedInput
 }
@@ -335,6 +341,7 @@ export type IncidenciaUncheckedUpdateInput = {
   FechaFin?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ConGoceSueldo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   IdUsuarioAutoriza?: Prisma.IntFieldUpdateOperationsInput | number
+  DetalleControlVacacion?: Prisma.DetalleControlVacacionUncheckedUpdateManyWithoutIncidenciaNestedInput
 }
 
 export type IncidenciaCreateManyInput = {
@@ -413,6 +420,11 @@ export type IncidenciaSumOrderByAggregateInput = {
   IdIncidencia?: Prisma.SortOrder
   IdEmpleado?: Prisma.SortOrder
   IdUsuarioAutoriza?: Prisma.SortOrder
+}
+
+export type IncidenciaScalarRelationFilter = {
+  is?: Prisma.IncidenciaWhereInput
+  isNot?: Prisma.IncidenciaWhereInput
 }
 
 export type IncidenciaCreateNestedManyWithoutEmpleadoInput = {
@@ -499,11 +511,26 @@ export type IncidenciaUncheckedUpdateManyWithoutUsuarioNestedInput = {
   deleteMany?: Prisma.IncidenciaScalarWhereInput | Prisma.IncidenciaScalarWhereInput[]
 }
 
+export type IncidenciaCreateNestedOneWithoutDetalleControlVacacionInput = {
+  create?: Prisma.XOR<Prisma.IncidenciaCreateWithoutDetalleControlVacacionInput, Prisma.IncidenciaUncheckedCreateWithoutDetalleControlVacacionInput>
+  connectOrCreate?: Prisma.IncidenciaCreateOrConnectWithoutDetalleControlVacacionInput
+  connect?: Prisma.IncidenciaWhereUniqueInput
+}
+
+export type IncidenciaUpdateOneRequiredWithoutDetalleControlVacacionNestedInput = {
+  create?: Prisma.XOR<Prisma.IncidenciaCreateWithoutDetalleControlVacacionInput, Prisma.IncidenciaUncheckedCreateWithoutDetalleControlVacacionInput>
+  connectOrCreate?: Prisma.IncidenciaCreateOrConnectWithoutDetalleControlVacacionInput
+  upsert?: Prisma.IncidenciaUpsertWithoutDetalleControlVacacionInput
+  connect?: Prisma.IncidenciaWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.IncidenciaUpdateToOneWithWhereWithoutDetalleControlVacacionInput, Prisma.IncidenciaUpdateWithoutDetalleControlVacacionInput>, Prisma.IncidenciaUncheckedUpdateWithoutDetalleControlVacacionInput>
+}
+
 export type IncidenciaCreateWithoutEmpleadoInput = {
   TipoIncidencia: string
   FechaInicio: Date | string
   FechaFin: Date | string
   ConGoceSueldo?: boolean | null
+  DetalleControlVacacion?: Prisma.DetalleControlVacacionCreateNestedManyWithoutIncidenciaInput
   Usuario: Prisma.UsuarioCreateNestedOneWithoutIncidenciaInput
 }
 
@@ -514,6 +541,7 @@ export type IncidenciaUncheckedCreateWithoutEmpleadoInput = {
   FechaFin: Date | string
   ConGoceSueldo?: boolean | null
   IdUsuarioAutoriza: number
+  DetalleControlVacacion?: Prisma.DetalleControlVacacionUncheckedCreateNestedManyWithoutIncidenciaInput
 }
 
 export type IncidenciaCreateOrConnectWithoutEmpleadoInput = {
@@ -559,6 +587,7 @@ export type IncidenciaCreateWithoutUsuarioInput = {
   FechaInicio: Date | string
   FechaFin: Date | string
   ConGoceSueldo?: boolean | null
+  DetalleControlVacacion?: Prisma.DetalleControlVacacionCreateNestedManyWithoutIncidenciaInput
   Empleado: Prisma.EmpleadoCreateNestedOneWithoutIncidenciaInput
 }
 
@@ -569,6 +598,7 @@ export type IncidenciaUncheckedCreateWithoutUsuarioInput = {
   FechaInicio: Date | string
   FechaFin: Date | string
   ConGoceSueldo?: boolean | null
+  DetalleControlVacacion?: Prisma.DetalleControlVacacionUncheckedCreateNestedManyWithoutIncidenciaInput
 }
 
 export type IncidenciaCreateOrConnectWithoutUsuarioInput = {
@@ -596,6 +626,60 @@ export type IncidenciaUpdateManyWithWhereWithoutUsuarioInput = {
   data: Prisma.XOR<Prisma.IncidenciaUpdateManyMutationInput, Prisma.IncidenciaUncheckedUpdateManyWithoutUsuarioInput>
 }
 
+export type IncidenciaCreateWithoutDetalleControlVacacionInput = {
+  TipoIncidencia: string
+  FechaInicio: Date | string
+  FechaFin: Date | string
+  ConGoceSueldo?: boolean | null
+  Empleado: Prisma.EmpleadoCreateNestedOneWithoutIncidenciaInput
+  Usuario: Prisma.UsuarioCreateNestedOneWithoutIncidenciaInput
+}
+
+export type IncidenciaUncheckedCreateWithoutDetalleControlVacacionInput = {
+  IdIncidencia?: number
+  IdEmpleado: number
+  TipoIncidencia: string
+  FechaInicio: Date | string
+  FechaFin: Date | string
+  ConGoceSueldo?: boolean | null
+  IdUsuarioAutoriza: number
+}
+
+export type IncidenciaCreateOrConnectWithoutDetalleControlVacacionInput = {
+  where: Prisma.IncidenciaWhereUniqueInput
+  create: Prisma.XOR<Prisma.IncidenciaCreateWithoutDetalleControlVacacionInput, Prisma.IncidenciaUncheckedCreateWithoutDetalleControlVacacionInput>
+}
+
+export type IncidenciaUpsertWithoutDetalleControlVacacionInput = {
+  update: Prisma.XOR<Prisma.IncidenciaUpdateWithoutDetalleControlVacacionInput, Prisma.IncidenciaUncheckedUpdateWithoutDetalleControlVacacionInput>
+  create: Prisma.XOR<Prisma.IncidenciaCreateWithoutDetalleControlVacacionInput, Prisma.IncidenciaUncheckedCreateWithoutDetalleControlVacacionInput>
+  where?: Prisma.IncidenciaWhereInput
+}
+
+export type IncidenciaUpdateToOneWithWhereWithoutDetalleControlVacacionInput = {
+  where?: Prisma.IncidenciaWhereInput
+  data: Prisma.XOR<Prisma.IncidenciaUpdateWithoutDetalleControlVacacionInput, Prisma.IncidenciaUncheckedUpdateWithoutDetalleControlVacacionInput>
+}
+
+export type IncidenciaUpdateWithoutDetalleControlVacacionInput = {
+  TipoIncidencia?: Prisma.StringFieldUpdateOperationsInput | string
+  FechaInicio?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  FechaFin?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ConGoceSueldo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  Empleado?: Prisma.EmpleadoUpdateOneRequiredWithoutIncidenciaNestedInput
+  Usuario?: Prisma.UsuarioUpdateOneRequiredWithoutIncidenciaNestedInput
+}
+
+export type IncidenciaUncheckedUpdateWithoutDetalleControlVacacionInput = {
+  IdIncidencia?: Prisma.IntFieldUpdateOperationsInput | number
+  IdEmpleado?: Prisma.IntFieldUpdateOperationsInput | number
+  TipoIncidencia?: Prisma.StringFieldUpdateOperationsInput | string
+  FechaInicio?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  FechaFin?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ConGoceSueldo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  IdUsuarioAutoriza?: Prisma.IntFieldUpdateOperationsInput | number
+}
+
 export type IncidenciaCreateManyEmpleadoInput = {
   TipoIncidencia: string
   FechaInicio: Date | string
@@ -609,6 +693,7 @@ export type IncidenciaUpdateWithoutEmpleadoInput = {
   FechaInicio?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   FechaFin?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ConGoceSueldo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  DetalleControlVacacion?: Prisma.DetalleControlVacacionUpdateManyWithoutIncidenciaNestedInput
   Usuario?: Prisma.UsuarioUpdateOneRequiredWithoutIncidenciaNestedInput
 }
 
@@ -619,6 +704,7 @@ export type IncidenciaUncheckedUpdateWithoutEmpleadoInput = {
   FechaFin?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ConGoceSueldo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   IdUsuarioAutoriza?: Prisma.IntFieldUpdateOperationsInput | number
+  DetalleControlVacacion?: Prisma.DetalleControlVacacionUncheckedUpdateManyWithoutIncidenciaNestedInput
 }
 
 export type IncidenciaUncheckedUpdateManyWithoutEmpleadoInput = {
@@ -643,6 +729,7 @@ export type IncidenciaUpdateWithoutUsuarioInput = {
   FechaInicio?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   FechaFin?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ConGoceSueldo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  DetalleControlVacacion?: Prisma.DetalleControlVacacionUpdateManyWithoutIncidenciaNestedInput
   Empleado?: Prisma.EmpleadoUpdateOneRequiredWithoutIncidenciaNestedInput
 }
 
@@ -653,6 +740,7 @@ export type IncidenciaUncheckedUpdateWithoutUsuarioInput = {
   FechaInicio?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   FechaFin?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ConGoceSueldo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  DetalleControlVacacion?: Prisma.DetalleControlVacacionUncheckedUpdateManyWithoutIncidenciaNestedInput
 }
 
 export type IncidenciaUncheckedUpdateManyWithoutUsuarioInput = {
@@ -665,6 +753,35 @@ export type IncidenciaUncheckedUpdateManyWithoutUsuarioInput = {
 }
 
 
+/**
+ * Count Type IncidenciaCountOutputType
+ */
+
+export type IncidenciaCountOutputType = {
+  DetalleControlVacacion: number
+}
+
+export type IncidenciaCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  DetalleControlVacacion?: boolean | IncidenciaCountOutputTypeCountDetalleControlVacacionArgs
+}
+
+/**
+ * IncidenciaCountOutputType without action
+ */
+export type IncidenciaCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the IncidenciaCountOutputType
+   */
+  select?: Prisma.IncidenciaCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * IncidenciaCountOutputType without action
+ */
+export type IncidenciaCountOutputTypeCountDetalleControlVacacionArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DetalleControlVacacionWhereInput
+}
+
 
 export type IncidenciaSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   IdIncidencia?: boolean
@@ -674,8 +791,10 @@ export type IncidenciaSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   FechaFin?: boolean
   ConGoceSueldo?: boolean
   IdUsuarioAutoriza?: boolean
+  DetalleControlVacacion?: boolean | Prisma.Incidencia$DetalleControlVacacionArgs<ExtArgs>
   Empleado?: boolean | Prisma.EmpleadoDefaultArgs<ExtArgs>
   Usuario?: boolean | Prisma.UsuarioDefaultArgs<ExtArgs>
+  _count?: boolean | Prisma.IncidenciaCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["incidencia"]>
 
 
@@ -692,13 +811,16 @@ export type IncidenciaSelectScalar = {
 
 export type IncidenciaOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"IdIncidencia" | "IdEmpleado" | "TipoIncidencia" | "FechaInicio" | "FechaFin" | "ConGoceSueldo" | "IdUsuarioAutoriza", ExtArgs["result"]["incidencia"]>
 export type IncidenciaInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  DetalleControlVacacion?: boolean | Prisma.Incidencia$DetalleControlVacacionArgs<ExtArgs>
   Empleado?: boolean | Prisma.EmpleadoDefaultArgs<ExtArgs>
   Usuario?: boolean | Prisma.UsuarioDefaultArgs<ExtArgs>
+  _count?: boolean | Prisma.IncidenciaCountOutputTypeDefaultArgs<ExtArgs>
 }
 
 export type $IncidenciaPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Incidencia"
   objects: {
+    DetalleControlVacacion: Prisma.$DetalleControlVacacionPayload<ExtArgs>[]
     Empleado: Prisma.$EmpleadoPayload<ExtArgs>
     Usuario: Prisma.$UsuarioPayload<ExtArgs>
   }
@@ -1050,6 +1172,7 @@ readonly fields: IncidenciaFieldRefs;
  */
 export interface Prisma__IncidenciaClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  DetalleControlVacacion<T extends Prisma.Incidencia$DetalleControlVacacionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Incidencia$DetalleControlVacacionArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DetalleControlVacacionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   Empleado<T extends Prisma.EmpleadoDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.EmpleadoDefaultArgs<ExtArgs>>): Prisma.Prisma__EmpleadoClient<runtime.Types.Result.GetResult<Prisma.$EmpleadoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   Usuario<T extends Prisma.UsuarioDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UsuarioDefaultArgs<ExtArgs>>): Prisma.Prisma__UsuarioClient<runtime.Types.Result.GetResult<Prisma.$UsuarioPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
@@ -1432,6 +1555,30 @@ export type IncidenciaDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.In
    * Limit how many Incidencias to delete.
    */
   limit?: number
+}
+
+/**
+ * Incidencia.DetalleControlVacacion
+ */
+export type Incidencia$DetalleControlVacacionArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DetalleControlVacacion
+   */
+  select?: Prisma.DetalleControlVacacionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the DetalleControlVacacion
+   */
+  omit?: Prisma.DetalleControlVacacionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DetalleControlVacacionInclude<ExtArgs> | null
+  where?: Prisma.DetalleControlVacacionWhereInput
+  orderBy?: Prisma.DetalleControlVacacionOrderByWithRelationInput | Prisma.DetalleControlVacacionOrderByWithRelationInput[]
+  cursor?: Prisma.DetalleControlVacacionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DetalleControlVacacionScalarFieldEnum | Prisma.DetalleControlVacacionScalarFieldEnum[]
 }
 
 /**

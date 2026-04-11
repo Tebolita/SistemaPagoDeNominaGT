@@ -22,7 +22,9 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { UsuarioService } from '../services/usuario.service';
 import { UsuarioRequest } from '../models/Usuario.model';
 import { PasswordModule } from 'primeng/password';
-
+import { VacacionesService } from '../services/vacacion.service';
+import { AsistenciaService } from '../services/asistencia.service';
+import { TableModule } from 'primeng/table';
 
 type Severity = "success" | "info" | "warn" | "danger" | "secondary" | "contrast" | null | undefined
 
@@ -35,7 +37,8 @@ interface City {
     selector: 'app-empleado',
     imports: [MenubarModule, ButtonModule, Divider, ContextMenuModule, 
         TagModule, ToastModule, CommonModule, AvatarModule, FieldsetModule, IconFieldModule,
-        InputIconModule, InputTextModule, FormsModule, SelectModule, DialogModule, DatePickerModule, PasswordModule],
+        InputIconModule, InputTextModule, FormsModule, SelectModule, DialogModule, 
+        DatePickerModule, PasswordModule, TableModule],
     providers: [MessageService],
     templateUrl: './empleado.html',
     styleUrl: './empleado.css',
@@ -46,6 +49,9 @@ export class Empleado implements OnInit, OnDestroy {
     error ='';
     messageResponsive = '';
     private destroy$ = new Subject<void>();
+
+    vacacionesEmpleado: any[] = [];
+    asistenciasEmpleado: any[] = [];
 
     items: MenuItem[] | undefined;
     usuarios: MenuItem[] | undefined;
@@ -61,7 +67,9 @@ export class Empleado implements OnInit, OnDestroy {
     constructor(
         private empleadoService: EmpleadoService,
         private cdr: ChangeDetectorRef,
-        private usuarioService: UsuarioService
+        private usuarioService: UsuarioService,
+        private vacacionesService: VacacionesService,
+        private asistenciaService: AsistenciaService
     ) {}
 
     ngOnInit() {
@@ -119,6 +127,7 @@ export class Empleado implements OnInit, OnDestroy {
     onSelectUser(user: EmpleadoResponse) {
         this.editarUsuario = true;
         this.selectedUser = user;
+        this.cargarHistorialUsuario(user.IdEmpleado);
     }
 
     // Consumir empleados
@@ -328,11 +337,28 @@ export class Empleado implements OnInit, OnDestroy {
         });
     }
 
-        // Método auxiliar para no repetir código
-        private finalizarGuardado(): void {
+    private finalizarGuardado(): void {
         this.loading = false;
         this.dialogVisible = false;
         this.cargarEmpleados();
         this.cdr.detectChanges();
-        }  
+    }  
+
+    cargarHistorialUsuario(idEmpleado: number) {
+        // Cargar Vacaciones del empleado
+        this.vacacionesService.getVacaciones()
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((data: any[]) => {
+            this.vacacionesEmpleado = data.filter(v => v.IdEmpleado === idEmpleado && v.TipoIncidencia === 'Vacaciones');
+            this.cdr.detectChanges();
+        });
+
+        // Cargar Asistencias del empleado
+        this.asistenciaService.getAsistencias()
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((data: any[]) => {
+            this.asistenciasEmpleado = data.filter(a => a.IdEmpleado === idEmpleado);
+            this.cdr.detectChanges();
+        });
+    }
 }

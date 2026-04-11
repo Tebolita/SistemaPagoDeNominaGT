@@ -19,12 +19,13 @@ model Asistencia {
 }
 
 model ControlVacacion {
-  IdControlVacacion Int      @id(map: "PK__ControlV__F1234BDBE124B2BD") @default(autoincrement())
-  IdEmpleado        Int
-  AnioCorriente     Int
-  DiasGanados       Int?
-  DiasGozados       Int?
-  Empleado          Empleado @relation(fields: [IdEmpleado], references: [IdEmpleado], onUpdate: NoAction, map: "FK_Vacacion_Empleado")
+  IdControlVacacion      Int                      @id(map: "PK__ControlV__F1234BDBE124B2BD") @default(autoincrement())
+  IdEmpleado             Int
+  AnioCorriente          Int
+  DiasGanados            Int?
+  DiasGozados            Int?
+  Empleado               Empleado                 @relation(fields: [IdEmpleado], references: [IdEmpleado], onUpdate: NoAction, map: "FK_Vacacion_Empleado")
+  DetalleControlVacacion DetalleControlVacacion[]
 }
 
 model Departamento {
@@ -60,15 +61,16 @@ model Empleado {
 }
 
 model Incidencia {
-  IdIncidencia      Int      @id(map: "PK__Incidenc__542A8F6CCC3DFE39") @default(autoincrement())
-  IdEmpleado        Int
-  TipoIncidencia    String   @db.VarChar(50)
-  FechaInicio       DateTime @db.DateTime
-  FechaFin          DateTime @db.DateTime
-  ConGoceSueldo     Boolean?
-  IdUsuarioAutoriza Int
-  Empleado          Empleado @relation(fields: [IdEmpleado], references: [IdEmpleado], onUpdate: NoAction, map: "FK_Incidencia_Empleado")
-  Usuario           Usuario  @relation(fields: [IdUsuarioAutoriza], references: [IdUsuario], onUpdate: NoAction, map: "FK_Incidencia_Usuario")
+  IdIncidencia           Int                      @id(map: "PK__Incidenc__542A8F6CCC3DFE39") @default(autoincrement())
+  IdEmpleado             Int
+  TipoIncidencia         String                   @db.VarChar(50)
+  FechaInicio            DateTime                 @db.DateTime
+  FechaFin               DateTime                 @db.DateTime
+  ConGoceSueldo          Boolean?
+  IdUsuarioAutoriza      Int
+  DetalleControlVacacion DetalleControlVacacion[]
+  Empleado               Empleado                 @relation(fields: [IdEmpleado], references: [IdEmpleado], onUpdate: NoAction, map: "FK_Incidencia_Empleado")
+  Usuario                Usuario                  @relation(fields: [IdUsuarioAutoriza], references: [IdUsuario], onUpdate: NoAction, map: "FK_Incidencia_Usuario")
 }
 
 model MovimientoEmpleado {
@@ -170,4 +172,14 @@ model Usuario {
   RegistroEnvioBoleta RegistroEnvioBoleta[]
   Empleado            Empleado              @relation(fields: [IdEmpleado], references: [IdEmpleado], onUpdate: NoAction, map: "FK_Usuario_Empleado")
   RolUsuario          RolUsuario            @relation(fields: [IdRol], references: [IdRol], onUpdate: NoAction, map: "FK_Usuario_Rol")
+}
+
+model DetalleControlVacacion {
+  IdDetalleVacacion Int             @id(map: "PK__DetalleC__9331136B43D20023") @default(autoincrement())
+  IdControlVacacion Int
+  IdIncidencia      Int
+  DiasDescontados   Decimal         @db.Decimal(4, 2)
+  FechaRegistro     DateTime?       @db.DateTime
+  ControlVacacion   ControlVacacion @relation(fields: [IdControlVacacion], references: [IdControlVacacion], onUpdate: NoAction, map: "FK_DetalleVac_Control")
+  Incidencia        Incidencia      @relation(fields: [IdIncidencia], references: [IdIncidencia], onUpdate: NoAction, map: "FK_DetalleVac_Incidencia")
 }

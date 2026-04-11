@@ -11,7 +11,6 @@ export class LoginService {
 
   async SignIn(username: string, contrasena: string, clave: number): Promise<any>{
     const user = await this.userService.findOne(username);
-    console.log(user)
     if (!user) {
       throw new UnauthorizedException('Credenciales inválidas');
     }

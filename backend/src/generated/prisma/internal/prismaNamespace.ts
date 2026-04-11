@@ -398,7 +398,8 @@ export const ModelName = {
   RolUsuario: 'RolUsuario',
   Salario: 'Salario',
   TipoMovimiento: 'TipoMovimiento',
-  Usuario: 'Usuario'
+  Usuario: 'Usuario',
+  DetalleControlVacacion: 'DetalleControlVacacion'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -414,7 +415,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "asistencia" | "controlVacacion" | "departamento" | "empleado" | "incidencia" | "movimientoEmpleado" | "nominaDetalle" | "nominaEncabezado" | "parametroGlobal" | "puesto" | "registroEnvioBoleta" | "rolUsuario" | "salario" | "tipoMovimiento" | "usuario"
+    modelProps: "asistencia" | "controlVacacion" | "departamento" | "empleado" | "incidencia" | "movimientoEmpleado" | "nominaDetalle" | "nominaEncabezado" | "parametroGlobal" | "puesto" | "registroEnvioBoleta" | "rolUsuario" | "salario" | "tipoMovimiento" | "usuario" | "detalleControlVacacion"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1408,6 +1409,72 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    DetalleControlVacacion: {
+      payload: Prisma.$DetalleControlVacacionPayload<ExtArgs>
+      fields: Prisma.DetalleControlVacacionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.DetalleControlVacacionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DetalleControlVacacionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.DetalleControlVacacionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DetalleControlVacacionPayload>
+        }
+        findFirst: {
+          args: Prisma.DetalleControlVacacionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DetalleControlVacacionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.DetalleControlVacacionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DetalleControlVacacionPayload>
+        }
+        findMany: {
+          args: Prisma.DetalleControlVacacionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DetalleControlVacacionPayload>[]
+        }
+        create: {
+          args: Prisma.DetalleControlVacacionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DetalleControlVacacionPayload>
+        }
+        createMany: {
+          args: Prisma.DetalleControlVacacionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.DetalleControlVacacionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DetalleControlVacacionPayload>
+        }
+        update: {
+          args: Prisma.DetalleControlVacacionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DetalleControlVacacionPayload>
+        }
+        deleteMany: {
+          args: Prisma.DetalleControlVacacionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.DetalleControlVacacionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.DetalleControlVacacionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DetalleControlVacacionPayload>
+        }
+        aggregate: {
+          args: Prisma.DetalleControlVacacionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateDetalleControlVacacion>
+        }
+        groupBy: {
+          args: Prisma.DetalleControlVacacionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DetalleControlVacacionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.DetalleControlVacacionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DetalleControlVacacionCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1623,6 +1690,17 @@ export const UsuarioScalarFieldEnum = {
 export type UsuarioScalarFieldEnum = (typeof UsuarioScalarFieldEnum)[keyof typeof UsuarioScalarFieldEnum]
 
 
+export const DetalleControlVacacionScalarFieldEnum = {
+  IdDetalleVacacion: 'IdDetalleVacacion',
+  IdControlVacacion: 'IdControlVacacion',
+  IdIncidencia: 'IdIncidencia',
+  DiasDescontados: 'DiasDescontados',
+  FechaRegistro: 'FechaRegistro'
+} as const
+
+export type DetalleControlVacacionScalarFieldEnum = (typeof DetalleControlVacacionScalarFieldEnum)[keyof typeof DetalleControlVacacionScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1796,6 +1874,7 @@ export type GlobalOmitConfig = {
   salario?: Prisma.SalarioOmit
   tipoMovimiento?: Prisma.TipoMovimientoOmit
   usuario?: Prisma.UsuarioOmit
+  detalleControlVacacion?: Prisma.DetalleControlVacacionOmit
 }
 
 /* Types for Logging */

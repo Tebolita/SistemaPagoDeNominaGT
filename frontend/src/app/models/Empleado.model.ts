@@ -1,29 +1,29 @@
 export interface EmpleadoResponse {
-  IdEmpleado: 0;
+  IdEmpleado: number;    // Antes tenías 0
   DPI: string;
   NIT: string;
   Nombres: string;
   Apellidos: string;
   CorreoPersonal: string;
   FechaIngresa: Date | null;
-  IdPuesto: 0;
+  IdPuesto: number;      // Antes tenías 0
   Estado: boolean;
   FechaEliminacion: Date | null;
-  Telefono: 0;
-  Genero: false;
+  Telefono: number;      // Antes tenías 0
+  Genero: boolean;       // Antes tenías false
   EstadoCivil: string;
   Direccion: string;
   Fotografia: string;
-  Usuario: 
-  {
+  Usuario: {
     RolUsuario: {
       NombreRol: string
     }
-  }[],
+  }[];
   Puesto: {
-      NombrePuesto: string
+    NombrePuesto: string
   };
 }
+
 export interface EmpleadoRequest {
   DPI: string;
   NIT: string;
@@ -35,7 +35,7 @@ export interface EmpleadoRequest {
   Estado: boolean;
   FechaEliminacion: Date | null;
   Telefono: number;
-  Genero: false;
+  Genero: boolean;
   EstadoCivil: string;
   Direccion: string;
   Fotografia: string; 
