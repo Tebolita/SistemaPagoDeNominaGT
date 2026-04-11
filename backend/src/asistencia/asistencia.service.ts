@@ -28,12 +28,19 @@ export class AsistenciaService {
   }
 
   async update(id: number, updateAsistenciaDto: UpdateAsistenciaDto) {
-    // Validar que exista antes de actualizar
-    await this.findOne(id); 
-    return await this.prisma.asistencia.update({
-      where: { IdAsistencia: id },
-      data: updateAsistenciaDto,
-    });
+      // Verificamos que exista
+      await this.findOne(id);
+
+      // Extraemos el IdAsistencia (y cualquier otra relación) para que no entre en el "data"
+      const { IdAsistencia, Empleado, ...dataToUpdate } = updateAsistenciaDto as any;
+
+      // Actualizamos
+      return await this.prisma.asistencia.update({
+          where: {
+              IdAsistencia: id
+          },
+          data: dataToUpdate 
+      });
   }
 
   async remove(id: number) {

@@ -43,7 +43,7 @@ export class Inicio {
       description: 'Control de días de vacaciones ganados, gozados y saldo disponible por empleado.',
       icon: 'pi pi-calendar',
       route: '/home/vacacion',
-      status: 'coming',
+      status: 'active',
       color: 'teal',
       features: ['Días ganados', 'Días gozados', 'Saldo disponible']
     },
@@ -52,7 +52,7 @@ export class Inicio {
       description: 'Registro y control de entradas, salidas y horas extras del personal.',
       icon: 'pi pi-clock',
       route: '/home/asistencia',
-      status: 'coming',
+      status: 'active',
       color: 'violet',
       features: ['Hora de entrada', 'Hora de salida', 'Horas extra']
     }
