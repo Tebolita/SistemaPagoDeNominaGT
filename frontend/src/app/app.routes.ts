@@ -7,7 +7,7 @@ import { Asistencia } from './asistencia/asistencia';
 import { Inicio } from './inicio/inicio';
 
 export const routes: Routes = [
-    { path: '', redirectTo: 'login', pathMatch: 'full' },
+    { path: '', redirectTo: 'home/inicio', pathMatch: 'full' },
     {
         path: 'login',
         component: Login

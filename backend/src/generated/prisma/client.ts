@@ -114,3 +114,8 @@ export type TipoMovimiento = Prisma.TipoMovimientoModel
  * 
  */
 export type Usuario = Prisma.UsuarioModel
+/**
+ * Model DetalleControlVacacion
+ * 
+ */
+export type DetalleControlVacacion = Prisma.DetalleControlVacacionModel
