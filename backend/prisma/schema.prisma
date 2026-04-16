@@ -78,7 +78,7 @@ model Incidencia {
   TipoIncidencia         String                   @db.VarChar(50)
   FechaInicio            DateTime                 @db.DateTime
   FechaFin               DateTime                 @db.DateTime
-  ConGoceSueldo          Boolean?
+  ConGoceSueldo          Boolean?                 @default(false, map: "DF__Incidenci__ConGo__3D5E1FD2")
   IdUsuarioAutoriza      Int
   Activo                 Boolean?
   FechaEliminacion       DateTime?                @db.DateTime
@@ -94,7 +94,7 @@ model MovimientoEmpleado {
   Monto            Decimal        @db.Decimal(18, 2)
   MesAplicacion    Int
   AnioAplicacion   Int
-  FechaRegistro    DateTime?      @db.DateTime
+  FechaRegistro    DateTime?      @default(now(), map: "DF__Movimient__Fecha__4E88ABD4") @db.DateTime
   IdUsuarioIngresa Int
   Activo           Boolean?
   FechaEliminacion DateTime?      @db.DateTime

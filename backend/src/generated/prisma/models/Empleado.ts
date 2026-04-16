@@ -497,7 +497,7 @@ export type EmpleadoUncheckedCreateInput = {
   Nombres: string
   Apellidos: string
   CorreoPersonal: string
-  FechaIngresa: Date | string
+  FechaIngresa?: Date | string
   IdPuesto: number
   IdJornada: number
   IdBanco?: number | null
@@ -582,7 +582,7 @@ export type EmpleadoCreateManyInput = {
   Nombres: string
   Apellidos: string
   CorreoPersonal: string
-  FechaIngresa: Date | string
+  FechaIngresa?: Date | string
   IdPuesto: number
   IdJornada: number
   IdBanco?: number | null
@@ -1006,7 +1006,7 @@ export type EmpleadoUncheckedCreateWithoutAsistenciaInput = {
   Nombres: string
   Apellidos: string
   CorreoPersonal: string
-  FechaIngresa: Date | string
+  FechaIngresa?: Date | string
   IdPuesto: number
   IdJornada: number
   IdBanco?: number | null
@@ -1132,7 +1132,7 @@ export type EmpleadoUncheckedCreateWithoutControlVacacionInput = {
   Nombres: string
   Apellidos: string
   CorreoPersonal: string
-  FechaIngresa: Date | string
+  FechaIngresa?: Date | string
   IdPuesto: number
   IdJornada: number
   IdBanco?: number | null
@@ -1258,7 +1258,7 @@ export type EmpleadoUncheckedCreateWithoutIncidenciaInput = {
   Nombres: string
   Apellidos: string
   CorreoPersonal: string
-  FechaIngresa: Date | string
+  FechaIngresa?: Date | string
   IdPuesto: number
   IdJornada: number
   IdBanco?: number | null
@@ -1384,7 +1384,7 @@ export type EmpleadoUncheckedCreateWithoutMovimientoEmpleadoInput = {
   Nombres: string
   Apellidos: string
   CorreoPersonal: string
-  FechaIngresa: Date | string
+  FechaIngresa?: Date | string
   IdPuesto: number
   IdJornada: number
   IdBanco?: number | null
@@ -1510,7 +1510,7 @@ export type EmpleadoUncheckedCreateWithoutNominaDetalleInput = {
   Nombres: string
   Apellidos: string
   CorreoPersonal: string
-  FechaIngresa: Date | string
+  FechaIngresa?: Date | string
   IdPuesto: number
   IdJornada: number
   IdBanco?: number | null
@@ -1740,7 +1740,7 @@ export type EmpleadoUncheckedCreateWithoutSalarioInput = {
   Nombres: string
   Apellidos: string
   CorreoPersonal: string
-  FechaIngresa: Date | string
+  FechaIngresa?: Date | string
   IdPuesto: number
   IdJornada: number
   IdBanco?: number | null
@@ -1866,7 +1866,7 @@ export type EmpleadoUncheckedCreateWithoutUsuarioInput = {
   Nombres: string
   Apellidos: string
   CorreoPersonal: string
-  FechaIngresa: Date | string
+  FechaIngresa?: Date | string
   IdPuesto: number
   IdJornada: number
   IdBanco?: number | null
