@@ -31,7 +31,7 @@ export type ControlVacacionAvgAggregateOutputType = {
   IdEmpleado: number | null
   AnioCorriente: number | null
   DiasGanados: number | null
-  DiasGozados: number | null
+  DiasGozados: runtime.Decimal | null
 }
 
 export type ControlVacacionSumAggregateOutputType = {
@@ -39,7 +39,7 @@ export type ControlVacacionSumAggregateOutputType = {
   IdEmpleado: number | null
   AnioCorriente: number | null
   DiasGanados: number | null
-  DiasGozados: number | null
+  DiasGozados: runtime.Decimal | null
 }
 
 export type ControlVacacionMinAggregateOutputType = {
@@ -47,7 +47,9 @@ export type ControlVacacionMinAggregateOutputType = {
   IdEmpleado: number | null
   AnioCorriente: number | null
   DiasGanados: number | null
-  DiasGozados: number | null
+  DiasGozados: runtime.Decimal | null
+  Activo: boolean | null
+  FechaEliminacion: Date | null
 }
 
 export type ControlVacacionMaxAggregateOutputType = {
@@ -55,7 +57,9 @@ export type ControlVacacionMaxAggregateOutputType = {
   IdEmpleado: number | null
   AnioCorriente: number | null
   DiasGanados: number | null
-  DiasGozados: number | null
+  DiasGozados: runtime.Decimal | null
+  Activo: boolean | null
+  FechaEliminacion: Date | null
 }
 
 export type ControlVacacionCountAggregateOutputType = {
@@ -64,6 +68,8 @@ export type ControlVacacionCountAggregateOutputType = {
   AnioCorriente: number
   DiasGanados: number
   DiasGozados: number
+  Activo: number
+  FechaEliminacion: number
   _all: number
 }
 
@@ -90,6 +96,8 @@ export type ControlVacacionMinAggregateInputType = {
   AnioCorriente?: true
   DiasGanados?: true
   DiasGozados?: true
+  Activo?: true
+  FechaEliminacion?: true
 }
 
 export type ControlVacacionMaxAggregateInputType = {
@@ -98,6 +106,8 @@ export type ControlVacacionMaxAggregateInputType = {
   AnioCorriente?: true
   DiasGanados?: true
   DiasGozados?: true
+  Activo?: true
+  FechaEliminacion?: true
 }
 
 export type ControlVacacionCountAggregateInputType = {
@@ -106,6 +116,8 @@ export type ControlVacacionCountAggregateInputType = {
   AnioCorriente?: true
   DiasGanados?: true
   DiasGozados?: true
+  Activo?: true
+  FechaEliminacion?: true
   _all?: true
 }
 
@@ -200,7 +212,9 @@ export type ControlVacacionGroupByOutputType = {
   IdEmpleado: number
   AnioCorriente: number
   DiasGanados: number | null
-  DiasGozados: number | null
+  DiasGozados: runtime.Decimal | null
+  Activo: boolean | null
+  FechaEliminacion: Date | null
   _count: ControlVacacionCountAggregateOutputType | null
   _avg: ControlVacacionAvgAggregateOutputType | null
   _sum: ControlVacacionSumAggregateOutputType | null
@@ -208,7 +222,7 @@ export type ControlVacacionGroupByOutputType = {
   _max: ControlVacacionMaxAggregateOutputType | null
 }
 
-type GetControlVacacionGroupByPayload<T extends ControlVacacionGroupByArgs> = Prisma.PrismaPromise<
+export type GetControlVacacionGroupByPayload<T extends ControlVacacionGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<ControlVacacionGroupByOutputType, T['by']> &
       {
@@ -231,7 +245,9 @@ export type ControlVacacionWhereInput = {
   IdEmpleado?: Prisma.IntFilter<"ControlVacacion"> | number
   AnioCorriente?: Prisma.IntFilter<"ControlVacacion"> | number
   DiasGanados?: Prisma.IntNullableFilter<"ControlVacacion"> | number | null
-  DiasGozados?: Prisma.IntNullableFilter<"ControlVacacion"> | number | null
+  DiasGozados?: Prisma.DecimalNullableFilter<"ControlVacacion"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: Prisma.BoolNullableFilter<"ControlVacacion"> | boolean | null
+  FechaEliminacion?: Prisma.DateTimeNullableFilter<"ControlVacacion"> | Date | string | null
   Empleado?: Prisma.XOR<Prisma.EmpleadoScalarRelationFilter, Prisma.EmpleadoWhereInput>
   DetalleControlVacacion?: Prisma.DetalleControlVacacionListRelationFilter
 }
@@ -242,6 +258,8 @@ export type ControlVacacionOrderByWithRelationInput = {
   AnioCorriente?: Prisma.SortOrder
   DiasGanados?: Prisma.SortOrderInput | Prisma.SortOrder
   DiasGozados?: Prisma.SortOrderInput | Prisma.SortOrder
+  Activo?: Prisma.SortOrderInput | Prisma.SortOrder
+  FechaEliminacion?: Prisma.SortOrderInput | Prisma.SortOrder
   Empleado?: Prisma.EmpleadoOrderByWithRelationInput
   DetalleControlVacacion?: Prisma.DetalleControlVacacionOrderByRelationAggregateInput
 }
@@ -254,7 +272,9 @@ export type ControlVacacionWhereUniqueInput = Prisma.AtLeast<{
   IdEmpleado?: Prisma.IntFilter<"ControlVacacion"> | number
   AnioCorriente?: Prisma.IntFilter<"ControlVacacion"> | number
   DiasGanados?: Prisma.IntNullableFilter<"ControlVacacion"> | number | null
-  DiasGozados?: Prisma.IntNullableFilter<"ControlVacacion"> | number | null
+  DiasGozados?: Prisma.DecimalNullableFilter<"ControlVacacion"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: Prisma.BoolNullableFilter<"ControlVacacion"> | boolean | null
+  FechaEliminacion?: Prisma.DateTimeNullableFilter<"ControlVacacion"> | Date | string | null
   Empleado?: Prisma.XOR<Prisma.EmpleadoScalarRelationFilter, Prisma.EmpleadoWhereInput>
   DetalleControlVacacion?: Prisma.DetalleControlVacacionListRelationFilter
 }, "IdControlVacacion">
@@ -265,6 +285,8 @@ export type ControlVacacionOrderByWithAggregationInput = {
   AnioCorriente?: Prisma.SortOrder
   DiasGanados?: Prisma.SortOrderInput | Prisma.SortOrder
   DiasGozados?: Prisma.SortOrderInput | Prisma.SortOrder
+  Activo?: Prisma.SortOrderInput | Prisma.SortOrder
+  FechaEliminacion?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.ControlVacacionCountOrderByAggregateInput
   _avg?: Prisma.ControlVacacionAvgOrderByAggregateInput
   _max?: Prisma.ControlVacacionMaxOrderByAggregateInput
@@ -280,13 +302,17 @@ export type ControlVacacionScalarWhereWithAggregatesInput = {
   IdEmpleado?: Prisma.IntWithAggregatesFilter<"ControlVacacion"> | number
   AnioCorriente?: Prisma.IntWithAggregatesFilter<"ControlVacacion"> | number
   DiasGanados?: Prisma.IntNullableWithAggregatesFilter<"ControlVacacion"> | number | null
-  DiasGozados?: Prisma.IntNullableWithAggregatesFilter<"ControlVacacion"> | number | null
+  DiasGozados?: Prisma.DecimalNullableWithAggregatesFilter<"ControlVacacion"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: Prisma.BoolNullableWithAggregatesFilter<"ControlVacacion"> | boolean | null
+  FechaEliminacion?: Prisma.DateTimeNullableWithAggregatesFilter<"ControlVacacion"> | Date | string | null
 }
 
 export type ControlVacacionCreateInput = {
   AnioCorriente: number
   DiasGanados?: number | null
-  DiasGozados?: number | null
+  DiasGozados?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
   Empleado: Prisma.EmpleadoCreateNestedOneWithoutControlVacacionInput
   DetalleControlVacacion?: Prisma.DetalleControlVacacionCreateNestedManyWithoutControlVacacionInput
 }
@@ -296,14 +322,18 @@ export type ControlVacacionUncheckedCreateInput = {
   IdEmpleado: number
   AnioCorriente: number
   DiasGanados?: number | null
-  DiasGozados?: number | null
+  DiasGozados?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
   DetalleControlVacacion?: Prisma.DetalleControlVacacionUncheckedCreateNestedManyWithoutControlVacacionInput
 }
 
 export type ControlVacacionUpdateInput = {
   AnioCorriente?: Prisma.IntFieldUpdateOperationsInput | number
   DiasGanados?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  DiasGozados?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  DiasGozados?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Empleado?: Prisma.EmpleadoUpdateOneRequiredWithoutControlVacacionNestedInput
   DetalleControlVacacion?: Prisma.DetalleControlVacacionUpdateManyWithoutControlVacacionNestedInput
 }
@@ -313,7 +343,9 @@ export type ControlVacacionUncheckedUpdateInput = {
   IdEmpleado?: Prisma.IntFieldUpdateOperationsInput | number
   AnioCorriente?: Prisma.IntFieldUpdateOperationsInput | number
   DiasGanados?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  DiasGozados?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  DiasGozados?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   DetalleControlVacacion?: Prisma.DetalleControlVacacionUncheckedUpdateManyWithoutControlVacacionNestedInput
 }
 
@@ -321,13 +353,17 @@ export type ControlVacacionCreateManyInput = {
   IdEmpleado: number
   AnioCorriente: number
   DiasGanados?: number | null
-  DiasGozados?: number | null
+  DiasGozados?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
 }
 
 export type ControlVacacionUpdateManyMutationInput = {
   AnioCorriente?: Prisma.IntFieldUpdateOperationsInput | number
   DiasGanados?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  DiasGozados?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  DiasGozados?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ControlVacacionUncheckedUpdateManyInput = {
@@ -335,7 +371,9 @@ export type ControlVacacionUncheckedUpdateManyInput = {
   IdEmpleado?: Prisma.IntFieldUpdateOperationsInput | number
   AnioCorriente?: Prisma.IntFieldUpdateOperationsInput | number
   DiasGanados?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  DiasGozados?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  DiasGozados?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ControlVacacionCountOrderByAggregateInput = {
@@ -344,6 +382,8 @@ export type ControlVacacionCountOrderByAggregateInput = {
   AnioCorriente?: Prisma.SortOrder
   DiasGanados?: Prisma.SortOrder
   DiasGozados?: Prisma.SortOrder
+  Activo?: Prisma.SortOrder
+  FechaEliminacion?: Prisma.SortOrder
 }
 
 export type ControlVacacionAvgOrderByAggregateInput = {
@@ -360,6 +400,8 @@ export type ControlVacacionMaxOrderByAggregateInput = {
   AnioCorriente?: Prisma.SortOrder
   DiasGanados?: Prisma.SortOrder
   DiasGozados?: Prisma.SortOrder
+  Activo?: Prisma.SortOrder
+  FechaEliminacion?: Prisma.SortOrder
 }
 
 export type ControlVacacionMinOrderByAggregateInput = {
@@ -368,6 +410,8 @@ export type ControlVacacionMinOrderByAggregateInput = {
   AnioCorriente?: Prisma.SortOrder
   DiasGanados?: Prisma.SortOrder
   DiasGozados?: Prisma.SortOrder
+  Activo?: Prisma.SortOrder
+  FechaEliminacion?: Prisma.SortOrder
 }
 
 export type ControlVacacionSumOrderByAggregateInput = {
@@ -460,7 +504,9 @@ export type ControlVacacionUpdateOneRequiredWithoutDetalleControlVacacionNestedI
 export type ControlVacacionCreateWithoutEmpleadoInput = {
   AnioCorriente: number
   DiasGanados?: number | null
-  DiasGozados?: number | null
+  DiasGozados?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
   DetalleControlVacacion?: Prisma.DetalleControlVacacionCreateNestedManyWithoutControlVacacionInput
 }
 
@@ -468,7 +514,9 @@ export type ControlVacacionUncheckedCreateWithoutEmpleadoInput = {
   IdControlVacacion?: number
   AnioCorriente: number
   DiasGanados?: number | null
-  DiasGozados?: number | null
+  DiasGozados?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
   DetalleControlVacacion?: Prisma.DetalleControlVacacionUncheckedCreateNestedManyWithoutControlVacacionInput
 }
 
@@ -505,13 +553,17 @@ export type ControlVacacionScalarWhereInput = {
   IdEmpleado?: Prisma.IntFilter<"ControlVacacion"> | number
   AnioCorriente?: Prisma.IntFilter<"ControlVacacion"> | number
   DiasGanados?: Prisma.IntNullableFilter<"ControlVacacion"> | number | null
-  DiasGozados?: Prisma.IntNullableFilter<"ControlVacacion"> | number | null
+  DiasGozados?: Prisma.DecimalNullableFilter<"ControlVacacion"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: Prisma.BoolNullableFilter<"ControlVacacion"> | boolean | null
+  FechaEliminacion?: Prisma.DateTimeNullableFilter<"ControlVacacion"> | Date | string | null
 }
 
 export type ControlVacacionCreateWithoutDetalleControlVacacionInput = {
   AnioCorriente: number
   DiasGanados?: number | null
-  DiasGozados?: number | null
+  DiasGozados?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
   Empleado: Prisma.EmpleadoCreateNestedOneWithoutControlVacacionInput
 }
 
@@ -520,7 +572,9 @@ export type ControlVacacionUncheckedCreateWithoutDetalleControlVacacionInput = {
   IdEmpleado: number
   AnioCorriente: number
   DiasGanados?: number | null
-  DiasGozados?: number | null
+  DiasGozados?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
 }
 
 export type ControlVacacionCreateOrConnectWithoutDetalleControlVacacionInput = {
@@ -542,7 +596,9 @@ export type ControlVacacionUpdateToOneWithWhereWithoutDetalleControlVacacionInpu
 export type ControlVacacionUpdateWithoutDetalleControlVacacionInput = {
   AnioCorriente?: Prisma.IntFieldUpdateOperationsInput | number
   DiasGanados?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  DiasGozados?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  DiasGozados?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Empleado?: Prisma.EmpleadoUpdateOneRequiredWithoutControlVacacionNestedInput
 }
 
@@ -551,19 +607,25 @@ export type ControlVacacionUncheckedUpdateWithoutDetalleControlVacacionInput = {
   IdEmpleado?: Prisma.IntFieldUpdateOperationsInput | number
   AnioCorriente?: Prisma.IntFieldUpdateOperationsInput | number
   DiasGanados?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  DiasGozados?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  DiasGozados?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ControlVacacionCreateManyEmpleadoInput = {
   AnioCorriente: number
   DiasGanados?: number | null
-  DiasGozados?: number | null
+  DiasGozados?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
 }
 
 export type ControlVacacionUpdateWithoutEmpleadoInput = {
   AnioCorriente?: Prisma.IntFieldUpdateOperationsInput | number
   DiasGanados?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  DiasGozados?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  DiasGozados?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   DetalleControlVacacion?: Prisma.DetalleControlVacacionUpdateManyWithoutControlVacacionNestedInput
 }
 
@@ -571,7 +633,9 @@ export type ControlVacacionUncheckedUpdateWithoutEmpleadoInput = {
   IdControlVacacion?: Prisma.IntFieldUpdateOperationsInput | number
   AnioCorriente?: Prisma.IntFieldUpdateOperationsInput | number
   DiasGanados?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  DiasGozados?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  DiasGozados?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   DetalleControlVacacion?: Prisma.DetalleControlVacacionUncheckedUpdateManyWithoutControlVacacionNestedInput
 }
 
@@ -579,7 +643,9 @@ export type ControlVacacionUncheckedUpdateManyWithoutEmpleadoInput = {
   IdControlVacacion?: Prisma.IntFieldUpdateOperationsInput | number
   AnioCorriente?: Prisma.IntFieldUpdateOperationsInput | number
   DiasGanados?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  DiasGozados?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  DiasGozados?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 
@@ -619,6 +685,8 @@ export type ControlVacacionSelect<ExtArgs extends runtime.Types.Extensions.Inter
   AnioCorriente?: boolean
   DiasGanados?: boolean
   DiasGozados?: boolean
+  Activo?: boolean
+  FechaEliminacion?: boolean
   Empleado?: boolean | Prisma.EmpleadoDefaultArgs<ExtArgs>
   DetalleControlVacacion?: boolean | Prisma.ControlVacacion$DetalleControlVacacionArgs<ExtArgs>
   _count?: boolean | Prisma.ControlVacacionCountOutputTypeDefaultArgs<ExtArgs>
@@ -632,9 +700,11 @@ export type ControlVacacionSelectScalar = {
   AnioCorriente?: boolean
   DiasGanados?: boolean
   DiasGozados?: boolean
+  Activo?: boolean
+  FechaEliminacion?: boolean
 }
 
-export type ControlVacacionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"IdControlVacacion" | "IdEmpleado" | "AnioCorriente" | "DiasGanados" | "DiasGozados", ExtArgs["result"]["controlVacacion"]>
+export type ControlVacacionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"IdControlVacacion" | "IdEmpleado" | "AnioCorriente" | "DiasGanados" | "DiasGozados" | "Activo" | "FechaEliminacion", ExtArgs["result"]["controlVacacion"]>
 export type ControlVacacionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   Empleado?: boolean | Prisma.EmpleadoDefaultArgs<ExtArgs>
   DetalleControlVacacion?: boolean | Prisma.ControlVacacion$DetalleControlVacacionArgs<ExtArgs>
@@ -652,7 +722,9 @@ export type $ControlVacacionPayload<ExtArgs extends runtime.Types.Extensions.Int
     IdEmpleado: number
     AnioCorriente: number
     DiasGanados: number | null
-    DiasGozados: number | null
+    DiasGozados: runtime.Decimal | null
+    Activo: boolean | null
+    FechaEliminacion: Date | null
   }, ExtArgs["result"]["controlVacacion"]>
   composites: {}
 }
@@ -1028,7 +1100,9 @@ export interface ControlVacacionFieldRefs {
   readonly IdEmpleado: Prisma.FieldRef<"ControlVacacion", 'Int'>
   readonly AnioCorriente: Prisma.FieldRef<"ControlVacacion", 'Int'>
   readonly DiasGanados: Prisma.FieldRef<"ControlVacacion", 'Int'>
-  readonly DiasGozados: Prisma.FieldRef<"ControlVacacion", 'Int'>
+  readonly DiasGozados: Prisma.FieldRef<"ControlVacacion", 'Decimal'>
+  readonly Activo: Prisma.FieldRef<"ControlVacacion", 'Boolean'>
+  readonly FechaEliminacion: Prisma.FieldRef<"ControlVacacion", 'DateTime'>
 }
     
 

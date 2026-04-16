@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException  } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsuarioService } from 'src/usuario/usuario.service';
 import * as bcryptjs from 'bcryptjs';
@@ -7,20 +7,26 @@ import * as bcryptjs from 'bcryptjs';
 export class LoginService {
   constructor(
     private userService: UsuarioService,
-    private jwtService: JwtService) {}
+    private jwtService: JwtService
+  ) {}
 
-  async SignIn(username: string, contrasena: string, clave: number): Promise<any>{
+  async SignIn(username: string, contrasena: string, clave: number): Promise<any> {
     const user = await this.userService.findOne(username);
     if (!user) {
-      throw new UnauthorizedException('Credenciales inválidas');
+      throw new UnauthorizedException('Tu usuario no es valido');
     }
     const isPasswordValid = await bcryptjs.compare(contrasena, user?.Contrasena!);
     const isClaveValid = await bcryptjs.compare(clave.toString(), user?.Clave!);
     
-    if(!isPasswordValid || !isClaveValid){
-      throw new UnauthorizedException();
+    if (!isPasswordValid || !isClaveValid) {
+      throw new UnauthorizedException('Contraseña o usuario incorrecto');
     }
-    const payload = {sub: user?.IdUsuario, username: user?.Username};
-    return {access_token: await this.jwtService.signAsync(payload)}
+    const payload = { sub: user?.IdUsuario, username: user?.Username };
+    return { access_token: await this.jwtService.signAsync(payload) };
+  }
+
+  // Método de Logout
+  logout() {
+    return { message: 'Sesión cerrada exitosamente' };
   }
 }

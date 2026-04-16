@@ -1,15 +1,17 @@
-import { IsString, IsNumber, IsNotEmpty, IsEmail, IsDate, IsBoolean, IsOptional } from "class-validator";
-import { ApiProperty } from "@nestjs/swagger";
+import { IsString, IsNumber, IsNotEmpty, IsEmail, IsDate, IsBoolean, IsOptional, MaxLength } from "class-validator";
+import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { Type } from "class-transformer";
 
 export class CreateEmpleadoDto {
-    @ApiProperty()
+    @ApiProperty({ description: 'DPI de 13 dígitos sin guiones' })
     @IsString()
     @IsNotEmpty()
+    @MaxLength(13)
     DPI!: string;
 
     @ApiProperty()
     @IsString()
+    @IsNotEmpty()
     NIT!: string;
 
     @ApiProperty()
@@ -19,49 +21,81 @@ export class CreateEmpleadoDto {
 
     @ApiProperty()
     @IsString()
-    Apellidos!: string
+    @IsNotEmpty()
+    Apellidos!: string;
 
     @ApiProperty()
     @IsEmail()
-    CorreoPersonal!: string
+    @IsNotEmpty()
+    CorreoPersonal!: string;
 
-    @ApiProperty()
-    @Type(() => Date)
-    @IsDate()
-    FechaIngresa!: Date;
-
-    @ApiProperty()
-    @IsNumber()
-    IdPuesto!: number;
-
-    @ApiProperty()
-    @IsBoolean()
-    Estado!: boolean;
-
-    @ApiProperty({ nullable: true, required: false })
+    // Es opcional en la creación porque la BD tiene DEFAULT GETDATE()
+    @ApiPropertyOptional()
     @IsOptional()
     @Type(() => Date)
     @IsDate()
-    FechaEliminacion!: Date | null;
+    FechaIngresa?: Date | null;
 
- 
     @ApiProperty()
     @IsNumber()
-    Telefono!: number;
+    @IsNotEmpty()
+    IdPuesto!: number;
+
+    // Agregado: Requerido según el nuevo esquema
+    @ApiProperty()
+    @IsNumber()
+    @IsNotEmpty()
+    IdJornada!: number;
+
+    // Cambiado de INT a VARCHAR según el esquema (para no perder ceros iniciales)
+    @ApiProperty()
+    @IsString()
+    @IsNotEmpty()
+    Telefono!: string;
 
     @ApiProperty()
     @IsBoolean()
+    @IsNotEmpty()
     Genero!: boolean;
 
-    @ApiProperty()
+    // Opcional según esquema de BD
+    @ApiPropertyOptional()
+    @IsOptional()
     @IsString()
-    EstadoCivil!: string
+    EstadoCivil?: string;
 
-    @ApiProperty()
+    // Opcional según esquema de BD
+    @ApiPropertyOptional()
+    @IsOptional()
     @IsString()
-    Direccion!: string 
+    Direccion?: string;
 
-    @ApiProperty()
+    // Opcional según esquema de BD
+    @ApiPropertyOptional()
+    @IsOptional()
     @IsString()
-    Fotografia!: string
+    Fotografia?: string;
+
+    // Agregado: Opcional, para transferencias bancarias
+    @ApiPropertyOptional()
+    @IsOptional()
+    @IsNumber()
+    IdBanco?: number;
+
+    // Agregado: Opcional, cuenta del banco
+    @ApiPropertyOptional()
+    @IsOptional()
+    @IsString()
+    CuentaBancaria?: string;
+
+    @ApiPropertyOptional()
+    @IsOptional()
+    @IsBoolean()
+    Activo?: boolean;
+
+    @ApiPropertyOptional()
+    @IsOptional()
+    @Type(() => Date)
+    @IsDate()
+    FechaEliminacion?: Date;
 }

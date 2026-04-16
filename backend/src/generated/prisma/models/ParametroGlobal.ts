@@ -41,6 +41,8 @@ export type ParametroGlobalMinAggregateOutputType = {
   NombreParametro: string | null
   Valor: runtime.Decimal | null
   Descripcion: string | null
+  Activo: boolean | null
+  FechaEliminacion: Date | null
 }
 
 export type ParametroGlobalMaxAggregateOutputType = {
@@ -48,6 +50,8 @@ export type ParametroGlobalMaxAggregateOutputType = {
   NombreParametro: string | null
   Valor: runtime.Decimal | null
   Descripcion: string | null
+  Activo: boolean | null
+  FechaEliminacion: Date | null
 }
 
 export type ParametroGlobalCountAggregateOutputType = {
@@ -55,6 +59,8 @@ export type ParametroGlobalCountAggregateOutputType = {
   NombreParametro: number
   Valor: number
   Descripcion: number
+  Activo: number
+  FechaEliminacion: number
   _all: number
 }
 
@@ -74,6 +80,8 @@ export type ParametroGlobalMinAggregateInputType = {
   NombreParametro?: true
   Valor?: true
   Descripcion?: true
+  Activo?: true
+  FechaEliminacion?: true
 }
 
 export type ParametroGlobalMaxAggregateInputType = {
@@ -81,6 +89,8 @@ export type ParametroGlobalMaxAggregateInputType = {
   NombreParametro?: true
   Valor?: true
   Descripcion?: true
+  Activo?: true
+  FechaEliminacion?: true
 }
 
 export type ParametroGlobalCountAggregateInputType = {
@@ -88,6 +98,8 @@ export type ParametroGlobalCountAggregateInputType = {
   NombreParametro?: true
   Valor?: true
   Descripcion?: true
+  Activo?: true
+  FechaEliminacion?: true
   _all?: true
 }
 
@@ -182,6 +194,8 @@ export type ParametroGlobalGroupByOutputType = {
   NombreParametro: string
   Valor: runtime.Decimal
   Descripcion: string | null
+  Activo: boolean | null
+  FechaEliminacion: Date | null
   _count: ParametroGlobalCountAggregateOutputType | null
   _avg: ParametroGlobalAvgAggregateOutputType | null
   _sum: ParametroGlobalSumAggregateOutputType | null
@@ -189,7 +203,7 @@ export type ParametroGlobalGroupByOutputType = {
   _max: ParametroGlobalMaxAggregateOutputType | null
 }
 
-type GetParametroGlobalGroupByPayload<T extends ParametroGlobalGroupByArgs> = Prisma.PrismaPromise<
+export type GetParametroGlobalGroupByPayload<T extends ParametroGlobalGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<ParametroGlobalGroupByOutputType, T['by']> &
       {
@@ -212,6 +226,8 @@ export type ParametroGlobalWhereInput = {
   NombreParametro?: Prisma.StringFilter<"ParametroGlobal"> | string
   Valor?: Prisma.DecimalFilter<"ParametroGlobal"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   Descripcion?: Prisma.StringNullableFilter<"ParametroGlobal"> | string | null
+  Activo?: Prisma.BoolNullableFilter<"ParametroGlobal"> | boolean | null
+  FechaEliminacion?: Prisma.DateTimeNullableFilter<"ParametroGlobal"> | Date | string | null
 }
 
 export type ParametroGlobalOrderByWithRelationInput = {
@@ -219,6 +235,8 @@ export type ParametroGlobalOrderByWithRelationInput = {
   NombreParametro?: Prisma.SortOrder
   Valor?: Prisma.SortOrder
   Descripcion?: Prisma.SortOrderInput | Prisma.SortOrder
+  Activo?: Prisma.SortOrderInput | Prisma.SortOrder
+  FechaEliminacion?: Prisma.SortOrderInput | Prisma.SortOrder
 }
 
 export type ParametroGlobalWhereUniqueInput = Prisma.AtLeast<{
@@ -229,6 +247,8 @@ export type ParametroGlobalWhereUniqueInput = Prisma.AtLeast<{
   NombreParametro?: Prisma.StringFilter<"ParametroGlobal"> | string
   Valor?: Prisma.DecimalFilter<"ParametroGlobal"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   Descripcion?: Prisma.StringNullableFilter<"ParametroGlobal"> | string | null
+  Activo?: Prisma.BoolNullableFilter<"ParametroGlobal"> | boolean | null
+  FechaEliminacion?: Prisma.DateTimeNullableFilter<"ParametroGlobal"> | Date | string | null
 }, "IdParametro">
 
 export type ParametroGlobalOrderByWithAggregationInput = {
@@ -236,6 +256,8 @@ export type ParametroGlobalOrderByWithAggregationInput = {
   NombreParametro?: Prisma.SortOrder
   Valor?: Prisma.SortOrder
   Descripcion?: Prisma.SortOrderInput | Prisma.SortOrder
+  Activo?: Prisma.SortOrderInput | Prisma.SortOrder
+  FechaEliminacion?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.ParametroGlobalCountOrderByAggregateInput
   _avg?: Prisma.ParametroGlobalAvgOrderByAggregateInput
   _max?: Prisma.ParametroGlobalMaxOrderByAggregateInput
@@ -251,12 +273,16 @@ export type ParametroGlobalScalarWhereWithAggregatesInput = {
   NombreParametro?: Prisma.StringWithAggregatesFilter<"ParametroGlobal"> | string
   Valor?: Prisma.DecimalWithAggregatesFilter<"ParametroGlobal"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   Descripcion?: Prisma.StringNullableWithAggregatesFilter<"ParametroGlobal"> | string | null
+  Activo?: Prisma.BoolNullableWithAggregatesFilter<"ParametroGlobal"> | boolean | null
+  FechaEliminacion?: Prisma.DateTimeNullableWithAggregatesFilter<"ParametroGlobal"> | Date | string | null
 }
 
 export type ParametroGlobalCreateInput = {
   NombreParametro: string
   Valor: runtime.Decimal | runtime.DecimalJsLike | number | string
   Descripcion?: string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
 }
 
 export type ParametroGlobalUncheckedCreateInput = {
@@ -264,12 +290,16 @@ export type ParametroGlobalUncheckedCreateInput = {
   NombreParametro: string
   Valor: runtime.Decimal | runtime.DecimalJsLike | number | string
   Descripcion?: string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
 }
 
 export type ParametroGlobalUpdateInput = {
   NombreParametro?: Prisma.StringFieldUpdateOperationsInput | string
   Valor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   Descripcion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ParametroGlobalUncheckedUpdateInput = {
@@ -277,18 +307,24 @@ export type ParametroGlobalUncheckedUpdateInput = {
   NombreParametro?: Prisma.StringFieldUpdateOperationsInput | string
   Valor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   Descripcion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ParametroGlobalCreateManyInput = {
   NombreParametro: string
   Valor: runtime.Decimal | runtime.DecimalJsLike | number | string
   Descripcion?: string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
 }
 
 export type ParametroGlobalUpdateManyMutationInput = {
   NombreParametro?: Prisma.StringFieldUpdateOperationsInput | string
   Valor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   Descripcion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ParametroGlobalUncheckedUpdateManyInput = {
@@ -296,6 +332,8 @@ export type ParametroGlobalUncheckedUpdateManyInput = {
   NombreParametro?: Prisma.StringFieldUpdateOperationsInput | string
   Valor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   Descripcion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ParametroGlobalCountOrderByAggregateInput = {
@@ -303,6 +341,8 @@ export type ParametroGlobalCountOrderByAggregateInput = {
   NombreParametro?: Prisma.SortOrder
   Valor?: Prisma.SortOrder
   Descripcion?: Prisma.SortOrder
+  Activo?: Prisma.SortOrder
+  FechaEliminacion?: Prisma.SortOrder
 }
 
 export type ParametroGlobalAvgOrderByAggregateInput = {
@@ -315,6 +355,8 @@ export type ParametroGlobalMaxOrderByAggregateInput = {
   NombreParametro?: Prisma.SortOrder
   Valor?: Prisma.SortOrder
   Descripcion?: Prisma.SortOrder
+  Activo?: Prisma.SortOrder
+  FechaEliminacion?: Prisma.SortOrder
 }
 
 export type ParametroGlobalMinOrderByAggregateInput = {
@@ -322,6 +364,8 @@ export type ParametroGlobalMinOrderByAggregateInput = {
   NombreParametro?: Prisma.SortOrder
   Valor?: Prisma.SortOrder
   Descripcion?: Prisma.SortOrder
+  Activo?: Prisma.SortOrder
+  FechaEliminacion?: Prisma.SortOrder
 }
 
 export type ParametroGlobalSumOrderByAggregateInput = {
@@ -336,6 +380,8 @@ export type ParametroGlobalSelect<ExtArgs extends runtime.Types.Extensions.Inter
   NombreParametro?: boolean
   Valor?: boolean
   Descripcion?: boolean
+  Activo?: boolean
+  FechaEliminacion?: boolean
 }, ExtArgs["result"]["parametroGlobal"]>
 
 
@@ -345,9 +391,11 @@ export type ParametroGlobalSelectScalar = {
   NombreParametro?: boolean
   Valor?: boolean
   Descripcion?: boolean
+  Activo?: boolean
+  FechaEliminacion?: boolean
 }
 
-export type ParametroGlobalOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"IdParametro" | "NombreParametro" | "Valor" | "Descripcion", ExtArgs["result"]["parametroGlobal"]>
+export type ParametroGlobalOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"IdParametro" | "NombreParametro" | "Valor" | "Descripcion" | "Activo" | "FechaEliminacion", ExtArgs["result"]["parametroGlobal"]>
 
 export type $ParametroGlobalPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "ParametroGlobal"
@@ -357,6 +405,8 @@ export type $ParametroGlobalPayload<ExtArgs extends runtime.Types.Extensions.Int
     NombreParametro: string
     Valor: runtime.Decimal
     Descripcion: string | null
+    Activo: boolean | null
+    FechaEliminacion: Date | null
   }, ExtArgs["result"]["parametroGlobal"]>
   composites: {}
 }
@@ -730,6 +780,8 @@ export interface ParametroGlobalFieldRefs {
   readonly NombreParametro: Prisma.FieldRef<"ParametroGlobal", 'String'>
   readonly Valor: Prisma.FieldRef<"ParametroGlobal", 'Decimal'>
   readonly Descripcion: Prisma.FieldRef<"ParametroGlobal", 'String'>
+  readonly Activo: Prisma.FieldRef<"ParametroGlobal", 'Boolean'>
+  readonly FechaEliminacion: Prisma.FieldRef<"ParametroGlobal", 'DateTime'>
 }
     
 

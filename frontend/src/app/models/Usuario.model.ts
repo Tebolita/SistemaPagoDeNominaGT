@@ -16,3 +16,13 @@ export interface UsuarioResponseCUD {
   message: string;
   id: string
 }
+
+export interface UsuarioInterface {
+  IdUsuario?: number;
+  Username: string;
+  Contrasena?: string; 
+  Clave?: string;      
+  IdRol: number;
+  IdEmpleado: number;
+  RolUsuario?: { NombreRol: string };
+}

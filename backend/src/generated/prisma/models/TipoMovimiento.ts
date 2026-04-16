@@ -39,6 +39,10 @@ export type TipoMovimientoMinAggregateOutputType = {
   NombreMovimiento: string | null
   Clasificacion: string | null
   EsFijo: boolean | null
+  AfectaIGSS: boolean | null
+  AfectaISR: boolean | null
+  Activo: boolean | null
+  FechaEliminacion: Date | null
 }
 
 export type TipoMovimientoMaxAggregateOutputType = {
@@ -46,6 +50,10 @@ export type TipoMovimientoMaxAggregateOutputType = {
   NombreMovimiento: string | null
   Clasificacion: string | null
   EsFijo: boolean | null
+  AfectaIGSS: boolean | null
+  AfectaISR: boolean | null
+  Activo: boolean | null
+  FechaEliminacion: Date | null
 }
 
 export type TipoMovimientoCountAggregateOutputType = {
@@ -53,6 +61,10 @@ export type TipoMovimientoCountAggregateOutputType = {
   NombreMovimiento: number
   Clasificacion: number
   EsFijo: number
+  AfectaIGSS: number
+  AfectaISR: number
+  Activo: number
+  FechaEliminacion: number
   _all: number
 }
 
@@ -70,6 +82,10 @@ export type TipoMovimientoMinAggregateInputType = {
   NombreMovimiento?: true
   Clasificacion?: true
   EsFijo?: true
+  AfectaIGSS?: true
+  AfectaISR?: true
+  Activo?: true
+  FechaEliminacion?: true
 }
 
 export type TipoMovimientoMaxAggregateInputType = {
@@ -77,6 +93,10 @@ export type TipoMovimientoMaxAggregateInputType = {
   NombreMovimiento?: true
   Clasificacion?: true
   EsFijo?: true
+  AfectaIGSS?: true
+  AfectaISR?: true
+  Activo?: true
+  FechaEliminacion?: true
 }
 
 export type TipoMovimientoCountAggregateInputType = {
@@ -84,6 +104,10 @@ export type TipoMovimientoCountAggregateInputType = {
   NombreMovimiento?: true
   Clasificacion?: true
   EsFijo?: true
+  AfectaIGSS?: true
+  AfectaISR?: true
+  Activo?: true
+  FechaEliminacion?: true
   _all?: true
 }
 
@@ -178,6 +202,10 @@ export type TipoMovimientoGroupByOutputType = {
   NombreMovimiento: string
   Clasificacion: string
   EsFijo: boolean | null
+  AfectaIGSS: boolean | null
+  AfectaISR: boolean | null
+  Activo: boolean | null
+  FechaEliminacion: Date | null
   _count: TipoMovimientoCountAggregateOutputType | null
   _avg: TipoMovimientoAvgAggregateOutputType | null
   _sum: TipoMovimientoSumAggregateOutputType | null
@@ -185,7 +213,7 @@ export type TipoMovimientoGroupByOutputType = {
   _max: TipoMovimientoMaxAggregateOutputType | null
 }
 
-type GetTipoMovimientoGroupByPayload<T extends TipoMovimientoGroupByArgs> = Prisma.PrismaPromise<
+export type GetTipoMovimientoGroupByPayload<T extends TipoMovimientoGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<TipoMovimientoGroupByOutputType, T['by']> &
       {
@@ -208,6 +236,10 @@ export type TipoMovimientoWhereInput = {
   NombreMovimiento?: Prisma.StringFilter<"TipoMovimiento"> | string
   Clasificacion?: Prisma.StringFilter<"TipoMovimiento"> | string
   EsFijo?: Prisma.BoolNullableFilter<"TipoMovimiento"> | boolean | null
+  AfectaIGSS?: Prisma.BoolNullableFilter<"TipoMovimiento"> | boolean | null
+  AfectaISR?: Prisma.BoolNullableFilter<"TipoMovimiento"> | boolean | null
+  Activo?: Prisma.BoolNullableFilter<"TipoMovimiento"> | boolean | null
+  FechaEliminacion?: Prisma.DateTimeNullableFilter<"TipoMovimiento"> | Date | string | null
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoListRelationFilter
 }
 
@@ -216,6 +248,10 @@ export type TipoMovimientoOrderByWithRelationInput = {
   NombreMovimiento?: Prisma.SortOrder
   Clasificacion?: Prisma.SortOrder
   EsFijo?: Prisma.SortOrderInput | Prisma.SortOrder
+  AfectaIGSS?: Prisma.SortOrderInput | Prisma.SortOrder
+  AfectaISR?: Prisma.SortOrderInput | Prisma.SortOrder
+  Activo?: Prisma.SortOrderInput | Prisma.SortOrder
+  FechaEliminacion?: Prisma.SortOrderInput | Prisma.SortOrder
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoOrderByRelationAggregateInput
 }
 
@@ -227,6 +263,10 @@ export type TipoMovimientoWhereUniqueInput = Prisma.AtLeast<{
   NombreMovimiento?: Prisma.StringFilter<"TipoMovimiento"> | string
   Clasificacion?: Prisma.StringFilter<"TipoMovimiento"> | string
   EsFijo?: Prisma.BoolNullableFilter<"TipoMovimiento"> | boolean | null
+  AfectaIGSS?: Prisma.BoolNullableFilter<"TipoMovimiento"> | boolean | null
+  AfectaISR?: Prisma.BoolNullableFilter<"TipoMovimiento"> | boolean | null
+  Activo?: Prisma.BoolNullableFilter<"TipoMovimiento"> | boolean | null
+  FechaEliminacion?: Prisma.DateTimeNullableFilter<"TipoMovimiento"> | Date | string | null
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoListRelationFilter
 }, "IdTipoMovimiento">
 
@@ -235,6 +275,10 @@ export type TipoMovimientoOrderByWithAggregationInput = {
   NombreMovimiento?: Prisma.SortOrder
   Clasificacion?: Prisma.SortOrder
   EsFijo?: Prisma.SortOrderInput | Prisma.SortOrder
+  AfectaIGSS?: Prisma.SortOrderInput | Prisma.SortOrder
+  AfectaISR?: Prisma.SortOrderInput | Prisma.SortOrder
+  Activo?: Prisma.SortOrderInput | Prisma.SortOrder
+  FechaEliminacion?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.TipoMovimientoCountOrderByAggregateInput
   _avg?: Prisma.TipoMovimientoAvgOrderByAggregateInput
   _max?: Prisma.TipoMovimientoMaxOrderByAggregateInput
@@ -250,12 +294,20 @@ export type TipoMovimientoScalarWhereWithAggregatesInput = {
   NombreMovimiento?: Prisma.StringWithAggregatesFilter<"TipoMovimiento"> | string
   Clasificacion?: Prisma.StringWithAggregatesFilter<"TipoMovimiento"> | string
   EsFijo?: Prisma.BoolNullableWithAggregatesFilter<"TipoMovimiento"> | boolean | null
+  AfectaIGSS?: Prisma.BoolNullableWithAggregatesFilter<"TipoMovimiento"> | boolean | null
+  AfectaISR?: Prisma.BoolNullableWithAggregatesFilter<"TipoMovimiento"> | boolean | null
+  Activo?: Prisma.BoolNullableWithAggregatesFilter<"TipoMovimiento"> | boolean | null
+  FechaEliminacion?: Prisma.DateTimeNullableWithAggregatesFilter<"TipoMovimiento"> | Date | string | null
 }
 
 export type TipoMovimientoCreateInput = {
   NombreMovimiento: string
   Clasificacion: string
   EsFijo?: boolean | null
+  AfectaIGSS?: boolean | null
+  AfectaISR?: boolean | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoCreateNestedManyWithoutTipoMovimientoInput
 }
 
@@ -264,6 +316,10 @@ export type TipoMovimientoUncheckedCreateInput = {
   NombreMovimiento: string
   Clasificacion: string
   EsFijo?: boolean | null
+  AfectaIGSS?: boolean | null
+  AfectaISR?: boolean | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUncheckedCreateNestedManyWithoutTipoMovimientoInput
 }
 
@@ -271,6 +327,10 @@ export type TipoMovimientoUpdateInput = {
   NombreMovimiento?: Prisma.StringFieldUpdateOperationsInput | string
   Clasificacion?: Prisma.StringFieldUpdateOperationsInput | string
   EsFijo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  AfectaIGSS?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  AfectaISR?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUpdateManyWithoutTipoMovimientoNestedInput
 }
 
@@ -279,6 +339,10 @@ export type TipoMovimientoUncheckedUpdateInput = {
   NombreMovimiento?: Prisma.StringFieldUpdateOperationsInput | string
   Clasificacion?: Prisma.StringFieldUpdateOperationsInput | string
   EsFijo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  AfectaIGSS?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  AfectaISR?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUncheckedUpdateManyWithoutTipoMovimientoNestedInput
 }
 
@@ -286,12 +350,20 @@ export type TipoMovimientoCreateManyInput = {
   NombreMovimiento: string
   Clasificacion: string
   EsFijo?: boolean | null
+  AfectaIGSS?: boolean | null
+  AfectaISR?: boolean | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
 }
 
 export type TipoMovimientoUpdateManyMutationInput = {
   NombreMovimiento?: Prisma.StringFieldUpdateOperationsInput | string
   Clasificacion?: Prisma.StringFieldUpdateOperationsInput | string
   EsFijo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  AfectaIGSS?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  AfectaISR?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type TipoMovimientoUncheckedUpdateManyInput = {
@@ -299,6 +371,10 @@ export type TipoMovimientoUncheckedUpdateManyInput = {
   NombreMovimiento?: Prisma.StringFieldUpdateOperationsInput | string
   Clasificacion?: Prisma.StringFieldUpdateOperationsInput | string
   EsFijo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  AfectaIGSS?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  AfectaISR?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type TipoMovimientoScalarRelationFilter = {
@@ -311,6 +387,10 @@ export type TipoMovimientoCountOrderByAggregateInput = {
   NombreMovimiento?: Prisma.SortOrder
   Clasificacion?: Prisma.SortOrder
   EsFijo?: Prisma.SortOrder
+  AfectaIGSS?: Prisma.SortOrder
+  AfectaISR?: Prisma.SortOrder
+  Activo?: Prisma.SortOrder
+  FechaEliminacion?: Prisma.SortOrder
 }
 
 export type TipoMovimientoAvgOrderByAggregateInput = {
@@ -322,6 +402,10 @@ export type TipoMovimientoMaxOrderByAggregateInput = {
   NombreMovimiento?: Prisma.SortOrder
   Clasificacion?: Prisma.SortOrder
   EsFijo?: Prisma.SortOrder
+  AfectaIGSS?: Prisma.SortOrder
+  AfectaISR?: Prisma.SortOrder
+  Activo?: Prisma.SortOrder
+  FechaEliminacion?: Prisma.SortOrder
 }
 
 export type TipoMovimientoMinOrderByAggregateInput = {
@@ -329,6 +413,10 @@ export type TipoMovimientoMinOrderByAggregateInput = {
   NombreMovimiento?: Prisma.SortOrder
   Clasificacion?: Prisma.SortOrder
   EsFijo?: Prisma.SortOrder
+  AfectaIGSS?: Prisma.SortOrder
+  AfectaISR?: Prisma.SortOrder
+  Activo?: Prisma.SortOrder
+  FechaEliminacion?: Prisma.SortOrder
 }
 
 export type TipoMovimientoSumOrderByAggregateInput = {
@@ -353,6 +441,10 @@ export type TipoMovimientoCreateWithoutMovimientoEmpleadoInput = {
   NombreMovimiento: string
   Clasificacion: string
   EsFijo?: boolean | null
+  AfectaIGSS?: boolean | null
+  AfectaISR?: boolean | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
 }
 
 export type TipoMovimientoUncheckedCreateWithoutMovimientoEmpleadoInput = {
@@ -360,6 +452,10 @@ export type TipoMovimientoUncheckedCreateWithoutMovimientoEmpleadoInput = {
   NombreMovimiento: string
   Clasificacion: string
   EsFijo?: boolean | null
+  AfectaIGSS?: boolean | null
+  AfectaISR?: boolean | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
 }
 
 export type TipoMovimientoCreateOrConnectWithoutMovimientoEmpleadoInput = {
@@ -382,6 +478,10 @@ export type TipoMovimientoUpdateWithoutMovimientoEmpleadoInput = {
   NombreMovimiento?: Prisma.StringFieldUpdateOperationsInput | string
   Clasificacion?: Prisma.StringFieldUpdateOperationsInput | string
   EsFijo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  AfectaIGSS?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  AfectaISR?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type TipoMovimientoUncheckedUpdateWithoutMovimientoEmpleadoInput = {
@@ -389,6 +489,10 @@ export type TipoMovimientoUncheckedUpdateWithoutMovimientoEmpleadoInput = {
   NombreMovimiento?: Prisma.StringFieldUpdateOperationsInput | string
   Clasificacion?: Prisma.StringFieldUpdateOperationsInput | string
   EsFijo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  AfectaIGSS?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  AfectaISR?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 
@@ -427,6 +531,10 @@ export type TipoMovimientoSelect<ExtArgs extends runtime.Types.Extensions.Intern
   NombreMovimiento?: boolean
   Clasificacion?: boolean
   EsFijo?: boolean
+  AfectaIGSS?: boolean
+  AfectaISR?: boolean
+  Activo?: boolean
+  FechaEliminacion?: boolean
   MovimientoEmpleado?: boolean | Prisma.TipoMovimiento$MovimientoEmpleadoArgs<ExtArgs>
   _count?: boolean | Prisma.TipoMovimientoCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["tipoMovimiento"]>
@@ -438,9 +546,13 @@ export type TipoMovimientoSelectScalar = {
   NombreMovimiento?: boolean
   Clasificacion?: boolean
   EsFijo?: boolean
+  AfectaIGSS?: boolean
+  AfectaISR?: boolean
+  Activo?: boolean
+  FechaEliminacion?: boolean
 }
 
-export type TipoMovimientoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"IdTipoMovimiento" | "NombreMovimiento" | "Clasificacion" | "EsFijo", ExtArgs["result"]["tipoMovimiento"]>
+export type TipoMovimientoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"IdTipoMovimiento" | "NombreMovimiento" | "Clasificacion" | "EsFijo" | "AfectaIGSS" | "AfectaISR" | "Activo" | "FechaEliminacion", ExtArgs["result"]["tipoMovimiento"]>
 export type TipoMovimientoInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   MovimientoEmpleado?: boolean | Prisma.TipoMovimiento$MovimientoEmpleadoArgs<ExtArgs>
   _count?: boolean | Prisma.TipoMovimientoCountOutputTypeDefaultArgs<ExtArgs>
@@ -456,6 +568,10 @@ export type $TipoMovimientoPayload<ExtArgs extends runtime.Types.Extensions.Inte
     NombreMovimiento: string
     Clasificacion: string
     EsFijo: boolean | null
+    AfectaIGSS: boolean | null
+    AfectaISR: boolean | null
+    Activo: boolean | null
+    FechaEliminacion: Date | null
   }, ExtArgs["result"]["tipoMovimiento"]>
   composites: {}
 }
@@ -830,6 +946,10 @@ export interface TipoMovimientoFieldRefs {
   readonly NombreMovimiento: Prisma.FieldRef<"TipoMovimiento", 'String'>
   readonly Clasificacion: Prisma.FieldRef<"TipoMovimiento", 'String'>
   readonly EsFijo: Prisma.FieldRef<"TipoMovimiento", 'Boolean'>
+  readonly AfectaIGSS: Prisma.FieldRef<"TipoMovimiento", 'Boolean'>
+  readonly AfectaISR: Prisma.FieldRef<"TipoMovimiento", 'Boolean'>
+  readonly Activo: Prisma.FieldRef<"TipoMovimiento", 'Boolean'>
+  readonly FechaEliminacion: Prisma.FieldRef<"TipoMovimiento", 'DateTime'>
 }
     
 

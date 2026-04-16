@@ -30,6 +30,7 @@ export type NominaEncabezadoAvgAggregateOutputType = {
   IdNomina: number | null
   Mes: number | null
   Anio: number | null
+  Quincena: number | null
   IdUsuarioGerente: number | null
 }
 
@@ -37,6 +38,7 @@ export type NominaEncabezadoSumAggregateOutputType = {
   IdNomina: number | null
   Mes: number | null
   Anio: number | null
+  Quincena: number | null
   IdUsuarioGerente: number | null
 }
 
@@ -44,27 +46,36 @@ export type NominaEncabezadoMinAggregateOutputType = {
   IdNomina: number | null
   Mes: number | null
   Anio: number | null
+  Quincena: number | null
   FechaGeneracion: Date | null
   Estado: string | null
   IdUsuarioGerente: number | null
+  Activo: boolean | null
+  FechaEliminacion: Date | null
 }
 
 export type NominaEncabezadoMaxAggregateOutputType = {
   IdNomina: number | null
   Mes: number | null
   Anio: number | null
+  Quincena: number | null
   FechaGeneracion: Date | null
   Estado: string | null
   IdUsuarioGerente: number | null
+  Activo: boolean | null
+  FechaEliminacion: Date | null
 }
 
 export type NominaEncabezadoCountAggregateOutputType = {
   IdNomina: number
   Mes: number
   Anio: number
+  Quincena: number
   FechaGeneracion: number
   Estado: number
   IdUsuarioGerente: number
+  Activo: number
+  FechaEliminacion: number
   _all: number
 }
 
@@ -73,6 +84,7 @@ export type NominaEncabezadoAvgAggregateInputType = {
   IdNomina?: true
   Mes?: true
   Anio?: true
+  Quincena?: true
   IdUsuarioGerente?: true
 }
 
@@ -80,6 +92,7 @@ export type NominaEncabezadoSumAggregateInputType = {
   IdNomina?: true
   Mes?: true
   Anio?: true
+  Quincena?: true
   IdUsuarioGerente?: true
 }
 
@@ -87,27 +100,36 @@ export type NominaEncabezadoMinAggregateInputType = {
   IdNomina?: true
   Mes?: true
   Anio?: true
+  Quincena?: true
   FechaGeneracion?: true
   Estado?: true
   IdUsuarioGerente?: true
+  Activo?: true
+  FechaEliminacion?: true
 }
 
 export type NominaEncabezadoMaxAggregateInputType = {
   IdNomina?: true
   Mes?: true
   Anio?: true
+  Quincena?: true
   FechaGeneracion?: true
   Estado?: true
   IdUsuarioGerente?: true
+  Activo?: true
+  FechaEliminacion?: true
 }
 
 export type NominaEncabezadoCountAggregateInputType = {
   IdNomina?: true
   Mes?: true
   Anio?: true
+  Quincena?: true
   FechaGeneracion?: true
   Estado?: true
   IdUsuarioGerente?: true
+  Activo?: true
+  FechaEliminacion?: true
   _all?: true
 }
 
@@ -201,9 +223,12 @@ export type NominaEncabezadoGroupByOutputType = {
   IdNomina: number
   Mes: number
   Anio: number
+  Quincena: number | null
   FechaGeneracion: Date | null
   Estado: string | null
   IdUsuarioGerente: number | null
+  Activo: boolean | null
+  FechaEliminacion: Date | null
   _count: NominaEncabezadoCountAggregateOutputType | null
   _avg: NominaEncabezadoAvgAggregateOutputType | null
   _sum: NominaEncabezadoSumAggregateOutputType | null
@@ -211,7 +236,7 @@ export type NominaEncabezadoGroupByOutputType = {
   _max: NominaEncabezadoMaxAggregateOutputType | null
 }
 
-type GetNominaEncabezadoGroupByPayload<T extends NominaEncabezadoGroupByArgs> = Prisma.PrismaPromise<
+export type GetNominaEncabezadoGroupByPayload<T extends NominaEncabezadoGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<NominaEncabezadoGroupByOutputType, T['by']> &
       {
@@ -233,9 +258,12 @@ export type NominaEncabezadoWhereInput = {
   IdNomina?: Prisma.IntFilter<"NominaEncabezado"> | number
   Mes?: Prisma.IntFilter<"NominaEncabezado"> | number
   Anio?: Prisma.IntFilter<"NominaEncabezado"> | number
+  Quincena?: Prisma.IntNullableFilter<"NominaEncabezado"> | number | null
   FechaGeneracion?: Prisma.DateTimeNullableFilter<"NominaEncabezado"> | Date | string | null
   Estado?: Prisma.StringNullableFilter<"NominaEncabezado"> | string | null
   IdUsuarioGerente?: Prisma.IntNullableFilter<"NominaEncabezado"> | number | null
+  Activo?: Prisma.BoolNullableFilter<"NominaEncabezado"> | boolean | null
+  FechaEliminacion?: Prisma.DateTimeNullableFilter<"NominaEncabezado"> | Date | string | null
   NominaDetalle?: Prisma.NominaDetalleListRelationFilter
   Usuario?: Prisma.XOR<Prisma.UsuarioNullableScalarRelationFilter, Prisma.UsuarioWhereInput> | null
 }
@@ -244,9 +272,12 @@ export type NominaEncabezadoOrderByWithRelationInput = {
   IdNomina?: Prisma.SortOrder
   Mes?: Prisma.SortOrder
   Anio?: Prisma.SortOrder
+  Quincena?: Prisma.SortOrderInput | Prisma.SortOrder
   FechaGeneracion?: Prisma.SortOrderInput | Prisma.SortOrder
   Estado?: Prisma.SortOrderInput | Prisma.SortOrder
   IdUsuarioGerente?: Prisma.SortOrderInput | Prisma.SortOrder
+  Activo?: Prisma.SortOrderInput | Prisma.SortOrder
+  FechaEliminacion?: Prisma.SortOrderInput | Prisma.SortOrder
   NominaDetalle?: Prisma.NominaDetalleOrderByRelationAggregateInput
   Usuario?: Prisma.UsuarioOrderByWithRelationInput
 }
@@ -258,9 +289,12 @@ export type NominaEncabezadoWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.NominaEncabezadoWhereInput | Prisma.NominaEncabezadoWhereInput[]
   Mes?: Prisma.IntFilter<"NominaEncabezado"> | number
   Anio?: Prisma.IntFilter<"NominaEncabezado"> | number
+  Quincena?: Prisma.IntNullableFilter<"NominaEncabezado"> | number | null
   FechaGeneracion?: Prisma.DateTimeNullableFilter<"NominaEncabezado"> | Date | string | null
   Estado?: Prisma.StringNullableFilter<"NominaEncabezado"> | string | null
   IdUsuarioGerente?: Prisma.IntNullableFilter<"NominaEncabezado"> | number | null
+  Activo?: Prisma.BoolNullableFilter<"NominaEncabezado"> | boolean | null
+  FechaEliminacion?: Prisma.DateTimeNullableFilter<"NominaEncabezado"> | Date | string | null
   NominaDetalle?: Prisma.NominaDetalleListRelationFilter
   Usuario?: Prisma.XOR<Prisma.UsuarioNullableScalarRelationFilter, Prisma.UsuarioWhereInput> | null
 }, "IdNomina">
@@ -269,9 +303,12 @@ export type NominaEncabezadoOrderByWithAggregationInput = {
   IdNomina?: Prisma.SortOrder
   Mes?: Prisma.SortOrder
   Anio?: Prisma.SortOrder
+  Quincena?: Prisma.SortOrderInput | Prisma.SortOrder
   FechaGeneracion?: Prisma.SortOrderInput | Prisma.SortOrder
   Estado?: Prisma.SortOrderInput | Prisma.SortOrder
   IdUsuarioGerente?: Prisma.SortOrderInput | Prisma.SortOrder
+  Activo?: Prisma.SortOrderInput | Prisma.SortOrder
+  FechaEliminacion?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.NominaEncabezadoCountOrderByAggregateInput
   _avg?: Prisma.NominaEncabezadoAvgOrderByAggregateInput
   _max?: Prisma.NominaEncabezadoMaxOrderByAggregateInput
@@ -286,16 +323,22 @@ export type NominaEncabezadoScalarWhereWithAggregatesInput = {
   IdNomina?: Prisma.IntWithAggregatesFilter<"NominaEncabezado"> | number
   Mes?: Prisma.IntWithAggregatesFilter<"NominaEncabezado"> | number
   Anio?: Prisma.IntWithAggregatesFilter<"NominaEncabezado"> | number
+  Quincena?: Prisma.IntNullableWithAggregatesFilter<"NominaEncabezado"> | number | null
   FechaGeneracion?: Prisma.DateTimeNullableWithAggregatesFilter<"NominaEncabezado"> | Date | string | null
   Estado?: Prisma.StringNullableWithAggregatesFilter<"NominaEncabezado"> | string | null
   IdUsuarioGerente?: Prisma.IntNullableWithAggregatesFilter<"NominaEncabezado"> | number | null
+  Activo?: Prisma.BoolNullableWithAggregatesFilter<"NominaEncabezado"> | boolean | null
+  FechaEliminacion?: Prisma.DateTimeNullableWithAggregatesFilter<"NominaEncabezado"> | Date | string | null
 }
 
 export type NominaEncabezadoCreateInput = {
   Mes: number
   Anio: number
+  Quincena?: number | null
   FechaGeneracion?: Date | string | null
   Estado?: string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
   NominaDetalle?: Prisma.NominaDetalleCreateNestedManyWithoutNominaEncabezadoInput
   Usuario?: Prisma.UsuarioCreateNestedOneWithoutNominaEncabezadoInput
 }
@@ -304,17 +347,23 @@ export type NominaEncabezadoUncheckedCreateInput = {
   IdNomina?: number
   Mes: number
   Anio: number
+  Quincena?: number | null
   FechaGeneracion?: Date | string | null
   Estado?: string | null
   IdUsuarioGerente?: number | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
   NominaDetalle?: Prisma.NominaDetalleUncheckedCreateNestedManyWithoutNominaEncabezadoInput
 }
 
 export type NominaEncabezadoUpdateInput = {
   Mes?: Prisma.IntFieldUpdateOperationsInput | number
   Anio?: Prisma.IntFieldUpdateOperationsInput | number
+  Quincena?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   FechaGeneracion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Estado?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   NominaDetalle?: Prisma.NominaDetalleUpdateManyWithoutNominaEncabezadoNestedInput
   Usuario?: Prisma.UsuarioUpdateOneWithoutNominaEncabezadoNestedInput
 }
@@ -323,34 +372,46 @@ export type NominaEncabezadoUncheckedUpdateInput = {
   IdNomina?: Prisma.IntFieldUpdateOperationsInput | number
   Mes?: Prisma.IntFieldUpdateOperationsInput | number
   Anio?: Prisma.IntFieldUpdateOperationsInput | number
+  Quincena?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   FechaGeneracion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Estado?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   IdUsuarioGerente?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   NominaDetalle?: Prisma.NominaDetalleUncheckedUpdateManyWithoutNominaEncabezadoNestedInput
 }
 
 export type NominaEncabezadoCreateManyInput = {
   Mes: number
   Anio: number
+  Quincena?: number | null
   FechaGeneracion?: Date | string | null
   Estado?: string | null
   IdUsuarioGerente?: number | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
 }
 
 export type NominaEncabezadoUpdateManyMutationInput = {
   Mes?: Prisma.IntFieldUpdateOperationsInput | number
   Anio?: Prisma.IntFieldUpdateOperationsInput | number
+  Quincena?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   FechaGeneracion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Estado?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type NominaEncabezadoUncheckedUpdateManyInput = {
   IdNomina?: Prisma.IntFieldUpdateOperationsInput | number
   Mes?: Prisma.IntFieldUpdateOperationsInput | number
   Anio?: Prisma.IntFieldUpdateOperationsInput | number
+  Quincena?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   FechaGeneracion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Estado?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   IdUsuarioGerente?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type NominaEncabezadoScalarRelationFilter = {
@@ -362,15 +423,19 @@ export type NominaEncabezadoCountOrderByAggregateInput = {
   IdNomina?: Prisma.SortOrder
   Mes?: Prisma.SortOrder
   Anio?: Prisma.SortOrder
+  Quincena?: Prisma.SortOrder
   FechaGeneracion?: Prisma.SortOrder
   Estado?: Prisma.SortOrder
   IdUsuarioGerente?: Prisma.SortOrder
+  Activo?: Prisma.SortOrder
+  FechaEliminacion?: Prisma.SortOrder
 }
 
 export type NominaEncabezadoAvgOrderByAggregateInput = {
   IdNomina?: Prisma.SortOrder
   Mes?: Prisma.SortOrder
   Anio?: Prisma.SortOrder
+  Quincena?: Prisma.SortOrder
   IdUsuarioGerente?: Prisma.SortOrder
 }
 
@@ -378,24 +443,31 @@ export type NominaEncabezadoMaxOrderByAggregateInput = {
   IdNomina?: Prisma.SortOrder
   Mes?: Prisma.SortOrder
   Anio?: Prisma.SortOrder
+  Quincena?: Prisma.SortOrder
   FechaGeneracion?: Prisma.SortOrder
   Estado?: Prisma.SortOrder
   IdUsuarioGerente?: Prisma.SortOrder
+  Activo?: Prisma.SortOrder
+  FechaEliminacion?: Prisma.SortOrder
 }
 
 export type NominaEncabezadoMinOrderByAggregateInput = {
   IdNomina?: Prisma.SortOrder
   Mes?: Prisma.SortOrder
   Anio?: Prisma.SortOrder
+  Quincena?: Prisma.SortOrder
   FechaGeneracion?: Prisma.SortOrder
   Estado?: Prisma.SortOrder
   IdUsuarioGerente?: Prisma.SortOrder
+  Activo?: Prisma.SortOrder
+  FechaEliminacion?: Prisma.SortOrder
 }
 
 export type NominaEncabezadoSumOrderByAggregateInput = {
   IdNomina?: Prisma.SortOrder
   Mes?: Prisma.SortOrder
   Anio?: Prisma.SortOrder
+  Quincena?: Prisma.SortOrder
   IdUsuarioGerente?: Prisma.SortOrder
 }
 
@@ -468,8 +540,11 @@ export type NominaEncabezadoUncheckedUpdateManyWithoutUsuarioNestedInput = {
 export type NominaEncabezadoCreateWithoutNominaDetalleInput = {
   Mes: number
   Anio: number
+  Quincena?: number | null
   FechaGeneracion?: Date | string | null
   Estado?: string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
   Usuario?: Prisma.UsuarioCreateNestedOneWithoutNominaEncabezadoInput
 }
 
@@ -477,9 +552,12 @@ export type NominaEncabezadoUncheckedCreateWithoutNominaDetalleInput = {
   IdNomina?: number
   Mes: number
   Anio: number
+  Quincena?: number | null
   FechaGeneracion?: Date | string | null
   Estado?: string | null
   IdUsuarioGerente?: number | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
 }
 
 export type NominaEncabezadoCreateOrConnectWithoutNominaDetalleInput = {
@@ -501,8 +579,11 @@ export type NominaEncabezadoUpdateToOneWithWhereWithoutNominaDetalleInput = {
 export type NominaEncabezadoUpdateWithoutNominaDetalleInput = {
   Mes?: Prisma.IntFieldUpdateOperationsInput | number
   Anio?: Prisma.IntFieldUpdateOperationsInput | number
+  Quincena?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   FechaGeneracion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Estado?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Usuario?: Prisma.UsuarioUpdateOneWithoutNominaEncabezadoNestedInput
 }
 
@@ -510,16 +591,22 @@ export type NominaEncabezadoUncheckedUpdateWithoutNominaDetalleInput = {
   IdNomina?: Prisma.IntFieldUpdateOperationsInput | number
   Mes?: Prisma.IntFieldUpdateOperationsInput | number
   Anio?: Prisma.IntFieldUpdateOperationsInput | number
+  Quincena?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   FechaGeneracion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Estado?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   IdUsuarioGerente?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type NominaEncabezadoCreateWithoutUsuarioInput = {
   Mes: number
   Anio: number
+  Quincena?: number | null
   FechaGeneracion?: Date | string | null
   Estado?: string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
   NominaDetalle?: Prisma.NominaDetalleCreateNestedManyWithoutNominaEncabezadoInput
 }
 
@@ -527,8 +614,11 @@ export type NominaEncabezadoUncheckedCreateWithoutUsuarioInput = {
   IdNomina?: number
   Mes: number
   Anio: number
+  Quincena?: number | null
   FechaGeneracion?: Date | string | null
   Estado?: string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
   NominaDetalle?: Prisma.NominaDetalleUncheckedCreateNestedManyWithoutNominaEncabezadoInput
 }
 
@@ -564,23 +654,32 @@ export type NominaEncabezadoScalarWhereInput = {
   IdNomina?: Prisma.IntFilter<"NominaEncabezado"> | number
   Mes?: Prisma.IntFilter<"NominaEncabezado"> | number
   Anio?: Prisma.IntFilter<"NominaEncabezado"> | number
+  Quincena?: Prisma.IntNullableFilter<"NominaEncabezado"> | number | null
   FechaGeneracion?: Prisma.DateTimeNullableFilter<"NominaEncabezado"> | Date | string | null
   Estado?: Prisma.StringNullableFilter<"NominaEncabezado"> | string | null
   IdUsuarioGerente?: Prisma.IntNullableFilter<"NominaEncabezado"> | number | null
+  Activo?: Prisma.BoolNullableFilter<"NominaEncabezado"> | boolean | null
+  FechaEliminacion?: Prisma.DateTimeNullableFilter<"NominaEncabezado"> | Date | string | null
 }
 
 export type NominaEncabezadoCreateManyUsuarioInput = {
   Mes: number
   Anio: number
+  Quincena?: number | null
   FechaGeneracion?: Date | string | null
   Estado?: string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
 }
 
 export type NominaEncabezadoUpdateWithoutUsuarioInput = {
   Mes?: Prisma.IntFieldUpdateOperationsInput | number
   Anio?: Prisma.IntFieldUpdateOperationsInput | number
+  Quincena?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   FechaGeneracion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Estado?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   NominaDetalle?: Prisma.NominaDetalleUpdateManyWithoutNominaEncabezadoNestedInput
 }
 
@@ -588,8 +687,11 @@ export type NominaEncabezadoUncheckedUpdateWithoutUsuarioInput = {
   IdNomina?: Prisma.IntFieldUpdateOperationsInput | number
   Mes?: Prisma.IntFieldUpdateOperationsInput | number
   Anio?: Prisma.IntFieldUpdateOperationsInput | number
+  Quincena?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   FechaGeneracion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Estado?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   NominaDetalle?: Prisma.NominaDetalleUncheckedUpdateManyWithoutNominaEncabezadoNestedInput
 }
 
@@ -597,8 +699,11 @@ export type NominaEncabezadoUncheckedUpdateManyWithoutUsuarioInput = {
   IdNomina?: Prisma.IntFieldUpdateOperationsInput | number
   Mes?: Prisma.IntFieldUpdateOperationsInput | number
   Anio?: Prisma.IntFieldUpdateOperationsInput | number
+  Quincena?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   FechaGeneracion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Estado?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 
@@ -636,9 +741,12 @@ export type NominaEncabezadoSelect<ExtArgs extends runtime.Types.Extensions.Inte
   IdNomina?: boolean
   Mes?: boolean
   Anio?: boolean
+  Quincena?: boolean
   FechaGeneracion?: boolean
   Estado?: boolean
   IdUsuarioGerente?: boolean
+  Activo?: boolean
+  FechaEliminacion?: boolean
   NominaDetalle?: boolean | Prisma.NominaEncabezado$NominaDetalleArgs<ExtArgs>
   Usuario?: boolean | Prisma.NominaEncabezado$UsuarioArgs<ExtArgs>
   _count?: boolean | Prisma.NominaEncabezadoCountOutputTypeDefaultArgs<ExtArgs>
@@ -650,12 +758,15 @@ export type NominaEncabezadoSelectScalar = {
   IdNomina?: boolean
   Mes?: boolean
   Anio?: boolean
+  Quincena?: boolean
   FechaGeneracion?: boolean
   Estado?: boolean
   IdUsuarioGerente?: boolean
+  Activo?: boolean
+  FechaEliminacion?: boolean
 }
 
-export type NominaEncabezadoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"IdNomina" | "Mes" | "Anio" | "FechaGeneracion" | "Estado" | "IdUsuarioGerente", ExtArgs["result"]["nominaEncabezado"]>
+export type NominaEncabezadoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"IdNomina" | "Mes" | "Anio" | "Quincena" | "FechaGeneracion" | "Estado" | "IdUsuarioGerente" | "Activo" | "FechaEliminacion", ExtArgs["result"]["nominaEncabezado"]>
 export type NominaEncabezadoInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   NominaDetalle?: boolean | Prisma.NominaEncabezado$NominaDetalleArgs<ExtArgs>
   Usuario?: boolean | Prisma.NominaEncabezado$UsuarioArgs<ExtArgs>
@@ -672,9 +783,12 @@ export type $NominaEncabezadoPayload<ExtArgs extends runtime.Types.Extensions.In
     IdNomina: number
     Mes: number
     Anio: number
+    Quincena: number | null
     FechaGeneracion: Date | null
     Estado: string | null
     IdUsuarioGerente: number | null
+    Activo: boolean | null
+    FechaEliminacion: Date | null
   }, ExtArgs["result"]["nominaEncabezado"]>
   composites: {}
 }
@@ -1049,9 +1163,12 @@ export interface NominaEncabezadoFieldRefs {
   readonly IdNomina: Prisma.FieldRef<"NominaEncabezado", 'Int'>
   readonly Mes: Prisma.FieldRef<"NominaEncabezado", 'Int'>
   readonly Anio: Prisma.FieldRef<"NominaEncabezado", 'Int'>
+  readonly Quincena: Prisma.FieldRef<"NominaEncabezado", 'Int'>
   readonly FechaGeneracion: Prisma.FieldRef<"NominaEncabezado", 'DateTime'>
   readonly Estado: Prisma.FieldRef<"NominaEncabezado", 'String'>
   readonly IdUsuarioGerente: Prisma.FieldRef<"NominaEncabezado", 'Int'>
+  readonly Activo: Prisma.FieldRef<"NominaEncabezado", 'Boolean'>
+  readonly FechaEliminacion: Prisma.FieldRef<"NominaEncabezado", 'DateTime'>
 }
     
 

@@ -52,9 +52,13 @@ export class DetalleControlVacacionService {
   }
 
   async remove(id: number) {
-    await this.findOne(id);
-    return await this.prisma.detalleControlVacacion.delete({
+    const detalleControlVacacion = await this.findOne(id);
+    return await this.prisma.detalleControlVacacion.update({
       where: { IdDetalleVacacion: id },
+      data: {
+        Activo: !detalleControlVacacion.Activo,
+        FechaEliminacion: new Date()
+      }
     });
   }
 }

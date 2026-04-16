@@ -40,18 +40,24 @@ export type PuestoMinAggregateOutputType = {
   IdPuesto: number | null
   NombrePuesto: string | null
   IdDepartamento: number | null
+  Activo: boolean | null
+  FechaEliminacion: Date | null
 }
 
 export type PuestoMaxAggregateOutputType = {
   IdPuesto: number | null
   NombrePuesto: string | null
   IdDepartamento: number | null
+  Activo: boolean | null
+  FechaEliminacion: Date | null
 }
 
 export type PuestoCountAggregateOutputType = {
   IdPuesto: number
   NombrePuesto: number
   IdDepartamento: number
+  Activo: number
+  FechaEliminacion: number
   _all: number
 }
 
@@ -70,18 +76,24 @@ export type PuestoMinAggregateInputType = {
   IdPuesto?: true
   NombrePuesto?: true
   IdDepartamento?: true
+  Activo?: true
+  FechaEliminacion?: true
 }
 
 export type PuestoMaxAggregateInputType = {
   IdPuesto?: true
   NombrePuesto?: true
   IdDepartamento?: true
+  Activo?: true
+  FechaEliminacion?: true
 }
 
 export type PuestoCountAggregateInputType = {
   IdPuesto?: true
   NombrePuesto?: true
   IdDepartamento?: true
+  Activo?: true
+  FechaEliminacion?: true
   _all?: true
 }
 
@@ -175,6 +187,8 @@ export type PuestoGroupByOutputType = {
   IdPuesto: number
   NombrePuesto: string
   IdDepartamento: number
+  Activo: boolean | null
+  FechaEliminacion: Date | null
   _count: PuestoCountAggregateOutputType | null
   _avg: PuestoAvgAggregateOutputType | null
   _sum: PuestoSumAggregateOutputType | null
@@ -182,7 +196,7 @@ export type PuestoGroupByOutputType = {
   _max: PuestoMaxAggregateOutputType | null
 }
 
-type GetPuestoGroupByPayload<T extends PuestoGroupByArgs> = Prisma.PrismaPromise<
+export type GetPuestoGroupByPayload<T extends PuestoGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<PuestoGroupByOutputType, T['by']> &
       {
@@ -204,6 +218,8 @@ export type PuestoWhereInput = {
   IdPuesto?: Prisma.IntFilter<"Puesto"> | number
   NombrePuesto?: Prisma.StringFilter<"Puesto"> | string
   IdDepartamento?: Prisma.IntFilter<"Puesto"> | number
+  Activo?: Prisma.BoolNullableFilter<"Puesto"> | boolean | null
+  FechaEliminacion?: Prisma.DateTimeNullableFilter<"Puesto"> | Date | string | null
   Empleado?: Prisma.EmpleadoListRelationFilter
   Departamento?: Prisma.XOR<Prisma.DepartamentoScalarRelationFilter, Prisma.DepartamentoWhereInput>
 }
@@ -212,6 +228,8 @@ export type PuestoOrderByWithRelationInput = {
   IdPuesto?: Prisma.SortOrder
   NombrePuesto?: Prisma.SortOrder
   IdDepartamento?: Prisma.SortOrder
+  Activo?: Prisma.SortOrderInput | Prisma.SortOrder
+  FechaEliminacion?: Prisma.SortOrderInput | Prisma.SortOrder
   Empleado?: Prisma.EmpleadoOrderByRelationAggregateInput
   Departamento?: Prisma.DepartamentoOrderByWithRelationInput
 }
@@ -223,6 +241,8 @@ export type PuestoWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.PuestoWhereInput | Prisma.PuestoWhereInput[]
   NombrePuesto?: Prisma.StringFilter<"Puesto"> | string
   IdDepartamento?: Prisma.IntFilter<"Puesto"> | number
+  Activo?: Prisma.BoolNullableFilter<"Puesto"> | boolean | null
+  FechaEliminacion?: Prisma.DateTimeNullableFilter<"Puesto"> | Date | string | null
   Empleado?: Prisma.EmpleadoListRelationFilter
   Departamento?: Prisma.XOR<Prisma.DepartamentoScalarRelationFilter, Prisma.DepartamentoWhereInput>
 }, "IdPuesto">
@@ -231,6 +251,8 @@ export type PuestoOrderByWithAggregationInput = {
   IdPuesto?: Prisma.SortOrder
   NombrePuesto?: Prisma.SortOrder
   IdDepartamento?: Prisma.SortOrder
+  Activo?: Prisma.SortOrderInput | Prisma.SortOrder
+  FechaEliminacion?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.PuestoCountOrderByAggregateInput
   _avg?: Prisma.PuestoAvgOrderByAggregateInput
   _max?: Prisma.PuestoMaxOrderByAggregateInput
@@ -245,10 +267,14 @@ export type PuestoScalarWhereWithAggregatesInput = {
   IdPuesto?: Prisma.IntWithAggregatesFilter<"Puesto"> | number
   NombrePuesto?: Prisma.StringWithAggregatesFilter<"Puesto"> | string
   IdDepartamento?: Prisma.IntWithAggregatesFilter<"Puesto"> | number
+  Activo?: Prisma.BoolNullableWithAggregatesFilter<"Puesto"> | boolean | null
+  FechaEliminacion?: Prisma.DateTimeNullableWithAggregatesFilter<"Puesto"> | Date | string | null
 }
 
 export type PuestoCreateInput = {
   NombrePuesto: string
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
   Empleado?: Prisma.EmpleadoCreateNestedManyWithoutPuestoInput
   Departamento: Prisma.DepartamentoCreateNestedOneWithoutPuestoInput
 }
@@ -257,11 +283,15 @@ export type PuestoUncheckedCreateInput = {
   IdPuesto?: number
   NombrePuesto: string
   IdDepartamento: number
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
   Empleado?: Prisma.EmpleadoUncheckedCreateNestedManyWithoutPuestoInput
 }
 
 export type PuestoUpdateInput = {
   NombrePuesto?: Prisma.StringFieldUpdateOperationsInput | string
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Empleado?: Prisma.EmpleadoUpdateManyWithoutPuestoNestedInput
   Departamento?: Prisma.DepartamentoUpdateOneRequiredWithoutPuestoNestedInput
 }
@@ -270,22 +300,30 @@ export type PuestoUncheckedUpdateInput = {
   IdPuesto?: Prisma.IntFieldUpdateOperationsInput | number
   NombrePuesto?: Prisma.StringFieldUpdateOperationsInput | string
   IdDepartamento?: Prisma.IntFieldUpdateOperationsInput | number
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Empleado?: Prisma.EmpleadoUncheckedUpdateManyWithoutPuestoNestedInput
 }
 
 export type PuestoCreateManyInput = {
   NombrePuesto: string
   IdDepartamento: number
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
 }
 
 export type PuestoUpdateManyMutationInput = {
   NombrePuesto?: Prisma.StringFieldUpdateOperationsInput | string
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type PuestoUncheckedUpdateManyInput = {
   IdPuesto?: Prisma.IntFieldUpdateOperationsInput | number
   NombrePuesto?: Prisma.StringFieldUpdateOperationsInput | string
   IdDepartamento?: Prisma.IntFieldUpdateOperationsInput | number
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type PuestoListRelationFilter = {
@@ -307,6 +345,8 @@ export type PuestoCountOrderByAggregateInput = {
   IdPuesto?: Prisma.SortOrder
   NombrePuesto?: Prisma.SortOrder
   IdDepartamento?: Prisma.SortOrder
+  Activo?: Prisma.SortOrder
+  FechaEliminacion?: Prisma.SortOrder
 }
 
 export type PuestoAvgOrderByAggregateInput = {
@@ -318,12 +358,16 @@ export type PuestoMaxOrderByAggregateInput = {
   IdPuesto?: Prisma.SortOrder
   NombrePuesto?: Prisma.SortOrder
   IdDepartamento?: Prisma.SortOrder
+  Activo?: Prisma.SortOrder
+  FechaEliminacion?: Prisma.SortOrder
 }
 
 export type PuestoMinOrderByAggregateInput = {
   IdPuesto?: Prisma.SortOrder
   NombrePuesto?: Prisma.SortOrder
   IdDepartamento?: Prisma.SortOrder
+  Activo?: Prisma.SortOrder
+  FechaEliminacion?: Prisma.SortOrder
 }
 
 export type PuestoSumOrderByAggregateInput = {
@@ -389,12 +433,16 @@ export type PuestoUpdateOneRequiredWithoutEmpleadoNestedInput = {
 
 export type PuestoCreateWithoutDepartamentoInput = {
   NombrePuesto: string
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
   Empleado?: Prisma.EmpleadoCreateNestedManyWithoutPuestoInput
 }
 
 export type PuestoUncheckedCreateWithoutDepartamentoInput = {
   IdPuesto?: number
   NombrePuesto: string
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
   Empleado?: Prisma.EmpleadoUncheckedCreateNestedManyWithoutPuestoInput
 }
 
@@ -430,10 +478,14 @@ export type PuestoScalarWhereInput = {
   IdPuesto?: Prisma.IntFilter<"Puesto"> | number
   NombrePuesto?: Prisma.StringFilter<"Puesto"> | string
   IdDepartamento?: Prisma.IntFilter<"Puesto"> | number
+  Activo?: Prisma.BoolNullableFilter<"Puesto"> | boolean | null
+  FechaEliminacion?: Prisma.DateTimeNullableFilter<"Puesto"> | Date | string | null
 }
 
 export type PuestoCreateWithoutEmpleadoInput = {
   NombrePuesto: string
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
   Departamento: Prisma.DepartamentoCreateNestedOneWithoutPuestoInput
 }
 
@@ -441,6 +493,8 @@ export type PuestoUncheckedCreateWithoutEmpleadoInput = {
   IdPuesto?: number
   NombrePuesto: string
   IdDepartamento: number
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
 }
 
 export type PuestoCreateOrConnectWithoutEmpleadoInput = {
@@ -461,6 +515,8 @@ export type PuestoUpdateToOneWithWhereWithoutEmpleadoInput = {
 
 export type PuestoUpdateWithoutEmpleadoInput = {
   NombrePuesto?: Prisma.StringFieldUpdateOperationsInput | string
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Departamento?: Prisma.DepartamentoUpdateOneRequiredWithoutPuestoNestedInput
 }
 
@@ -468,26 +524,36 @@ export type PuestoUncheckedUpdateWithoutEmpleadoInput = {
   IdPuesto?: Prisma.IntFieldUpdateOperationsInput | number
   NombrePuesto?: Prisma.StringFieldUpdateOperationsInput | string
   IdDepartamento?: Prisma.IntFieldUpdateOperationsInput | number
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type PuestoCreateManyDepartamentoInput = {
   NombrePuesto: string
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
 }
 
 export type PuestoUpdateWithoutDepartamentoInput = {
   NombrePuesto?: Prisma.StringFieldUpdateOperationsInput | string
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Empleado?: Prisma.EmpleadoUpdateManyWithoutPuestoNestedInput
 }
 
 export type PuestoUncheckedUpdateWithoutDepartamentoInput = {
   IdPuesto?: Prisma.IntFieldUpdateOperationsInput | number
   NombrePuesto?: Prisma.StringFieldUpdateOperationsInput | string
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Empleado?: Prisma.EmpleadoUncheckedUpdateManyWithoutPuestoNestedInput
 }
 
 export type PuestoUncheckedUpdateManyWithoutDepartamentoInput = {
   IdPuesto?: Prisma.IntFieldUpdateOperationsInput | number
   NombrePuesto?: Prisma.StringFieldUpdateOperationsInput | string
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 
@@ -525,6 +591,8 @@ export type PuestoSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   IdPuesto?: boolean
   NombrePuesto?: boolean
   IdDepartamento?: boolean
+  Activo?: boolean
+  FechaEliminacion?: boolean
   Empleado?: boolean | Prisma.Puesto$EmpleadoArgs<ExtArgs>
   Departamento?: boolean | Prisma.DepartamentoDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.PuestoCountOutputTypeDefaultArgs<ExtArgs>
@@ -536,9 +604,11 @@ export type PuestoSelectScalar = {
   IdPuesto?: boolean
   NombrePuesto?: boolean
   IdDepartamento?: boolean
+  Activo?: boolean
+  FechaEliminacion?: boolean
 }
 
-export type PuestoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"IdPuesto" | "NombrePuesto" | "IdDepartamento", ExtArgs["result"]["puesto"]>
+export type PuestoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"IdPuesto" | "NombrePuesto" | "IdDepartamento" | "Activo" | "FechaEliminacion", ExtArgs["result"]["puesto"]>
 export type PuestoInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   Empleado?: boolean | Prisma.Puesto$EmpleadoArgs<ExtArgs>
   Departamento?: boolean | Prisma.DepartamentoDefaultArgs<ExtArgs>
@@ -555,6 +625,8 @@ export type $PuestoPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     IdPuesto: number
     NombrePuesto: string
     IdDepartamento: number
+    Activo: boolean | null
+    FechaEliminacion: Date | null
   }, ExtArgs["result"]["puesto"]>
   composites: {}
 }
@@ -929,6 +1001,8 @@ export interface PuestoFieldRefs {
   readonly IdPuesto: Prisma.FieldRef<"Puesto", 'Int'>
   readonly NombrePuesto: Prisma.FieldRef<"Puesto", 'String'>
   readonly IdDepartamento: Prisma.FieldRef<"Puesto", 'Int'>
+  readonly Activo: Prisma.FieldRef<"Puesto", 'Boolean'>
+  readonly FechaEliminacion: Prisma.FieldRef<"Puesto", 'DateTime'>
 }
     
 

@@ -44,6 +44,8 @@ export type RegistroEnvioBoletaMinAggregateOutputType = {
   FechaEnvio: Date | null
   Exitoso: boolean | null
   IdUsuarioEnvia: number | null
+  Activo: boolean | null
+  FechaEliminacion: Date | null
 }
 
 export type RegistroEnvioBoletaMaxAggregateOutputType = {
@@ -52,6 +54,8 @@ export type RegistroEnvioBoletaMaxAggregateOutputType = {
   FechaEnvio: Date | null
   Exitoso: boolean | null
   IdUsuarioEnvia: number | null
+  Activo: boolean | null
+  FechaEliminacion: Date | null
 }
 
 export type RegistroEnvioBoletaCountAggregateOutputType = {
@@ -60,6 +64,8 @@ export type RegistroEnvioBoletaCountAggregateOutputType = {
   FechaEnvio: number
   Exitoso: number
   IdUsuarioEnvia: number
+  Activo: number
+  FechaEliminacion: number
   _all: number
 }
 
@@ -82,6 +88,8 @@ export type RegistroEnvioBoletaMinAggregateInputType = {
   FechaEnvio?: true
   Exitoso?: true
   IdUsuarioEnvia?: true
+  Activo?: true
+  FechaEliminacion?: true
 }
 
 export type RegistroEnvioBoletaMaxAggregateInputType = {
@@ -90,6 +98,8 @@ export type RegistroEnvioBoletaMaxAggregateInputType = {
   FechaEnvio?: true
   Exitoso?: true
   IdUsuarioEnvia?: true
+  Activo?: true
+  FechaEliminacion?: true
 }
 
 export type RegistroEnvioBoletaCountAggregateInputType = {
@@ -98,6 +108,8 @@ export type RegistroEnvioBoletaCountAggregateInputType = {
   FechaEnvio?: true
   Exitoso?: true
   IdUsuarioEnvia?: true
+  Activo?: true
+  FechaEliminacion?: true
   _all?: true
 }
 
@@ -193,6 +205,8 @@ export type RegistroEnvioBoletaGroupByOutputType = {
   FechaEnvio: Date | null
   Exitoso: boolean | null
   IdUsuarioEnvia: number
+  Activo: boolean | null
+  FechaEliminacion: Date | null
   _count: RegistroEnvioBoletaCountAggregateOutputType | null
   _avg: RegistroEnvioBoletaAvgAggregateOutputType | null
   _sum: RegistroEnvioBoletaSumAggregateOutputType | null
@@ -200,7 +214,7 @@ export type RegistroEnvioBoletaGroupByOutputType = {
   _max: RegistroEnvioBoletaMaxAggregateOutputType | null
 }
 
-type GetRegistroEnvioBoletaGroupByPayload<T extends RegistroEnvioBoletaGroupByArgs> = Prisma.PrismaPromise<
+export type GetRegistroEnvioBoletaGroupByPayload<T extends RegistroEnvioBoletaGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<RegistroEnvioBoletaGroupByOutputType, T['by']> &
       {
@@ -224,6 +238,8 @@ export type RegistroEnvioBoletaWhereInput = {
   FechaEnvio?: Prisma.DateTimeNullableFilter<"RegistroEnvioBoleta"> | Date | string | null
   Exitoso?: Prisma.BoolNullableFilter<"RegistroEnvioBoleta"> | boolean | null
   IdUsuarioEnvia?: Prisma.IntFilter<"RegistroEnvioBoleta"> | number
+  Activo?: Prisma.BoolNullableFilter<"RegistroEnvioBoleta"> | boolean | null
+  FechaEliminacion?: Prisma.DateTimeNullableFilter<"RegistroEnvioBoleta"> | Date | string | null
   NominaDetalle?: Prisma.XOR<Prisma.NominaDetalleScalarRelationFilter, Prisma.NominaDetalleWhereInput>
   Usuario?: Prisma.XOR<Prisma.UsuarioScalarRelationFilter, Prisma.UsuarioWhereInput>
 }
@@ -234,6 +250,8 @@ export type RegistroEnvioBoletaOrderByWithRelationInput = {
   FechaEnvio?: Prisma.SortOrderInput | Prisma.SortOrder
   Exitoso?: Prisma.SortOrderInput | Prisma.SortOrder
   IdUsuarioEnvia?: Prisma.SortOrder
+  Activo?: Prisma.SortOrderInput | Prisma.SortOrder
+  FechaEliminacion?: Prisma.SortOrderInput | Prisma.SortOrder
   NominaDetalle?: Prisma.NominaDetalleOrderByWithRelationInput
   Usuario?: Prisma.UsuarioOrderByWithRelationInput
 }
@@ -247,6 +265,8 @@ export type RegistroEnvioBoletaWhereUniqueInput = Prisma.AtLeast<{
   FechaEnvio?: Prisma.DateTimeNullableFilter<"RegistroEnvioBoleta"> | Date | string | null
   Exitoso?: Prisma.BoolNullableFilter<"RegistroEnvioBoleta"> | boolean | null
   IdUsuarioEnvia?: Prisma.IntFilter<"RegistroEnvioBoleta"> | number
+  Activo?: Prisma.BoolNullableFilter<"RegistroEnvioBoleta"> | boolean | null
+  FechaEliminacion?: Prisma.DateTimeNullableFilter<"RegistroEnvioBoleta"> | Date | string | null
   NominaDetalle?: Prisma.XOR<Prisma.NominaDetalleScalarRelationFilter, Prisma.NominaDetalleWhereInput>
   Usuario?: Prisma.XOR<Prisma.UsuarioScalarRelationFilter, Prisma.UsuarioWhereInput>
 }, "IdEnvio">
@@ -257,6 +277,8 @@ export type RegistroEnvioBoletaOrderByWithAggregationInput = {
   FechaEnvio?: Prisma.SortOrderInput | Prisma.SortOrder
   Exitoso?: Prisma.SortOrderInput | Prisma.SortOrder
   IdUsuarioEnvia?: Prisma.SortOrder
+  Activo?: Prisma.SortOrderInput | Prisma.SortOrder
+  FechaEliminacion?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.RegistroEnvioBoletaCountOrderByAggregateInput
   _avg?: Prisma.RegistroEnvioBoletaAvgOrderByAggregateInput
   _max?: Prisma.RegistroEnvioBoletaMaxOrderByAggregateInput
@@ -273,11 +295,15 @@ export type RegistroEnvioBoletaScalarWhereWithAggregatesInput = {
   FechaEnvio?: Prisma.DateTimeNullableWithAggregatesFilter<"RegistroEnvioBoleta"> | Date | string | null
   Exitoso?: Prisma.BoolNullableWithAggregatesFilter<"RegistroEnvioBoleta"> | boolean | null
   IdUsuarioEnvia?: Prisma.IntWithAggregatesFilter<"RegistroEnvioBoleta"> | number
+  Activo?: Prisma.BoolNullableWithAggregatesFilter<"RegistroEnvioBoleta"> | boolean | null
+  FechaEliminacion?: Prisma.DateTimeNullableWithAggregatesFilter<"RegistroEnvioBoleta"> | Date | string | null
 }
 
 export type RegistroEnvioBoletaCreateInput = {
   FechaEnvio?: Date | string | null
   Exitoso?: boolean | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
   NominaDetalle: Prisma.NominaDetalleCreateNestedOneWithoutRegistroEnvioBoletaInput
   Usuario: Prisma.UsuarioCreateNestedOneWithoutRegistroEnvioBoletaInput
 }
@@ -288,11 +314,15 @@ export type RegistroEnvioBoletaUncheckedCreateInput = {
   FechaEnvio?: Date | string | null
   Exitoso?: boolean | null
   IdUsuarioEnvia: number
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
 }
 
 export type RegistroEnvioBoletaUpdateInput = {
   FechaEnvio?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Exitoso?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   NominaDetalle?: Prisma.NominaDetalleUpdateOneRequiredWithoutRegistroEnvioBoletaNestedInput
   Usuario?: Prisma.UsuarioUpdateOneRequiredWithoutRegistroEnvioBoletaNestedInput
 }
@@ -303,6 +333,8 @@ export type RegistroEnvioBoletaUncheckedUpdateInput = {
   FechaEnvio?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Exitoso?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   IdUsuarioEnvia?: Prisma.IntFieldUpdateOperationsInput | number
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type RegistroEnvioBoletaCreateManyInput = {
@@ -310,11 +342,15 @@ export type RegistroEnvioBoletaCreateManyInput = {
   FechaEnvio?: Date | string | null
   Exitoso?: boolean | null
   IdUsuarioEnvia: number
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
 }
 
 export type RegistroEnvioBoletaUpdateManyMutationInput = {
   FechaEnvio?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Exitoso?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type RegistroEnvioBoletaUncheckedUpdateManyInput = {
@@ -323,6 +359,8 @@ export type RegistroEnvioBoletaUncheckedUpdateManyInput = {
   FechaEnvio?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Exitoso?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   IdUsuarioEnvia?: Prisma.IntFieldUpdateOperationsInput | number
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type RegistroEnvioBoletaListRelationFilter = {
@@ -341,6 +379,8 @@ export type RegistroEnvioBoletaCountOrderByAggregateInput = {
   FechaEnvio?: Prisma.SortOrder
   Exitoso?: Prisma.SortOrder
   IdUsuarioEnvia?: Prisma.SortOrder
+  Activo?: Prisma.SortOrder
+  FechaEliminacion?: Prisma.SortOrder
 }
 
 export type RegistroEnvioBoletaAvgOrderByAggregateInput = {
@@ -355,6 +395,8 @@ export type RegistroEnvioBoletaMaxOrderByAggregateInput = {
   FechaEnvio?: Prisma.SortOrder
   Exitoso?: Prisma.SortOrder
   IdUsuarioEnvia?: Prisma.SortOrder
+  Activo?: Prisma.SortOrder
+  FechaEliminacion?: Prisma.SortOrder
 }
 
 export type RegistroEnvioBoletaMinOrderByAggregateInput = {
@@ -363,6 +405,8 @@ export type RegistroEnvioBoletaMinOrderByAggregateInput = {
   FechaEnvio?: Prisma.SortOrder
   Exitoso?: Prisma.SortOrder
   IdUsuarioEnvia?: Prisma.SortOrder
+  Activo?: Prisma.SortOrder
+  FechaEliminacion?: Prisma.SortOrder
 }
 
 export type RegistroEnvioBoletaSumOrderByAggregateInput = {
@@ -458,6 +502,8 @@ export type RegistroEnvioBoletaUncheckedUpdateManyWithoutUsuarioNestedInput = {
 export type RegistroEnvioBoletaCreateWithoutNominaDetalleInput = {
   FechaEnvio?: Date | string | null
   Exitoso?: boolean | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
   Usuario: Prisma.UsuarioCreateNestedOneWithoutRegistroEnvioBoletaInput
 }
 
@@ -466,6 +512,8 @@ export type RegistroEnvioBoletaUncheckedCreateWithoutNominaDetalleInput = {
   FechaEnvio?: Date | string | null
   Exitoso?: boolean | null
   IdUsuarioEnvia: number
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
 }
 
 export type RegistroEnvioBoletaCreateOrConnectWithoutNominaDetalleInput = {
@@ -502,11 +550,15 @@ export type RegistroEnvioBoletaScalarWhereInput = {
   FechaEnvio?: Prisma.DateTimeNullableFilter<"RegistroEnvioBoleta"> | Date | string | null
   Exitoso?: Prisma.BoolNullableFilter<"RegistroEnvioBoleta"> | boolean | null
   IdUsuarioEnvia?: Prisma.IntFilter<"RegistroEnvioBoleta"> | number
+  Activo?: Prisma.BoolNullableFilter<"RegistroEnvioBoleta"> | boolean | null
+  FechaEliminacion?: Prisma.DateTimeNullableFilter<"RegistroEnvioBoleta"> | Date | string | null
 }
 
 export type RegistroEnvioBoletaCreateWithoutUsuarioInput = {
   FechaEnvio?: Date | string | null
   Exitoso?: boolean | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
   NominaDetalle: Prisma.NominaDetalleCreateNestedOneWithoutRegistroEnvioBoletaInput
 }
 
@@ -515,6 +567,8 @@ export type RegistroEnvioBoletaUncheckedCreateWithoutUsuarioInput = {
   IdNominaDetalle: number
   FechaEnvio?: Date | string | null
   Exitoso?: boolean | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
 }
 
 export type RegistroEnvioBoletaCreateOrConnectWithoutUsuarioInput = {
@@ -546,11 +600,15 @@ export type RegistroEnvioBoletaCreateManyNominaDetalleInput = {
   FechaEnvio?: Date | string | null
   Exitoso?: boolean | null
   IdUsuarioEnvia: number
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
 }
 
 export type RegistroEnvioBoletaUpdateWithoutNominaDetalleInput = {
   FechaEnvio?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Exitoso?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Usuario?: Prisma.UsuarioUpdateOneRequiredWithoutRegistroEnvioBoletaNestedInput
 }
 
@@ -559,6 +617,8 @@ export type RegistroEnvioBoletaUncheckedUpdateWithoutNominaDetalleInput = {
   FechaEnvio?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Exitoso?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   IdUsuarioEnvia?: Prisma.IntFieldUpdateOperationsInput | number
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type RegistroEnvioBoletaUncheckedUpdateManyWithoutNominaDetalleInput = {
@@ -566,17 +626,23 @@ export type RegistroEnvioBoletaUncheckedUpdateManyWithoutNominaDetalleInput = {
   FechaEnvio?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Exitoso?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   IdUsuarioEnvia?: Prisma.IntFieldUpdateOperationsInput | number
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type RegistroEnvioBoletaCreateManyUsuarioInput = {
   IdNominaDetalle: number
   FechaEnvio?: Date | string | null
   Exitoso?: boolean | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
 }
 
 export type RegistroEnvioBoletaUpdateWithoutUsuarioInput = {
   FechaEnvio?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Exitoso?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   NominaDetalle?: Prisma.NominaDetalleUpdateOneRequiredWithoutRegistroEnvioBoletaNestedInput
 }
 
@@ -585,6 +651,8 @@ export type RegistroEnvioBoletaUncheckedUpdateWithoutUsuarioInput = {
   IdNominaDetalle?: Prisma.IntFieldUpdateOperationsInput | number
   FechaEnvio?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Exitoso?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type RegistroEnvioBoletaUncheckedUpdateManyWithoutUsuarioInput = {
@@ -592,6 +660,8 @@ export type RegistroEnvioBoletaUncheckedUpdateManyWithoutUsuarioInput = {
   IdNominaDetalle?: Prisma.IntFieldUpdateOperationsInput | number
   FechaEnvio?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Exitoso?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 
@@ -602,6 +672,8 @@ export type RegistroEnvioBoletaSelect<ExtArgs extends runtime.Types.Extensions.I
   FechaEnvio?: boolean
   Exitoso?: boolean
   IdUsuarioEnvia?: boolean
+  Activo?: boolean
+  FechaEliminacion?: boolean
   NominaDetalle?: boolean | Prisma.NominaDetalleDefaultArgs<ExtArgs>
   Usuario?: boolean | Prisma.UsuarioDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["registroEnvioBoleta"]>
@@ -614,9 +686,11 @@ export type RegistroEnvioBoletaSelectScalar = {
   FechaEnvio?: boolean
   Exitoso?: boolean
   IdUsuarioEnvia?: boolean
+  Activo?: boolean
+  FechaEliminacion?: boolean
 }
 
-export type RegistroEnvioBoletaOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"IdEnvio" | "IdNominaDetalle" | "FechaEnvio" | "Exitoso" | "IdUsuarioEnvia", ExtArgs["result"]["registroEnvioBoleta"]>
+export type RegistroEnvioBoletaOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"IdEnvio" | "IdNominaDetalle" | "FechaEnvio" | "Exitoso" | "IdUsuarioEnvia" | "Activo" | "FechaEliminacion", ExtArgs["result"]["registroEnvioBoleta"]>
 export type RegistroEnvioBoletaInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   NominaDetalle?: boolean | Prisma.NominaDetalleDefaultArgs<ExtArgs>
   Usuario?: boolean | Prisma.UsuarioDefaultArgs<ExtArgs>
@@ -634,6 +708,8 @@ export type $RegistroEnvioBoletaPayload<ExtArgs extends runtime.Types.Extensions
     FechaEnvio: Date | null
     Exitoso: boolean | null
     IdUsuarioEnvia: number
+    Activo: boolean | null
+    FechaEliminacion: Date | null
   }, ExtArgs["result"]["registroEnvioBoleta"]>
   composites: {}
 }
@@ -1010,6 +1086,8 @@ export interface RegistroEnvioBoletaFieldRefs {
   readonly FechaEnvio: Prisma.FieldRef<"RegistroEnvioBoleta", 'DateTime'>
   readonly Exitoso: Prisma.FieldRef<"RegistroEnvioBoleta", 'Boolean'>
   readonly IdUsuarioEnvia: Prisma.FieldRef<"RegistroEnvioBoleta", 'Int'>
+  readonly Activo: Prisma.FieldRef<"RegistroEnvioBoleta", 'Boolean'>
+  readonly FechaEliminacion: Prisma.FieldRef<"RegistroEnvioBoleta", 'DateTime'>
 }
     
 

@@ -97,3 +97,28 @@ export type Usuario = Prisma.UsuarioModel
  * 
  */
 export type DetalleControlVacacion = Prisma.DetalleControlVacacionModel
+/**
+ * Model Banco
+ * 
+ */
+export type Banco = Prisma.BancoModel
+/**
+ * Model Empresa
+ * 
+ */
+export type Empresa = Prisma.EmpresaModel
+/**
+ * Model JornadaLaboral
+ * 
+ */
+export type JornadaLaboral = Prisma.JornadaLaboralModel
+/**
+ * Model ProvisionPrestacion
+ * 
+ */
+export type ProvisionPrestacion = Prisma.ProvisionPrestacionModel
+/**
+ * Model sysdiagrams
+ * 
+ */
+export type sysdiagrams = Prisma.sysdiagramsModel

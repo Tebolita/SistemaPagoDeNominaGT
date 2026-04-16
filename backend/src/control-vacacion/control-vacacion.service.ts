@@ -25,7 +25,6 @@ export class ControlVacacionService {
     return control;
   }
 
-  // --- FUNCIÓN EXTRA RECOMENDADA ---
   // Obtiene los saldos de vacaciones de un empleado específico
   async findByEmpleado(idEmpleado: number) {
     return await this.prisma.controlVacacion.findMany({
@@ -43,9 +42,13 @@ export class ControlVacacionService {
   }
 
   async remove(id: number) {
-    await this.findOne(id);
-    return await this.prisma.controlVacacion.delete({
+    const controlVacacion = await this.findOne(id);
+    return await this.prisma.controlVacacion.update({
       where: { IdControlVacacion: id },
+      data: {
+        Activo: !controlVacacion.Activo,
+        FechaEliminacion: new Date()
+      }
     });
   }
 }

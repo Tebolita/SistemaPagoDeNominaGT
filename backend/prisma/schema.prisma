@@ -9,72 +9,86 @@ datasource db {
 }
 
 model Asistencia {
-  IdAsistencia Int       @id(map: "PK__Asistenc__3956DEE6E62222A9") @default(autoincrement())
-  IdEmpleado   Int
-  Fecha        DateTime  @db.Date
-  HoraEntrada  DateTime? @db.DateTime
-  HoraSalida   DateTime? @db.DateTime
-  HorasExtra   Decimal?  @db.Decimal(4, 2)
-  Empleado     Empleado  @relation(fields: [IdEmpleado], references: [IdEmpleado], onUpdate: NoAction, map: "FK_Asistencia_Empleado")
+  IdAsistencia     Int       @id(map: "PK__Asistenc__3956DEE66D823520") @default(autoincrement())
+  IdEmpleado       Int
+  Fecha            DateTime  @db.Date
+  HoraEntrada      DateTime? @db.DateTime
+  HoraSalida       DateTime? @db.DateTime
+  HorasExtra       Decimal?  @db.Decimal(4, 2)
+  Activo           Boolean?
+  FechaEliminacion DateTime? @db.DateTime
+  Empleado         Empleado  @relation(fields: [IdEmpleado], references: [IdEmpleado], onUpdate: NoAction, map: "FK_Asistencia_Empleado")
 }
 
 model ControlVacacion {
-  IdControlVacacion      Int                      @id(map: "PK__ControlV__F1234BDBE124B2BD") @default(autoincrement())
+  IdControlVacacion      Int                      @id(map: "PK__ControlV__F1234BDBD4C280FA") @default(autoincrement())
   IdEmpleado             Int
   AnioCorriente          Int
   DiasGanados            Int?
-  DiasGozados            Int?
+  DiasGozados            Decimal?                 @db.Decimal(4, 2)
+  Activo                 Boolean?
+  FechaEliminacion       DateTime?                @db.DateTime
   Empleado               Empleado                 @relation(fields: [IdEmpleado], references: [IdEmpleado], onUpdate: NoAction, map: "FK_Vacacion_Empleado")
   DetalleControlVacacion DetalleControlVacacion[]
 }
 
 model Departamento {
-  IdDepartamento     Int      @id(map: "PK__Departam__787A433D048279C6") @default(autoincrement())
-  NombreDepartamento String   @db.VarChar(100)
+  IdDepartamento     Int       @id(map: "PK__Departam__787A433DFF32EB91") @default(autoincrement())
+  NombreDepartamento String    @db.VarChar(100)
+  Activo             Boolean?
+  FechaEliminacion   DateTime? @db.DateTime
   Puesto             Puesto[]
 }
 
 model Empleado {
-  IdEmpleado         Int                  @id(map: "PK__Empleado__CE6D8B9E8B53F830") @default(autoincrement())
-  DPI                String               @unique(map: "UQ__Empleado__C035891F0786CB79") @db.VarChar(13)
-  NIT                String               @unique(map: "UQ__Empleado__C7DEC3C291C4ADF5") @db.VarChar(15)
-  Nombres            String               @db.VarChar(100)
-  Apellidos          String               @db.VarChar(100)
-  CorreoPersonal     String               @db.VarChar(100)
-  FechaIngresa       DateTime             @db.DateTime
-  IdPuesto           Int
-  Estado             Boolean?
-  FechaEliminacion   DateTime?            @db.DateTime
-  Telefono           Int
-  Genero             Boolean
-  EstadoCivil        String?              @db.VarChar(100)
-  Direccion          String?              @db.VarChar(100)
-  Fotografia         String?              @db.VarChar(200)
-  Asistencia         Asistencia[]
-  ControlVacacion    ControlVacacion[]
-  Puesto             Puesto               @relation(fields: [IdPuesto], references: [IdPuesto], onUpdate: NoAction, map: "FK_Empleado_Puesto")
-  Incidencia         Incidencia[]
-  MovimientoEmpleado MovimientoEmpleado[]
-  NominaDetalle      NominaDetalle[]
-  Salario            Salario[]
-  Usuario            Usuario[]
+  IdEmpleado          Int                   @id(map: "PK__Empleado__CE6D8B9E8EEC4E7D") @default(autoincrement())
+  DPI                 String                @unique(map: "UQ__Empleado__C035891FAD630049") @db.VarChar(13)
+  NIT                 String                @db.VarChar(15)
+  Nombres             String                @db.VarChar(100)
+  Apellidos           String                @db.VarChar(100)
+  CorreoPersonal      String                @db.VarChar(100)
+  FechaIngresa        DateTime              @db.DateTime
+  IdPuesto            Int
+  IdJornada           Int
+  IdBanco             Int?
+  CuentaBancaria      String?               @db.VarChar(50)
+  Telefono            String                @db.VarChar(15)
+  Genero              Boolean
+  EstadoCivil         String?               @db.VarChar(100)
+  Direccion           String?               @db.VarChar(200)
+  Fotografia          String?               @db.VarChar(200)
+  Activo              Boolean?
+  FechaEliminacion    DateTime?             @db.DateTime
+  Asistencia          Asistencia[]
+  ControlVacacion     ControlVacacion[]
+  Banco               Banco?                @relation(fields: [IdBanco], references: [IdBanco], onDelete: NoAction, onUpdate: NoAction, map: "FK_Empleado_Banco")
+  JornadaLaboral      JornadaLaboral        @relation(fields: [IdJornada], references: [IdJornada], onUpdate: NoAction, map: "FK_Empleado_Jornada")
+  Puesto              Puesto                @relation(fields: [IdPuesto], references: [IdPuesto], onUpdate: NoAction, map: "FK_Empleado_Puesto")
+  Incidencia          Incidencia[]
+  MovimientoEmpleado  MovimientoEmpleado[]
+  NominaDetalle       NominaDetalle[]
+  ProvisionPrestacion ProvisionPrestacion[]
+  Salario             Salario[]
+  Usuario             Usuario[]
 }
 
 model Incidencia {
-  IdIncidencia           Int                      @id(map: "PK__Incidenc__542A8F6CCC3DFE39") @default(autoincrement())
+  IdIncidencia           Int                      @id(map: "PK__Incidenc__542A8F6C54A43909") @default(autoincrement())
   IdEmpleado             Int
   TipoIncidencia         String                   @db.VarChar(50)
   FechaInicio            DateTime                 @db.DateTime
   FechaFin               DateTime                 @db.DateTime
   ConGoceSueldo          Boolean?
   IdUsuarioAutoriza      Int
+  Activo                 Boolean?
+  FechaEliminacion       DateTime?                @db.DateTime
   DetalleControlVacacion DetalleControlVacacion[]
   Empleado               Empleado                 @relation(fields: [IdEmpleado], references: [IdEmpleado], onUpdate: NoAction, map: "FK_Incidencia_Empleado")
   Usuario                Usuario                  @relation(fields: [IdUsuarioAutoriza], references: [IdUsuario], onUpdate: NoAction, map: "FK_Incidencia_Usuario")
 }
 
 model MovimientoEmpleado {
-  IdMovimiento     Int            @id(map: "PK__Movimien__881A6AE0DE13D72B") @default(autoincrement())
+  IdMovimiento     Int            @id(map: "PK__Movimien__881A6AE0C587808A") @default(autoincrement())
   IdEmpleado       Int
   IdTipoMovimiento Int
   Monto            Decimal        @db.Decimal(18, 2)
@@ -82,90 +96,117 @@ model MovimientoEmpleado {
   AnioAplicacion   Int
   FechaRegistro    DateTime?      @db.DateTime
   IdUsuarioIngresa Int
+  Activo           Boolean?
+  FechaEliminacion DateTime?      @db.DateTime
   Empleado         Empleado       @relation(fields: [IdEmpleado], references: [IdEmpleado], onUpdate: NoAction, map: "FK_Movimiento_Empleado")
   TipoMovimiento   TipoMovimiento @relation(fields: [IdTipoMovimiento], references: [IdTipoMovimiento], onUpdate: NoAction, map: "FK_Movimiento_Tipo")
   Usuario          Usuario        @relation(fields: [IdUsuarioIngresa], references: [IdUsuario], onUpdate: NoAction, map: "FK_Movimiento_Usuario")
 }
 
 model NominaDetalle {
-  IdNominaDetalle     Int                   @id(map: "PK__NominaDe__C872BFDDBDBDA76E") @default(autoincrement())
-  IdNomina            Int
-  IdEmpleado          Int
-  SueldoBase          Decimal               @db.Decimal(18, 2)
-  TotalIngresos       Decimal?              @db.Decimal(18, 2)
-  TotalDescuentos     Decimal?              @db.Decimal(18, 2)
-  LiquidoRecibir      Decimal?              @db.Decimal(18, 2)
-  Empleado            Empleado              @relation(fields: [IdEmpleado], references: [IdEmpleado], onUpdate: NoAction, map: "FK_Detalle_Empleado")
-  NominaEncabezado    NominaEncabezado      @relation(fields: [IdNomina], references: [IdNomina], onUpdate: NoAction, map: "FK_Detalle_Nomina")
-  RegistroEnvioBoleta RegistroEnvioBoleta[]
+  IdNominaDetalle       Int                   @id(map: "PK__NominaDe__C872BFDDB686A020") @default(autoincrement())
+  IdNomina              Int
+  IdEmpleado            Int
+  DiasLaborados         Decimal?              @db.Decimal(4, 2)
+  SueldoBase            Decimal               @db.Decimal(18, 2)
+  BonificacionIncentivo Decimal?              @db.Decimal(18, 2)
+  OtrosIngresos         Decimal?              @db.Decimal(18, 2)
+  DescuentoIGSS         Decimal?              @db.Decimal(18, 2)
+  DescuentoISR          Decimal?              @db.Decimal(18, 2)
+  OtrosDescuentos       Decimal?              @db.Decimal(18, 2)
+  LiquidoRecibir        Decimal?              @db.Decimal(18, 2)
+  Activo                Boolean?
+  FechaEliminacion      DateTime?             @db.DateTime
+  Empleado              Empleado              @relation(fields: [IdEmpleado], references: [IdEmpleado], onUpdate: NoAction, map: "FK_Detalle_Empleado")
+  NominaEncabezado      NominaEncabezado      @relation(fields: [IdNomina], references: [IdNomina], onUpdate: NoAction, map: "FK_Detalle_Nomina")
+  RegistroEnvioBoleta   RegistroEnvioBoleta[]
 }
 
 model NominaEncabezado {
-  IdNomina         Int             @id(map: "PK__NominaEn__02F9D722CF3F23DE") @default(autoincrement())
+  IdNomina         Int             @id(map: "PK__NominaEn__02F9D722EDDCFCF3") @default(autoincrement())
   Mes              Int
   Anio             Int
+  Quincena         Int?
   FechaGeneracion  DateTime?       @db.DateTime
   Estado           String?         @db.VarChar(20)
   IdUsuarioGerente Int?
+  Activo           Boolean?
+  FechaEliminacion DateTime?       @db.DateTime
   NominaDetalle    NominaDetalle[]
   Usuario          Usuario?        @relation(fields: [IdUsuarioGerente], references: [IdUsuario], onDelete: NoAction, onUpdate: NoAction, map: "FK_Planilla_Gerente")
 }
 
 model ParametroGlobal {
-  IdParametro     Int     @id(map: "PK__Parametr__37B016F4BB451B9F") @default(autoincrement())
-  NombreParametro String  @db.VarChar(50)
-  Valor           Decimal @db.Decimal(18, 4)
-  Descripcion     String? @db.VarChar(255)
+  IdParametro      Int       @id(map: "PK__Parametr__37B016F45BC5E7CA") @default(autoincrement())
+  NombreParametro  String    @db.VarChar(50)
+  Valor            Decimal   @db.Decimal(18, 4)
+  Descripcion      String?   @db.VarChar(255)
+  Activo           Boolean?
+  FechaEliminacion DateTime? @db.DateTime
 }
 
 model Puesto {
-  IdPuesto       Int          @id(map: "PK__Puesto__ADAC6B9C95670054") @default(autoincrement())
-  NombrePuesto   String       @db.VarChar(100)
-  IdDepartamento Int
-  Empleado       Empleado[]
-  Departamento   Departamento @relation(fields: [IdDepartamento], references: [IdDepartamento], onUpdate: NoAction, map: "FK_Puesto_Departamento")
+  IdPuesto         Int          @id(map: "PK__Puesto__ADAC6B9C404CD7C5") @default(autoincrement())
+  NombrePuesto     String       @db.VarChar(100)
+  IdDepartamento   Int
+  Activo           Boolean?
+  FechaEliminacion DateTime?    @db.DateTime
+  Empleado         Empleado[]
+  Departamento     Departamento @relation(fields: [IdDepartamento], references: [IdDepartamento], onUpdate: NoAction, map: "FK_Puesto_Departamento")
 }
 
 model RegistroEnvioBoleta {
-  IdEnvio         Int           @id(map: "PK__Registro__B814A62E4F89E923") @default(autoincrement())
-  IdNominaDetalle Int
-  FechaEnvio      DateTime?     @db.DateTime
-  Exitoso         Boolean?
-  IdUsuarioEnvia  Int
-  NominaDetalle   NominaDetalle @relation(fields: [IdNominaDetalle], references: [IdNominaDetalle], onUpdate: NoAction, map: "FK_Envio_Detalle")
-  Usuario         Usuario       @relation(fields: [IdUsuarioEnvia], references: [IdUsuario], onUpdate: NoAction, map: "FK_Envio_Usuario")
+  IdEnvio          Int           @id(map: "PK__Registro__B814A62E724092B0") @default(autoincrement())
+  IdNominaDetalle  Int
+  FechaEnvio       DateTime?     @db.DateTime
+  Exitoso          Boolean?
+  IdUsuarioEnvia   Int
+  Activo           Boolean?
+  FechaEliminacion DateTime?     @db.DateTime
+  NominaDetalle    NominaDetalle @relation(fields: [IdNominaDetalle], references: [IdNominaDetalle], onUpdate: NoAction, map: "FK_Envio_Detalle")
+  Usuario          Usuario       @relation(fields: [IdUsuarioEnvia], references: [IdUsuario], onUpdate: NoAction, map: "FK_Envio_Usuario")
 }
 
 model RolUsuario {
-  IdRol     Int       @id(map: "PK__RolUsuar__2A49584CF5830C44") @default(autoincrement())
-  NombreRol String    @db.VarChar(50)
-  Usuario   Usuario[]
+  IdRol            Int       @id(map: "PK__RolUsuar__2A49584C8A8E1230") @default(autoincrement())
+  NombreRol        String    @db.VarChar(50)
+  Activo           Boolean?
+  FechaEliminacion DateTime? @db.DateTime
+  Usuario          Usuario[]
 }
 
 model Salario {
-  IdHistorico         Int       @id(map: "PK__Salario__9CC7EBF3F6D2E765") @default(autoincrement())
+  IdHistorico         Int       @id(map: "PK__Salario__9CC7EBF3713D65D0") @default(autoincrement())
   IdEmpleado          Int
   SalarioBase         Decimal   @db.Decimal(18, 2)
   FechaInicioVigencia DateTime  @db.DateTime
   FechaFinVigencia    DateTime? @db.DateTime
+  Activo              Boolean?
+  FechaEliminacion    DateTime? @db.DateTime
   Empleado            Empleado  @relation(fields: [IdEmpleado], references: [IdEmpleado], onUpdate: NoAction, map: "FK_Historico_Empleado")
 }
 
 model TipoMovimiento {
-  IdTipoMovimiento   Int                  @id(map: "PK__TipoMovi__820D7FC234DD25DC") @default(autoincrement())
+  IdTipoMovimiento   Int                  @id(map: "PK__TipoMovi__820D7FC2E8608D7F") @default(autoincrement())
   NombreMovimiento   String               @db.VarChar(50)
   Clasificacion      String               @db.VarChar(20)
   EsFijo             Boolean?
+  AfectaIGSS         Boolean?
+  AfectaISR          Boolean?
+  Activo             Boolean?
+  FechaEliminacion   DateTime?            @db.DateTime
   MovimientoEmpleado MovimientoEmpleado[]
 }
 
 model Usuario {
-  IdUsuario           Int                   @id(map: "PK__Usuario__5B65BF97B1CA95A8") @default(autoincrement())
-  Username            String                @unique(map: "UQ__Usuario__536C85E4EE693044") @db.VarChar(50)
+  IdUsuario           Int                   @id(map: "PK__Usuario__5B65BF97DD9F4FE5") @default(autoincrement())
+  Username            String                @unique(map: "UQ__Usuario__536C85E4295FCD25") @db.VarChar(50)
   Contrasena          String                @db.VarChar(200)
   IdRol               Int
   IdEmpleado          Int
-  Clave               String?               @db.VarChar(100)
+  Clave               String?               @db.VarChar(200)
+  Activo              Boolean?
+  FechaEliminacion    DateTime?             @db.DateTime
   Incidencia          Incidencia[]
   MovimientoEmpleado  MovimientoEmpleado[]
   NominaEncabezado    NominaEncabezado[]
@@ -175,11 +216,65 @@ model Usuario {
 }
 
 model DetalleControlVacacion {
-  IdDetalleVacacion Int             @id(map: "PK__DetalleC__9331136B43D20023") @default(autoincrement())
+  IdDetalleVacacion Int             @id(map: "PK__DetalleC__9331136B6788AD92") @default(autoincrement())
   IdControlVacacion Int
   IdIncidencia      Int
   DiasDescontados   Decimal         @db.Decimal(4, 2)
   FechaRegistro     DateTime?       @db.DateTime
+  Activo            Boolean?
+  FechaEliminacion  DateTime?       @db.DateTime
   ControlVacacion   ControlVacacion @relation(fields: [IdControlVacacion], references: [IdControlVacacion], onUpdate: NoAction, map: "FK_DetalleVac_Control")
   Incidencia        Incidencia      @relation(fields: [IdIncidencia], references: [IdIncidencia], onUpdate: NoAction, map: "FK_DetalleVac_Incidencia")
+}
+
+model Banco {
+  IdBanco          Int        @id(map: "PK__Banco__2D3F553EE803B804") @default(autoincrement())
+  NombreBanco      String     @db.VarChar(100)
+  Activo           Boolean?
+  FechaEliminacion DateTime?  @db.DateTime
+  Empleado         Empleado[]
+}
+
+model Empresa {
+  IdEmpresa          Int       @id(map: "PK__Empresa__5EF4033E015875B0") @default(autoincrement())
+  NombreRazonSocial  String    @db.VarChar(200)
+  NombreComercial    String?   @db.VarChar(200)
+  NIT                String    @db.VarChar(15)
+  NumeroPatronalIGSS String    @db.VarChar(50)
+  Activo             Boolean?
+  FechaEliminacion   DateTime? @db.DateTime
+}
+
+model JornadaLaboral {
+  IdJornada        Int        @id(map: "PK__JornadaL__FED2FEE801CF088C") @default(autoincrement())
+  NombreJornada    String     @db.VarChar(50)
+  HorasDiarias     Decimal    @db.Decimal(4, 2)
+  HorasSemanales   Decimal    @db.Decimal(4, 2)
+  Activo           Boolean?
+  FechaEliminacion DateTime?  @db.DateTime
+  Empleado         Empleado[]
+}
+
+model ProvisionPrestacion {
+  IdProvision            Int       @id(map: "PK__Provisio__0865F96DA4E2F0D5") @default(autoincrement())
+  IdEmpleado             Int
+  Mes                    Int
+  Anio                   Int
+  ProvisionBono14        Decimal?  @db.Decimal(18, 2)
+  ProvisionAguinaldo     Decimal?  @db.Decimal(18, 2)
+  ProvisionIndemnizacion Decimal?  @db.Decimal(18, 2)
+  ProvisionVacaciones    Decimal?  @db.Decimal(18, 2)
+  Activo                 Boolean?
+  FechaEliminacion       DateTime? @db.DateTime
+  Empleado               Empleado  @relation(fields: [IdEmpleado], references: [IdEmpleado], onUpdate: NoAction, map: "FK_Provision_Empleado")
+}
+
+model sysdiagrams {
+  name         String @db.NVarChar(128)
+  principal_id Int
+  diagram_id   Int    @id(map: "PK__sysdiagr__C2B05B61934EDE98") @default(autoincrement())
+  version      Int?
+  definition   Bytes?
+
+  @@unique([principal_id, name], map: "UK_principal_name")
 }

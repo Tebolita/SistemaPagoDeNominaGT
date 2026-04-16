@@ -80,12 +80,12 @@ export type PrismaVersion = {
 }
 
 /**
- * Prisma Client JS version: 7.5.0
- * Query Engine version: 280c870be64f457428992c43c1f6d557fab6e29e
+ * Prisma Client JS version: 7.7.0
+ * Query Engine version: 75cbdc1eb7150937890ad5465d861175c6624711
  */
 export const prismaVersion: PrismaVersion = {
-  client: "7.5.0",
-  engine: "280c870be64f457428992c43c1f6d557fab6e29e"
+  client: "7.7.0",
+  engine: "75cbdc1eb7150937890ad5465d861175c6624711"
 }
 
 /**
@@ -399,7 +399,12 @@ export const ModelName = {
   Salario: 'Salario',
   TipoMovimiento: 'TipoMovimiento',
   Usuario: 'Usuario',
-  DetalleControlVacacion: 'DetalleControlVacacion'
+  DetalleControlVacacion: 'DetalleControlVacacion',
+  Banco: 'Banco',
+  Empresa: 'Empresa',
+  JornadaLaboral: 'JornadaLaboral',
+  ProvisionPrestacion: 'ProvisionPrestacion',
+  sysdiagrams: 'sysdiagrams'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -415,7 +420,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "asistencia" | "controlVacacion" | "departamento" | "empleado" | "incidencia" | "movimientoEmpleado" | "nominaDetalle" | "nominaEncabezado" | "parametroGlobal" | "puesto" | "registroEnvioBoleta" | "rolUsuario" | "salario" | "tipoMovimiento" | "usuario" | "detalleControlVacacion"
+    modelProps: "asistencia" | "controlVacacion" | "departamento" | "empleado" | "incidencia" | "movimientoEmpleado" | "nominaDetalle" | "nominaEncabezado" | "parametroGlobal" | "puesto" | "registroEnvioBoleta" | "rolUsuario" | "salario" | "tipoMovimiento" | "usuario" | "detalleControlVacacion" | "banco" | "empresa" | "jornadaLaboral" | "provisionPrestacion" | "sysdiagrams"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1475,6 +1480,336 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Banco: {
+      payload: Prisma.$BancoPayload<ExtArgs>
+      fields: Prisma.BancoFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.BancoFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BancoPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.BancoFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BancoPayload>
+        }
+        findFirst: {
+          args: Prisma.BancoFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BancoPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.BancoFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BancoPayload>
+        }
+        findMany: {
+          args: Prisma.BancoFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BancoPayload>[]
+        }
+        create: {
+          args: Prisma.BancoCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BancoPayload>
+        }
+        createMany: {
+          args: Prisma.BancoCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.BancoDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BancoPayload>
+        }
+        update: {
+          args: Prisma.BancoUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BancoPayload>
+        }
+        deleteMany: {
+          args: Prisma.BancoDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.BancoUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.BancoUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BancoPayload>
+        }
+        aggregate: {
+          args: Prisma.BancoAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBanco>
+        }
+        groupBy: {
+          args: Prisma.BancoGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BancoGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.BancoCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BancoCountAggregateOutputType> | number
+        }
+      }
+    }
+    Empresa: {
+      payload: Prisma.$EmpresaPayload<ExtArgs>
+      fields: Prisma.EmpresaFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.EmpresaFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmpresaPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.EmpresaFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmpresaPayload>
+        }
+        findFirst: {
+          args: Prisma.EmpresaFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmpresaPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.EmpresaFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmpresaPayload>
+        }
+        findMany: {
+          args: Prisma.EmpresaFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmpresaPayload>[]
+        }
+        create: {
+          args: Prisma.EmpresaCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmpresaPayload>
+        }
+        createMany: {
+          args: Prisma.EmpresaCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.EmpresaDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmpresaPayload>
+        }
+        update: {
+          args: Prisma.EmpresaUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmpresaPayload>
+        }
+        deleteMany: {
+          args: Prisma.EmpresaDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.EmpresaUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.EmpresaUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmpresaPayload>
+        }
+        aggregate: {
+          args: Prisma.EmpresaAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateEmpresa>
+        }
+        groupBy: {
+          args: Prisma.EmpresaGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EmpresaGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.EmpresaCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EmpresaCountAggregateOutputType> | number
+        }
+      }
+    }
+    JornadaLaboral: {
+      payload: Prisma.$JornadaLaboralPayload<ExtArgs>
+      fields: Prisma.JornadaLaboralFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.JornadaLaboralFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$JornadaLaboralPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.JornadaLaboralFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$JornadaLaboralPayload>
+        }
+        findFirst: {
+          args: Prisma.JornadaLaboralFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$JornadaLaboralPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.JornadaLaboralFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$JornadaLaboralPayload>
+        }
+        findMany: {
+          args: Prisma.JornadaLaboralFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$JornadaLaboralPayload>[]
+        }
+        create: {
+          args: Prisma.JornadaLaboralCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$JornadaLaboralPayload>
+        }
+        createMany: {
+          args: Prisma.JornadaLaboralCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.JornadaLaboralDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$JornadaLaboralPayload>
+        }
+        update: {
+          args: Prisma.JornadaLaboralUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$JornadaLaboralPayload>
+        }
+        deleteMany: {
+          args: Prisma.JornadaLaboralDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.JornadaLaboralUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.JornadaLaboralUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$JornadaLaboralPayload>
+        }
+        aggregate: {
+          args: Prisma.JornadaLaboralAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateJornadaLaboral>
+        }
+        groupBy: {
+          args: Prisma.JornadaLaboralGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.JornadaLaboralGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.JornadaLaboralCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.JornadaLaboralCountAggregateOutputType> | number
+        }
+      }
+    }
+    ProvisionPrestacion: {
+      payload: Prisma.$ProvisionPrestacionPayload<ExtArgs>
+      fields: Prisma.ProvisionPrestacionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ProvisionPrestacionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProvisionPrestacionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ProvisionPrestacionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProvisionPrestacionPayload>
+        }
+        findFirst: {
+          args: Prisma.ProvisionPrestacionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProvisionPrestacionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ProvisionPrestacionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProvisionPrestacionPayload>
+        }
+        findMany: {
+          args: Prisma.ProvisionPrestacionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProvisionPrestacionPayload>[]
+        }
+        create: {
+          args: Prisma.ProvisionPrestacionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProvisionPrestacionPayload>
+        }
+        createMany: {
+          args: Prisma.ProvisionPrestacionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.ProvisionPrestacionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProvisionPrestacionPayload>
+        }
+        update: {
+          args: Prisma.ProvisionPrestacionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProvisionPrestacionPayload>
+        }
+        deleteMany: {
+          args: Prisma.ProvisionPrestacionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ProvisionPrestacionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.ProvisionPrestacionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProvisionPrestacionPayload>
+        }
+        aggregate: {
+          args: Prisma.ProvisionPrestacionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateProvisionPrestacion>
+        }
+        groupBy: {
+          args: Prisma.ProvisionPrestacionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProvisionPrestacionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ProvisionPrestacionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProvisionPrestacionCountAggregateOutputType> | number
+        }
+      }
+    }
+    sysdiagrams: {
+      payload: Prisma.$sysdiagramsPayload<ExtArgs>
+      fields: Prisma.sysdiagramsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.sysdiagramsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$sysdiagramsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.sysdiagramsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$sysdiagramsPayload>
+        }
+        findFirst: {
+          args: Prisma.sysdiagramsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$sysdiagramsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.sysdiagramsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$sysdiagramsPayload>
+        }
+        findMany: {
+          args: Prisma.sysdiagramsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$sysdiagramsPayload>[]
+        }
+        create: {
+          args: Prisma.sysdiagramsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$sysdiagramsPayload>
+        }
+        createMany: {
+          args: Prisma.sysdiagramsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.sysdiagramsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$sysdiagramsPayload>
+        }
+        update: {
+          args: Prisma.sysdiagramsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$sysdiagramsPayload>
+        }
+        deleteMany: {
+          args: Prisma.sysdiagramsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.sysdiagramsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.sysdiagramsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$sysdiagramsPayload>
+        }
+        aggregate: {
+          args: Prisma.SysdiagramsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSysdiagrams>
+        }
+        groupBy: {
+          args: Prisma.sysdiagramsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SysdiagramsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.sysdiagramsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SysdiagramsCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1521,7 +1856,9 @@ export const AsistenciaScalarFieldEnum = {
   Fecha: 'Fecha',
   HoraEntrada: 'HoraEntrada',
   HoraSalida: 'HoraSalida',
-  HorasExtra: 'HorasExtra'
+  HorasExtra: 'HorasExtra',
+  Activo: 'Activo',
+  FechaEliminacion: 'FechaEliminacion'
 } as const
 
 export type AsistenciaScalarFieldEnum = (typeof AsistenciaScalarFieldEnum)[keyof typeof AsistenciaScalarFieldEnum]
@@ -1532,7 +1869,9 @@ export const ControlVacacionScalarFieldEnum = {
   IdEmpleado: 'IdEmpleado',
   AnioCorriente: 'AnioCorriente',
   DiasGanados: 'DiasGanados',
-  DiasGozados: 'DiasGozados'
+  DiasGozados: 'DiasGozados',
+  Activo: 'Activo',
+  FechaEliminacion: 'FechaEliminacion'
 } as const
 
 export type ControlVacacionScalarFieldEnum = (typeof ControlVacacionScalarFieldEnum)[keyof typeof ControlVacacionScalarFieldEnum]
@@ -1540,7 +1879,9 @@ export type ControlVacacionScalarFieldEnum = (typeof ControlVacacionScalarFieldE
 
 export const DepartamentoScalarFieldEnum = {
   IdDepartamento: 'IdDepartamento',
-  NombreDepartamento: 'NombreDepartamento'
+  NombreDepartamento: 'NombreDepartamento',
+  Activo: 'Activo',
+  FechaEliminacion: 'FechaEliminacion'
 } as const
 
 export type DepartamentoScalarFieldEnum = (typeof DepartamentoScalarFieldEnum)[keyof typeof DepartamentoScalarFieldEnum]
@@ -1555,13 +1896,16 @@ export const EmpleadoScalarFieldEnum = {
   CorreoPersonal: 'CorreoPersonal',
   FechaIngresa: 'FechaIngresa',
   IdPuesto: 'IdPuesto',
-  Estado: 'Estado',
-  FechaEliminacion: 'FechaEliminacion',
+  IdJornada: 'IdJornada',
+  IdBanco: 'IdBanco',
+  CuentaBancaria: 'CuentaBancaria',
   Telefono: 'Telefono',
   Genero: 'Genero',
   EstadoCivil: 'EstadoCivil',
   Direccion: 'Direccion',
-  Fotografia: 'Fotografia'
+  Fotografia: 'Fotografia',
+  Activo: 'Activo',
+  FechaEliminacion: 'FechaEliminacion'
 } as const
 
 export type EmpleadoScalarFieldEnum = (typeof EmpleadoScalarFieldEnum)[keyof typeof EmpleadoScalarFieldEnum]
@@ -1574,7 +1918,9 @@ export const IncidenciaScalarFieldEnum = {
   FechaInicio: 'FechaInicio',
   FechaFin: 'FechaFin',
   ConGoceSueldo: 'ConGoceSueldo',
-  IdUsuarioAutoriza: 'IdUsuarioAutoriza'
+  IdUsuarioAutoriza: 'IdUsuarioAutoriza',
+  Activo: 'Activo',
+  FechaEliminacion: 'FechaEliminacion'
 } as const
 
 export type IncidenciaScalarFieldEnum = (typeof IncidenciaScalarFieldEnum)[keyof typeof IncidenciaScalarFieldEnum]
@@ -1588,7 +1934,9 @@ export const MovimientoEmpleadoScalarFieldEnum = {
   MesAplicacion: 'MesAplicacion',
   AnioAplicacion: 'AnioAplicacion',
   FechaRegistro: 'FechaRegistro',
-  IdUsuarioIngresa: 'IdUsuarioIngresa'
+  IdUsuarioIngresa: 'IdUsuarioIngresa',
+  Activo: 'Activo',
+  FechaEliminacion: 'FechaEliminacion'
 } as const
 
 export type MovimientoEmpleadoScalarFieldEnum = (typeof MovimientoEmpleadoScalarFieldEnum)[keyof typeof MovimientoEmpleadoScalarFieldEnum]
@@ -1598,10 +1946,16 @@ export const NominaDetalleScalarFieldEnum = {
   IdNominaDetalle: 'IdNominaDetalle',
   IdNomina: 'IdNomina',
   IdEmpleado: 'IdEmpleado',
+  DiasLaborados: 'DiasLaborados',
   SueldoBase: 'SueldoBase',
-  TotalIngresos: 'TotalIngresos',
-  TotalDescuentos: 'TotalDescuentos',
-  LiquidoRecibir: 'LiquidoRecibir'
+  BonificacionIncentivo: 'BonificacionIncentivo',
+  OtrosIngresos: 'OtrosIngresos',
+  DescuentoIGSS: 'DescuentoIGSS',
+  DescuentoISR: 'DescuentoISR',
+  OtrosDescuentos: 'OtrosDescuentos',
+  LiquidoRecibir: 'LiquidoRecibir',
+  Activo: 'Activo',
+  FechaEliminacion: 'FechaEliminacion'
 } as const
 
 export type NominaDetalleScalarFieldEnum = (typeof NominaDetalleScalarFieldEnum)[keyof typeof NominaDetalleScalarFieldEnum]
@@ -1611,9 +1965,12 @@ export const NominaEncabezadoScalarFieldEnum = {
   IdNomina: 'IdNomina',
   Mes: 'Mes',
   Anio: 'Anio',
+  Quincena: 'Quincena',
   FechaGeneracion: 'FechaGeneracion',
   Estado: 'Estado',
-  IdUsuarioGerente: 'IdUsuarioGerente'
+  IdUsuarioGerente: 'IdUsuarioGerente',
+  Activo: 'Activo',
+  FechaEliminacion: 'FechaEliminacion'
 } as const
 
 export type NominaEncabezadoScalarFieldEnum = (typeof NominaEncabezadoScalarFieldEnum)[keyof typeof NominaEncabezadoScalarFieldEnum]
@@ -1623,7 +1980,9 @@ export const ParametroGlobalScalarFieldEnum = {
   IdParametro: 'IdParametro',
   NombreParametro: 'NombreParametro',
   Valor: 'Valor',
-  Descripcion: 'Descripcion'
+  Descripcion: 'Descripcion',
+  Activo: 'Activo',
+  FechaEliminacion: 'FechaEliminacion'
 } as const
 
 export type ParametroGlobalScalarFieldEnum = (typeof ParametroGlobalScalarFieldEnum)[keyof typeof ParametroGlobalScalarFieldEnum]
@@ -1632,7 +1991,9 @@ export type ParametroGlobalScalarFieldEnum = (typeof ParametroGlobalScalarFieldE
 export const PuestoScalarFieldEnum = {
   IdPuesto: 'IdPuesto',
   NombrePuesto: 'NombrePuesto',
-  IdDepartamento: 'IdDepartamento'
+  IdDepartamento: 'IdDepartamento',
+  Activo: 'Activo',
+  FechaEliminacion: 'FechaEliminacion'
 } as const
 
 export type PuestoScalarFieldEnum = (typeof PuestoScalarFieldEnum)[keyof typeof PuestoScalarFieldEnum]
@@ -1643,7 +2004,9 @@ export const RegistroEnvioBoletaScalarFieldEnum = {
   IdNominaDetalle: 'IdNominaDetalle',
   FechaEnvio: 'FechaEnvio',
   Exitoso: 'Exitoso',
-  IdUsuarioEnvia: 'IdUsuarioEnvia'
+  IdUsuarioEnvia: 'IdUsuarioEnvia',
+  Activo: 'Activo',
+  FechaEliminacion: 'FechaEliminacion'
 } as const
 
 export type RegistroEnvioBoletaScalarFieldEnum = (typeof RegistroEnvioBoletaScalarFieldEnum)[keyof typeof RegistroEnvioBoletaScalarFieldEnum]
@@ -1651,7 +2014,9 @@ export type RegistroEnvioBoletaScalarFieldEnum = (typeof RegistroEnvioBoletaScal
 
 export const RolUsuarioScalarFieldEnum = {
   IdRol: 'IdRol',
-  NombreRol: 'NombreRol'
+  NombreRol: 'NombreRol',
+  Activo: 'Activo',
+  FechaEliminacion: 'FechaEliminacion'
 } as const
 
 export type RolUsuarioScalarFieldEnum = (typeof RolUsuarioScalarFieldEnum)[keyof typeof RolUsuarioScalarFieldEnum]
@@ -1662,7 +2027,9 @@ export const SalarioScalarFieldEnum = {
   IdEmpleado: 'IdEmpleado',
   SalarioBase: 'SalarioBase',
   FechaInicioVigencia: 'FechaInicioVigencia',
-  FechaFinVigencia: 'FechaFinVigencia'
+  FechaFinVigencia: 'FechaFinVigencia',
+  Activo: 'Activo',
+  FechaEliminacion: 'FechaEliminacion'
 } as const
 
 export type SalarioScalarFieldEnum = (typeof SalarioScalarFieldEnum)[keyof typeof SalarioScalarFieldEnum]
@@ -1672,7 +2039,11 @@ export const TipoMovimientoScalarFieldEnum = {
   IdTipoMovimiento: 'IdTipoMovimiento',
   NombreMovimiento: 'NombreMovimiento',
   Clasificacion: 'Clasificacion',
-  EsFijo: 'EsFijo'
+  EsFijo: 'EsFijo',
+  AfectaIGSS: 'AfectaIGSS',
+  AfectaISR: 'AfectaISR',
+  Activo: 'Activo',
+  FechaEliminacion: 'FechaEliminacion'
 } as const
 
 export type TipoMovimientoScalarFieldEnum = (typeof TipoMovimientoScalarFieldEnum)[keyof typeof TipoMovimientoScalarFieldEnum]
@@ -1684,7 +2055,9 @@ export const UsuarioScalarFieldEnum = {
   Contrasena: 'Contrasena',
   IdRol: 'IdRol',
   IdEmpleado: 'IdEmpleado',
-  Clave: 'Clave'
+  Clave: 'Clave',
+  Activo: 'Activo',
+  FechaEliminacion: 'FechaEliminacion'
 } as const
 
 export type UsuarioScalarFieldEnum = (typeof UsuarioScalarFieldEnum)[keyof typeof UsuarioScalarFieldEnum]
@@ -1695,10 +2068,74 @@ export const DetalleControlVacacionScalarFieldEnum = {
   IdControlVacacion: 'IdControlVacacion',
   IdIncidencia: 'IdIncidencia',
   DiasDescontados: 'DiasDescontados',
-  FechaRegistro: 'FechaRegistro'
+  FechaRegistro: 'FechaRegistro',
+  Activo: 'Activo',
+  FechaEliminacion: 'FechaEliminacion'
 } as const
 
 export type DetalleControlVacacionScalarFieldEnum = (typeof DetalleControlVacacionScalarFieldEnum)[keyof typeof DetalleControlVacacionScalarFieldEnum]
+
+
+export const BancoScalarFieldEnum = {
+  IdBanco: 'IdBanco',
+  NombreBanco: 'NombreBanco',
+  Activo: 'Activo',
+  FechaEliminacion: 'FechaEliminacion'
+} as const
+
+export type BancoScalarFieldEnum = (typeof BancoScalarFieldEnum)[keyof typeof BancoScalarFieldEnum]
+
+
+export const EmpresaScalarFieldEnum = {
+  IdEmpresa: 'IdEmpresa',
+  NombreRazonSocial: 'NombreRazonSocial',
+  NombreComercial: 'NombreComercial',
+  NIT: 'NIT',
+  NumeroPatronalIGSS: 'NumeroPatronalIGSS',
+  Activo: 'Activo',
+  FechaEliminacion: 'FechaEliminacion'
+} as const
+
+export type EmpresaScalarFieldEnum = (typeof EmpresaScalarFieldEnum)[keyof typeof EmpresaScalarFieldEnum]
+
+
+export const JornadaLaboralScalarFieldEnum = {
+  IdJornada: 'IdJornada',
+  NombreJornada: 'NombreJornada',
+  HorasDiarias: 'HorasDiarias',
+  HorasSemanales: 'HorasSemanales',
+  Activo: 'Activo',
+  FechaEliminacion: 'FechaEliminacion'
+} as const
+
+export type JornadaLaboralScalarFieldEnum = (typeof JornadaLaboralScalarFieldEnum)[keyof typeof JornadaLaboralScalarFieldEnum]
+
+
+export const ProvisionPrestacionScalarFieldEnum = {
+  IdProvision: 'IdProvision',
+  IdEmpleado: 'IdEmpleado',
+  Mes: 'Mes',
+  Anio: 'Anio',
+  ProvisionBono14: 'ProvisionBono14',
+  ProvisionAguinaldo: 'ProvisionAguinaldo',
+  ProvisionIndemnizacion: 'ProvisionIndemnizacion',
+  ProvisionVacaciones: 'ProvisionVacaciones',
+  Activo: 'Activo',
+  FechaEliminacion: 'FechaEliminacion'
+} as const
+
+export type ProvisionPrestacionScalarFieldEnum = (typeof ProvisionPrestacionScalarFieldEnum)[keyof typeof ProvisionPrestacionScalarFieldEnum]
+
+
+export const SysdiagramsScalarFieldEnum = {
+  name: 'name',
+  principal_id: 'principal_id',
+  diagram_id: 'diagram_id',
+  version: 'version',
+  definition: 'definition'
+} as const
+
+export type SysdiagramsScalarFieldEnum = (typeof SysdiagramsScalarFieldEnum)[keyof typeof SysdiagramsScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1745,6 +2182,13 @@ export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel,
 
 
 /**
+ * Reference to a field of type 'Boolean'
+ */
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+/**
  * Reference to a field of type 'String'
  */
 export type StringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String'>
@@ -1752,9 +2196,9 @@ export type StringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 
 
 
 /**
- * Reference to a field of type 'Boolean'
+ * Reference to a field of type 'Bytes'
  */
-export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+export type BytesFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Bytes'>
     
 
 
@@ -1875,6 +2319,11 @@ export type GlobalOmitConfig = {
   tipoMovimiento?: Prisma.TipoMovimientoOmit
   usuario?: Prisma.UsuarioOmit
   detalleControlVacacion?: Prisma.DetalleControlVacacionOmit
+  banco?: Prisma.BancoOmit
+  empresa?: Prisma.EmpresaOmit
+  jornadaLaboral?: Prisma.JornadaLaboralOmit
+  provisionPrestacion?: Prisma.ProvisionPrestacionOmit
+  sysdiagrams?: Prisma.sysdiagramsOmit
 }
 
 /* Types for Logging */

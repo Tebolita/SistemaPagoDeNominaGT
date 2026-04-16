@@ -5,9 +5,13 @@ import { Empleado } from './empleado/empleado';
 import { Vacacion } from './vacacion/vacacion';
 import { Asistencia } from './asistencia/asistencia';
 import { Inicio } from './inicio/inicio';
+import { Usuario } from './usuario/usuario';
+import { Seguridad } from './seguridad/seguridad';
+import { RecursosHumanos } from './rrhh/rrhh';
 
 export const routes: Routes = [
-    { path: '', redirectTo: 'login', pathMatch: 'full' },
+    { path: '', redirectTo: 'home/inicio', pathMatch: 'full' },
+    
     {
         path: 'login',
         component: Login
@@ -16,11 +20,28 @@ export const routes: Routes = [
         path: 'home', 
         component: Home,
         children: [
-            {path: 'empleado', component: Empleado},
-            {path: 'vacacion', component: Vacacion},
-            {path: 'asistencia', component: Asistencia},
-            {path: 'inicio', component: Inicio}
+            {path: 'inicio', component: Inicio},
         ]
     },
+    {
+        path: 'recursoshumanos',
+        component: Home,
+        children: [
+            {path: 'inicio', component: RecursosHumanos},
+            {path: 'empleados', component: Empleado},
+            {path: 'vacaciones', component: Vacacion},
+            {path: 'asistencias', component: Asistencia},
+        ]
+
+    },
+    {
+        path: 'seguridad',
+        component: Home,
+        children: [
+            {path: 'inicio', component: Seguridad},
+            {path: 'usuarios', component: Usuario},
+        ]
+
+    },    
     { path: '**', redirectTo: 'login' }
 ];

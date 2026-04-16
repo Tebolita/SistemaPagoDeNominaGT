@@ -44,6 +44,8 @@ export type SalarioMinAggregateOutputType = {
   SalarioBase: runtime.Decimal | null
   FechaInicioVigencia: Date | null
   FechaFinVigencia: Date | null
+  Activo: boolean | null
+  FechaEliminacion: Date | null
 }
 
 export type SalarioMaxAggregateOutputType = {
@@ -52,6 +54,8 @@ export type SalarioMaxAggregateOutputType = {
   SalarioBase: runtime.Decimal | null
   FechaInicioVigencia: Date | null
   FechaFinVigencia: Date | null
+  Activo: boolean | null
+  FechaEliminacion: Date | null
 }
 
 export type SalarioCountAggregateOutputType = {
@@ -60,6 +64,8 @@ export type SalarioCountAggregateOutputType = {
   SalarioBase: number
   FechaInicioVigencia: number
   FechaFinVigencia: number
+  Activo: number
+  FechaEliminacion: number
   _all: number
 }
 
@@ -82,6 +88,8 @@ export type SalarioMinAggregateInputType = {
   SalarioBase?: true
   FechaInicioVigencia?: true
   FechaFinVigencia?: true
+  Activo?: true
+  FechaEliminacion?: true
 }
 
 export type SalarioMaxAggregateInputType = {
@@ -90,6 +98,8 @@ export type SalarioMaxAggregateInputType = {
   SalarioBase?: true
   FechaInicioVigencia?: true
   FechaFinVigencia?: true
+  Activo?: true
+  FechaEliminacion?: true
 }
 
 export type SalarioCountAggregateInputType = {
@@ -98,6 +108,8 @@ export type SalarioCountAggregateInputType = {
   SalarioBase?: true
   FechaInicioVigencia?: true
   FechaFinVigencia?: true
+  Activo?: true
+  FechaEliminacion?: true
   _all?: true
 }
 
@@ -193,6 +205,8 @@ export type SalarioGroupByOutputType = {
   SalarioBase: runtime.Decimal
   FechaInicioVigencia: Date
   FechaFinVigencia: Date | null
+  Activo: boolean | null
+  FechaEliminacion: Date | null
   _count: SalarioCountAggregateOutputType | null
   _avg: SalarioAvgAggregateOutputType | null
   _sum: SalarioSumAggregateOutputType | null
@@ -200,7 +214,7 @@ export type SalarioGroupByOutputType = {
   _max: SalarioMaxAggregateOutputType | null
 }
 
-type GetSalarioGroupByPayload<T extends SalarioGroupByArgs> = Prisma.PrismaPromise<
+export type GetSalarioGroupByPayload<T extends SalarioGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<SalarioGroupByOutputType, T['by']> &
       {
@@ -224,6 +238,8 @@ export type SalarioWhereInput = {
   SalarioBase?: Prisma.DecimalFilter<"Salario"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   FechaInicioVigencia?: Prisma.DateTimeFilter<"Salario"> | Date | string
   FechaFinVigencia?: Prisma.DateTimeNullableFilter<"Salario"> | Date | string | null
+  Activo?: Prisma.BoolNullableFilter<"Salario"> | boolean | null
+  FechaEliminacion?: Prisma.DateTimeNullableFilter<"Salario"> | Date | string | null
   Empleado?: Prisma.XOR<Prisma.EmpleadoScalarRelationFilter, Prisma.EmpleadoWhereInput>
 }
 
@@ -233,6 +249,8 @@ export type SalarioOrderByWithRelationInput = {
   SalarioBase?: Prisma.SortOrder
   FechaInicioVigencia?: Prisma.SortOrder
   FechaFinVigencia?: Prisma.SortOrderInput | Prisma.SortOrder
+  Activo?: Prisma.SortOrderInput | Prisma.SortOrder
+  FechaEliminacion?: Prisma.SortOrderInput | Prisma.SortOrder
   Empleado?: Prisma.EmpleadoOrderByWithRelationInput
 }
 
@@ -245,6 +263,8 @@ export type SalarioWhereUniqueInput = Prisma.AtLeast<{
   SalarioBase?: Prisma.DecimalFilter<"Salario"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   FechaInicioVigencia?: Prisma.DateTimeFilter<"Salario"> | Date | string
   FechaFinVigencia?: Prisma.DateTimeNullableFilter<"Salario"> | Date | string | null
+  Activo?: Prisma.BoolNullableFilter<"Salario"> | boolean | null
+  FechaEliminacion?: Prisma.DateTimeNullableFilter<"Salario"> | Date | string | null
   Empleado?: Prisma.XOR<Prisma.EmpleadoScalarRelationFilter, Prisma.EmpleadoWhereInput>
 }, "IdHistorico">
 
@@ -254,6 +274,8 @@ export type SalarioOrderByWithAggregationInput = {
   SalarioBase?: Prisma.SortOrder
   FechaInicioVigencia?: Prisma.SortOrder
   FechaFinVigencia?: Prisma.SortOrderInput | Prisma.SortOrder
+  Activo?: Prisma.SortOrderInput | Prisma.SortOrder
+  FechaEliminacion?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.SalarioCountOrderByAggregateInput
   _avg?: Prisma.SalarioAvgOrderByAggregateInput
   _max?: Prisma.SalarioMaxOrderByAggregateInput
@@ -270,12 +292,16 @@ export type SalarioScalarWhereWithAggregatesInput = {
   SalarioBase?: Prisma.DecimalWithAggregatesFilter<"Salario"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   FechaInicioVigencia?: Prisma.DateTimeWithAggregatesFilter<"Salario"> | Date | string
   FechaFinVigencia?: Prisma.DateTimeNullableWithAggregatesFilter<"Salario"> | Date | string | null
+  Activo?: Prisma.BoolNullableWithAggregatesFilter<"Salario"> | boolean | null
+  FechaEliminacion?: Prisma.DateTimeNullableWithAggregatesFilter<"Salario"> | Date | string | null
 }
 
 export type SalarioCreateInput = {
   SalarioBase: runtime.Decimal | runtime.DecimalJsLike | number | string
   FechaInicioVigencia: Date | string
   FechaFinVigencia?: Date | string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
   Empleado: Prisma.EmpleadoCreateNestedOneWithoutSalarioInput
 }
 
@@ -285,12 +311,16 @@ export type SalarioUncheckedCreateInput = {
   SalarioBase: runtime.Decimal | runtime.DecimalJsLike | number | string
   FechaInicioVigencia: Date | string
   FechaFinVigencia?: Date | string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
 }
 
 export type SalarioUpdateInput = {
   SalarioBase?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   FechaInicioVigencia?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   FechaFinVigencia?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Empleado?: Prisma.EmpleadoUpdateOneRequiredWithoutSalarioNestedInput
 }
 
@@ -300,6 +330,8 @@ export type SalarioUncheckedUpdateInput = {
   SalarioBase?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   FechaInicioVigencia?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   FechaFinVigencia?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type SalarioCreateManyInput = {
@@ -307,12 +339,16 @@ export type SalarioCreateManyInput = {
   SalarioBase: runtime.Decimal | runtime.DecimalJsLike | number | string
   FechaInicioVigencia: Date | string
   FechaFinVigencia?: Date | string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
 }
 
 export type SalarioUpdateManyMutationInput = {
   SalarioBase?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   FechaInicioVigencia?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   FechaFinVigencia?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type SalarioUncheckedUpdateManyInput = {
@@ -321,6 +357,8 @@ export type SalarioUncheckedUpdateManyInput = {
   SalarioBase?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   FechaInicioVigencia?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   FechaFinVigencia?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type SalarioListRelationFilter = {
@@ -339,6 +377,8 @@ export type SalarioCountOrderByAggregateInput = {
   SalarioBase?: Prisma.SortOrder
   FechaInicioVigencia?: Prisma.SortOrder
   FechaFinVigencia?: Prisma.SortOrder
+  Activo?: Prisma.SortOrder
+  FechaEliminacion?: Prisma.SortOrder
 }
 
 export type SalarioAvgOrderByAggregateInput = {
@@ -353,6 +393,8 @@ export type SalarioMaxOrderByAggregateInput = {
   SalarioBase?: Prisma.SortOrder
   FechaInicioVigencia?: Prisma.SortOrder
   FechaFinVigencia?: Prisma.SortOrder
+  Activo?: Prisma.SortOrder
+  FechaEliminacion?: Prisma.SortOrder
 }
 
 export type SalarioMinOrderByAggregateInput = {
@@ -361,6 +403,8 @@ export type SalarioMinOrderByAggregateInput = {
   SalarioBase?: Prisma.SortOrder
   FechaInicioVigencia?: Prisma.SortOrder
   FechaFinVigencia?: Prisma.SortOrder
+  Activo?: Prisma.SortOrder
+  FechaEliminacion?: Prisma.SortOrder
 }
 
 export type SalarioSumOrderByAggregateInput = {
@@ -415,6 +459,8 @@ export type SalarioCreateWithoutEmpleadoInput = {
   SalarioBase: runtime.Decimal | runtime.DecimalJsLike | number | string
   FechaInicioVigencia: Date | string
   FechaFinVigencia?: Date | string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
 }
 
 export type SalarioUncheckedCreateWithoutEmpleadoInput = {
@@ -422,6 +468,8 @@ export type SalarioUncheckedCreateWithoutEmpleadoInput = {
   SalarioBase: runtime.Decimal | runtime.DecimalJsLike | number | string
   FechaInicioVigencia: Date | string
   FechaFinVigencia?: Date | string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
 }
 
 export type SalarioCreateOrConnectWithoutEmpleadoInput = {
@@ -458,18 +506,24 @@ export type SalarioScalarWhereInput = {
   SalarioBase?: Prisma.DecimalFilter<"Salario"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   FechaInicioVigencia?: Prisma.DateTimeFilter<"Salario"> | Date | string
   FechaFinVigencia?: Prisma.DateTimeNullableFilter<"Salario"> | Date | string | null
+  Activo?: Prisma.BoolNullableFilter<"Salario"> | boolean | null
+  FechaEliminacion?: Prisma.DateTimeNullableFilter<"Salario"> | Date | string | null
 }
 
 export type SalarioCreateManyEmpleadoInput = {
   SalarioBase: runtime.Decimal | runtime.DecimalJsLike | number | string
   FechaInicioVigencia: Date | string
   FechaFinVigencia?: Date | string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
 }
 
 export type SalarioUpdateWithoutEmpleadoInput = {
   SalarioBase?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   FechaInicioVigencia?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   FechaFinVigencia?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type SalarioUncheckedUpdateWithoutEmpleadoInput = {
@@ -477,6 +531,8 @@ export type SalarioUncheckedUpdateWithoutEmpleadoInput = {
   SalarioBase?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   FechaInicioVigencia?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   FechaFinVigencia?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type SalarioUncheckedUpdateManyWithoutEmpleadoInput = {
@@ -484,6 +540,8 @@ export type SalarioUncheckedUpdateManyWithoutEmpleadoInput = {
   SalarioBase?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   FechaInicioVigencia?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   FechaFinVigencia?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 
@@ -494,6 +552,8 @@ export type SalarioSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   SalarioBase?: boolean
   FechaInicioVigencia?: boolean
   FechaFinVigencia?: boolean
+  Activo?: boolean
+  FechaEliminacion?: boolean
   Empleado?: boolean | Prisma.EmpleadoDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["salario"]>
 
@@ -505,9 +565,11 @@ export type SalarioSelectScalar = {
   SalarioBase?: boolean
   FechaInicioVigencia?: boolean
   FechaFinVigencia?: boolean
+  Activo?: boolean
+  FechaEliminacion?: boolean
 }
 
-export type SalarioOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"IdHistorico" | "IdEmpleado" | "SalarioBase" | "FechaInicioVigencia" | "FechaFinVigencia", ExtArgs["result"]["salario"]>
+export type SalarioOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"IdHistorico" | "IdEmpleado" | "SalarioBase" | "FechaInicioVigencia" | "FechaFinVigencia" | "Activo" | "FechaEliminacion", ExtArgs["result"]["salario"]>
 export type SalarioInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   Empleado?: boolean | Prisma.EmpleadoDefaultArgs<ExtArgs>
 }
@@ -523,6 +585,8 @@ export type $SalarioPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     SalarioBase: runtime.Decimal
     FechaInicioVigencia: Date
     FechaFinVigencia: Date | null
+    Activo: boolean | null
+    FechaEliminacion: Date | null
   }, ExtArgs["result"]["salario"]>
   composites: {}
 }
@@ -898,6 +962,8 @@ export interface SalarioFieldRefs {
   readonly SalarioBase: Prisma.FieldRef<"Salario", 'Decimal'>
   readonly FechaInicioVigencia: Prisma.FieldRef<"Salario", 'DateTime'>
   readonly FechaFinVigencia: Prisma.FieldRef<"Salario", 'DateTime'>
+  readonly Activo: Prisma.FieldRef<"Salario", 'Boolean'>
+  readonly FechaEliminacion: Prisma.FieldRef<"Salario", 'DateTime'>
 }
     
 

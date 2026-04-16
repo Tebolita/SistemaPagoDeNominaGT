@@ -55,6 +55,8 @@ export type MovimientoEmpleadoMinAggregateOutputType = {
   AnioAplicacion: number | null
   FechaRegistro: Date | null
   IdUsuarioIngresa: number | null
+  Activo: boolean | null
+  FechaEliminacion: Date | null
 }
 
 export type MovimientoEmpleadoMaxAggregateOutputType = {
@@ -66,6 +68,8 @@ export type MovimientoEmpleadoMaxAggregateOutputType = {
   AnioAplicacion: number | null
   FechaRegistro: Date | null
   IdUsuarioIngresa: number | null
+  Activo: boolean | null
+  FechaEliminacion: Date | null
 }
 
 export type MovimientoEmpleadoCountAggregateOutputType = {
@@ -77,6 +81,8 @@ export type MovimientoEmpleadoCountAggregateOutputType = {
   AnioAplicacion: number
   FechaRegistro: number
   IdUsuarioIngresa: number
+  Activo: number
+  FechaEliminacion: number
   _all: number
 }
 
@@ -110,6 +116,8 @@ export type MovimientoEmpleadoMinAggregateInputType = {
   AnioAplicacion?: true
   FechaRegistro?: true
   IdUsuarioIngresa?: true
+  Activo?: true
+  FechaEliminacion?: true
 }
 
 export type MovimientoEmpleadoMaxAggregateInputType = {
@@ -121,6 +129,8 @@ export type MovimientoEmpleadoMaxAggregateInputType = {
   AnioAplicacion?: true
   FechaRegistro?: true
   IdUsuarioIngresa?: true
+  Activo?: true
+  FechaEliminacion?: true
 }
 
 export type MovimientoEmpleadoCountAggregateInputType = {
@@ -132,6 +142,8 @@ export type MovimientoEmpleadoCountAggregateInputType = {
   AnioAplicacion?: true
   FechaRegistro?: true
   IdUsuarioIngresa?: true
+  Activo?: true
+  FechaEliminacion?: true
   _all?: true
 }
 
@@ -230,6 +242,8 @@ export type MovimientoEmpleadoGroupByOutputType = {
   AnioAplicacion: number
   FechaRegistro: Date | null
   IdUsuarioIngresa: number
+  Activo: boolean | null
+  FechaEliminacion: Date | null
   _count: MovimientoEmpleadoCountAggregateOutputType | null
   _avg: MovimientoEmpleadoAvgAggregateOutputType | null
   _sum: MovimientoEmpleadoSumAggregateOutputType | null
@@ -237,7 +251,7 @@ export type MovimientoEmpleadoGroupByOutputType = {
   _max: MovimientoEmpleadoMaxAggregateOutputType | null
 }
 
-type GetMovimientoEmpleadoGroupByPayload<T extends MovimientoEmpleadoGroupByArgs> = Prisma.PrismaPromise<
+export type GetMovimientoEmpleadoGroupByPayload<T extends MovimientoEmpleadoGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<MovimientoEmpleadoGroupByOutputType, T['by']> &
       {
@@ -264,6 +278,8 @@ export type MovimientoEmpleadoWhereInput = {
   AnioAplicacion?: Prisma.IntFilter<"MovimientoEmpleado"> | number
   FechaRegistro?: Prisma.DateTimeNullableFilter<"MovimientoEmpleado"> | Date | string | null
   IdUsuarioIngresa?: Prisma.IntFilter<"MovimientoEmpleado"> | number
+  Activo?: Prisma.BoolNullableFilter<"MovimientoEmpleado"> | boolean | null
+  FechaEliminacion?: Prisma.DateTimeNullableFilter<"MovimientoEmpleado"> | Date | string | null
   Empleado?: Prisma.XOR<Prisma.EmpleadoScalarRelationFilter, Prisma.EmpleadoWhereInput>
   TipoMovimiento?: Prisma.XOR<Prisma.TipoMovimientoScalarRelationFilter, Prisma.TipoMovimientoWhereInput>
   Usuario?: Prisma.XOR<Prisma.UsuarioScalarRelationFilter, Prisma.UsuarioWhereInput>
@@ -278,6 +294,8 @@ export type MovimientoEmpleadoOrderByWithRelationInput = {
   AnioAplicacion?: Prisma.SortOrder
   FechaRegistro?: Prisma.SortOrderInput | Prisma.SortOrder
   IdUsuarioIngresa?: Prisma.SortOrder
+  Activo?: Prisma.SortOrderInput | Prisma.SortOrder
+  FechaEliminacion?: Prisma.SortOrderInput | Prisma.SortOrder
   Empleado?: Prisma.EmpleadoOrderByWithRelationInput
   TipoMovimiento?: Prisma.TipoMovimientoOrderByWithRelationInput
   Usuario?: Prisma.UsuarioOrderByWithRelationInput
@@ -295,6 +313,8 @@ export type MovimientoEmpleadoWhereUniqueInput = Prisma.AtLeast<{
   AnioAplicacion?: Prisma.IntFilter<"MovimientoEmpleado"> | number
   FechaRegistro?: Prisma.DateTimeNullableFilter<"MovimientoEmpleado"> | Date | string | null
   IdUsuarioIngresa?: Prisma.IntFilter<"MovimientoEmpleado"> | number
+  Activo?: Prisma.BoolNullableFilter<"MovimientoEmpleado"> | boolean | null
+  FechaEliminacion?: Prisma.DateTimeNullableFilter<"MovimientoEmpleado"> | Date | string | null
   Empleado?: Prisma.XOR<Prisma.EmpleadoScalarRelationFilter, Prisma.EmpleadoWhereInput>
   TipoMovimiento?: Prisma.XOR<Prisma.TipoMovimientoScalarRelationFilter, Prisma.TipoMovimientoWhereInput>
   Usuario?: Prisma.XOR<Prisma.UsuarioScalarRelationFilter, Prisma.UsuarioWhereInput>
@@ -309,6 +329,8 @@ export type MovimientoEmpleadoOrderByWithAggregationInput = {
   AnioAplicacion?: Prisma.SortOrder
   FechaRegistro?: Prisma.SortOrderInput | Prisma.SortOrder
   IdUsuarioIngresa?: Prisma.SortOrder
+  Activo?: Prisma.SortOrderInput | Prisma.SortOrder
+  FechaEliminacion?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.MovimientoEmpleadoCountOrderByAggregateInput
   _avg?: Prisma.MovimientoEmpleadoAvgOrderByAggregateInput
   _max?: Prisma.MovimientoEmpleadoMaxOrderByAggregateInput
@@ -328,6 +350,8 @@ export type MovimientoEmpleadoScalarWhereWithAggregatesInput = {
   AnioAplicacion?: Prisma.IntWithAggregatesFilter<"MovimientoEmpleado"> | number
   FechaRegistro?: Prisma.DateTimeNullableWithAggregatesFilter<"MovimientoEmpleado"> | Date | string | null
   IdUsuarioIngresa?: Prisma.IntWithAggregatesFilter<"MovimientoEmpleado"> | number
+  Activo?: Prisma.BoolNullableWithAggregatesFilter<"MovimientoEmpleado"> | boolean | null
+  FechaEliminacion?: Prisma.DateTimeNullableWithAggregatesFilter<"MovimientoEmpleado"> | Date | string | null
 }
 
 export type MovimientoEmpleadoCreateInput = {
@@ -335,6 +359,8 @@ export type MovimientoEmpleadoCreateInput = {
   MesAplicacion: number
   AnioAplicacion: number
   FechaRegistro?: Date | string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
   Empleado: Prisma.EmpleadoCreateNestedOneWithoutMovimientoEmpleadoInput
   TipoMovimiento: Prisma.TipoMovimientoCreateNestedOneWithoutMovimientoEmpleadoInput
   Usuario: Prisma.UsuarioCreateNestedOneWithoutMovimientoEmpleadoInput
@@ -349,6 +375,8 @@ export type MovimientoEmpleadoUncheckedCreateInput = {
   AnioAplicacion: number
   FechaRegistro?: Date | string | null
   IdUsuarioIngresa: number
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
 }
 
 export type MovimientoEmpleadoUpdateInput = {
@@ -356,6 +384,8 @@ export type MovimientoEmpleadoUpdateInput = {
   MesAplicacion?: Prisma.IntFieldUpdateOperationsInput | number
   AnioAplicacion?: Prisma.IntFieldUpdateOperationsInput | number
   FechaRegistro?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Empleado?: Prisma.EmpleadoUpdateOneRequiredWithoutMovimientoEmpleadoNestedInput
   TipoMovimiento?: Prisma.TipoMovimientoUpdateOneRequiredWithoutMovimientoEmpleadoNestedInput
   Usuario?: Prisma.UsuarioUpdateOneRequiredWithoutMovimientoEmpleadoNestedInput
@@ -370,6 +400,8 @@ export type MovimientoEmpleadoUncheckedUpdateInput = {
   AnioAplicacion?: Prisma.IntFieldUpdateOperationsInput | number
   FechaRegistro?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   IdUsuarioIngresa?: Prisma.IntFieldUpdateOperationsInput | number
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type MovimientoEmpleadoCreateManyInput = {
@@ -380,6 +412,8 @@ export type MovimientoEmpleadoCreateManyInput = {
   AnioAplicacion: number
   FechaRegistro?: Date | string | null
   IdUsuarioIngresa: number
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
 }
 
 export type MovimientoEmpleadoUpdateManyMutationInput = {
@@ -387,6 +421,8 @@ export type MovimientoEmpleadoUpdateManyMutationInput = {
   MesAplicacion?: Prisma.IntFieldUpdateOperationsInput | number
   AnioAplicacion?: Prisma.IntFieldUpdateOperationsInput | number
   FechaRegistro?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type MovimientoEmpleadoUncheckedUpdateManyInput = {
@@ -398,6 +434,8 @@ export type MovimientoEmpleadoUncheckedUpdateManyInput = {
   AnioAplicacion?: Prisma.IntFieldUpdateOperationsInput | number
   FechaRegistro?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   IdUsuarioIngresa?: Prisma.IntFieldUpdateOperationsInput | number
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type MovimientoEmpleadoListRelationFilter = {
@@ -419,6 +457,8 @@ export type MovimientoEmpleadoCountOrderByAggregateInput = {
   AnioAplicacion?: Prisma.SortOrder
   FechaRegistro?: Prisma.SortOrder
   IdUsuarioIngresa?: Prisma.SortOrder
+  Activo?: Prisma.SortOrder
+  FechaEliminacion?: Prisma.SortOrder
 }
 
 export type MovimientoEmpleadoAvgOrderByAggregateInput = {
@@ -440,6 +480,8 @@ export type MovimientoEmpleadoMaxOrderByAggregateInput = {
   AnioAplicacion?: Prisma.SortOrder
   FechaRegistro?: Prisma.SortOrder
   IdUsuarioIngresa?: Prisma.SortOrder
+  Activo?: Prisma.SortOrder
+  FechaEliminacion?: Prisma.SortOrder
 }
 
 export type MovimientoEmpleadoMinOrderByAggregateInput = {
@@ -451,6 +493,8 @@ export type MovimientoEmpleadoMinOrderByAggregateInput = {
   AnioAplicacion?: Prisma.SortOrder
   FechaRegistro?: Prisma.SortOrder
   IdUsuarioIngresa?: Prisma.SortOrder
+  Activo?: Prisma.SortOrder
+  FechaEliminacion?: Prisma.SortOrder
 }
 
 export type MovimientoEmpleadoSumOrderByAggregateInput = {
@@ -602,6 +646,8 @@ export type MovimientoEmpleadoCreateWithoutEmpleadoInput = {
   MesAplicacion: number
   AnioAplicacion: number
   FechaRegistro?: Date | string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
   TipoMovimiento: Prisma.TipoMovimientoCreateNestedOneWithoutMovimientoEmpleadoInput
   Usuario: Prisma.UsuarioCreateNestedOneWithoutMovimientoEmpleadoInput
 }
@@ -614,6 +660,8 @@ export type MovimientoEmpleadoUncheckedCreateWithoutEmpleadoInput = {
   AnioAplicacion: number
   FechaRegistro?: Date | string | null
   IdUsuarioIngresa: number
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
 }
 
 export type MovimientoEmpleadoCreateOrConnectWithoutEmpleadoInput = {
@@ -653,6 +701,8 @@ export type MovimientoEmpleadoScalarWhereInput = {
   AnioAplicacion?: Prisma.IntFilter<"MovimientoEmpleado"> | number
   FechaRegistro?: Prisma.DateTimeNullableFilter<"MovimientoEmpleado"> | Date | string | null
   IdUsuarioIngresa?: Prisma.IntFilter<"MovimientoEmpleado"> | number
+  Activo?: Prisma.BoolNullableFilter<"MovimientoEmpleado"> | boolean | null
+  FechaEliminacion?: Prisma.DateTimeNullableFilter<"MovimientoEmpleado"> | Date | string | null
 }
 
 export type MovimientoEmpleadoCreateWithoutTipoMovimientoInput = {
@@ -660,6 +710,8 @@ export type MovimientoEmpleadoCreateWithoutTipoMovimientoInput = {
   MesAplicacion: number
   AnioAplicacion: number
   FechaRegistro?: Date | string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
   Empleado: Prisma.EmpleadoCreateNestedOneWithoutMovimientoEmpleadoInput
   Usuario: Prisma.UsuarioCreateNestedOneWithoutMovimientoEmpleadoInput
 }
@@ -672,6 +724,8 @@ export type MovimientoEmpleadoUncheckedCreateWithoutTipoMovimientoInput = {
   AnioAplicacion: number
   FechaRegistro?: Date | string | null
   IdUsuarioIngresa: number
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
 }
 
 export type MovimientoEmpleadoCreateOrConnectWithoutTipoMovimientoInput = {
@@ -704,6 +758,8 @@ export type MovimientoEmpleadoCreateWithoutUsuarioInput = {
   MesAplicacion: number
   AnioAplicacion: number
   FechaRegistro?: Date | string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
   Empleado: Prisma.EmpleadoCreateNestedOneWithoutMovimientoEmpleadoInput
   TipoMovimiento: Prisma.TipoMovimientoCreateNestedOneWithoutMovimientoEmpleadoInput
 }
@@ -716,6 +772,8 @@ export type MovimientoEmpleadoUncheckedCreateWithoutUsuarioInput = {
   MesAplicacion: number
   AnioAplicacion: number
   FechaRegistro?: Date | string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
 }
 
 export type MovimientoEmpleadoCreateOrConnectWithoutUsuarioInput = {
@@ -750,6 +808,8 @@ export type MovimientoEmpleadoCreateManyEmpleadoInput = {
   AnioAplicacion: number
   FechaRegistro?: Date | string | null
   IdUsuarioIngresa: number
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
 }
 
 export type MovimientoEmpleadoUpdateWithoutEmpleadoInput = {
@@ -757,6 +817,8 @@ export type MovimientoEmpleadoUpdateWithoutEmpleadoInput = {
   MesAplicacion?: Prisma.IntFieldUpdateOperationsInput | number
   AnioAplicacion?: Prisma.IntFieldUpdateOperationsInput | number
   FechaRegistro?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   TipoMovimiento?: Prisma.TipoMovimientoUpdateOneRequiredWithoutMovimientoEmpleadoNestedInput
   Usuario?: Prisma.UsuarioUpdateOneRequiredWithoutMovimientoEmpleadoNestedInput
 }
@@ -769,6 +831,8 @@ export type MovimientoEmpleadoUncheckedUpdateWithoutEmpleadoInput = {
   AnioAplicacion?: Prisma.IntFieldUpdateOperationsInput | number
   FechaRegistro?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   IdUsuarioIngresa?: Prisma.IntFieldUpdateOperationsInput | number
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type MovimientoEmpleadoUncheckedUpdateManyWithoutEmpleadoInput = {
@@ -779,6 +843,8 @@ export type MovimientoEmpleadoUncheckedUpdateManyWithoutEmpleadoInput = {
   AnioAplicacion?: Prisma.IntFieldUpdateOperationsInput | number
   FechaRegistro?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   IdUsuarioIngresa?: Prisma.IntFieldUpdateOperationsInput | number
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type MovimientoEmpleadoCreateManyTipoMovimientoInput = {
@@ -788,6 +854,8 @@ export type MovimientoEmpleadoCreateManyTipoMovimientoInput = {
   AnioAplicacion: number
   FechaRegistro?: Date | string | null
   IdUsuarioIngresa: number
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
 }
 
 export type MovimientoEmpleadoUpdateWithoutTipoMovimientoInput = {
@@ -795,6 +863,8 @@ export type MovimientoEmpleadoUpdateWithoutTipoMovimientoInput = {
   MesAplicacion?: Prisma.IntFieldUpdateOperationsInput | number
   AnioAplicacion?: Prisma.IntFieldUpdateOperationsInput | number
   FechaRegistro?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Empleado?: Prisma.EmpleadoUpdateOneRequiredWithoutMovimientoEmpleadoNestedInput
   Usuario?: Prisma.UsuarioUpdateOneRequiredWithoutMovimientoEmpleadoNestedInput
 }
@@ -807,6 +877,8 @@ export type MovimientoEmpleadoUncheckedUpdateWithoutTipoMovimientoInput = {
   AnioAplicacion?: Prisma.IntFieldUpdateOperationsInput | number
   FechaRegistro?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   IdUsuarioIngresa?: Prisma.IntFieldUpdateOperationsInput | number
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type MovimientoEmpleadoUncheckedUpdateManyWithoutTipoMovimientoInput = {
@@ -817,6 +889,8 @@ export type MovimientoEmpleadoUncheckedUpdateManyWithoutTipoMovimientoInput = {
   AnioAplicacion?: Prisma.IntFieldUpdateOperationsInput | number
   FechaRegistro?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   IdUsuarioIngresa?: Prisma.IntFieldUpdateOperationsInput | number
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type MovimientoEmpleadoCreateManyUsuarioInput = {
@@ -826,6 +900,8 @@ export type MovimientoEmpleadoCreateManyUsuarioInput = {
   MesAplicacion: number
   AnioAplicacion: number
   FechaRegistro?: Date | string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
 }
 
 export type MovimientoEmpleadoUpdateWithoutUsuarioInput = {
@@ -833,6 +909,8 @@ export type MovimientoEmpleadoUpdateWithoutUsuarioInput = {
   MesAplicacion?: Prisma.IntFieldUpdateOperationsInput | number
   AnioAplicacion?: Prisma.IntFieldUpdateOperationsInput | number
   FechaRegistro?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Empleado?: Prisma.EmpleadoUpdateOneRequiredWithoutMovimientoEmpleadoNestedInput
   TipoMovimiento?: Prisma.TipoMovimientoUpdateOneRequiredWithoutMovimientoEmpleadoNestedInput
 }
@@ -845,6 +923,8 @@ export type MovimientoEmpleadoUncheckedUpdateWithoutUsuarioInput = {
   MesAplicacion?: Prisma.IntFieldUpdateOperationsInput | number
   AnioAplicacion?: Prisma.IntFieldUpdateOperationsInput | number
   FechaRegistro?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type MovimientoEmpleadoUncheckedUpdateManyWithoutUsuarioInput = {
@@ -855,6 +935,8 @@ export type MovimientoEmpleadoUncheckedUpdateManyWithoutUsuarioInput = {
   MesAplicacion?: Prisma.IntFieldUpdateOperationsInput | number
   AnioAplicacion?: Prisma.IntFieldUpdateOperationsInput | number
   FechaRegistro?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 
@@ -868,6 +950,8 @@ export type MovimientoEmpleadoSelect<ExtArgs extends runtime.Types.Extensions.In
   AnioAplicacion?: boolean
   FechaRegistro?: boolean
   IdUsuarioIngresa?: boolean
+  Activo?: boolean
+  FechaEliminacion?: boolean
   Empleado?: boolean | Prisma.EmpleadoDefaultArgs<ExtArgs>
   TipoMovimiento?: boolean | Prisma.TipoMovimientoDefaultArgs<ExtArgs>
   Usuario?: boolean | Prisma.UsuarioDefaultArgs<ExtArgs>
@@ -884,9 +968,11 @@ export type MovimientoEmpleadoSelectScalar = {
   AnioAplicacion?: boolean
   FechaRegistro?: boolean
   IdUsuarioIngresa?: boolean
+  Activo?: boolean
+  FechaEliminacion?: boolean
 }
 
-export type MovimientoEmpleadoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"IdMovimiento" | "IdEmpleado" | "IdTipoMovimiento" | "Monto" | "MesAplicacion" | "AnioAplicacion" | "FechaRegistro" | "IdUsuarioIngresa", ExtArgs["result"]["movimientoEmpleado"]>
+export type MovimientoEmpleadoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"IdMovimiento" | "IdEmpleado" | "IdTipoMovimiento" | "Monto" | "MesAplicacion" | "AnioAplicacion" | "FechaRegistro" | "IdUsuarioIngresa" | "Activo" | "FechaEliminacion", ExtArgs["result"]["movimientoEmpleado"]>
 export type MovimientoEmpleadoInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   Empleado?: boolean | Prisma.EmpleadoDefaultArgs<ExtArgs>
   TipoMovimiento?: boolean | Prisma.TipoMovimientoDefaultArgs<ExtArgs>
@@ -909,6 +995,8 @@ export type $MovimientoEmpleadoPayload<ExtArgs extends runtime.Types.Extensions.
     AnioAplicacion: number
     FechaRegistro: Date | null
     IdUsuarioIngresa: number
+    Activo: boolean | null
+    FechaEliminacion: Date | null
   }, ExtArgs["result"]["movimientoEmpleado"]>
   composites: {}
 }
@@ -1289,6 +1377,8 @@ export interface MovimientoEmpleadoFieldRefs {
   readonly AnioAplicacion: Prisma.FieldRef<"MovimientoEmpleado", 'Int'>
   readonly FechaRegistro: Prisma.FieldRef<"MovimientoEmpleado", 'DateTime'>
   readonly IdUsuarioIngresa: Prisma.FieldRef<"MovimientoEmpleado", 'Int'>
+  readonly Activo: Prisma.FieldRef<"MovimientoEmpleado", 'Boolean'>
+  readonly FechaEliminacion: Prisma.FieldRef<"MovimientoEmpleado", 'DateTime'>
 }
     
 

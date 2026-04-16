@@ -30,9 +30,13 @@ export type NominaDetalleAvgAggregateOutputType = {
   IdNominaDetalle: number | null
   IdNomina: number | null
   IdEmpleado: number | null
+  DiasLaborados: runtime.Decimal | null
   SueldoBase: runtime.Decimal | null
-  TotalIngresos: runtime.Decimal | null
-  TotalDescuentos: runtime.Decimal | null
+  BonificacionIncentivo: runtime.Decimal | null
+  OtrosIngresos: runtime.Decimal | null
+  DescuentoIGSS: runtime.Decimal | null
+  DescuentoISR: runtime.Decimal | null
+  OtrosDescuentos: runtime.Decimal | null
   LiquidoRecibir: runtime.Decimal | null
 }
 
@@ -40,9 +44,13 @@ export type NominaDetalleSumAggregateOutputType = {
   IdNominaDetalle: number | null
   IdNomina: number | null
   IdEmpleado: number | null
+  DiasLaborados: runtime.Decimal | null
   SueldoBase: runtime.Decimal | null
-  TotalIngresos: runtime.Decimal | null
-  TotalDescuentos: runtime.Decimal | null
+  BonificacionIncentivo: runtime.Decimal | null
+  OtrosIngresos: runtime.Decimal | null
+  DescuentoIGSS: runtime.Decimal | null
+  DescuentoISR: runtime.Decimal | null
+  OtrosDescuentos: runtime.Decimal | null
   LiquidoRecibir: runtime.Decimal | null
 }
 
@@ -50,30 +58,48 @@ export type NominaDetalleMinAggregateOutputType = {
   IdNominaDetalle: number | null
   IdNomina: number | null
   IdEmpleado: number | null
+  DiasLaborados: runtime.Decimal | null
   SueldoBase: runtime.Decimal | null
-  TotalIngresos: runtime.Decimal | null
-  TotalDescuentos: runtime.Decimal | null
+  BonificacionIncentivo: runtime.Decimal | null
+  OtrosIngresos: runtime.Decimal | null
+  DescuentoIGSS: runtime.Decimal | null
+  DescuentoISR: runtime.Decimal | null
+  OtrosDescuentos: runtime.Decimal | null
   LiquidoRecibir: runtime.Decimal | null
+  Activo: boolean | null
+  FechaEliminacion: Date | null
 }
 
 export type NominaDetalleMaxAggregateOutputType = {
   IdNominaDetalle: number | null
   IdNomina: number | null
   IdEmpleado: number | null
+  DiasLaborados: runtime.Decimal | null
   SueldoBase: runtime.Decimal | null
-  TotalIngresos: runtime.Decimal | null
-  TotalDescuentos: runtime.Decimal | null
+  BonificacionIncentivo: runtime.Decimal | null
+  OtrosIngresos: runtime.Decimal | null
+  DescuentoIGSS: runtime.Decimal | null
+  DescuentoISR: runtime.Decimal | null
+  OtrosDescuentos: runtime.Decimal | null
   LiquidoRecibir: runtime.Decimal | null
+  Activo: boolean | null
+  FechaEliminacion: Date | null
 }
 
 export type NominaDetalleCountAggregateOutputType = {
   IdNominaDetalle: number
   IdNomina: number
   IdEmpleado: number
+  DiasLaborados: number
   SueldoBase: number
-  TotalIngresos: number
-  TotalDescuentos: number
+  BonificacionIncentivo: number
+  OtrosIngresos: number
+  DescuentoIGSS: number
+  DescuentoISR: number
+  OtrosDescuentos: number
   LiquidoRecibir: number
+  Activo: number
+  FechaEliminacion: number
   _all: number
 }
 
@@ -82,9 +108,13 @@ export type NominaDetalleAvgAggregateInputType = {
   IdNominaDetalle?: true
   IdNomina?: true
   IdEmpleado?: true
+  DiasLaborados?: true
   SueldoBase?: true
-  TotalIngresos?: true
-  TotalDescuentos?: true
+  BonificacionIncentivo?: true
+  OtrosIngresos?: true
+  DescuentoIGSS?: true
+  DescuentoISR?: true
+  OtrosDescuentos?: true
   LiquidoRecibir?: true
 }
 
@@ -92,9 +122,13 @@ export type NominaDetalleSumAggregateInputType = {
   IdNominaDetalle?: true
   IdNomina?: true
   IdEmpleado?: true
+  DiasLaborados?: true
   SueldoBase?: true
-  TotalIngresos?: true
-  TotalDescuentos?: true
+  BonificacionIncentivo?: true
+  OtrosIngresos?: true
+  DescuentoIGSS?: true
+  DescuentoISR?: true
+  OtrosDescuentos?: true
   LiquidoRecibir?: true
 }
 
@@ -102,30 +136,48 @@ export type NominaDetalleMinAggregateInputType = {
   IdNominaDetalle?: true
   IdNomina?: true
   IdEmpleado?: true
+  DiasLaborados?: true
   SueldoBase?: true
-  TotalIngresos?: true
-  TotalDescuentos?: true
+  BonificacionIncentivo?: true
+  OtrosIngresos?: true
+  DescuentoIGSS?: true
+  DescuentoISR?: true
+  OtrosDescuentos?: true
   LiquidoRecibir?: true
+  Activo?: true
+  FechaEliminacion?: true
 }
 
 export type NominaDetalleMaxAggregateInputType = {
   IdNominaDetalle?: true
   IdNomina?: true
   IdEmpleado?: true
+  DiasLaborados?: true
   SueldoBase?: true
-  TotalIngresos?: true
-  TotalDescuentos?: true
+  BonificacionIncentivo?: true
+  OtrosIngresos?: true
+  DescuentoIGSS?: true
+  DescuentoISR?: true
+  OtrosDescuentos?: true
   LiquidoRecibir?: true
+  Activo?: true
+  FechaEliminacion?: true
 }
 
 export type NominaDetalleCountAggregateInputType = {
   IdNominaDetalle?: true
   IdNomina?: true
   IdEmpleado?: true
+  DiasLaborados?: true
   SueldoBase?: true
-  TotalIngresos?: true
-  TotalDescuentos?: true
+  BonificacionIncentivo?: true
+  OtrosIngresos?: true
+  DescuentoIGSS?: true
+  DescuentoISR?: true
+  OtrosDescuentos?: true
   LiquidoRecibir?: true
+  Activo?: true
+  FechaEliminacion?: true
   _all?: true
 }
 
@@ -219,10 +271,16 @@ export type NominaDetalleGroupByOutputType = {
   IdNominaDetalle: number
   IdNomina: number
   IdEmpleado: number
+  DiasLaborados: runtime.Decimal | null
   SueldoBase: runtime.Decimal
-  TotalIngresos: runtime.Decimal | null
-  TotalDescuentos: runtime.Decimal | null
+  BonificacionIncentivo: runtime.Decimal | null
+  OtrosIngresos: runtime.Decimal | null
+  DescuentoIGSS: runtime.Decimal | null
+  DescuentoISR: runtime.Decimal | null
+  OtrosDescuentos: runtime.Decimal | null
   LiquidoRecibir: runtime.Decimal | null
+  Activo: boolean | null
+  FechaEliminacion: Date | null
   _count: NominaDetalleCountAggregateOutputType | null
   _avg: NominaDetalleAvgAggregateOutputType | null
   _sum: NominaDetalleSumAggregateOutputType | null
@@ -230,7 +288,7 @@ export type NominaDetalleGroupByOutputType = {
   _max: NominaDetalleMaxAggregateOutputType | null
 }
 
-type GetNominaDetalleGroupByPayload<T extends NominaDetalleGroupByArgs> = Prisma.PrismaPromise<
+export type GetNominaDetalleGroupByPayload<T extends NominaDetalleGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<NominaDetalleGroupByOutputType, T['by']> &
       {
@@ -252,10 +310,16 @@ export type NominaDetalleWhereInput = {
   IdNominaDetalle?: Prisma.IntFilter<"NominaDetalle"> | number
   IdNomina?: Prisma.IntFilter<"NominaDetalle"> | number
   IdEmpleado?: Prisma.IntFilter<"NominaDetalle"> | number
+  DiasLaborados?: Prisma.DecimalNullableFilter<"NominaDetalle"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   SueldoBase?: Prisma.DecimalFilter<"NominaDetalle"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  TotalIngresos?: Prisma.DecimalNullableFilter<"NominaDetalle"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  TotalDescuentos?: Prisma.DecimalNullableFilter<"NominaDetalle"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  BonificacionIncentivo?: Prisma.DecimalNullableFilter<"NominaDetalle"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  OtrosIngresos?: Prisma.DecimalNullableFilter<"NominaDetalle"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  DescuentoIGSS?: Prisma.DecimalNullableFilter<"NominaDetalle"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  DescuentoISR?: Prisma.DecimalNullableFilter<"NominaDetalle"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  OtrosDescuentos?: Prisma.DecimalNullableFilter<"NominaDetalle"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   LiquidoRecibir?: Prisma.DecimalNullableFilter<"NominaDetalle"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: Prisma.BoolNullableFilter<"NominaDetalle"> | boolean | null
+  FechaEliminacion?: Prisma.DateTimeNullableFilter<"NominaDetalle"> | Date | string | null
   Empleado?: Prisma.XOR<Prisma.EmpleadoScalarRelationFilter, Prisma.EmpleadoWhereInput>
   NominaEncabezado?: Prisma.XOR<Prisma.NominaEncabezadoScalarRelationFilter, Prisma.NominaEncabezadoWhereInput>
   RegistroEnvioBoleta?: Prisma.RegistroEnvioBoletaListRelationFilter
@@ -265,10 +329,16 @@ export type NominaDetalleOrderByWithRelationInput = {
   IdNominaDetalle?: Prisma.SortOrder
   IdNomina?: Prisma.SortOrder
   IdEmpleado?: Prisma.SortOrder
+  DiasLaborados?: Prisma.SortOrderInput | Prisma.SortOrder
   SueldoBase?: Prisma.SortOrder
-  TotalIngresos?: Prisma.SortOrderInput | Prisma.SortOrder
-  TotalDescuentos?: Prisma.SortOrderInput | Prisma.SortOrder
+  BonificacionIncentivo?: Prisma.SortOrderInput | Prisma.SortOrder
+  OtrosIngresos?: Prisma.SortOrderInput | Prisma.SortOrder
+  DescuentoIGSS?: Prisma.SortOrderInput | Prisma.SortOrder
+  DescuentoISR?: Prisma.SortOrderInput | Prisma.SortOrder
+  OtrosDescuentos?: Prisma.SortOrderInput | Prisma.SortOrder
   LiquidoRecibir?: Prisma.SortOrderInput | Prisma.SortOrder
+  Activo?: Prisma.SortOrderInput | Prisma.SortOrder
+  FechaEliminacion?: Prisma.SortOrderInput | Prisma.SortOrder
   Empleado?: Prisma.EmpleadoOrderByWithRelationInput
   NominaEncabezado?: Prisma.NominaEncabezadoOrderByWithRelationInput
   RegistroEnvioBoleta?: Prisma.RegistroEnvioBoletaOrderByRelationAggregateInput
@@ -281,10 +351,16 @@ export type NominaDetalleWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.NominaDetalleWhereInput | Prisma.NominaDetalleWhereInput[]
   IdNomina?: Prisma.IntFilter<"NominaDetalle"> | number
   IdEmpleado?: Prisma.IntFilter<"NominaDetalle"> | number
+  DiasLaborados?: Prisma.DecimalNullableFilter<"NominaDetalle"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   SueldoBase?: Prisma.DecimalFilter<"NominaDetalle"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  TotalIngresos?: Prisma.DecimalNullableFilter<"NominaDetalle"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  TotalDescuentos?: Prisma.DecimalNullableFilter<"NominaDetalle"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  BonificacionIncentivo?: Prisma.DecimalNullableFilter<"NominaDetalle"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  OtrosIngresos?: Prisma.DecimalNullableFilter<"NominaDetalle"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  DescuentoIGSS?: Prisma.DecimalNullableFilter<"NominaDetalle"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  DescuentoISR?: Prisma.DecimalNullableFilter<"NominaDetalle"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  OtrosDescuentos?: Prisma.DecimalNullableFilter<"NominaDetalle"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   LiquidoRecibir?: Prisma.DecimalNullableFilter<"NominaDetalle"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: Prisma.BoolNullableFilter<"NominaDetalle"> | boolean | null
+  FechaEliminacion?: Prisma.DateTimeNullableFilter<"NominaDetalle"> | Date | string | null
   Empleado?: Prisma.XOR<Prisma.EmpleadoScalarRelationFilter, Prisma.EmpleadoWhereInput>
   NominaEncabezado?: Prisma.XOR<Prisma.NominaEncabezadoScalarRelationFilter, Prisma.NominaEncabezadoWhereInput>
   RegistroEnvioBoleta?: Prisma.RegistroEnvioBoletaListRelationFilter
@@ -294,10 +370,16 @@ export type NominaDetalleOrderByWithAggregationInput = {
   IdNominaDetalle?: Prisma.SortOrder
   IdNomina?: Prisma.SortOrder
   IdEmpleado?: Prisma.SortOrder
+  DiasLaborados?: Prisma.SortOrderInput | Prisma.SortOrder
   SueldoBase?: Prisma.SortOrder
-  TotalIngresos?: Prisma.SortOrderInput | Prisma.SortOrder
-  TotalDescuentos?: Prisma.SortOrderInput | Prisma.SortOrder
+  BonificacionIncentivo?: Prisma.SortOrderInput | Prisma.SortOrder
+  OtrosIngresos?: Prisma.SortOrderInput | Prisma.SortOrder
+  DescuentoIGSS?: Prisma.SortOrderInput | Prisma.SortOrder
+  DescuentoISR?: Prisma.SortOrderInput | Prisma.SortOrder
+  OtrosDescuentos?: Prisma.SortOrderInput | Prisma.SortOrder
   LiquidoRecibir?: Prisma.SortOrderInput | Prisma.SortOrder
+  Activo?: Prisma.SortOrderInput | Prisma.SortOrder
+  FechaEliminacion?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.NominaDetalleCountOrderByAggregateInput
   _avg?: Prisma.NominaDetalleAvgOrderByAggregateInput
   _max?: Prisma.NominaDetalleMaxOrderByAggregateInput
@@ -312,17 +394,29 @@ export type NominaDetalleScalarWhereWithAggregatesInput = {
   IdNominaDetalle?: Prisma.IntWithAggregatesFilter<"NominaDetalle"> | number
   IdNomina?: Prisma.IntWithAggregatesFilter<"NominaDetalle"> | number
   IdEmpleado?: Prisma.IntWithAggregatesFilter<"NominaDetalle"> | number
+  DiasLaborados?: Prisma.DecimalNullableWithAggregatesFilter<"NominaDetalle"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   SueldoBase?: Prisma.DecimalWithAggregatesFilter<"NominaDetalle"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  TotalIngresos?: Prisma.DecimalNullableWithAggregatesFilter<"NominaDetalle"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  TotalDescuentos?: Prisma.DecimalNullableWithAggregatesFilter<"NominaDetalle"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  BonificacionIncentivo?: Prisma.DecimalNullableWithAggregatesFilter<"NominaDetalle"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  OtrosIngresos?: Prisma.DecimalNullableWithAggregatesFilter<"NominaDetalle"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  DescuentoIGSS?: Prisma.DecimalNullableWithAggregatesFilter<"NominaDetalle"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  DescuentoISR?: Prisma.DecimalNullableWithAggregatesFilter<"NominaDetalle"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  OtrosDescuentos?: Prisma.DecimalNullableWithAggregatesFilter<"NominaDetalle"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   LiquidoRecibir?: Prisma.DecimalNullableWithAggregatesFilter<"NominaDetalle"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: Prisma.BoolNullableWithAggregatesFilter<"NominaDetalle"> | boolean | null
+  FechaEliminacion?: Prisma.DateTimeNullableWithAggregatesFilter<"NominaDetalle"> | Date | string | null
 }
 
 export type NominaDetalleCreateInput = {
+  DiasLaborados?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   SueldoBase: runtime.Decimal | runtime.DecimalJsLike | number | string
-  TotalIngresos?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  TotalDescuentos?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  BonificacionIncentivo?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  OtrosIngresos?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  DescuentoIGSS?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  DescuentoISR?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  OtrosDescuentos?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   LiquidoRecibir?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
   Empleado: Prisma.EmpleadoCreateNestedOneWithoutNominaDetalleInput
   NominaEncabezado: Prisma.NominaEncabezadoCreateNestedOneWithoutNominaDetalleInput
   RegistroEnvioBoleta?: Prisma.RegistroEnvioBoletaCreateNestedManyWithoutNominaDetalleInput
@@ -332,18 +426,30 @@ export type NominaDetalleUncheckedCreateInput = {
   IdNominaDetalle?: number
   IdNomina: number
   IdEmpleado: number
+  DiasLaborados?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   SueldoBase: runtime.Decimal | runtime.DecimalJsLike | number | string
-  TotalIngresos?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  TotalDescuentos?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  BonificacionIncentivo?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  OtrosIngresos?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  DescuentoIGSS?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  DescuentoISR?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  OtrosDescuentos?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   LiquidoRecibir?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
   RegistroEnvioBoleta?: Prisma.RegistroEnvioBoletaUncheckedCreateNestedManyWithoutNominaDetalleInput
 }
 
 export type NominaDetalleUpdateInput = {
+  DiasLaborados?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   SueldoBase?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  TotalIngresos?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  TotalDescuentos?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  BonificacionIncentivo?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  OtrosIngresos?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  DescuentoIGSS?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  DescuentoISR?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  OtrosDescuentos?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   LiquidoRecibir?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Empleado?: Prisma.EmpleadoUpdateOneRequiredWithoutNominaDetalleNestedInput
   NominaEncabezado?: Prisma.NominaEncabezadoUpdateOneRequiredWithoutNominaDetalleNestedInput
   RegistroEnvioBoleta?: Prisma.RegistroEnvioBoletaUpdateManyWithoutNominaDetalleNestedInput
@@ -353,37 +459,61 @@ export type NominaDetalleUncheckedUpdateInput = {
   IdNominaDetalle?: Prisma.IntFieldUpdateOperationsInput | number
   IdNomina?: Prisma.IntFieldUpdateOperationsInput | number
   IdEmpleado?: Prisma.IntFieldUpdateOperationsInput | number
+  DiasLaborados?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   SueldoBase?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  TotalIngresos?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  TotalDescuentos?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  BonificacionIncentivo?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  OtrosIngresos?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  DescuentoIGSS?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  DescuentoISR?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  OtrosDescuentos?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   LiquidoRecibir?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   RegistroEnvioBoleta?: Prisma.RegistroEnvioBoletaUncheckedUpdateManyWithoutNominaDetalleNestedInput
 }
 
 export type NominaDetalleCreateManyInput = {
   IdNomina: number
   IdEmpleado: number
+  DiasLaborados?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   SueldoBase: runtime.Decimal | runtime.DecimalJsLike | number | string
-  TotalIngresos?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  TotalDescuentos?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  BonificacionIncentivo?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  OtrosIngresos?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  DescuentoIGSS?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  DescuentoISR?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  OtrosDescuentos?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   LiquidoRecibir?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
 }
 
 export type NominaDetalleUpdateManyMutationInput = {
+  DiasLaborados?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   SueldoBase?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  TotalIngresos?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  TotalDescuentos?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  BonificacionIncentivo?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  OtrosIngresos?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  DescuentoIGSS?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  DescuentoISR?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  OtrosDescuentos?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   LiquidoRecibir?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type NominaDetalleUncheckedUpdateManyInput = {
   IdNominaDetalle?: Prisma.IntFieldUpdateOperationsInput | number
   IdNomina?: Prisma.IntFieldUpdateOperationsInput | number
   IdEmpleado?: Prisma.IntFieldUpdateOperationsInput | number
+  DiasLaborados?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   SueldoBase?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  TotalIngresos?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  TotalDescuentos?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  BonificacionIncentivo?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  OtrosIngresos?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  DescuentoIGSS?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  DescuentoISR?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  OtrosDescuentos?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   LiquidoRecibir?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type NominaDetalleListRelationFilter = {
@@ -400,19 +530,29 @@ export type NominaDetalleCountOrderByAggregateInput = {
   IdNominaDetalle?: Prisma.SortOrder
   IdNomina?: Prisma.SortOrder
   IdEmpleado?: Prisma.SortOrder
+  DiasLaborados?: Prisma.SortOrder
   SueldoBase?: Prisma.SortOrder
-  TotalIngresos?: Prisma.SortOrder
-  TotalDescuentos?: Prisma.SortOrder
+  BonificacionIncentivo?: Prisma.SortOrder
+  OtrosIngresos?: Prisma.SortOrder
+  DescuentoIGSS?: Prisma.SortOrder
+  DescuentoISR?: Prisma.SortOrder
+  OtrosDescuentos?: Prisma.SortOrder
   LiquidoRecibir?: Prisma.SortOrder
+  Activo?: Prisma.SortOrder
+  FechaEliminacion?: Prisma.SortOrder
 }
 
 export type NominaDetalleAvgOrderByAggregateInput = {
   IdNominaDetalle?: Prisma.SortOrder
   IdNomina?: Prisma.SortOrder
   IdEmpleado?: Prisma.SortOrder
+  DiasLaborados?: Prisma.SortOrder
   SueldoBase?: Prisma.SortOrder
-  TotalIngresos?: Prisma.SortOrder
-  TotalDescuentos?: Prisma.SortOrder
+  BonificacionIncentivo?: Prisma.SortOrder
+  OtrosIngresos?: Prisma.SortOrder
+  DescuentoIGSS?: Prisma.SortOrder
+  DescuentoISR?: Prisma.SortOrder
+  OtrosDescuentos?: Prisma.SortOrder
   LiquidoRecibir?: Prisma.SortOrder
 }
 
@@ -420,29 +560,45 @@ export type NominaDetalleMaxOrderByAggregateInput = {
   IdNominaDetalle?: Prisma.SortOrder
   IdNomina?: Prisma.SortOrder
   IdEmpleado?: Prisma.SortOrder
+  DiasLaborados?: Prisma.SortOrder
   SueldoBase?: Prisma.SortOrder
-  TotalIngresos?: Prisma.SortOrder
-  TotalDescuentos?: Prisma.SortOrder
+  BonificacionIncentivo?: Prisma.SortOrder
+  OtrosIngresos?: Prisma.SortOrder
+  DescuentoIGSS?: Prisma.SortOrder
+  DescuentoISR?: Prisma.SortOrder
+  OtrosDescuentos?: Prisma.SortOrder
   LiquidoRecibir?: Prisma.SortOrder
+  Activo?: Prisma.SortOrder
+  FechaEliminacion?: Prisma.SortOrder
 }
 
 export type NominaDetalleMinOrderByAggregateInput = {
   IdNominaDetalle?: Prisma.SortOrder
   IdNomina?: Prisma.SortOrder
   IdEmpleado?: Prisma.SortOrder
+  DiasLaborados?: Prisma.SortOrder
   SueldoBase?: Prisma.SortOrder
-  TotalIngresos?: Prisma.SortOrder
-  TotalDescuentos?: Prisma.SortOrder
+  BonificacionIncentivo?: Prisma.SortOrder
+  OtrosIngresos?: Prisma.SortOrder
+  DescuentoIGSS?: Prisma.SortOrder
+  DescuentoISR?: Prisma.SortOrder
+  OtrosDescuentos?: Prisma.SortOrder
   LiquidoRecibir?: Prisma.SortOrder
+  Activo?: Prisma.SortOrder
+  FechaEliminacion?: Prisma.SortOrder
 }
 
 export type NominaDetalleSumOrderByAggregateInput = {
   IdNominaDetalle?: Prisma.SortOrder
   IdNomina?: Prisma.SortOrder
   IdEmpleado?: Prisma.SortOrder
+  DiasLaborados?: Prisma.SortOrder
   SueldoBase?: Prisma.SortOrder
-  TotalIngresos?: Prisma.SortOrder
-  TotalDescuentos?: Prisma.SortOrder
+  BonificacionIncentivo?: Prisma.SortOrder
+  OtrosIngresos?: Prisma.SortOrder
+  DescuentoIGSS?: Prisma.SortOrder
+  DescuentoISR?: Prisma.SortOrder
+  OtrosDescuentos?: Prisma.SortOrder
   LiquidoRecibir?: Prisma.SortOrder
 }
 
@@ -550,10 +706,16 @@ export type NominaDetalleUpdateOneRequiredWithoutRegistroEnvioBoletaNestedInput 
 }
 
 export type NominaDetalleCreateWithoutEmpleadoInput = {
+  DiasLaborados?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   SueldoBase: runtime.Decimal | runtime.DecimalJsLike | number | string
-  TotalIngresos?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  TotalDescuentos?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  BonificacionIncentivo?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  OtrosIngresos?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  DescuentoIGSS?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  DescuentoISR?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  OtrosDescuentos?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   LiquidoRecibir?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
   NominaEncabezado: Prisma.NominaEncabezadoCreateNestedOneWithoutNominaDetalleInput
   RegistroEnvioBoleta?: Prisma.RegistroEnvioBoletaCreateNestedManyWithoutNominaDetalleInput
 }
@@ -561,10 +723,16 @@ export type NominaDetalleCreateWithoutEmpleadoInput = {
 export type NominaDetalleUncheckedCreateWithoutEmpleadoInput = {
   IdNominaDetalle?: number
   IdNomina: number
+  DiasLaborados?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   SueldoBase: runtime.Decimal | runtime.DecimalJsLike | number | string
-  TotalIngresos?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  TotalDescuentos?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  BonificacionIncentivo?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  OtrosIngresos?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  DescuentoIGSS?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  DescuentoISR?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  OtrosDescuentos?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   LiquidoRecibir?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
   RegistroEnvioBoleta?: Prisma.RegistroEnvioBoletaUncheckedCreateNestedManyWithoutNominaDetalleInput
 }
 
@@ -600,17 +768,29 @@ export type NominaDetalleScalarWhereInput = {
   IdNominaDetalle?: Prisma.IntFilter<"NominaDetalle"> | number
   IdNomina?: Prisma.IntFilter<"NominaDetalle"> | number
   IdEmpleado?: Prisma.IntFilter<"NominaDetalle"> | number
+  DiasLaborados?: Prisma.DecimalNullableFilter<"NominaDetalle"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   SueldoBase?: Prisma.DecimalFilter<"NominaDetalle"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  TotalIngresos?: Prisma.DecimalNullableFilter<"NominaDetalle"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  TotalDescuentos?: Prisma.DecimalNullableFilter<"NominaDetalle"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  BonificacionIncentivo?: Prisma.DecimalNullableFilter<"NominaDetalle"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  OtrosIngresos?: Prisma.DecimalNullableFilter<"NominaDetalle"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  DescuentoIGSS?: Prisma.DecimalNullableFilter<"NominaDetalle"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  DescuentoISR?: Prisma.DecimalNullableFilter<"NominaDetalle"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  OtrosDescuentos?: Prisma.DecimalNullableFilter<"NominaDetalle"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   LiquidoRecibir?: Prisma.DecimalNullableFilter<"NominaDetalle"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: Prisma.BoolNullableFilter<"NominaDetalle"> | boolean | null
+  FechaEliminacion?: Prisma.DateTimeNullableFilter<"NominaDetalle"> | Date | string | null
 }
 
 export type NominaDetalleCreateWithoutNominaEncabezadoInput = {
+  DiasLaborados?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   SueldoBase: runtime.Decimal | runtime.DecimalJsLike | number | string
-  TotalIngresos?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  TotalDescuentos?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  BonificacionIncentivo?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  OtrosIngresos?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  DescuentoIGSS?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  DescuentoISR?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  OtrosDescuentos?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   LiquidoRecibir?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
   Empleado: Prisma.EmpleadoCreateNestedOneWithoutNominaDetalleInput
   RegistroEnvioBoleta?: Prisma.RegistroEnvioBoletaCreateNestedManyWithoutNominaDetalleInput
 }
@@ -618,10 +798,16 @@ export type NominaDetalleCreateWithoutNominaEncabezadoInput = {
 export type NominaDetalleUncheckedCreateWithoutNominaEncabezadoInput = {
   IdNominaDetalle?: number
   IdEmpleado: number
+  DiasLaborados?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   SueldoBase: runtime.Decimal | runtime.DecimalJsLike | number | string
-  TotalIngresos?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  TotalDescuentos?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  BonificacionIncentivo?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  OtrosIngresos?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  DescuentoIGSS?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  DescuentoISR?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  OtrosDescuentos?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   LiquidoRecibir?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
   RegistroEnvioBoleta?: Prisma.RegistroEnvioBoletaUncheckedCreateNestedManyWithoutNominaDetalleInput
 }
 
@@ -651,10 +837,16 @@ export type NominaDetalleUpdateManyWithWhereWithoutNominaEncabezadoInput = {
 }
 
 export type NominaDetalleCreateWithoutRegistroEnvioBoletaInput = {
+  DiasLaborados?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   SueldoBase: runtime.Decimal | runtime.DecimalJsLike | number | string
-  TotalIngresos?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  TotalDescuentos?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  BonificacionIncentivo?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  OtrosIngresos?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  DescuentoIGSS?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  DescuentoISR?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  OtrosDescuentos?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   LiquidoRecibir?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
   Empleado: Prisma.EmpleadoCreateNestedOneWithoutNominaDetalleInput
   NominaEncabezado: Prisma.NominaEncabezadoCreateNestedOneWithoutNominaDetalleInput
 }
@@ -663,10 +855,16 @@ export type NominaDetalleUncheckedCreateWithoutRegistroEnvioBoletaInput = {
   IdNominaDetalle?: number
   IdNomina: number
   IdEmpleado: number
+  DiasLaborados?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   SueldoBase: runtime.Decimal | runtime.DecimalJsLike | number | string
-  TotalIngresos?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  TotalDescuentos?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  BonificacionIncentivo?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  OtrosIngresos?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  DescuentoIGSS?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  DescuentoISR?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  OtrosDescuentos?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   LiquidoRecibir?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
 }
 
 export type NominaDetalleCreateOrConnectWithoutRegistroEnvioBoletaInput = {
@@ -686,10 +884,16 @@ export type NominaDetalleUpdateToOneWithWhereWithoutRegistroEnvioBoletaInput = {
 }
 
 export type NominaDetalleUpdateWithoutRegistroEnvioBoletaInput = {
+  DiasLaborados?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   SueldoBase?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  TotalIngresos?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  TotalDescuentos?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  BonificacionIncentivo?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  OtrosIngresos?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  DescuentoIGSS?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  DescuentoISR?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  OtrosDescuentos?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   LiquidoRecibir?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Empleado?: Prisma.EmpleadoUpdateOneRequiredWithoutNominaDetalleNestedInput
   NominaEncabezado?: Prisma.NominaEncabezadoUpdateOneRequiredWithoutNominaDetalleNestedInput
 }
@@ -698,25 +902,43 @@ export type NominaDetalleUncheckedUpdateWithoutRegistroEnvioBoletaInput = {
   IdNominaDetalle?: Prisma.IntFieldUpdateOperationsInput | number
   IdNomina?: Prisma.IntFieldUpdateOperationsInput | number
   IdEmpleado?: Prisma.IntFieldUpdateOperationsInput | number
+  DiasLaborados?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   SueldoBase?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  TotalIngresos?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  TotalDescuentos?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  BonificacionIncentivo?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  OtrosIngresos?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  DescuentoIGSS?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  DescuentoISR?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  OtrosDescuentos?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   LiquidoRecibir?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type NominaDetalleCreateManyEmpleadoInput = {
   IdNomina: number
+  DiasLaborados?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   SueldoBase: runtime.Decimal | runtime.DecimalJsLike | number | string
-  TotalIngresos?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  TotalDescuentos?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  BonificacionIncentivo?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  OtrosIngresos?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  DescuentoIGSS?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  DescuentoISR?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  OtrosDescuentos?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   LiquidoRecibir?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
 }
 
 export type NominaDetalleUpdateWithoutEmpleadoInput = {
+  DiasLaborados?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   SueldoBase?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  TotalIngresos?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  TotalDescuentos?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  BonificacionIncentivo?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  OtrosIngresos?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  DescuentoIGSS?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  DescuentoISR?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  OtrosDescuentos?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   LiquidoRecibir?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   NominaEncabezado?: Prisma.NominaEncabezadoUpdateOneRequiredWithoutNominaDetalleNestedInput
   RegistroEnvioBoleta?: Prisma.RegistroEnvioBoletaUpdateManyWithoutNominaDetalleNestedInput
 }
@@ -724,35 +946,59 @@ export type NominaDetalleUpdateWithoutEmpleadoInput = {
 export type NominaDetalleUncheckedUpdateWithoutEmpleadoInput = {
   IdNominaDetalle?: Prisma.IntFieldUpdateOperationsInput | number
   IdNomina?: Prisma.IntFieldUpdateOperationsInput | number
+  DiasLaborados?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   SueldoBase?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  TotalIngresos?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  TotalDescuentos?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  BonificacionIncentivo?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  OtrosIngresos?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  DescuentoIGSS?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  DescuentoISR?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  OtrosDescuentos?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   LiquidoRecibir?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   RegistroEnvioBoleta?: Prisma.RegistroEnvioBoletaUncheckedUpdateManyWithoutNominaDetalleNestedInput
 }
 
 export type NominaDetalleUncheckedUpdateManyWithoutEmpleadoInput = {
   IdNominaDetalle?: Prisma.IntFieldUpdateOperationsInput | number
   IdNomina?: Prisma.IntFieldUpdateOperationsInput | number
+  DiasLaborados?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   SueldoBase?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  TotalIngresos?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  TotalDescuentos?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  BonificacionIncentivo?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  OtrosIngresos?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  DescuentoIGSS?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  DescuentoISR?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  OtrosDescuentos?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   LiquidoRecibir?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type NominaDetalleCreateManyNominaEncabezadoInput = {
   IdEmpleado: number
+  DiasLaborados?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   SueldoBase: runtime.Decimal | runtime.DecimalJsLike | number | string
-  TotalIngresos?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  TotalDescuentos?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  BonificacionIncentivo?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  OtrosIngresos?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  DescuentoIGSS?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  DescuentoISR?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  OtrosDescuentos?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   LiquidoRecibir?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
 }
 
 export type NominaDetalleUpdateWithoutNominaEncabezadoInput = {
+  DiasLaborados?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   SueldoBase?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  TotalIngresos?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  TotalDescuentos?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  BonificacionIncentivo?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  OtrosIngresos?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  DescuentoIGSS?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  DescuentoISR?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  OtrosDescuentos?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   LiquidoRecibir?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Empleado?: Prisma.EmpleadoUpdateOneRequiredWithoutNominaDetalleNestedInput
   RegistroEnvioBoleta?: Prisma.RegistroEnvioBoletaUpdateManyWithoutNominaDetalleNestedInput
 }
@@ -760,20 +1006,32 @@ export type NominaDetalleUpdateWithoutNominaEncabezadoInput = {
 export type NominaDetalleUncheckedUpdateWithoutNominaEncabezadoInput = {
   IdNominaDetalle?: Prisma.IntFieldUpdateOperationsInput | number
   IdEmpleado?: Prisma.IntFieldUpdateOperationsInput | number
+  DiasLaborados?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   SueldoBase?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  TotalIngresos?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  TotalDescuentos?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  BonificacionIncentivo?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  OtrosIngresos?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  DescuentoIGSS?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  DescuentoISR?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  OtrosDescuentos?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   LiquidoRecibir?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   RegistroEnvioBoleta?: Prisma.RegistroEnvioBoletaUncheckedUpdateManyWithoutNominaDetalleNestedInput
 }
 
 export type NominaDetalleUncheckedUpdateManyWithoutNominaEncabezadoInput = {
   IdNominaDetalle?: Prisma.IntFieldUpdateOperationsInput | number
   IdEmpleado?: Prisma.IntFieldUpdateOperationsInput | number
+  DiasLaborados?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   SueldoBase?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  TotalIngresos?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  TotalDescuentos?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  BonificacionIncentivo?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  OtrosIngresos?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  DescuentoIGSS?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  DescuentoISR?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  OtrosDescuentos?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   LiquidoRecibir?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 
@@ -811,10 +1069,16 @@ export type NominaDetalleSelect<ExtArgs extends runtime.Types.Extensions.Interna
   IdNominaDetalle?: boolean
   IdNomina?: boolean
   IdEmpleado?: boolean
+  DiasLaborados?: boolean
   SueldoBase?: boolean
-  TotalIngresos?: boolean
-  TotalDescuentos?: boolean
+  BonificacionIncentivo?: boolean
+  OtrosIngresos?: boolean
+  DescuentoIGSS?: boolean
+  DescuentoISR?: boolean
+  OtrosDescuentos?: boolean
   LiquidoRecibir?: boolean
+  Activo?: boolean
+  FechaEliminacion?: boolean
   Empleado?: boolean | Prisma.EmpleadoDefaultArgs<ExtArgs>
   NominaEncabezado?: boolean | Prisma.NominaEncabezadoDefaultArgs<ExtArgs>
   RegistroEnvioBoleta?: boolean | Prisma.NominaDetalle$RegistroEnvioBoletaArgs<ExtArgs>
@@ -827,13 +1091,19 @@ export type NominaDetalleSelectScalar = {
   IdNominaDetalle?: boolean
   IdNomina?: boolean
   IdEmpleado?: boolean
+  DiasLaborados?: boolean
   SueldoBase?: boolean
-  TotalIngresos?: boolean
-  TotalDescuentos?: boolean
+  BonificacionIncentivo?: boolean
+  OtrosIngresos?: boolean
+  DescuentoIGSS?: boolean
+  DescuentoISR?: boolean
+  OtrosDescuentos?: boolean
   LiquidoRecibir?: boolean
+  Activo?: boolean
+  FechaEliminacion?: boolean
 }
 
-export type NominaDetalleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"IdNominaDetalle" | "IdNomina" | "IdEmpleado" | "SueldoBase" | "TotalIngresos" | "TotalDescuentos" | "LiquidoRecibir", ExtArgs["result"]["nominaDetalle"]>
+export type NominaDetalleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"IdNominaDetalle" | "IdNomina" | "IdEmpleado" | "DiasLaborados" | "SueldoBase" | "BonificacionIncentivo" | "OtrosIngresos" | "DescuentoIGSS" | "DescuentoISR" | "OtrosDescuentos" | "LiquidoRecibir" | "Activo" | "FechaEliminacion", ExtArgs["result"]["nominaDetalle"]>
 export type NominaDetalleInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   Empleado?: boolean | Prisma.EmpleadoDefaultArgs<ExtArgs>
   NominaEncabezado?: boolean | Prisma.NominaEncabezadoDefaultArgs<ExtArgs>
@@ -852,10 +1122,16 @@ export type $NominaDetallePayload<ExtArgs extends runtime.Types.Extensions.Inter
     IdNominaDetalle: number
     IdNomina: number
     IdEmpleado: number
+    DiasLaborados: runtime.Decimal | null
     SueldoBase: runtime.Decimal
-    TotalIngresos: runtime.Decimal | null
-    TotalDescuentos: runtime.Decimal | null
+    BonificacionIncentivo: runtime.Decimal | null
+    OtrosIngresos: runtime.Decimal | null
+    DescuentoIGSS: runtime.Decimal | null
+    DescuentoISR: runtime.Decimal | null
+    OtrosDescuentos: runtime.Decimal | null
     LiquidoRecibir: runtime.Decimal | null
+    Activo: boolean | null
+    FechaEliminacion: Date | null
   }, ExtArgs["result"]["nominaDetalle"]>
   composites: {}
 }
@@ -1231,10 +1507,16 @@ export interface NominaDetalleFieldRefs {
   readonly IdNominaDetalle: Prisma.FieldRef<"NominaDetalle", 'Int'>
   readonly IdNomina: Prisma.FieldRef<"NominaDetalle", 'Int'>
   readonly IdEmpleado: Prisma.FieldRef<"NominaDetalle", 'Int'>
+  readonly DiasLaborados: Prisma.FieldRef<"NominaDetalle", 'Decimal'>
   readonly SueldoBase: Prisma.FieldRef<"NominaDetalle", 'Decimal'>
-  readonly TotalIngresos: Prisma.FieldRef<"NominaDetalle", 'Decimal'>
-  readonly TotalDescuentos: Prisma.FieldRef<"NominaDetalle", 'Decimal'>
+  readonly BonificacionIncentivo: Prisma.FieldRef<"NominaDetalle", 'Decimal'>
+  readonly OtrosIngresos: Prisma.FieldRef<"NominaDetalle", 'Decimal'>
+  readonly DescuentoIGSS: Prisma.FieldRef<"NominaDetalle", 'Decimal'>
+  readonly DescuentoISR: Prisma.FieldRef<"NominaDetalle", 'Decimal'>
+  readonly OtrosDescuentos: Prisma.FieldRef<"NominaDetalle", 'Decimal'>
   readonly LiquidoRecibir: Prisma.FieldRef<"NominaDetalle", 'Decimal'>
+  readonly Activo: Prisma.FieldRef<"NominaDetalle", 'Boolean'>
+  readonly FechaEliminacion: Prisma.FieldRef<"NominaDetalle", 'DateTime'>
 }
     
 

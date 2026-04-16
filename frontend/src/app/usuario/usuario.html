@@ -1,0 +1,77 @@
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
+
+<div class="card p-4">
+    <div class="flex justify-content-between align-items-center mb-4">
+        <h2 class="m-0">Gestión de Usuarios</h2>
+        <p-button label="Nuevo Usuario" icon="pi pi-plus" (onClick)="abrirNuevo()" severity="success"></p-button>
+    </div>
+
+    <p-table [value]="usuarios()" [loading]="loading()" [paginator]="true" [rows]="10" [tableStyle]="{ 'min-width': '50rem' }">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>ID</th>
+                <th>Usuario</th>
+                <th>Rol</th>
+                <th class="text-center">Acciones</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-usuario>
+            <tr>
+                <td>{{ usuario.IdUsuario }}</td>
+                <td>{{ usuario.Username }}</td>
+                <td>{{ usuario.RolUsuario?.NombreRol }}</td>
+                <td class="text-center">
+                    <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true" severity="info" (onClick)="editarUsuario(usuario)"></p-button>
+                    <p-button icon="pi pi-trash" [rounded]="true" [outlined]="true" severity="danger" (onClick)="eliminarUsuario(usuario)"></p-button>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="4" class="text-center">No se encontraron usuarios.</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-dialog 
+    [visible]="mostrarDialog()" 
+    (visibleChange)="mostrarDialog.set($event)" 
+    [style]="{ width: '450px' }" 
+    [header]="esEdicion() ? 'Editar Usuario' : 'Nuevo Usuario'" 
+    [modal]="true" 
+    class="p-fluid">
+    
+    <ng-template pTemplate="content">
+        <div class="field mb-3">
+            <label for="username">Nombre de Usuario</label>
+            <input type="text" pInputText id="username" [(ngModel)]="usuarioActual().Username" required autofocus />
+        </div>
+
+        <div class="field mb-3">
+            <label for="contrasena">Contraseña {{ esEdicion() ? '(Dejar en blanco para mantener actual)' : '' }}</label>
+            <p-password id="contrasena" [(ngModel)]="usuarioActual().Contrasena" [toggleMask]="true" appendTo="body"></p-password>
+        </div>
+
+        <div class="field mb-3">
+            <label for="clave">Clave Numérica</label>
+            <p-password id="clave" [(ngModel)]="usuarioActual().Clave" [toggleMask]="true" appendTo="body" [feedback]="false"></p-password>
+        </div>
+
+        <div class="field mb-3">
+            <label for="idRol">ID Rol</label>
+            <input type="number" pInputText id="idRol" [(ngModel)]="usuarioActual().IdRol" required />
+        </div>
+
+        <div class="field mb-3">
+            <label for="idEmpleado">ID Empleado</label>
+            <input type="number" pInputText id="idEmpleado" [(ngModel)]="usuarioActual().IdEmpleado" required />
+        </div>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <p-button label="Cancelar" icon="pi pi-times" [text]="true" severity="secondary" (onClick)="mostrarDialog.set(false)"></p-button>
+        <p-button label="Guardar" icon="pi pi-check" [text]="true" (onClick)="guardarUsuario()"></p-button>
+    </ng-template>
+</p-dialog>

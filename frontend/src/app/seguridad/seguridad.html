@@ -1,0 +1,100 @@
+<div class="dashboard-wrapper">
+  
+  <div class="hero-section">
+    <div class="hero-bg-shapes">
+      <div class="shape shape-1"></div>
+      <div class="shape shape-2"></div>
+      <div class="shape shape-3"></div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-badge">
+        <i class="pi pi-lock"></i>
+        Acceso Restringido
+      </div>
+      <h1 class="hero-title">
+        Gestión de <span class="highlight">Seguridad</span>
+      </h1>
+      <p class="hero-subtitle">
+        Administrá los accesos, credenciales y privilegios del personal. 
+        Garantizá la protección de la información del sistema de nóminas.
+      </p>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <i class="pi pi-users"></i>
+          <span>Usuarios</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <i class="pi pi-id-card"></i>
+          <span>Roles</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <i class="pi pi-shield"></i>
+          <span>Encriptación Activa</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modules-section">
+    <div class="section-header">
+      <h2 class="section-title">Opciones de Seguridad</h2>
+      <p class="section-subtitle">Seleccioná el área que deseás administrar</p>
+    </div>
+
+    <div class="cards-grid">
+      @for (mod of subModules; track mod.route) {
+        <div class="module-card card-{{ mod.color }}" [class.coming-soon]="mod.status === 'coming'" (click)="navigate(mod.route)">
+          
+          <div class="card-glow"></div>
+
+          @if (mod.status === 'coming') {
+            <div class="status-badge coming">
+              <i class="pi pi-clock"></i> Próximamente
+            </div>
+          } @else {
+            <div class="status-badge active">
+              <i class="pi pi-check-circle"></i> Disponible
+            </div>
+          }
+
+          <div class="card-icon-wrapper">
+            <div class="card-icon">
+              <i [class]="mod.icon"></i>
+            </div>
+            <div class="icon-ring"></div>
+          </div>
+
+          <div class="card-content">
+            <h3 class="card-title">{{ mod.title }}</h3>
+            <p class="card-description">{{ mod.description }}</p>
+
+            <ul class="features-list">
+              @for (feat of mod.features; track feat) {
+                <li>
+                  <i class="pi pi-check"></i>
+                  {{ feat }}
+                </li>
+              }
+            </ul>
+          </div>
+
+          <div class="card-footer">
+            @if (mod.status === 'active') {
+              <button class="card-btn" pRipple>
+                Gestionar <i class="pi pi-arrow-right"></i>
+              </button>
+            } @else {
+              <button class="card-btn disabled" disabled>
+                En desarrollo <i class="pi pi-wrench"></i>
+              </button>
+            }
+          </div>
+
+        </div>
+      }
+    </div>
+  </div>
+  
+</div>

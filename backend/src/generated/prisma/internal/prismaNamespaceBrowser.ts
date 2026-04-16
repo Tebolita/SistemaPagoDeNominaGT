@@ -66,7 +66,12 @@ export const ModelName = {
   Salario: 'Salario',
   TipoMovimiento: 'TipoMovimiento',
   Usuario: 'Usuario',
-  DetalleControlVacacion: 'DetalleControlVacacion'
+  DetalleControlVacacion: 'DetalleControlVacacion',
+  Banco: 'Banco',
+  Empresa: 'Empresa',
+  JornadaLaboral: 'JornadaLaboral',
+  ProvisionPrestacion: 'ProvisionPrestacion',
+  sysdiagrams: 'sysdiagrams'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -92,7 +97,9 @@ export const AsistenciaScalarFieldEnum = {
   Fecha: 'Fecha',
   HoraEntrada: 'HoraEntrada',
   HoraSalida: 'HoraSalida',
-  HorasExtra: 'HorasExtra'
+  HorasExtra: 'HorasExtra',
+  Activo: 'Activo',
+  FechaEliminacion: 'FechaEliminacion'
 } as const
 
 export type AsistenciaScalarFieldEnum = (typeof AsistenciaScalarFieldEnum)[keyof typeof AsistenciaScalarFieldEnum]
@@ -103,7 +110,9 @@ export const ControlVacacionScalarFieldEnum = {
   IdEmpleado: 'IdEmpleado',
   AnioCorriente: 'AnioCorriente',
   DiasGanados: 'DiasGanados',
-  DiasGozados: 'DiasGozados'
+  DiasGozados: 'DiasGozados',
+  Activo: 'Activo',
+  FechaEliminacion: 'FechaEliminacion'
 } as const
 
 export type ControlVacacionScalarFieldEnum = (typeof ControlVacacionScalarFieldEnum)[keyof typeof ControlVacacionScalarFieldEnum]
@@ -111,7 +120,9 @@ export type ControlVacacionScalarFieldEnum = (typeof ControlVacacionScalarFieldE
 
 export const DepartamentoScalarFieldEnum = {
   IdDepartamento: 'IdDepartamento',
-  NombreDepartamento: 'NombreDepartamento'
+  NombreDepartamento: 'NombreDepartamento',
+  Activo: 'Activo',
+  FechaEliminacion: 'FechaEliminacion'
 } as const
 
 export type DepartamentoScalarFieldEnum = (typeof DepartamentoScalarFieldEnum)[keyof typeof DepartamentoScalarFieldEnum]
@@ -126,13 +137,16 @@ export const EmpleadoScalarFieldEnum = {
   CorreoPersonal: 'CorreoPersonal',
   FechaIngresa: 'FechaIngresa',
   IdPuesto: 'IdPuesto',
-  Estado: 'Estado',
-  FechaEliminacion: 'FechaEliminacion',
+  IdJornada: 'IdJornada',
+  IdBanco: 'IdBanco',
+  CuentaBancaria: 'CuentaBancaria',
   Telefono: 'Telefono',
   Genero: 'Genero',
   EstadoCivil: 'EstadoCivil',
   Direccion: 'Direccion',
-  Fotografia: 'Fotografia'
+  Fotografia: 'Fotografia',
+  Activo: 'Activo',
+  FechaEliminacion: 'FechaEliminacion'
 } as const
 
 export type EmpleadoScalarFieldEnum = (typeof EmpleadoScalarFieldEnum)[keyof typeof EmpleadoScalarFieldEnum]
@@ -145,7 +159,9 @@ export const IncidenciaScalarFieldEnum = {
   FechaInicio: 'FechaInicio',
   FechaFin: 'FechaFin',
   ConGoceSueldo: 'ConGoceSueldo',
-  IdUsuarioAutoriza: 'IdUsuarioAutoriza'
+  IdUsuarioAutoriza: 'IdUsuarioAutoriza',
+  Activo: 'Activo',
+  FechaEliminacion: 'FechaEliminacion'
 } as const
 
 export type IncidenciaScalarFieldEnum = (typeof IncidenciaScalarFieldEnum)[keyof typeof IncidenciaScalarFieldEnum]
@@ -159,7 +175,9 @@ export const MovimientoEmpleadoScalarFieldEnum = {
   MesAplicacion: 'MesAplicacion',
   AnioAplicacion: 'AnioAplicacion',
   FechaRegistro: 'FechaRegistro',
-  IdUsuarioIngresa: 'IdUsuarioIngresa'
+  IdUsuarioIngresa: 'IdUsuarioIngresa',
+  Activo: 'Activo',
+  FechaEliminacion: 'FechaEliminacion'
 } as const
 
 export type MovimientoEmpleadoScalarFieldEnum = (typeof MovimientoEmpleadoScalarFieldEnum)[keyof typeof MovimientoEmpleadoScalarFieldEnum]
@@ -169,10 +187,16 @@ export const NominaDetalleScalarFieldEnum = {
   IdNominaDetalle: 'IdNominaDetalle',
   IdNomina: 'IdNomina',
   IdEmpleado: 'IdEmpleado',
+  DiasLaborados: 'DiasLaborados',
   SueldoBase: 'SueldoBase',
-  TotalIngresos: 'TotalIngresos',
-  TotalDescuentos: 'TotalDescuentos',
-  LiquidoRecibir: 'LiquidoRecibir'
+  BonificacionIncentivo: 'BonificacionIncentivo',
+  OtrosIngresos: 'OtrosIngresos',
+  DescuentoIGSS: 'DescuentoIGSS',
+  DescuentoISR: 'DescuentoISR',
+  OtrosDescuentos: 'OtrosDescuentos',
+  LiquidoRecibir: 'LiquidoRecibir',
+  Activo: 'Activo',
+  FechaEliminacion: 'FechaEliminacion'
 } as const
 
 export type NominaDetalleScalarFieldEnum = (typeof NominaDetalleScalarFieldEnum)[keyof typeof NominaDetalleScalarFieldEnum]
@@ -182,9 +206,12 @@ export const NominaEncabezadoScalarFieldEnum = {
   IdNomina: 'IdNomina',
   Mes: 'Mes',
   Anio: 'Anio',
+  Quincena: 'Quincena',
   FechaGeneracion: 'FechaGeneracion',
   Estado: 'Estado',
-  IdUsuarioGerente: 'IdUsuarioGerente'
+  IdUsuarioGerente: 'IdUsuarioGerente',
+  Activo: 'Activo',
+  FechaEliminacion: 'FechaEliminacion'
 } as const
 
 export type NominaEncabezadoScalarFieldEnum = (typeof NominaEncabezadoScalarFieldEnum)[keyof typeof NominaEncabezadoScalarFieldEnum]
@@ -194,7 +221,9 @@ export const ParametroGlobalScalarFieldEnum = {
   IdParametro: 'IdParametro',
   NombreParametro: 'NombreParametro',
   Valor: 'Valor',
-  Descripcion: 'Descripcion'
+  Descripcion: 'Descripcion',
+  Activo: 'Activo',
+  FechaEliminacion: 'FechaEliminacion'
 } as const
 
 export type ParametroGlobalScalarFieldEnum = (typeof ParametroGlobalScalarFieldEnum)[keyof typeof ParametroGlobalScalarFieldEnum]
@@ -203,7 +232,9 @@ export type ParametroGlobalScalarFieldEnum = (typeof ParametroGlobalScalarFieldE
 export const PuestoScalarFieldEnum = {
   IdPuesto: 'IdPuesto',
   NombrePuesto: 'NombrePuesto',
-  IdDepartamento: 'IdDepartamento'
+  IdDepartamento: 'IdDepartamento',
+  Activo: 'Activo',
+  FechaEliminacion: 'FechaEliminacion'
 } as const
 
 export type PuestoScalarFieldEnum = (typeof PuestoScalarFieldEnum)[keyof typeof PuestoScalarFieldEnum]
@@ -214,7 +245,9 @@ export const RegistroEnvioBoletaScalarFieldEnum = {
   IdNominaDetalle: 'IdNominaDetalle',
   FechaEnvio: 'FechaEnvio',
   Exitoso: 'Exitoso',
-  IdUsuarioEnvia: 'IdUsuarioEnvia'
+  IdUsuarioEnvia: 'IdUsuarioEnvia',
+  Activo: 'Activo',
+  FechaEliminacion: 'FechaEliminacion'
 } as const
 
 export type RegistroEnvioBoletaScalarFieldEnum = (typeof RegistroEnvioBoletaScalarFieldEnum)[keyof typeof RegistroEnvioBoletaScalarFieldEnum]
@@ -222,7 +255,9 @@ export type RegistroEnvioBoletaScalarFieldEnum = (typeof RegistroEnvioBoletaScal
 
 export const RolUsuarioScalarFieldEnum = {
   IdRol: 'IdRol',
-  NombreRol: 'NombreRol'
+  NombreRol: 'NombreRol',
+  Activo: 'Activo',
+  FechaEliminacion: 'FechaEliminacion'
 } as const
 
 export type RolUsuarioScalarFieldEnum = (typeof RolUsuarioScalarFieldEnum)[keyof typeof RolUsuarioScalarFieldEnum]
@@ -233,7 +268,9 @@ export const SalarioScalarFieldEnum = {
   IdEmpleado: 'IdEmpleado',
   SalarioBase: 'SalarioBase',
   FechaInicioVigencia: 'FechaInicioVigencia',
-  FechaFinVigencia: 'FechaFinVigencia'
+  FechaFinVigencia: 'FechaFinVigencia',
+  Activo: 'Activo',
+  FechaEliminacion: 'FechaEliminacion'
 } as const
 
 export type SalarioScalarFieldEnum = (typeof SalarioScalarFieldEnum)[keyof typeof SalarioScalarFieldEnum]
@@ -243,7 +280,11 @@ export const TipoMovimientoScalarFieldEnum = {
   IdTipoMovimiento: 'IdTipoMovimiento',
   NombreMovimiento: 'NombreMovimiento',
   Clasificacion: 'Clasificacion',
-  EsFijo: 'EsFijo'
+  EsFijo: 'EsFijo',
+  AfectaIGSS: 'AfectaIGSS',
+  AfectaISR: 'AfectaISR',
+  Activo: 'Activo',
+  FechaEliminacion: 'FechaEliminacion'
 } as const
 
 export type TipoMovimientoScalarFieldEnum = (typeof TipoMovimientoScalarFieldEnum)[keyof typeof TipoMovimientoScalarFieldEnum]
@@ -255,7 +296,9 @@ export const UsuarioScalarFieldEnum = {
   Contrasena: 'Contrasena',
   IdRol: 'IdRol',
   IdEmpleado: 'IdEmpleado',
-  Clave: 'Clave'
+  Clave: 'Clave',
+  Activo: 'Activo',
+  FechaEliminacion: 'FechaEliminacion'
 } as const
 
 export type UsuarioScalarFieldEnum = (typeof UsuarioScalarFieldEnum)[keyof typeof UsuarioScalarFieldEnum]
@@ -266,10 +309,74 @@ export const DetalleControlVacacionScalarFieldEnum = {
   IdControlVacacion: 'IdControlVacacion',
   IdIncidencia: 'IdIncidencia',
   DiasDescontados: 'DiasDescontados',
-  FechaRegistro: 'FechaRegistro'
+  FechaRegistro: 'FechaRegistro',
+  Activo: 'Activo',
+  FechaEliminacion: 'FechaEliminacion'
 } as const
 
 export type DetalleControlVacacionScalarFieldEnum = (typeof DetalleControlVacacionScalarFieldEnum)[keyof typeof DetalleControlVacacionScalarFieldEnum]
+
+
+export const BancoScalarFieldEnum = {
+  IdBanco: 'IdBanco',
+  NombreBanco: 'NombreBanco',
+  Activo: 'Activo',
+  FechaEliminacion: 'FechaEliminacion'
+} as const
+
+export type BancoScalarFieldEnum = (typeof BancoScalarFieldEnum)[keyof typeof BancoScalarFieldEnum]
+
+
+export const EmpresaScalarFieldEnum = {
+  IdEmpresa: 'IdEmpresa',
+  NombreRazonSocial: 'NombreRazonSocial',
+  NombreComercial: 'NombreComercial',
+  NIT: 'NIT',
+  NumeroPatronalIGSS: 'NumeroPatronalIGSS',
+  Activo: 'Activo',
+  FechaEliminacion: 'FechaEliminacion'
+} as const
+
+export type EmpresaScalarFieldEnum = (typeof EmpresaScalarFieldEnum)[keyof typeof EmpresaScalarFieldEnum]
+
+
+export const JornadaLaboralScalarFieldEnum = {
+  IdJornada: 'IdJornada',
+  NombreJornada: 'NombreJornada',
+  HorasDiarias: 'HorasDiarias',
+  HorasSemanales: 'HorasSemanales',
+  Activo: 'Activo',
+  FechaEliminacion: 'FechaEliminacion'
+} as const
+
+export type JornadaLaboralScalarFieldEnum = (typeof JornadaLaboralScalarFieldEnum)[keyof typeof JornadaLaboralScalarFieldEnum]
+
+
+export const ProvisionPrestacionScalarFieldEnum = {
+  IdProvision: 'IdProvision',
+  IdEmpleado: 'IdEmpleado',
+  Mes: 'Mes',
+  Anio: 'Anio',
+  ProvisionBono14: 'ProvisionBono14',
+  ProvisionAguinaldo: 'ProvisionAguinaldo',
+  ProvisionIndemnizacion: 'ProvisionIndemnizacion',
+  ProvisionVacaciones: 'ProvisionVacaciones',
+  Activo: 'Activo',
+  FechaEliminacion: 'FechaEliminacion'
+} as const
+
+export type ProvisionPrestacionScalarFieldEnum = (typeof ProvisionPrestacionScalarFieldEnum)[keyof typeof ProvisionPrestacionScalarFieldEnum]
+
+
+export const SysdiagramsScalarFieldEnum = {
+  name: 'name',
+  principal_id: 'principal_id',
+  diagram_id: 'diagram_id',
+  version: 'version',
+  definition: 'definition'
+} as const
+
+export type SysdiagramsScalarFieldEnum = (typeof SysdiagramsScalarFieldEnum)[keyof typeof SysdiagramsScalarFieldEnum]
 
 
 export const SortOrder = {

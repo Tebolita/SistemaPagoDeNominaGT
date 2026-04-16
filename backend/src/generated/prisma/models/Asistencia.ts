@@ -45,6 +45,8 @@ export type AsistenciaMinAggregateOutputType = {
   HoraEntrada: Date | null
   HoraSalida: Date | null
   HorasExtra: runtime.Decimal | null
+  Activo: boolean | null
+  FechaEliminacion: Date | null
 }
 
 export type AsistenciaMaxAggregateOutputType = {
@@ -54,6 +56,8 @@ export type AsistenciaMaxAggregateOutputType = {
   HoraEntrada: Date | null
   HoraSalida: Date | null
   HorasExtra: runtime.Decimal | null
+  Activo: boolean | null
+  FechaEliminacion: Date | null
 }
 
 export type AsistenciaCountAggregateOutputType = {
@@ -63,6 +67,8 @@ export type AsistenciaCountAggregateOutputType = {
   HoraEntrada: number
   HoraSalida: number
   HorasExtra: number
+  Activo: number
+  FechaEliminacion: number
   _all: number
 }
 
@@ -86,6 +92,8 @@ export type AsistenciaMinAggregateInputType = {
   HoraEntrada?: true
   HoraSalida?: true
   HorasExtra?: true
+  Activo?: true
+  FechaEliminacion?: true
 }
 
 export type AsistenciaMaxAggregateInputType = {
@@ -95,6 +103,8 @@ export type AsistenciaMaxAggregateInputType = {
   HoraEntrada?: true
   HoraSalida?: true
   HorasExtra?: true
+  Activo?: true
+  FechaEliminacion?: true
 }
 
 export type AsistenciaCountAggregateInputType = {
@@ -104,6 +114,8 @@ export type AsistenciaCountAggregateInputType = {
   HoraEntrada?: true
   HoraSalida?: true
   HorasExtra?: true
+  Activo?: true
+  FechaEliminacion?: true
   _all?: true
 }
 
@@ -200,6 +212,8 @@ export type AsistenciaGroupByOutputType = {
   HoraEntrada: Date | null
   HoraSalida: Date | null
   HorasExtra: runtime.Decimal | null
+  Activo: boolean | null
+  FechaEliminacion: Date | null
   _count: AsistenciaCountAggregateOutputType | null
   _avg: AsistenciaAvgAggregateOutputType | null
   _sum: AsistenciaSumAggregateOutputType | null
@@ -207,7 +221,7 @@ export type AsistenciaGroupByOutputType = {
   _max: AsistenciaMaxAggregateOutputType | null
 }
 
-type GetAsistenciaGroupByPayload<T extends AsistenciaGroupByArgs> = Prisma.PrismaPromise<
+export type GetAsistenciaGroupByPayload<T extends AsistenciaGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<AsistenciaGroupByOutputType, T['by']> &
       {
@@ -232,6 +246,8 @@ export type AsistenciaWhereInput = {
   HoraEntrada?: Prisma.DateTimeNullableFilter<"Asistencia"> | Date | string | null
   HoraSalida?: Prisma.DateTimeNullableFilter<"Asistencia"> | Date | string | null
   HorasExtra?: Prisma.DecimalNullableFilter<"Asistencia"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: Prisma.BoolNullableFilter<"Asistencia"> | boolean | null
+  FechaEliminacion?: Prisma.DateTimeNullableFilter<"Asistencia"> | Date | string | null
   Empleado?: Prisma.XOR<Prisma.EmpleadoScalarRelationFilter, Prisma.EmpleadoWhereInput>
 }
 
@@ -242,6 +258,8 @@ export type AsistenciaOrderByWithRelationInput = {
   HoraEntrada?: Prisma.SortOrderInput | Prisma.SortOrder
   HoraSalida?: Prisma.SortOrderInput | Prisma.SortOrder
   HorasExtra?: Prisma.SortOrderInput | Prisma.SortOrder
+  Activo?: Prisma.SortOrderInput | Prisma.SortOrder
+  FechaEliminacion?: Prisma.SortOrderInput | Prisma.SortOrder
   Empleado?: Prisma.EmpleadoOrderByWithRelationInput
 }
 
@@ -255,6 +273,8 @@ export type AsistenciaWhereUniqueInput = Prisma.AtLeast<{
   HoraEntrada?: Prisma.DateTimeNullableFilter<"Asistencia"> | Date | string | null
   HoraSalida?: Prisma.DateTimeNullableFilter<"Asistencia"> | Date | string | null
   HorasExtra?: Prisma.DecimalNullableFilter<"Asistencia"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: Prisma.BoolNullableFilter<"Asistencia"> | boolean | null
+  FechaEliminacion?: Prisma.DateTimeNullableFilter<"Asistencia"> | Date | string | null
   Empleado?: Prisma.XOR<Prisma.EmpleadoScalarRelationFilter, Prisma.EmpleadoWhereInput>
 }, "IdAsistencia">
 
@@ -265,6 +285,8 @@ export type AsistenciaOrderByWithAggregationInput = {
   HoraEntrada?: Prisma.SortOrderInput | Prisma.SortOrder
   HoraSalida?: Prisma.SortOrderInput | Prisma.SortOrder
   HorasExtra?: Prisma.SortOrderInput | Prisma.SortOrder
+  Activo?: Prisma.SortOrderInput | Prisma.SortOrder
+  FechaEliminacion?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.AsistenciaCountOrderByAggregateInput
   _avg?: Prisma.AsistenciaAvgOrderByAggregateInput
   _max?: Prisma.AsistenciaMaxOrderByAggregateInput
@@ -282,6 +304,8 @@ export type AsistenciaScalarWhereWithAggregatesInput = {
   HoraEntrada?: Prisma.DateTimeNullableWithAggregatesFilter<"Asistencia"> | Date | string | null
   HoraSalida?: Prisma.DateTimeNullableWithAggregatesFilter<"Asistencia"> | Date | string | null
   HorasExtra?: Prisma.DecimalNullableWithAggregatesFilter<"Asistencia"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: Prisma.BoolNullableWithAggregatesFilter<"Asistencia"> | boolean | null
+  FechaEliminacion?: Prisma.DateTimeNullableWithAggregatesFilter<"Asistencia"> | Date | string | null
 }
 
 export type AsistenciaCreateInput = {
@@ -289,6 +313,8 @@ export type AsistenciaCreateInput = {
   HoraEntrada?: Date | string | null
   HoraSalida?: Date | string | null
   HorasExtra?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
   Empleado: Prisma.EmpleadoCreateNestedOneWithoutAsistenciaInput
 }
 
@@ -299,6 +325,8 @@ export type AsistenciaUncheckedCreateInput = {
   HoraEntrada?: Date | string | null
   HoraSalida?: Date | string | null
   HorasExtra?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
 }
 
 export type AsistenciaUpdateInput = {
@@ -306,6 +334,8 @@ export type AsistenciaUpdateInput = {
   HoraEntrada?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   HoraSalida?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   HorasExtra?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Empleado?: Prisma.EmpleadoUpdateOneRequiredWithoutAsistenciaNestedInput
 }
 
@@ -316,6 +346,8 @@ export type AsistenciaUncheckedUpdateInput = {
   HoraEntrada?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   HoraSalida?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   HorasExtra?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type AsistenciaCreateManyInput = {
@@ -324,6 +356,8 @@ export type AsistenciaCreateManyInput = {
   HoraEntrada?: Date | string | null
   HoraSalida?: Date | string | null
   HorasExtra?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
 }
 
 export type AsistenciaUpdateManyMutationInput = {
@@ -331,6 +365,8 @@ export type AsistenciaUpdateManyMutationInput = {
   HoraEntrada?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   HoraSalida?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   HorasExtra?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type AsistenciaUncheckedUpdateManyInput = {
@@ -340,6 +376,8 @@ export type AsistenciaUncheckedUpdateManyInput = {
   HoraEntrada?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   HoraSalida?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   HorasExtra?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type AsistenciaCountOrderByAggregateInput = {
@@ -349,6 +387,8 @@ export type AsistenciaCountOrderByAggregateInput = {
   HoraEntrada?: Prisma.SortOrder
   HoraSalida?: Prisma.SortOrder
   HorasExtra?: Prisma.SortOrder
+  Activo?: Prisma.SortOrder
+  FechaEliminacion?: Prisma.SortOrder
 }
 
 export type AsistenciaAvgOrderByAggregateInput = {
@@ -364,6 +404,8 @@ export type AsistenciaMaxOrderByAggregateInput = {
   HoraEntrada?: Prisma.SortOrder
   HoraSalida?: Prisma.SortOrder
   HorasExtra?: Prisma.SortOrder
+  Activo?: Prisma.SortOrder
+  FechaEliminacion?: Prisma.SortOrder
 }
 
 export type AsistenciaMinOrderByAggregateInput = {
@@ -373,6 +415,8 @@ export type AsistenciaMinOrderByAggregateInput = {
   HoraEntrada?: Prisma.SortOrder
   HoraSalida?: Prisma.SortOrder
   HorasExtra?: Prisma.SortOrder
+  Activo?: Prisma.SortOrder
+  FechaEliminacion?: Prisma.SortOrder
 }
 
 export type AsistenciaSumOrderByAggregateInput = {
@@ -405,6 +449,10 @@ export type NullableDecimalFieldUpdateOperationsInput = {
   decrement?: runtime.Decimal | runtime.DecimalJsLike | number | string
   multiply?: runtime.Decimal | runtime.DecimalJsLike | number | string
   divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
+}
+
+export type NullableBoolFieldUpdateOperationsInput = {
+  set?: boolean | null
 }
 
 export type IntFieldUpdateOperationsInput = {
@@ -462,6 +510,8 @@ export type AsistenciaCreateWithoutEmpleadoInput = {
   HoraEntrada?: Date | string | null
   HoraSalida?: Date | string | null
   HorasExtra?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
 }
 
 export type AsistenciaUncheckedCreateWithoutEmpleadoInput = {
@@ -470,6 +520,8 @@ export type AsistenciaUncheckedCreateWithoutEmpleadoInput = {
   HoraEntrada?: Date | string | null
   HoraSalida?: Date | string | null
   HorasExtra?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
 }
 
 export type AsistenciaCreateOrConnectWithoutEmpleadoInput = {
@@ -507,6 +559,8 @@ export type AsistenciaScalarWhereInput = {
   HoraEntrada?: Prisma.DateTimeNullableFilter<"Asistencia"> | Date | string | null
   HoraSalida?: Prisma.DateTimeNullableFilter<"Asistencia"> | Date | string | null
   HorasExtra?: Prisma.DecimalNullableFilter<"Asistencia"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: Prisma.BoolNullableFilter<"Asistencia"> | boolean | null
+  FechaEliminacion?: Prisma.DateTimeNullableFilter<"Asistencia"> | Date | string | null
 }
 
 export type AsistenciaCreateManyEmpleadoInput = {
@@ -514,6 +568,8 @@ export type AsistenciaCreateManyEmpleadoInput = {
   HoraEntrada?: Date | string | null
   HoraSalida?: Date | string | null
   HorasExtra?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
 }
 
 export type AsistenciaUpdateWithoutEmpleadoInput = {
@@ -521,6 +577,8 @@ export type AsistenciaUpdateWithoutEmpleadoInput = {
   HoraEntrada?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   HoraSalida?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   HorasExtra?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type AsistenciaUncheckedUpdateWithoutEmpleadoInput = {
@@ -529,6 +587,8 @@ export type AsistenciaUncheckedUpdateWithoutEmpleadoInput = {
   HoraEntrada?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   HoraSalida?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   HorasExtra?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type AsistenciaUncheckedUpdateManyWithoutEmpleadoInput = {
@@ -537,6 +597,8 @@ export type AsistenciaUncheckedUpdateManyWithoutEmpleadoInput = {
   HoraEntrada?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   HoraSalida?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   HorasExtra?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 
@@ -548,6 +610,8 @@ export type AsistenciaSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   HoraEntrada?: boolean
   HoraSalida?: boolean
   HorasExtra?: boolean
+  Activo?: boolean
+  FechaEliminacion?: boolean
   Empleado?: boolean | Prisma.EmpleadoDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["asistencia"]>
 
@@ -560,9 +624,11 @@ export type AsistenciaSelectScalar = {
   HoraEntrada?: boolean
   HoraSalida?: boolean
   HorasExtra?: boolean
+  Activo?: boolean
+  FechaEliminacion?: boolean
 }
 
-export type AsistenciaOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"IdAsistencia" | "IdEmpleado" | "Fecha" | "HoraEntrada" | "HoraSalida" | "HorasExtra", ExtArgs["result"]["asistencia"]>
+export type AsistenciaOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"IdAsistencia" | "IdEmpleado" | "Fecha" | "HoraEntrada" | "HoraSalida" | "HorasExtra" | "Activo" | "FechaEliminacion", ExtArgs["result"]["asistencia"]>
 export type AsistenciaInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   Empleado?: boolean | Prisma.EmpleadoDefaultArgs<ExtArgs>
 }
@@ -579,6 +645,8 @@ export type $AsistenciaPayload<ExtArgs extends runtime.Types.Extensions.Internal
     HoraEntrada: Date | null
     HoraSalida: Date | null
     HorasExtra: runtime.Decimal | null
+    Activo: boolean | null
+    FechaEliminacion: Date | null
   }, ExtArgs["result"]["asistencia"]>
   composites: {}
 }
@@ -955,6 +1023,8 @@ export interface AsistenciaFieldRefs {
   readonly HoraEntrada: Prisma.FieldRef<"Asistencia", 'DateTime'>
   readonly HoraSalida: Prisma.FieldRef<"Asistencia", 'DateTime'>
   readonly HorasExtra: Prisma.FieldRef<"Asistencia", 'Decimal'>
+  readonly Activo: Prisma.FieldRef<"Asistencia", 'Boolean'>
+  readonly FechaEliminacion: Prisma.FieldRef<"Asistencia", 'DateTime'>
 }
     
 

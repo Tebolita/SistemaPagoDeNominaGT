@@ -10,15 +10,23 @@ export class LoginController {
 
   @HttpCode(HttpStatus.OK)
   @Post('login')
-  signIn(@Body() singIn: ValidateLoginDto){
+  signIn(@Body() singIn: ValidateLoginDto) {
     return this.loginService.SignIn(singIn.Username, singIn.Contrasena, singIn.Clave);
   }
 
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
   @Get('profile')
-  getProfile(@Request() req){
+  getProfile(@Request() req) {
     return req.user;
   }
 
+  // NUEVO: Endpoint para cerrar sesión
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
+  @Post('logout')
+  @HttpCode(HttpStatus.OK)
+  logout() {
+    return this.loginService.logout();
+  }
 }
