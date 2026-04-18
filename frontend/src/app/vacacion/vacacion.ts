@@ -12,7 +12,7 @@ import { SelectModule } from 'primeng/select';
 import { CheckboxModule } from 'primeng/checkbox';
 import { DatePickerModule } from 'primeng/datepicker'; 
 
-import { VacacionesService } from '../services/vacacion.service';
+import { VacacionesService } from './vacacion.service';
 import { IncidenciaVacacion } from '../models/Vacacion.model';
 import { ConfirmationService, MessageService } from 'primeng/api';
 

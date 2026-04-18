@@ -111,8 +111,7 @@ export class Usuario implements OnInit {
   obtenerNombreEmpleado(idEmpleado: number | undefined): string {
     if (!idEmpleado) return 'N/A';
     const empleado = this.listaEmpleados().find(e => e.IdEmpleado === idEmpleado);
-    // NOTA: Cambia '.Nombre' por el campo real que uses en tu EmpleadoResponse (ej. .Nombres, .NombreCompleto)
-    return empleado ? (empleado as any).Nombre : 'Desconocido'; 
+    return empleado ? `${empleado.Nombres} ${empleado.Apellidos}` : 'Desconocido';
   }
 
   // --- LÓGICA DEL CRUD ---
@@ -140,8 +139,8 @@ export class Usuario implements OnInit {
 
       const payload: Partial<UsuarioInterface> = {
         Username: usuarioUI.Username,
-        IdRol: usuarioUI.IdRol,
-        IdEmpleado: usuarioUI.IdEmpleado
+        IdRol: Number(usuarioUI.IdRol),
+        IdEmpleado: Number(usuarioUI.IdEmpleado)
       };
 
       if (usuarioUI.Contrasena && usuarioUI.Contrasena.trim() !== '') {

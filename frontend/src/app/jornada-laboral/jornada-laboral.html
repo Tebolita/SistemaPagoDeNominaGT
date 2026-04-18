@@ -1,0 +1,96 @@
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
+
+<div class="flex flex-col gap-4 p-4">
+  <div class="flex justify-between items-center">
+    <h1 class="text-2xl font-bold">Gestión de Jornadas Laborales</h1>
+    <p-button
+      label="Nuevo"
+      icon="pi pi-plus"
+      (onClick)="showDialog()"
+      severity="success"
+    ></p-button>
+  </div>
+
+  <p-table [value]="jornadas()" [tableStyle]="{ 'min-width': '50rem' }">
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="NombreJornada">Nombre <p-sortIcon field="NombreJornada"></p-sortIcon></th>
+        <th>Horas Diarias</th>
+        <th>Horas Semanales</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-jornada>
+      <tr>
+        <td>{{ jornada.NombreJornada }}</td>
+        <td>{{ jornada.HorasDiarias }}</td>
+        <td>{{ jornada.HorasSemanales }}</td>
+        <td>
+          <p-tag 
+            [value]="jornada.Activo ? 'Activo' : 'Inactivo'" 
+            [severity]="jornada.Activo ? 'success' : 'danger'"
+          ></p-tag>
+        </td>
+        <td>
+          <p-button
+            icon="pi pi-pencil"
+            [rounded]="true"
+            [text]="true"
+            (onClick)="editJornada(jornada)"
+            severity="warn"
+            pTooltip="Editar"
+            tooltipPosition="top"
+          ></p-button>
+          <p-button
+            icon="pi pi-trash"
+            [rounded]="true"
+            [text]="true"
+            (onClick)="deleteJornada(jornada.IdJornada)"
+            severity="danger"
+            pTooltip="Eliminar"
+            tooltipPosition="top"
+          ></p-button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<p-dialog
+  [visible]="displayDialog()"
+  (visibleChange)="displayDialog.set($event)"
+  [header]="isEditMode() ? 'Editar Jornada' : 'Nueva Jornada'"
+  [modal]="true"
+  [style]="{ width: '50vw' }"
+>
+  <div class="flex flex-col gap-4">
+    <div>
+      <label class="block text-sm font-medium mb-2">Nombre de la Jornada</label>
+      <input type="text" pInputText [(ngModel)]="form.NombreJornada" class="w-full" />
+    </div>
+    <div>
+      <label class="block text-sm font-medium mb-2">Horas Diarias</label>
+      <p-inputNumber [(ngModel)]="form.HorasDiarias" [minFractionDigits]="1" [maxFractionDigits]="2" class="w-full"></p-inputNumber>
+    </div>
+    <div>
+      <label class="block text-sm font-medium mb-2">Horas Semanales</label>
+      <p-inputNumber [(ngModel)]="form.HorasSemanales" [minFractionDigits]="1" [maxFractionDigits]="2" class="w-full"></p-inputNumber>
+    </div>
+  </div>
+  <ng-template pTemplate="footer">
+    <p-button
+      label="Cancelar"
+      icon="pi pi-times"
+      (onClick)="displayDialog.set(false)"
+      [text]="true"
+    ></p-button>
+    <p-button
+      label="Guardar"
+      icon="pi pi-check"
+      (onClick)="saveJornada()"
+      severity="success"
+    ></p-button>
+  </ng-template>
+</p-dialog>

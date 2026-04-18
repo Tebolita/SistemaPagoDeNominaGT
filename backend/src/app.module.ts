@@ -8,9 +8,28 @@ import { AsistenciaModule } from './asistencia/asistencia.module';
 import { ControlvacacionModule } from './control-vacacion/controlvacacion.module';
 import { DetallecontrolvacacionModule } from './detalle-control-vacacion/detallecontrolvacacion.module';
 import { RolModule } from './rol/rol.module';
+import { DepartamentoModule } from './departamento/departamento.module';
+import { PuestoModule } from './puesto/puesto.module';
+import { JornadaLaboralModule } from './jornada-laboral/jornada-laboral.module';
+import { BancoModule } from './banco/banco.module';
+import { ParametroGlobalModule } from './parametro-global/parametro-global.module';
 
 @Module({
-  imports: [LoginModule, UsuarioModule, EmpleadoModule, IncidenciaModule, AsistenciaModule, ControlvacacionModule, DetallecontrolvacacionModule, RolModule],
+  imports: [
+    LoginModule,
+    UsuarioModule,
+    EmpleadoModule,
+    IncidenciaModule,
+    AsistenciaModule,
+    ControlvacacionModule,
+    DetallecontrolvacacionModule,
+    RolModule,
+    DepartamentoModule,
+    PuestoModule,
+    JornadaLaboralModule,
+    BancoModule,
+    ParametroGlobalModule,
+  ],
   controllers: [],
   providers: [PrismaService],
 })

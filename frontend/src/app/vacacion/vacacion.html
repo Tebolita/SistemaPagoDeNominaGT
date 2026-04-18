@@ -1,81 +1,102 @@
-<p-toast></p-toast>
+﻿<p-toast></p-toast>
 
-<div class="card">
-    <p-toolbar styleClass="mb-4">
-        <ng-template pTemplate="left">
-            <button pButton pRipple label="Nueva Solicitud" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
-        </ng-template>
-    </p-toolbar>
+<div class="vacacion-wrapper">
+    <section class="vacacion-hero card">
+        <div class="hero-info">
+            <span class="hero-label">Vacaciones</span>
+            <h1>Control de vacaciones</h1>
+            <p>Gestioná solicitudes de descanso y días con o sin goce de sueldo en un solo panel integrado.</p>
+        </div>
 
-    <p-table #dt [value]="vacaciones" [rows]="10" [paginator]="true" [rowHover]="true" dataKey="IdIncidencia"
-        currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [showCurrentPageReport]="true">
-        <ng-template pTemplate="header">
-            <tr>
-                <th>Empleado</th>
-                <th>Fecha Inicio</th>
-                <th>Fecha Fin</th>
-                <th>Goce de Sueldo</th>
-                <th>Acciones</th>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-vacacion>
-            <tr>
-                <td>{{ vacacion.Empleado?.Nombres }} {{ vacacion.Empleado?.Apellidos }}</td>
-                <td>{{ vacacion.FechaInicio | date:'dd/MM/yyyy' }}</td>
-                <td>{{ vacacion.FechaFin | date:'dd/MM/yyyy' }}</td>
-                <td>
-                    <i class="pi" [ngClass]="{'true-icon pi-check-circle text-green-500': vacacion.ConGoceSueldo, 'false-icon pi-times-circle text-red-500': !vacacion.ConGoceSueldo}"></i>
-                </td>
-                <td>
-                    <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editVacacion(vacacion)"></button>
-                    <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteVacacion(vacacion)"></button>
-                </td>
-            </tr>
-        </ng-template>
-    </p-table>
+        <div class="hero-actions">
+            <button pButton pRipple label="Nueva Solicitud" icon="pi pi-plus" class="p-button-raised p-button-success" (click)="openNew()"></button>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <span class="stat-value">{{ vacaciones.length }}</span>
+                    <span class="stat-label">Vacaciones</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">{{ empleados.length }}</span>
+                    <span class="stat-label">Empleados</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="vacacion-table-card card">
+        <p-toolbar styleClass="mb-4 vacacion-toolbar">
+            <ng-template pTemplate="left">
+                <h2 class="table-title">Solicitudes de vacaciones</h2>
+            </ng-template>
+        </p-toolbar>
+
+        <p-table #dt [value]="vacaciones" [rows]="10" [paginator]="true" [rowHover]="true" dataKey="IdIncidencia"
+            currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [showCurrentPageReport]="true">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Empleado</th>
+                    <th>Fecha Inicio</th>
+                    <th>Fecha Fin</th>
+                    <th>Goce</th>
+                    <th>Acciones</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-vacacion>
+                <tr>
+                    <td>{{ vacacion.Empleado?.Nombres }} {{ vacacion.Empleado?.Apellidos }}</td>
+                    <td>{{ vacacion.FechaInicio | date:'dd/MM/yyyy' }}</td>
+                    <td>{{ vacacion.FechaFin | date:'dd/MM/yyyy' }}</td>
+                    <td>
+                        <span [ngClass]="vacacion.ConGoceSueldo ? 'status-chip status-good' : 'status-chip status-bad'">
+                            {{ vacacion.ConGoceSueldo ? 'Con goce' : 'Sin goce' }}
+                        </span>
+                    </td>
+                    <td class="actions-cell">
+                        <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editVacacion(vacacion)"></button>
+                        <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteVacacion(vacacion)"></button>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </section>
 </div>
 
-<p-dialog [(visible)]="vacacionesDialog" [style]="{width: '450px'}" header="Detalle de Vacación" [modal]="true" styleClass="p-fluid">
+<p-dialog [(visible)]="vacacionesDialog" [style]="{width: '520px'}" header="Detalle de Vacación" [modal]="true" styleClass="p-fluid vacacion-dialog">
     <ng-template pTemplate="content">
-        
         <div class="field">
             <label for="empleado">Empleado</label>
-            
             <p-select 
                 [options]="empleados" 
                 [(ngModel)]="vacacion.IdEmpleado" 
                 placeholder="Selecciona un empleado" 
-                optionLabel="nombreCompleto"   optionValue="IdEmpleado"       appendTo="body">
+                optionLabel="nombreCompleto" optionValue="IdEmpleado" appendTo="body">
             </p-select>
-            
             @if (submitted && !vacacion.IdEmpleado) {
                 <small class="p-error">El empleado es requerido.</small>
             }
         </div>
 
-        <div class="field">
-            <label for="fechaInicio">Fecha Inicio</label>
-            <p-datepicker [(ngModel)]="vacacion.FechaInicio" dateFormat="dd/mm/yy" [showIcon]="true" appendTo="body"></p-datepicker>
-            
-            @if (submitted && !vacacion.FechaInicio) {
-                <small class="p-error">La fecha de inicio es requerida.</small>
-            }
-        </div>
-
-        <div class="field">
-            <label for="fechaFin">Fecha Fin</label>
-            <p-datepicker [(ngModel)]="vacacion.FechaFin" dateFormat="dd/mm/yy" [showIcon]="true" appendTo="body"></p-datepicker>
-            
-            @if (submitted && !vacacion.FechaFin) {
-                <small class="p-error">La fecha de fin es requerida.</small>
-            }
+        <div class="field row-grid">
+            <div>
+                <label for="fechaInicio">Fecha Inicio</label>
+                <p-datepicker [(ngModel)]="vacacion.FechaInicio" dateFormat="dd/mm/yy" [showIcon]="true" appendTo="body"></p-datepicker>
+                @if (submitted && !vacacion.FechaInicio) {
+                    <small class="p-error">La fecha de inicio es requerida.</small>
+                }
+            </div>
+            <div>
+                <label for="fechaFin">Fecha Fin</label>
+                <p-datepicker [(ngModel)]="vacacion.FechaFin" dateFormat="dd/mm/yy" [showIcon]="true" appendTo="body"></p-datepicker>
+                @if (submitted && !vacacion.FechaFin) {
+                    <small class="p-error">La fecha de fin es requerida.</small>
+                }
+            </div>
         </div>
 
         <div class="field-checkbox mt-4">
             <p-checkbox [(ngModel)]="vacacion.ConGoceSueldo" [binary]="true" inputId="goceSueldo"></p-checkbox>
             <label for="goceSueldo">Con Goce de Sueldo</label>
         </div>
-
     </ng-template>
 
     <ng-template pTemplate="footer">

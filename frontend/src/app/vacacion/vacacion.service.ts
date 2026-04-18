@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { catchError,Observable } from 'rxjs';
+import { catchError, Observable } from 'rxjs';
 import { IncidenciaVacacion } from '../models/Vacacion.model';
-import { ErrorService } from './error.service';
-
+import { ErrorService } from '../services/error.service';
 
 // Aquí define la URL de tu API
 const API_URL = 'http://localhost:4000/api/incidencia'; 

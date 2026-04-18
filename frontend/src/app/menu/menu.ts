@@ -86,6 +86,36 @@ export class MenuPrincipal implements OnInit {
                 ]
             },
             {
+                label: 'Configuración',
+                items: [
+                    {
+                        label: 'Departamentos',
+                        icon: 'pi pi-building',
+                        routerLink: '/configuracion/departamentos'
+                    },
+                    {
+                        label: 'Puestos',
+                        icon: 'pi pi-briefcase',
+                        routerLink: '/configuracion/puestos'
+                    },
+                    {
+                        label: 'Jornadas Laborales',
+                        icon: 'pi pi-calendar',
+                        routerLink: '/configuracion/jornadas'
+                    },
+                    {
+                        label: 'Bancos',
+                        icon: 'pi pi-money-bill',
+                        routerLink: '/configuracion/bancos'
+                    },
+                    {
+                        label: 'Parámetros Globales',
+                        icon: 'pi pi-sliders-h',
+                        routerLink: '/configuracion/parametros'
+                    },
+                ]
+            },
+            {
                 separator: true
             }
         ];

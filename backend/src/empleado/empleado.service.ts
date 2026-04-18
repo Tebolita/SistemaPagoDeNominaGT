@@ -1,11 +1,13 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateEmpleadoDto } from './dto/create-empleado.dto';
 import { UpdateEmpleadoDto } from './dto/update-empleado.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class EmpleadoService {
-  constructor(private prismaService: PrismaService) {}
+  constructor(
+    private prismaService: PrismaService
+  ) {}
 
   async create(createEmpleadoDto: CreateEmpleadoDto) {
       
@@ -16,7 +18,7 @@ export class EmpleadoService {
           ...dataToCreate,
          
           ...(Estado !== undefined && { Activo: Estado }),
-          
+            
           ...(IdPuesto && { Puesto: { connect: { IdPuesto: Number(IdPuesto) } } }),
 
           ...(IdJornada && { JornadaLaboral: {connect: {IdJornada: Number(IdJornada)}}})
@@ -36,7 +38,7 @@ export class EmpleadoService {
   async findAll() {
     const empleados = await this.prismaService.empleado.findMany({
       include: {
-        Usuario: { select: { RolUsuario: { select: { NombreRol: true } } } },
+        Usuario: { select: { IdUsuario: true, IdRol: true, RolUsuario: { select: { NombreRol: true } } } },
         Puesto: { select: { NombrePuesto: true } },
         JornadaLaboral: { select: { NombreJornada: true } },
         Banco: { select: { NombreBanco: true } } 
@@ -58,6 +60,7 @@ export class EmpleadoService {
     const empleado = await this.prismaService.empleado.findUnique({
       where: { IdEmpleado: idEmpleado },
       include: {
+        Usuario: { select: { IdUsuario: true, IdRol: true, RolUsuario: { select: { NombreRol: true } } } },
         Puesto: { select: { NombrePuesto: true } },
         JornadaLaboral: { select: { NombreJornada: true } },
         Banco: { select: { NombreBanco: true } }
@@ -70,9 +73,9 @@ export class EmpleadoService {
   async update(id: number, updateEmpleadoDto: UpdateEmpleadoDto) {
       await this.findOne(id);
 
-      const { IdEmpleado, IdPuesto, Estado, ...dataToUpdate } = updateEmpleadoDto as any;
+      const { IdEmpleado, IdPuesto, Estado, IdRol, ...dataToUpdate } = updateEmpleadoDto as any;
 
-      return await this.prismaService.empleado.update({
+      const empleadoActualizado = await this.prismaService.empleado.update({
         where: { IdEmpleado: id },
         data: {
           ...dataToUpdate,
@@ -82,17 +85,27 @@ export class EmpleadoService {
           ...(IdPuesto && { Puesto: { connect: { IdPuesto: Number(IdPuesto) } } })
         },
       });
+
+      return {
+        message: `Empleado actualizado correctamente.`,
+        id: empleadoActualizado.IdEmpleado,
+      };
     }
 
   async remove(id: number) {
     const empelado = await this.findOne(id);
 
-    return await this.prismaService.empleado.update({
+    const empleadoEliminado = await this.prismaService.empleado.update({
       where: { IdEmpleado: id },
       data: {
         Activo: !empelado?.Activo,
         FechaEliminacion: new Date(),
       },
     });
+
+    return {
+      message: `Empleado eliminado correctamente.`,
+      id: empleadoEliminado.IdEmpleado,
+    };
   }
 }

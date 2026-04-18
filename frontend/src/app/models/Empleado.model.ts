@@ -15,6 +15,8 @@ export interface EmpleadoResponse {
   Direccion: string;
   Fotografia: string;
   Usuario: {
+    IdUsuario?: number;
+    IdRol?: number;
     RolUsuario: {
       NombreRol: string
     }
@@ -43,5 +45,5 @@ export interface EmpleadoRequest {
 }
 export interface EmpleadoResponseCUD {
   message: string;
-  id: string
+  id: number;
 }

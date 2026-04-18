@@ -23,6 +23,9 @@ import { MessageService, ConfirmationService, MenuItem } from 'primeng/api';
 // --- Servicios y Modelos ---
 import { EmpleadoService } from '../services/empleado.service';
 import { RolService } from '../services/rol.service';
+import { AsistenciaService } from '../services/asistencia.service';
+import { VacacionesService } from '../vacacion/vacacion.service';
+import { UsuarioService } from '../services/usuario.service';
 // import { PuestoService } from '../services/puesto.service'; <-- Descomenta cuando lo tengas
 
 import { EmpleadoResponse, EmpleadoRequest } from '../models/Empleado.model';
@@ -61,6 +64,9 @@ export class Empleado implements OnInit {
   
   private empleadoService = inject(EmpleadoService);
   private rolService = inject(RolService);
+  private asistenciaService = inject(AsistenciaService);
+  private vacacionesService = inject(VacacionesService);
+  private usuarioService = inject(UsuarioService);
   // private puestoService = inject(PuestoService); 
 
   // --- ESTADOS PRINCIPALES (UI y Datos) ---
@@ -150,15 +156,29 @@ export class Empleado implements OnInit {
     ]);
   }
 
+  loadVacaciones(idEmpleado: number) {
+    this.vacacionesEmpleado.set([]);
+    this.vacacionesService.getVacaciones().subscribe({
+      next: (data) => this.vacacionesEmpleado.set(data.filter(v => v.IdEmpleado === idEmpleado)),
+      error: () => this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudieron cargar las vacaciones del empleado' })
+    });
+  }
+
+  loadAsistencias(idEmpleado: number) {
+    this.asistenciasEmpleado.set([]);
+    this.asistenciaService.getAsistencias().subscribe({
+      next: (data) => this.asistenciasEmpleado.set(data.filter(a => a.IdEmpleado === idEmpleado)),
+      error: () => this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudieron cargar las asistencias del empleado' })
+    });
+  }
+
   // --- INTERACCIONES DE LA VISTA ---
   
   onSelectUser(user: EmpleadoResponse) {
     this.selectedUser.set(user);
     this.messageResponsive.set('');
-    // Aquí podrías cargar las vacaciones y asistencias del empleado seleccionado llamando a otro servicio
-    this.vacacionesEmpleado.set([]); 
-    this.asistenciasEmpleado.set([]);
-    console.log(user)
+    this.loadVacaciones(user.IdEmpleado);
+    this.loadAsistencias(user.IdEmpleado);
   }
 
   onContextMenu(event: Event, user: EmpleadoResponse) {
@@ -231,9 +251,24 @@ export class Empleado implements OnInit {
 
     this.empleadoService.ActualizarEmpleado(userToUpdate.IdEmpleado, payload).subscribe({
       next: (res: any) => {
-        this.messageService.add({ severity: 'success', summary: 'Actualizado', detail: 'Información actualizada correctamente.' });
-        this.messageResponsive.set('Datos guardados con éxito.');
-        this.cargarEmpleados();
+        const usuarioRelacionado = userToUpdate.Usuario?.[0];
+        if (usuarioRelacionado?.IdUsuario && usuarioRelacionado.IdRol !== undefined) {
+          this.usuarioService.ActualizarUsuario(usuarioRelacionado.IdUsuario, { IdRol: Number(usuarioRelacionado.IdRol) }).subscribe({
+            next: () => {
+              this.messageService.add({ severity: 'success', summary: 'Actualizado', detail: 'Información y rol actualizados correctamente.' });
+              this.messageResponsive.set('Datos guardados con éxito.');
+              this.cargarEmpleados();
+            },
+            error: (err) => {
+              this.messageService.add({ severity: 'warn', summary: 'Advertencia', detail: 'Empleado actualizado, pero no se pudo actualizar el rol.' });
+              this.cargarEmpleados();
+            }
+          });
+        } else {
+          this.messageService.add({ severity: 'success', summary: 'Actualizado', detail: 'Información actualizada correctamente.' });
+          this.messageResponsive.set('Datos guardados con éxito.');
+          this.cargarEmpleados();
+        }
       },
       error: (err) => {
         this.messageService.add({ severity: 'error', summary: 'Error', detail: err.message });
@@ -270,4 +305,5 @@ export class Empleado implements OnInit {
       }
     });
   }
+
 }

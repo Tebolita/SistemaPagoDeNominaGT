@@ -31,7 +31,10 @@ export class UsuarioService {
         Clave: await bcryptjs.hash(createUsuarioDto.Clave, 12),
       }
     });
-    return { message: `Se creó el usuario ${nuevoUsuario.Username} correctamente.` };
+    return {
+      message: `Se creó el usuario ${nuevoUsuario.Username} correctamente.`,
+      id: nuevoUsuario.IdUsuario,
+    };
   }  
 
   // Obtener todos los usuarios (Sin contraseñas)
@@ -90,12 +93,15 @@ export class UsuarioService {
     // Quitamos propiedades que no deben ir en el update de Prisma
     const { IdUsuario, ...rest } = dataToUpdate as any;
 
-    await this.prismaService.usuario.update({
+    const usuarioActualizado = await this.prismaService.usuario.update({
       where: { IdUsuario: id },
       data: rest,
     });
 
-    return { message: `Usuario actualizado correctamente.` };
+    return {
+      message: `Usuario actualizado correctamente.`,
+      id: usuarioActualizado.IdUsuario,
+    };
   }
 
   // Eliminar un usuario
@@ -103,11 +109,14 @@ export class UsuarioService {
     // Validamos que exista
     const usuario = await this.findById(id);
 
-    await this.prismaService.usuario.update({
+    const usuarioEliminado = await this.prismaService.usuario.update({
       where: { IdUsuario: id },
       data: { Activo: !usuario.Activo }
     });
 
-    return { message: `Usuario eliminado correctamente.` };
+    return {
+      message: `Usuario eliminado correctamente.`,
+      id: usuarioEliminado.IdUsuario,
+    };
   }
 }

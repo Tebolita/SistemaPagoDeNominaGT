@@ -14,7 +14,7 @@ export interface UsuarioRequest {
 }
 export interface UsuarioResponseCUD {
   message: string;
-  id: string
+  id: number;
 }
 
 export interface UsuarioInterface {

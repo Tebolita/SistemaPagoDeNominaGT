@@ -1,0 +1,148 @@
+.vacacion-wrapper {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.vacacion-hero {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem 1.5rem 1rem;
+    border-radius: 1.25rem;
+    box-shadow: 0 25px 60px rgba(15, 23, 42, 0.08);
+}
+
+.hero-info {
+    flex: 1 1 320px;
+    min-width: 280px;
+}
+
+.hero-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #e0f2fe;
+    color: #0369a1;
+    padding: 0.55rem 0.95rem;
+    border-radius: 999px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-size: 0.85rem;
+}
+
+.vacacion-hero h1 {
+    margin: 0.8rem 0 0.65rem;
+    font-size: clamp(1.75rem, 2.1vw, 2.25rem);
+    line-height: 1.1;
+}
+
+.vacacion-hero p {
+    margin: 0;
+    max-width: 560px;
+    color: #475569;
+    font-size: 0.95rem;
+}
+
+.hero-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.hero-stats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(120px, 1fr));
+    gap: 0.9rem;
+    min-width: 220px;
+}
+
+.stat-item {
+    background: white;
+    padding: 1rem 1.1rem;
+    border-radius: 1rem;
+    box-shadow: 0 16px 32px rgba(15, 23, 42, 0.07);
+}
+
+.stat-value {
+    display: block;
+    font-size: 1.65rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.stat-label {
+    display: block;
+    margin-top: 0.3rem;
+    color: #475569;
+    font-size: 0.92rem;
+}
+
+.vacacion-table-card {
+    padding: 1.25rem;
+    border-radius: 1.25rem;
+    box-shadow: 0 25px 60px rgba(15, 23, 42, 0.08);
+}
+
+.vacacion-toolbar {
+    padding: 0;
+}
+
+.table-title {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.actions-cell {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-start;
+}
+
+.status-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.45rem 0.8rem;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.status-good {
+    background: #d1fae5;
+    color: #166534;
+}
+
+.status-bad {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.vacacion-dialog .field {
+    margin-bottom: 1rem;
+}
+
+.vacacion-dialog .field label {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 0.45rem;
+}
+
+.row-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+@media screen and (max-width: 720px) {
+    .row-grid {
+        grid-template-columns: 1fr;
+    }
+}

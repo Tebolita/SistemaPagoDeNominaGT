@@ -1,0 +1,107 @@
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
+
+<div class="flex flex-col gap-4 p-4">
+  <div class="flex justify-between items-center">
+    <h1 class="text-2xl font-bold">Parámetros Globales</h1>
+    <p-button
+      label="Nuevo"
+      icon="pi pi-plus"
+      (onClick)="showDialog()"
+      severity="success"
+    ></p-button>
+  </div>
+
+  <p-table 
+    [value]="parametros()" 
+    [tableStyle]="{ 'min-width': '50rem' }"
+    [paginator]="true" 
+    [rows]="10"
+    [globalFilterFields]="['NombreParametro']"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="NombreParametro">Nombre <p-sortIcon field="NombreParametro"></p-sortIcon></th>
+        <th>Valor</th>
+        <th>Descripción</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-param>
+      <tr>
+        <td>{{ param.NombreParametro }}</td>
+        <td>{{ param.Valor | number: '1.2-4' }}</td>
+        <td>{{ param.Descripcion || '-' }}</td>
+        <td>
+          <p-tag 
+            [value]="param.Activo ? 'Activo' : 'Inactivo'" 
+            [severity]="param.Activo ? 'success' : 'danger'"
+          ></p-tag>
+        </td>
+        <td>
+          <p-button
+            icon="pi pi-pencil"
+            [rounded]="true"
+            [text]="true"
+            (onClick)="editParametro(param)"
+            severity="warn"
+            pTooltip="Editar"
+            tooltipPosition="top"
+          ></p-button>
+          <p-button
+            icon="pi pi-trash"
+            [rounded]="true"
+            [text]="true"
+            (onClick)="deleteParametro(param.IdParametro)"
+            severity="danger"
+            pTooltip="Eliminar"
+            tooltipPosition="top"
+          ></p-button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<p-dialog
+  [visible]="displayDialog()"
+  (visibleChange)="displayDialog.set($event)"
+  [header]="isEditMode() ? 'Editar Parámetro' : 'Nuevo Parámetro'"
+  [modal]="true"
+  [style]="{ width: '50vw' }"
+>
+  <div class="flex flex-col gap-4">
+    <div>
+      <label class="block text-sm font-medium mb-2">Nombre del Parámetro</label>
+      <input type="text" pInputText [(ngModel)]="form.NombreParametro" class="w-full" />
+    </div>
+    <div>
+      <label class="block text-sm font-medium mb-2">Valor</label>
+      <p-inputNumber 
+        [(ngModel)]="form.Valor" 
+        [minFractionDigits]="2" 
+        [maxFractionDigits]="4" 
+        class="w-full"
+      ></p-inputNumber>
+    </div>
+    <div>
+      <label class="block text-sm font-medium mb-2">Descripción (Opcional)</label>
+      <input type="text" pInputText [(ngModel)]="form.Descripcion" class="w-full" />
+    </div>
+  </div>
+  <ng-template pTemplate="footer">
+    <p-button
+      label="Cancelar"
+      icon="pi pi-times"
+      (onClick)="displayDialog.set(false)"
+      [text]="true"
+    ></p-button>
+    <p-button
+      label="Guardar"
+      icon="pi pi-check"
+      (onClick)="saveParametro()"
+      severity="success"
+    ></p-button>
+  </ng-template>
+</p-dialog>
