@@ -1,364 +1,273 @@
-import { Component, OnInit, inject, ViewChild, OnDestroy, ChangeDetectorRef  } from '@angular/core';
-import { MenubarModule } from 'primeng/menubar';
-import { MenuItem, MessageService } from 'primeng/api';
-import { ButtonModule } from 'primeng/button';
-import { Divider } from 'primeng/divider';
-import { ContextMenu, ContextMenuModule } from 'primeng/contextmenu';
-import { TagModule } from 'primeng/tag';
-import { ToastModule } from 'primeng/toast';
+import { Component, OnInit, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { EmpleadoService } from '../services/empleado.service';
-import { EmpleadoResponse, EmpleadoRequest, EmpleadoResponseCUD } from '../models/Empleado.model';
 import { FormsModule } from '@angular/forms';
-import { Subject, takeUntil } from 'rxjs';
-import { AvatarModule } from 'primeng/avatar';
-import { FieldsetModule } from 'primeng/fieldset';
-import { IconFieldModule } from 'primeng/iconfield';
-import { InputIconModule } from 'primeng/inputicon';
-import { InputTextModule } from 'primeng/inputtext';
-import { SelectModule } from 'primeng/select';
-import { DialogModule }    from 'primeng/dialog';
-import { DatePickerModule } from 'primeng/datepicker';
-import { UsuarioService } from '../services/usuario.service';
-import { UsuarioRequest } from '../models/Usuario.model';
-import { PasswordModule } from 'primeng/password';
-import { VacacionesService } from '../services/vacacion.service';
-import { AsistenciaService } from '../services/asistencia.service';
+
+// --- Módulos de PrimeNG (Asegúrate de tenerlos instalados y actualizados) ---
 import { TableModule } from 'primeng/table';
+import { ButtonModule } from 'primeng/button';
+import { DialogModule } from 'primeng/dialog';
+import { InputTextModule } from 'primeng/inputtext';
+import { PasswordModule } from 'primeng/password';
+import { ToastModule } from 'primeng/toast';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { SelectModule } from 'primeng/select';
+import { DividerModule } from 'primeng/divider';
+import { MenubarModule } from 'primeng/menubar';
+import { TagModule } from 'primeng/tag';
+import { ContextMenuModule } from 'primeng/contextmenu';
+import { FieldsetModule } from 'primeng/fieldset';
+import { AvatarModule } from 'primeng/avatar';
+import { DatePickerModule } from 'primeng/datepicker'; // O CalendarModule dependiendo de tu versión exacta
+import { MessageService, ConfirmationService, MenuItem } from 'primeng/api';
 
-type Severity = "success" | "info" | "warn" | "danger" | "secondary" | "contrast" | null | undefined
+// --- Servicios y Modelos ---
+import { EmpleadoService } from '../services/empleado.service';
+import { RolService } from '../services/rol.service';
+// import { PuestoService } from '../services/puesto.service'; <-- Descomenta cuando lo tengas
 
-interface City {
-    name: string;
-    code: string;
-}
+import { EmpleadoResponse, EmpleadoRequest } from '../models/Empleado.model';
+import { RolInterface } from '../models/Rol.model';
+import { UsuarioInterface } from '../models/Usuario.model';
 
 @Component({
-    selector: 'app-empleado',
-    imports: [MenubarModule, ButtonModule, Divider, ContextMenuModule, 
-        TagModule, ToastModule, CommonModule, AvatarModule, FieldsetModule, IconFieldModule,
-        InputIconModule, InputTextModule, FormsModule, SelectModule, DialogModule, 
-        DatePickerModule, PasswordModule, TableModule],
-    providers: [MessageService],
-    templateUrl: './empleado.html',
-    styleUrl: './empleado.css',
+  selector: 'app-empleados',
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule,
+    TableModule,
+    ButtonModule,
+    DialogModule,
+    InputTextModule,
+    PasswordModule,
+    ToastModule,
+    ConfirmDialogModule,
+    SelectModule,
+    DividerModule,
+    MenubarModule,
+    TagModule,
+    ContextMenuModule,
+    FieldsetModule,
+    AvatarModule,
+    DatePickerModule
+  ],
+  providers: [MessageService, ConfirmationService],
+  templateUrl: './empleado.html',
+  styleUrl: './empleado.css'
 })
-export class Empleado implements OnInit, OnDestroy {
-    @ViewChild('cm') cm!: ContextMenu;
-    loading = false;  
-    error ='';
-    messageResponsive = '';
-    private destroy$ = new Subject<void>();
+export class Empleado implements OnInit {
+  private messageService = inject(MessageService);
+  private confirmationService = inject(ConfirmationService);
+  
+  private empleadoService = inject(EmpleadoService);
+  private rolService = inject(RolService);
+  // private puestoService = inject(PuestoService); 
 
-    vacacionesEmpleado: any[] = [];
-    asistenciasEmpleado: any[] = [];
+  // --- ESTADOS PRINCIPALES (UI y Datos) ---
+  users = signal<EmpleadoResponse[]>([]);
+  selectedUser = signal<EmpleadoResponse | null>(null);
+  loading = signal<boolean>(false);
+  error = signal<string>('');
+  messageResponsive = signal<string>('');
 
-    items: MenuItem[] | undefined;
-    usuarios: MenuItem[] | undefined;
-    users: EmpleadoResponse[] = [];                       
-    selectedUser: EmpleadoResponse | null = null;
-    editarUsuario: boolean = false;
+  vacacionesEmpleado = signal<any[]>([]);
+  asistenciasEmpleado = signal<any[]>([]);
 
-    cities: City[]| undefined;
-    selectedCity: City | undefined;
+  items = signal<MenuItem[]>([]);
+  usuarios = signal<MenuItem[]>([]); 
 
-    private messageService = inject(MessageService);
+  editarUsuario = signal<boolean>(true); 
 
-    constructor(
-        private empleadoService: EmpleadoService,
-        private cdr: ChangeDetectorRef,
-        private usuarioService: UsuarioService,
-        private vacacionesService: VacacionesService,
-        private asistenciaService: AsistenciaService
-    ) {}
+  // --- ESTADOS PARA EL DIALOGO DE CREACIÓN ---
+  dialogVisible = signal<boolean>(false);
+  errorDialog = signal<string>('');
+  
+  nuevoEmpleado = signal<Partial<EmpleadoRequest>>({});
+  nuevoUsuario = signal<Partial<UsuarioInterface>>({}); 
 
-    ngOnInit() {
-        this.items = [
-            { icon: 'pi pi-user-plus', severity: 'success' },
-            { icon: 'pi pi-file-export', severity: 'warn' },
-        ];
-
-        this.usuarios = [
-            {
-                label: 'Roles',
-                icon: 'pi pi-users',
-                items: [
-                    { label: 'Admin',  command: () => { if (this.selectedUser) this.selectedUser.Usuario[0].RolUsuario.NombreRol = 'Admin' } },
-                    { label: 'Member', command: () => { if (this.selectedUser) this.selectedUser.Usuario[0].RolUsuario.NombreRol = 'Member' } },
-                    { label: 'Guest',  command: () => { if (this.selectedUser) this.selectedUser.Usuario[0].RolUsuario.NombreRol = 'Guest'  } }
-                ]
-            },
-            {
-                label: 'Invite',
-                icon: 'pi pi-user-plus',
-                command: () => {
-                    this.messageService.add({
-                        severity: 'success',
-                        summary: 'Success',
-                        detail: 'Invitation sent!',
-                        life: 3000
-                    });
-                }
-            }
-        ];
-
-        this.cargarEmpleados();
-
-        this.cities = [
-            { name: 'New York', code: 'NY' },
-            { name: 'Rome', code: 'RM' },
-            { name: 'London', code: 'LDN' },
-            { name: 'Istanbul', code: 'IST' },
-            { name: 'Paris', code: 'PRS' }
-        ];
-    }
-
-    getBadge(user: EmpleadoResponse): string | null {  
-        if (user.Usuario[0].RolUsuario.NombreRol === 'Member') return 'info';
-        if (user.Usuario[0].RolUsuario.NombreRol === 'Guest')  return 'warn';
-        return null;
-    }
-
-    onContextMenu(event: MouseEvent, user: EmpleadoResponse) {  
-        this.selectedUser = user;
-        this.cm.show(event);
-    }
-
-    onSelectUser(user: EmpleadoResponse) {
-        this.editarUsuario = true;
-        this.selectedUser = user;
-        this.cargarHistorialUsuario(user.IdEmpleado);
-    }
-
-    // Consumir empleados
-    cargarEmpleados(): void{
-        this.loading = true;
-        this.empleadoService.ObtenerEmplados()
-        .pipe(takeUntil(this.destroy$))
-        .subscribe({
-            next: (data) => {
-                this.users = data;
-                this.loading = false;
-                this.cdr.detectChanges();
-            },
-            error: (err) => {
-                this.error = err.message;
-                this.loading = false;
-                this.cdr.detectChanges();
-            }
-        });
-    }
-
-    onUpdateUser(){
-        this.loading = true; 
-        let data: EmpleadoRequest = {
-            DPI: this.selectedUser?.DPI!,
-            NIT:this.selectedUser?.NIT!,
-            Nombres: this.selectedUser?.Nombres!,
-            Apellidos:this.selectedUser?.Apellidos!,
-            CorreoPersonal: this.selectedUser?.CorreoPersonal!,
-            FechaIngresa: this.selectedUser?.FechaIngresa ? new Date(this.selectedUser.FechaIngresa) : null,
-            IdPuesto: this.selectedUser?.IdPuesto!,
-            Estado: this.selectedUser?.Estado!,
-            FechaEliminacion: this.selectedUser?.FechaEliminacion ? new Date(this.selectedUser.FechaEliminacion) : null,
-            Telefono: this.selectedUser?.Telefono!,
-            Genero: this.selectedUser?.Genero!,
-            EstadoCivil: this.selectedUser?.EstadoCivil!,
-            Direccion: this.selectedUser?.Direccion!,
-            Fotografia: this.selectedUser?.Fotografia!,
-        }
-        let idEmpleado = this.selectedUser?.IdEmpleado!;
-
-        this.empleadoService.ActualizarEmpleado(idEmpleado, data)
-        .pipe(takeUntil(this.destroy$)) 
-        .subscribe({
-            next: (res: EmpleadoResponseCUD) => {
-                this.messageResponsive = res.message;
-                this.loading = false;
-                this.cdr.detectChanges();
-            },
-            error: (err) => {
-                this.error = err.message;
-                this.loading = false;
-                this.cdr.detectChanges();
-            }
-        })
-    }
-
-    ngOnDestroy(): void{
-        this.destroy$.next();
-        this.destroy$.complete();
-    }
-
-    onDeleteUser(){
-        if (!this.selectedUser) return;
-        this.loading = true;
-
-        const nuevoEstado = !this.selectedUser.Estado;
-
-        this.selectedUser = {
-        ...this.selectedUser,
-        Estado: nuevoEstado
-        };
-
-        let data: EmpleadoRequest = {
-        DPI: this.selectedUser.DPI,
-        NIT: this.selectedUser.NIT,
-        Nombres: this.selectedUser.Nombres,
-        Apellidos: this.selectedUser.Apellidos,
-        CorreoPersonal: this.selectedUser.CorreoPersonal,
-        FechaIngresa: this.selectedUser.FechaIngresa ? new Date(this.selectedUser.FechaIngresa) : null,
-        IdPuesto: this.selectedUser.IdPuesto,
-        Estado: nuevoEstado,  // ← mismo valor, sin negar de nuevo
-        FechaEliminacion: this.selectedUser.FechaEliminacion ? new Date(this.selectedUser.FechaEliminacion) : null,
-        Telefono: this.selectedUser.Telefono,
-        Genero: this.selectedUser.Genero,
-        EstadoCivil: this.selectedUser.EstadoCivil,
-        Direccion: this.selectedUser.Direccion,
-        Fotografia: this.selectedUser.Fotografia,
-        };
-        let idEmpleado = this.selectedUser?.IdEmpleado!;
-        
-        this.empleadoService.ActualizarEmpleado(idEmpleado, data)
-        .pipe(takeUntil(this.destroy$)) 
-        .subscribe({
-            next: (res: EmpleadoResponseCUD) => {
-                this.messageResponsive = res.message;
-                this.loading = false;
-                this.cargarEmpleados();
-                this.cdr.detectChanges();
-            },
-            error: (err) => {
-                this.error = err.message;
-                this.loading = false;
-                this.cdr.detectChanges();
-            }
-        })
-    }
-
-    // Variables
-    dialogVisible = false;
-    errorDialog   = '';
-
-    nuevoEmpleado: Partial<EmpleadoRequest> = {};
-    // Agrega esta nueva variable junto a nuevoEmpleado
-    nuevoUsuario: Partial<UsuarioRequest> = {};
-    generos = [
-
+  // --- CATÁLOGOS PARA DROPDOWNS ---
+  roles = signal<RolInterface[]>([]);
+  puestos = signal<any[]>([]); // Cambia 'any' por tu PuestoInterface
+  generos = signal<{label: string, value: boolean}[]>([
     { label: 'Masculino', value: false },
+    { label: 'Femenino', value: true }
+  ]);
+  JornadaLaboral = signal<{IdJornada: number, NombreJornada: string}[]>([
+    { IdJornada: 1, NombreJornada: 'Diurna' }
+  ]);
 
-    { label: 'Femenino',  value: true  }
+  ngOnInit() {
+    this.configurarMenus();
+    this.cargarDatosBase();
+  }
 
-    ];
+  // --- CONFIGURACIÓN DE MENÚS ---
+  configurarMenus() {
+    this.items.set([
+      { icon: 'pi pi-user-plus', severity: 'success', command: () => this.onCreateUser() }
+    ]);
 
+    this.usuarios.set([
+      { label: 'Ver detalles', icon: 'pi pi-eye' },
+      { label: 'Dar de baja', icon: 'pi pi-trash', command: () => this.onDeleteUser() }
+    ]);
+  }
 
+  // --- CARGA DE DATOS ---
+  cargarDatosBase() {
+    this.cargarEmpleados();
+    this.cargarRoles();
+    this.cargarPuestos();
+  }
 
-    estados = [{ label: 'Activo',   value: true  },{ label: 'Inactivo', value: false }];
+  cargarEmpleados() {
+    this.loading.set(true);
+    this.empleadoService.ObtenerEmplados().subscribe({
+      next: (data: EmpleadoResponse[]) => {
+        this.users.set(data);
+        this.loading.set(false);
+      },
+      error: (err) => {
+        this.error.set('No se pudieron cargar los empleados.');
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: err.message });
+        this.loading.set(false);
+      }
+    });
+  }
 
-    puestos = [{ IdPuesto: 1, NombrePuesto: 'Hola' }];
+  cargarRoles() {
+    this.rolService.getRoles().subscribe({
+      next: (data) => this.roles.set(data),
+      error: () => this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudieron cargar los roles' })
+    });
+  }
 
-    roles = [{IdRol: 1,   NombreRol: 'Administracion' }];
+  cargarPuestos() {
+    // Aquí llamas a tu PuestoService. Por ahora dejo un mock para que el dropdown no esté vacío.
+    this.puestos.set([
+      { IdPuesto: 1, NombrePuesto: 'Gerente' },
+      { IdPuesto: 2, NombrePuesto: 'Desarrollador' }
+    ]);
+  }
 
+  // --- INTERACCIONES DE LA VISTA ---
+  
+  onSelectUser(user: EmpleadoResponse) {
+    this.selectedUser.set(user);
+    this.messageResponsive.set('');
+    // Aquí podrías cargar las vacaciones y asistencias del empleado seleccionado llamando a otro servicio
+    this.vacacionesEmpleado.set([]); 
+    this.asistenciasEmpleado.set([]);
+    console.log(user)
+  }
 
-    // Abrir y limpiar
-    onCreateUser(): void {
-    this.nuevoEmpleado = {
-        Estado: true,
-        Genero: false,
-        IdPuesto: 1,
-        FechaIngresa: null,
-        FechaEliminacion: null,
-    };
+  onContextMenu(event: Event, user: EmpleadoResponse) {
+    this.selectedUser.set(user);
+  }
+
+  // --- LÓGICA DEL CRUD ---
+
+  onCreateUser() {
+    this.errorDialog.set('');
+    this.nuevoEmpleado.set({ Genero: false, Activo: true }); // Valores por defecto
+    this.nuevoUsuario.set({}); // Limpiar usuario
+    this.dialogVisible.set(true);
+  }
+
+  onCancelDialog() {
+    this.dialogVisible.set(false);
+    this.nuevoEmpleado.set({});
+    this.nuevoUsuario.set({});
+  }
+
+  onSaveUser() {
+    const empData = this.nuevoEmpleado() as EmpleadoRequest;
     
-    // Limpiamos el usuario
-    this.nuevoUsuario = {}; 
-
-    this.errorDialog = '';
-    this.dialogVisible = true;
+    // Validaciones básicas
+    if (!empData.Nombres || !empData.Apellidos || !empData.DPI) {
+      this.errorDialog.set('Por favor completa los campos obligatorios (Nombres, Apellidos, DPI).');
+      return;
     }
 
-    onCancelDialog(): void {
-    this.dialogVisible = false;
-    this.errorDialog = '';
-    this.nuevoEmpleado = {};
-    this.nuevoUsuario = {}; // Limpiamos también aquí
-    }
+    this.loading.set(true);
+    this.errorDialog.set('');
 
-    onSaveUser(): void {
-    // Validación básica del empleado
-    if (!this.nuevoEmpleado.Nombres || !this.nuevoEmpleado.DPI || !this.nuevoEmpleado.CorreoPersonal) {
-        this.errorDialog = 'Nombres, DPI y Correo personal son requeridos para el empleado';
-        return;
-    }
+    // Construir el payload final. Si tu backend espera el usuario anidado, lo envías aquí.
+    const payload = {
+      ...empData,
+    };
 
-    // Si ingresó algún dato del usuario, validar que estén completos (opcional según tus reglas de negocio)
-    if (this.nuevoUsuario.Username || this.nuevoUsuario.IdRol) {
-        if (!this.nuevoUsuario.Username || !this.nuevoUsuario.Contrasena || !this.nuevoUsuario.IdRol) {
-        this.errorDialog = 'Si vas a crear un usuario, Username, Contraseña y Rol son requeridos';
-        return;
-        }
-    }
-
-    this.loading = true;
-    this.errorDialog = '';
-
-    // Paso 1: Crear Empleado
-    this.empleadoService.CrearEmpleado(this.nuevoEmpleado as EmpleadoRequest)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe({
-        next: (res: EmpleadoResponseCUD) => {
-            
-            // Paso 2: Crear el Usuario si llenaron el formulario de usuario
-            if (this.nuevoUsuario.Username) {
-                // Asignamos el IdEmpleado devuelto por la API
-                this.nuevoUsuario.IdEmpleado = Number(res.id); 
-                
-                this.usuarioService.CrearUsuario(this.nuevoUsuario as UsuarioRequest)
-                .subscribe({
-                    next: (resUser) => {
-                    this.finalizarGuardado();
-                    },
-                    error: (errUser) => {
-                    this.errorDialog = 'Empleado creado, pero falló al crear el usuario: ' + errUser.message;
-                    this.loading = false;
-                    this.cdr.detectChanges();
-                    }
-                });
-            } else {
-                // Si no se llenaron los datos de usuario, cerramos directo
-                this.finalizarGuardado();
-            }
-        },
-        error: (err) => {
-            this.errorDialog = err.message;
-            this.loading = false;
-            this.cdr.detectChanges();
-        }
-        });
-    }
-
-    private finalizarGuardado(): void {
-        this.loading = false;
-        this.dialogVisible = false;
+    this.empleadoService.CrearEmpleado(payload).subscribe({
+      next: (res: any) => {
+        this.messageService.add({ severity: 'success', summary: 'Éxito', detail: res.message || 'Empleado creado correctamente' });
+        this.dialogVisible.set(false);
         this.cargarEmpleados();
-        this.cdr.detectChanges();
-    }  
+      },
+      error: (err) => {
+        this.errorDialog.set(err.error?.message || 'Ocurrió un error al guardar el empleado.');
+        this.loading.set(false);
+      }
+    });
+  }
 
-    cargarHistorialUsuario(idEmpleado: number) {
-        // Cargar Vacaciones del empleado
-        this.vacacionesService.getVacaciones()
-        .pipe(takeUntil(this.destroy$))
-        .subscribe((data: any[]) => {
-            this.vacacionesEmpleado = data.filter(v => v.IdEmpleado === idEmpleado && v.TipoIncidencia === 'Vacaciones');
-            this.cdr.detectChanges();
-        });
+  onUpdateUser() {
+    const userToUpdate = this.selectedUser();
+    if (!userToUpdate) return;
 
-        // Cargar Asistencias del empleado
-        this.asistenciaService.getAsistencias()
-        .pipe(takeUntil(this.destroy$))
-        .subscribe((data: any[]) => {
-            this.asistenciasEmpleado = data.filter(a => a.IdEmpleado === idEmpleado);
-            this.cdr.detectChanges();
+    this.loading.set(true);
+    this.messageResponsive.set('');
+
+    const payload: Partial<EmpleadoRequest> = {
+      Nombres: userToUpdate.Nombres,
+      Apellidos: userToUpdate.Apellidos,
+      DPI: userToUpdate.DPI,
+      NIT: userToUpdate.NIT,
+      CorreoPersonal: userToUpdate.CorreoPersonal,
+      Telefono: userToUpdate.Telefono.toString(),
+      Direccion: userToUpdate.Direccion,
+      EstadoCivil: userToUpdate.EstadoCivil,
+      IdJornada: 1
+    };
+
+    this.empleadoService.ActualizarEmpleado(userToUpdate.IdEmpleado, payload).subscribe({
+      next: (res: any) => {
+        this.messageService.add({ severity: 'success', summary: 'Actualizado', detail: 'Información actualizada correctamente.' });
+        this.messageResponsive.set('Datos guardados con éxito.');
+        this.cargarEmpleados();
+      },
+      error: (err) => {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: err.message });
+        this.loading.set(false);
+      }
+    });
+  }
+
+  onDeleteUser() {
+    const user = this.selectedUser();
+    if (!user) return;
+
+    const accion = user.Activo ? 'dar de baja' : 'reactivar';
+
+    this.confirmationService.confirm({
+      message: `¿Estás seguro de que deseas ${accion} al empleado ${user.Nombres}?`,
+      header: 'Confirmar Acción',
+      icon: 'pi pi-exclamation-triangle',
+      acceptLabel: 'Sí',
+      rejectLabel: 'No',
+      accept: () => {
+        this.loading.set(true);
+        this.empleadoService.EliminarEmpleado(user.IdEmpleado).subscribe({
+          next: (res: any) => {
+            this.messageService.add({ severity: 'success', summary: 'Éxito', detail: `Empleado actualizado.` });
+            this.selectedUser.set(null);
+            this.cargarEmpleados();
+          },
+          error: (err) => {
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: err.message });
+            this.loading.set(false);
+          }
         });
-    }
+      }
+    });
+  }
 }

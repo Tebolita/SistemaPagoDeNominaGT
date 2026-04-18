@@ -52,8 +52,12 @@ export class MenuPrincipal implements OnInit {
                         label: 'Usuarios',
                         icon: 'pi pi-user',
                         routerLink: '/seguridad/usuarios'
-                    },   
-
+                    },
+                    {
+                        label: 'Roles',
+                        icon: 'pi pi-users',
+                        routerLink: '/seguridad/roles'
+                    },
                 ]      
             },
             {

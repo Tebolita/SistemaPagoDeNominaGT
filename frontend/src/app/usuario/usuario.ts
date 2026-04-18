@@ -1,6 +1,8 @@
 import { Component, OnInit, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+
+// Módulos de PrimeNG
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
@@ -8,9 +10,17 @@ import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { SelectModule } from 'primeng/select';
 import { MessageService, ConfirmationService } from 'primeng/api';
+
+// Servicios y Modelos
 import { UsuarioService } from '../services/usuario.service'; 
+import { RolService } from '../services/rol.service';
+import { EmpleadoService } from '../services/empleado.service';
+
 import { UsuarioInterface } from '../models/Usuario.model';
+import { RolInterface } from '../models/Rol.model';
+import { EmpleadoResponse } from '../models/Empleado.model';
 
 @Component({
   selector: 'app-usuario',
@@ -24,7 +34,8 @@ import { UsuarioInterface } from '../models/Usuario.model';
     InputTextModule,
     PasswordModule,
     ToastModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    SelectModule 
   ],
   providers: [MessageService, ConfirmationService],
   templateUrl: './usuario.html',
@@ -33,12 +44,19 @@ import { UsuarioInterface } from '../models/Usuario.model';
 export class Usuario implements OnInit {
   private messageService = inject(MessageService);
   private confirmationService = inject(ConfirmationService);
+  
   private usuarioService = inject(UsuarioService);
+  private rolService = inject(RolService);
+  private empleadoService = inject(EmpleadoService);
 
-  // Estados usando Signals
+  // Estados principales
   usuarios = signal<UsuarioInterface[]>([]); 
   loading = signal<boolean>(false);
   
+  // Listas para los Dropdowns
+  listaRoles = signal<RolInterface[]>([]);
+  listaEmpleados = signal<EmpleadoResponse[]>([]);
+
   // Estados para el Modal (Dialog)
   mostrarDialog = signal<boolean>(false);
   esEdicion = signal<boolean>(false);
@@ -48,12 +66,14 @@ export class Usuario implements OnInit {
 
   ngOnInit() {
     this.cargarUsuarios();
+    this.cargarRoles();
+    this.cargarEmpleados();
   }
+
+  // --- MÉTODOS DE CARGA ---
 
   cargarUsuarios() {
     this.loading.set(true);
-    
-    // Consumo real de la API
     this.usuarioService.ObtenerUsuarios().subscribe({
       next: (data: UsuarioInterface[]) => {
         this.usuarios.set(data);
@@ -66,15 +86,45 @@ export class Usuario implements OnInit {
     });
   }
 
+  cargarRoles() {
+    this.rolService.getRoles().subscribe({
+      next: (data) => this.listaRoles.set(data),
+      error: () => this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudieron cargar los roles' })
+    });
+  }
+
+  cargarEmpleados() {
+    this.empleadoService.ObtenerEmplados().subscribe({
+      next: (data) => this.listaEmpleados.set(data),
+      error: () => this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudieron cargar los empleados' })
+    });
+  }
+
+  // --- MÉTODOS AUXILIARES PARA LA TABLA ---
+  
+  obtenerNombreRol(idRol: number | undefined): string {
+    if (!idRol) return 'N/A';
+    const rol = this.listaRoles().find(r => r.IdRol === idRol);
+    return rol ? rol.NombreRol : 'Desconocido';
+  }
+
+  obtenerNombreEmpleado(idEmpleado: number | undefined): string {
+    if (!idEmpleado) return 'N/A';
+    const empleado = this.listaEmpleados().find(e => e.IdEmpleado === idEmpleado);
+    // NOTA: Cambia '.Nombre' por el campo real que uses en tu EmpleadoResponse (ej. .Nombres, .NombreCompleto)
+    return empleado ? (empleado as any).Nombre : 'Desconocido'; 
+  }
+
+  // --- LÓGICA DEL CRUD ---
+
   abrirNuevo() {
-    this.usuarioActual.set({ Username: '', Contrasena: '', Clave: '', IdRol: 1, IdEmpleado: 1 });
+    // Al ser dropdowns, podemos dejar null para que muestre el placeholder "Seleccione..."
+    this.usuarioActual.set({ Username: '', Contrasena: '', Clave: '', IdRol: null as any, IdEmpleado: null as any });
     this.esEdicion.set(false);
     this.mostrarDialog.set(true);
   }
 
   editarUsuario(usuario: UsuarioInterface) {
-    // Clonamos el objeto. Vaciamos las contraseñas porque el backend no nos las manda
-    // y si el usuario las deja en blanco, el backend no las actualizará.
     this.usuarioActual.set({ ...usuario, Contrasena: '', Clave: '' });
     this.esEdicion.set(true);
     this.mostrarDialog.set(true);
@@ -83,21 +133,17 @@ export class Usuario implements OnInit {
   guardarUsuario() {
       const usuarioUI = this.usuarioActual();
       
-      // Validación básica
-      if (!usuarioUI.Username || !usuarioUI.IdRol || (!this.esEdicion() && (!usuarioUI.Contrasena || !usuarioUI.Clave))) {
+      if (!usuarioUI.Username || !usuarioUI.IdRol || !usuarioUI.IdEmpleado || (!this.esEdicion() && (!usuarioUI.Contrasena || !usuarioUI.Clave))) {
         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Campos requeridos faltantes' });
         return;
       }
 
-      // 1. CONSTRUIR UN PAYLOAD LIMPIO 
       const payload: Partial<UsuarioInterface> = {
         Username: usuarioUI.Username,
         IdRol: usuarioUI.IdRol,
         IdEmpleado: usuarioUI.IdEmpleado
       };
 
-      // Solo enviar las contraseñas si el usuario escribió algo
-      // Esto evita sobreescribir la contraseña actual con un string vacío ("")
       if (usuarioUI.Contrasena && usuarioUI.Contrasena.trim() !== '') {
         payload.Contrasena = usuarioUI.Contrasena;
       }
@@ -107,29 +153,22 @@ export class Usuario implements OnInit {
 
       if (this.esEdicion()) {
         if (!usuarioUI.IdUsuario) return; 
-
-        // Enviamos el ID en la URL, y el payload limpio en el Body
         this.usuarioService.ActualizarUsuario(usuarioUI.IdUsuario, payload).subscribe({
-          next: (res) => {
+          next: (res: any) => {
             this.messageService.add({ severity: 'success', summary: 'Éxito', detail: res.message || 'Usuario actualizado' });
             this.mostrarDialog.set(false);
             this.cargarUsuarios(); 
           },
-          error: (err) => {
-            this.messageService.add({ severity: 'error', summary: 'Error', detail: err.message });
-          }
+          error: (err) => this.messageService.add({ severity: 'error', summary: 'Error', detail: err.message })
         });
-
       } else {
         this.usuarioService.CrearSoloUsuario(payload as UsuarioInterface).subscribe({
-          next: (res) => {
+          next: (res: any) => {
             this.messageService.add({ severity: 'success', summary: 'Éxito', detail: res.message || 'Usuario creado' });
             this.mostrarDialog.set(false);
             this.cargarUsuarios();
           },
-          error: (err) => {
-            this.messageService.add({ severity: 'error', summary: 'Error', detail: err.message });
-          }
+          error: (err) => this.messageService.add({ severity: 'error', summary: 'Error', detail: err.message })
         });
       }
     }
@@ -144,18 +183,13 @@ export class Usuario implements OnInit {
       acceptLabel: 'Sí',
       rejectLabel: 'No',
       accept: () => {
-        
-        // Lógica de Delete real
         this.usuarioService.EliminarUsuario(usuario.IdUsuario!).subscribe({
-          next: (res) => {
+          next: (res: any) => {
             this.messageService.add({ severity: 'success', summary: 'Éxito', detail: res.message || 'Usuario eliminado' });
-            this.cargarUsuarios(); // Recargamos la tabla
+            this.cargarUsuarios(); 
           },
-          error: (err) => {
-            this.messageService.add({ severity: 'error', summary: 'Error', detail: err.message });
-          }
+          error: (err) => this.messageService.add({ severity: 'error', summary: 'Error', detail: err.message })
         });
-
       }
     });
   }

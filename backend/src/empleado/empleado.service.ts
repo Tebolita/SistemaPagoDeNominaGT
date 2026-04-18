@@ -8,24 +8,33 @@ export class EmpleadoService {
   constructor(private prismaService: PrismaService) {}
 
   async create(createEmpleadoDto: CreateEmpleadoDto) {
-    const nuevoEmpleado = await this.prismaService.empleado.create({
-      data: createEmpleadoDto as any,
-      select: {
-        Nombres: true,
-        IdEmpleado: true,
-      },
-    });
-    
-    return {
-      message: `Se creó el empleado ${nuevoEmpleado.Nombres} correctamente.`,
-      id: nuevoEmpleado.IdEmpleado,
-    };
-  }
+      
+      const { IdPuesto, IdJornada, Estado, ...dataToCreate } = createEmpleadoDto as any;
+
+      const nuevoEmpleado = await this.prismaService.empleado.create({
+        data: {
+          ...dataToCreate,
+         
+          ...(Estado !== undefined && { Activo: Estado }),
+          
+          ...(IdPuesto && { Puesto: { connect: { IdPuesto: Number(IdPuesto) } } }),
+
+          ...(IdJornada && { JornadaLaboral: {connect: {IdJornada: Number(IdJornada)}}})
+        },
+        select: {
+          Nombres: true,
+          IdEmpleado: true,
+        },
+      });
+      
+      return {
+        message: `Se creó el empleado ${nuevoEmpleado.Nombres} correctamente.`,
+        id: nuevoEmpleado.IdEmpleado,
+      };
+    }
 
   async findAll() {
     const empleados = await this.prismaService.empleado.findMany({
-      // 1. Solo traemos los activos (Borrado lógico)
-      where: { Activo: true }, 
       include: {
         Usuario: { select: { RolUsuario: { select: { NombreRol: true } } } },
         Puesto: { select: { NombrePuesto: true } },
@@ -54,36 +63,34 @@ export class EmpleadoService {
         Banco: { select: { NombreBanco: true } }
       }
     });
-
-    // 4. Manejo de excepciones si el empleado no existe o ya fue eliminado (borrado lógico)
-    if (!empleado || !empleado.Activo) {
-      throw new NotFoundException(`El empleado con ID ${idEmpleado} no existe o ha sido dado de baja.`);
-    }
     
     return empleado;
   }
 
   async update(id: number, updateEmpleadoDto: UpdateEmpleadoDto) {
-    // Verificamos que exista y esté activo
-    await this.findOne(id);
+      await this.findOne(id);
 
-    const { IdEmpleado, ...dataToUpdate } = updateEmpleadoDto as any;
+      const { IdEmpleado, IdPuesto, Estado, ...dataToUpdate } = updateEmpleadoDto as any;
 
-    return await this.prismaService.empleado.update({
-      where: { IdEmpleado: id },
-      data: dataToUpdate,
-    });
-  }
+      return await this.prismaService.empleado.update({
+        where: { IdEmpleado: id },
+        data: {
+          ...dataToUpdate,
+          
+          ...(Estado !== undefined && { Activo: Estado }),
+          
+          ...(IdPuesto && { Puesto: { connect: { IdPuesto: Number(IdPuesto) } } })
+        },
+      });
+    }
 
   async remove(id: number) {
-    // Verificamos que exista
-    await this.findOne(id);
+    const empelado = await this.findOne(id);
 
-    // Aplicamos el borrado lógico en lugar de eliminar la fila físicamente
     return await this.prismaService.empleado.update({
       where: { IdEmpleado: id },
       data: {
-        Activo: false,
+        Activo: !empelado?.Activo,
         FechaEliminacion: new Date(),
       },
     });

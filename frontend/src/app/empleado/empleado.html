@@ -6,7 +6,7 @@
     </p-divider>
 
     <div class="card w-[98%]">
-        <p-menubar [model]="items">
+        <p-menubar [model]="items()">
             <ng-template #item let-item>
                 <p-button 
                     class="flex items-center px-3 py-2 cursor-pointer" 
@@ -17,148 +17,146 @@
             </ng-template>
         </p-menubar>
     </div>
+    
     <p-divider>
         <b>Usuarios</b>
     </p-divider>
-    <p *ngIf="error" class="text-red-300 text-xs text-center">{{ error }}</p>
+    
+    <p *ngIf="error()" class="text-red-300 text-xs text-center">{{ error() }}</p>
+    
     <div class="card flex sm:justify-center">
         <p-toast />
         <ul class="m-0 p-2 list-none flex flex-col gap-1 w-full">
-            @for (user of users; track user.IdEmpleado) {
+            @for (user of users(); track user.IdEmpleado) {
                 <li
                     class="flex items-center gap-3 px-3 py-2 rounded-lg border cursor-pointer transition-all duration-150 cardUser"
-                    [class.border-transparent]="selectedUser?.IdEmpleado !== user.IdEmpleado"
-                    [class.bg-transparent]="selectedUser?.IdEmpleado !== user.IdEmpleado"
-                    [class.hover:bg-surface-100]="selectedUser?.IdEmpleado !== user.IdEmpleado"
-                    [class.border-primary]="selectedUser?.IdEmpleado === user.IdEmpleado"
-                    [class.bg-primary-50]="selectedUser?.IdEmpleado === user.IdEmpleado"
-                    [class.dark:bg-primary-900-20]="selectedUser?.IdEmpleado === user.IdEmpleado"
+                    [class.border-transparent]="selectedUser()?.IdEmpleado !== user.IdEmpleado"
+                    [class.bg-transparent]="selectedUser()?.IdEmpleado !== user.IdEmpleado"
+                    [class.hover:bg-surface-100]="selectedUser()?.IdEmpleado !== user.IdEmpleado"
+                    [class.border-primary]="selectedUser()?.IdEmpleado === user.IdEmpleado"
+                    [class.bg-primary-50]="selectedUser()?.IdEmpleado === user.IdEmpleado"
+                    [class.dark:bg-primary-900-20]="selectedUser()?.IdEmpleado === user.IdEmpleado"
                     (click)="onSelectUser(user)"  
                     (contextmenu)="onContextMenu($event, user)"
                 >
                 
-                <!-- Avatar -->
                 <img
                     class="w-9 h-9 rounded-full flex-shrink-0 border border-surface-200 dark:border-surface-700 object-cover"
                     [src]="user.Fotografia"
                     [alt]="user.Nombres"
                 />
 
-                <!-- Nombre -->
                 <span 
                     class="flex-1 text-sm font-medium truncate"
-                    [class.text-primary]="selectedUser?.IdEmpleado === user.IdEmpleado">
+                    [class.text-primary]="selectedUser()?.IdEmpleado === user.IdEmpleado">
                     {{ user.Nombres }} {{ user.Apellidos }}
                 </span>
 
-                <!-- Badge rol -->
                 <p-tag 
-                    [value]="user.Usuario[0].RolUsuario.NombreRol" 
+                    [value]="user.Usuario[0]?.RolUsuario?.NombreRol || 'Sin rol'"
                     styleClass="text-sm" />
                 </li>
             }
         </ul>
 
-        <p-contextmenu #cm [model]="usuarios"/>
+        <p-contextmenu #cm [model]="usuarios()"/>
     </div>
   </aside>
 
   <main class="content-area">
-    @if (selectedUser) {
+    @if (selectedUser(); as selected) {
         <div class="card">
             <p-fieldset class="w-full" legend="Información General">
                 <div class="flex gap-2">
 
-                    <!-- Columna izquierda — Avatar -->
                     <div class="flex flex-col items-center gap-3 w-[300px] flex-shrink-0">
                         <p-avatar 
                             shape="circle"
-                            [image]="selectedUser.Fotografia"
+                            [image]="selected.Fotografia"
                             [style]="{ width: '120px', height: '120px' }" />
-                        <span class="font-semibold text-lg">
-                            {{ selectedUser.Nombres }} {{ selectedUser.Apellidos }}
+                        <span class="font-semibold text-lg text-center">
+                            {{ selected.Nombres }} {{ selected.Apellidos }}
                         </span>
                         <div class="flex justify-center flex-wrap gap-4">
                         <p-tag 
-                            [value]="selectedUser.Usuario[0]?.RolUsuario?.NombreRol ?? 'Sin rol'" 
+                            [value]="selected.Usuario[0]?.RolUsuario?.NombreRol ?? 'Sin rol'"
                             severity="info" />
                         <p-tag 
-                            [value]="selectedUser.Puesto.NombrePuesto ? selectedUser.Puesto.NombrePuesto : 'Puesto no asignado'" 
+                            [value]="selected.Puesto.NombrePuesto ? selected.Puesto.NombrePuesto : 'Puesto no asignado'"
                             severity="warn" />                            
                         </div>
 
                         <div class="flex justify-center flex-wrap gap-4">
                             <p-tag 
-                                [value]="selectedUser.Estado ? 'Activo' : 'Inactivo'" 
-                                [severity]="selectedUser.Estado ? 'success' : 'danger'" />
+                                [value]="selected.Activo ? 'Activo' : 'Inactivo'" 
+                                [severity]="selected.Activo ? 'success' : 'danger'" />
                             <p-tag 
-                                [value]="selectedUser.Genero ? 'Femenino' : 'Masculino'" 
-                                [severity]="selectedUser.Genero ? 'success' : 'danger'" />    
+                                [value]="selected.Genero ? 'Femenino' : 'Masculino'" 
+                                [severity]="selected.Genero ? 'success' : 'danger'" />    
                         </div>
 
-                        <p *ngIf="messageResponsive" class="text-green-300 text-xs text-center">{{ messageResponsive }}</p>
+                        <p *ngIf="messageResponsive()" class="text-green-300 text-xs text-center">{{ messageResponsive() }}</p>
 
-                        <p-divider   />
+                        <p-divider />
                         <div class="flex justify-center flex-wrap gap-4">
                             <p-button 
                                 icon="pi pi-save" 
                                 severity="success" 
                                 (click)="onUpdateUser()"
-                                [disabled]="loading"
-                                [loading]="loading" />
+                                [disabled]="loading()"
+                                [loading]="loading()" />
                             <p-button 
-                                [icon]="selectedUser.Estado ? 'pi pi-times' : 'pi pi-check'" 
-                                [severity]="selectedUser.Estado ? 'danger' : 'success'"  
+                                [icon]="selected.Activo ? 'pi pi-times' : 'pi pi-check'" 
+                                [severity]="selected.Activo ? 'danger' : 'success'"  
                                 (click)="onDeleteUser()"
-                                [disabled]="loading"
-                                [loading]="loading" />
+                                [disabled]="loading()"
+                                [loading]="loading()" />
                         </div>                     
                     </div>
 
                     <p-divider layout="vertical" />
 
-                    <!-- Columna derecha — Información -->
                     <div class="flex flex-col gap-4 flex-1">
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div class="flex flex-col gap-1">
                                 <label class="text-xs text-surface-500">Nombres</label>
-                                <input pInputText [(ngModel)]="selectedUser.Nombres" [readonly]="!(editarUsuario)" />
+                                <input pInputText [(ngModel)]="selected.Nombres" [readonly]="!editarUsuario()" />
                             </div>
                             <div class="flex flex-col gap-1">
                                 <label class="text-xs text-surface-500">Apellidos</label>
-                                <input pInputText [(ngModel)]="selectedUser.Apellidos" [readonly]="!(editarUsuario)" />
+                                <input pInputText [(ngModel)]="selected.Apellidos" [readonly]="!editarUsuario()" />
                             </div>
                             <div class="flex flex-col gap-1">
                                 <label class="text-xs text-surface-500">DPI</label>
-                                <input pInputText [(ngModel)]="selectedUser.DPI" [readonly]="!(editarUsuario)" />
+                                <input pInputText [(ngModel)]="selected.DPI" [readonly]="!editarUsuario()" />
                             </div>
                             <div class="flex flex-col gap-1">
                                 <label class="text-xs text-surface-500">NIT</label>
-                                <input pInputText [(ngModel)]="selectedUser.NIT" [readonly]="!(editarUsuario)" />
+                                <input pInputText [(ngModel)]="selected.NIT" [readonly]="!editarUsuario()" />
                             </div>
                             <div class="flex flex-col gap-1">
                                 <label class="text-xs text-surface-500">Correo</label>
-                                <input pInputText [(ngModel)]="selectedUser.CorreoPersonal" [readonly]="!(editarUsuario)" />
+                                <input pInputText [(ngModel)]="selected.CorreoPersonal" [readonly]="!editarUsuario()" />
                             </div>
                             <div class="flex flex-col gap-1">
                                 <label class="text-xs text-surface-500">Teléfono</label>
-                                <input pInputText [(ngModel)]="selectedUser.Telefono" [readonly]="!(editarUsuario)" />
+                                <input pInputText [(ngModel)]="selected.Telefono" [readonly]="!editarUsuario()" />
                             </div>
                             <div class="flex flex-col gap-1">
                                 <label class="text-xs text-surface-500">Dirección</label>
-                                <input pInputText [(ngModel)]="selectedUser.Direccion" [readonly]="!(editarUsuario)" />
+                                <input pInputText [(ngModel)]="selected.Direccion" [readonly]="!editarUsuario()" />
                             </div>
                             <div class="flex flex-col gap-1">
                                 <label class="text-xs text-surface-500">Estado civil</label>
-                                <input pInputText [(ngModel)]="selectedUser.EstadoCivil" [readonly]="!(editarUsuario)" />
+                                <input pInputText [(ngModel)]="selected.EstadoCivil" [readonly]="!editarUsuario()" />
                             </div>
                             <div class="flex flex-col gap-1">
                                 <label class="text-xs text-surface-500">Fecha de ingreso</label>
-                                <input pInputText [(ngModel)]="selectedUser.FechaIngresa"  readonly />
+                                <input pInputText [value]="selected.FechaIngresa | date:'dd/MM/yyyy'" readonly />
                             </div>
                             <div class="flex flex-col gap-1">
-                                <label class="text-xs text-surface-500">Fecha de eliminicación</label>
-                                <input pInputText [(ngModel)]="selectedUser.FechaEliminacion" readonly />
+                                <label class="text-xs text-surface-500">Fecha de eliminación</label>
+                                <input pInputText [value]="selected.FechaEliminacion | date:'dd/MM/yyyy'" readonly />
                             </div>
                         </div>
                     </div>
@@ -172,11 +170,25 @@
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
                     <div class="flex flex-col gap-1">
                         <label class="text-xs text-surface-500">Rol de usuario</label>
-                        <p-select [options]="cities" [(ngModel)]="selectedCity" optionLabel="name" placeholder="Select a City" class="w-full md:w-56" />
+                        <p-select 
+                            [options]="roles()" 
+                            [(ngModel)]="selected.Usuario[0]" 
+                            optionLabel="NombreRol" 
+                            optionValue="IdRol"
+                            placeholder="Seleccionar Rol" 
+                            [disabled]="!editarUsuario()"
+                            class="w-full md:w-56" />
                     </div>
                     <div class="flex flex-col gap-1">
                         <label class="text-xs text-surface-500">Puesto</label>
-                        <p-select [options]="cities" [(ngModel)]="selectedCity" optionLabel="name" placeholder="Select a City" class="w-full md:w-56" />
+                        <p-select 
+                            [options]="puestos()" 
+                            [(ngModel)]="selected.IdPuesto" 
+                            optionLabel="NombrePuesto" 
+                            optionValue="IdPuesto"
+                            placeholder="Seleccionar Puesto" 
+                            [disabled]="!editarUsuario()"
+                            class="w-full md:w-56" />
                     </div>
                 </div>
             </p-fieldset>
@@ -184,7 +196,7 @@
 
         <div class="card mt-4">
             <p-fieldset class="w-full" legend="Vacaciones">
-                <p-table [value]="vacacionesEmpleado" [rows]="5" [paginator]="true" [rowHover]="true" 
+                <p-table [value]="vacacionesEmpleado()" [rows]="5" [paginator]="true" [rowHover]="true" 
                     emptyMessage="Este empleado no tiene registros de vacaciones.">
                     <ng-template pTemplate="header">
                         <tr>
@@ -212,7 +224,7 @@
 
         <div class="card mt-4">
             <p-fieldset class="w-full" legend="Asistencias">
-                <p-table [value]="asistenciasEmpleado" [rows]="5" [paginator]="true" [rowHover]="true"
+                <p-table [value]="asistenciasEmpleado()" [rows]="5" [paginator]="true" [rowHover]="true"
                     emptyMessage="Este empleado no tiene registros de asistencia.">
                     <ng-template pTemplate="header">
                         <tr>
@@ -232,7 +244,7 @@
                                 @if (asistencia.HoraSalida) {
                                     <span class="text-red-600 font-medium"><i class="pi pi-sign-out mr-1"></i>{{ asistencia.HoraSalida | date:'shortTime' }}</span>
                                 } @else {
-                                    <p-tag severity="warn" value="Sin marcar"></p-tag>
+                                    <p-tag severity="warn" value="Sin marcar"></p-tag>  
                                 }
                             </td>
                             <td>
@@ -247,14 +259,14 @@
                 </p-table>
             </p-fieldset>
         </div>
-
     }
   </main>
 </div>
 
 <p-dialog 
   header="Nuevo empleado" 
-  [(visible)]="dialogVisible" 
+  [visible]="dialogVisible()" 
+  (visibleChange)="dialogVisible.set($event)"
   [modal]="true" 
   [style]="{ width: '100%', maxWidth: '700px' }"
   [breakpoints]="{ '768px': '95vw' }"
@@ -267,48 +279,48 @@
 
       <div class="flex flex-col gap-2">
         <label class="text-sm font-medium text-surface-600">Nombres</label>
-        <input pInputText class="w-full" [(ngModel)]="nuevoEmpleado.Nombres" placeholder="Juan Carlos" />
+        <input pInputText class="w-full" [(ngModel)]="nuevoEmpleado().Nombres" placeholder="Juan Carlos" />
       </div>
 
       <div class="flex flex-col gap-2">
         <label class="text-sm font-medium text-surface-600">Apellidos</label>
-        <input pInputText class="w-full" [(ngModel)]="nuevoEmpleado.Apellidos" placeholder="López Pérez" />
+        <input pInputText class="w-full" [(ngModel)]="nuevoEmpleado().Apellidos" placeholder="López Pérez" />
       </div>
 
       <div class="flex flex-col gap-2">
         <label class="text-sm font-medium text-surface-600">DPI</label>
-        <input pInputText class="w-full" [(ngModel)]="nuevoEmpleado.DPI" placeholder="1234567890101" />
+        <input pInputText class="w-full" [(ngModel)]="nuevoEmpleado().DPI" placeholder="1234567890101" />
       </div>
 
       <div class="flex flex-col gap-2">
         <label class="text-sm font-medium text-surface-600">NIT</label>
-        <input pInputText class="w-full" [(ngModel)]="nuevoEmpleado.NIT" placeholder="12345678-9" />
+        <input pInputText class="w-full" [(ngModel)]="nuevoEmpleado().NIT" placeholder="12345678-9" />
       </div>
 
       <div class="flex flex-col gap-2">
         <label class="text-sm font-medium text-surface-600">Correo personal</label>
-        <input pInputText class="w-full" [(ngModel)]="nuevoEmpleado.CorreoPersonal" placeholder="correo@ejemplo.com" />
+        <input pInputText class="w-full" [(ngModel)]="nuevoEmpleado().CorreoPersonal" placeholder="correo@ejemplo.com" />
       </div>
 
       <div class="flex flex-col gap-2">
         <label class="text-sm font-medium text-surface-600">Teléfono</label>
-        <input pInputText class="w-full" [(ngModel)]="nuevoEmpleado.Telefono" placeholder="55551234" type="number" />
+        <input pInputText class="w-full" [(ngModel)]="nuevoEmpleado().Telefono" placeholder="55551234" type="text" />
       </div>
 
       <div class="flex flex-col gap-2">
         <label class="text-sm font-medium text-surface-600">Dirección</label>
-        <input pInputText class="w-full" [(ngModel)]="nuevoEmpleado.Direccion" placeholder="Zona 10, Guatemala" />
+        <input pInputText class="w-full" [(ngModel)]="nuevoEmpleado().Direccion" placeholder="Zona 10, Guatemala" />
       </div>
 
       <div class="flex flex-col gap-2">
         <label class="text-sm font-medium text-surface-600">Estado civil</label>
-        <input pInputText class="w-full" [(ngModel)]="nuevoEmpleado.EstadoCivil" placeholder="Soltero" />
+        <input pInputText class="w-full" [(ngModel)]="nuevoEmpleado().EstadoCivil" placeholder="Soltero" />
       </div>
 
       <div class="flex flex-col gap-2">
         <label class="text-sm font-medium text-surface-600">Fecha de ingreso</label>
         <p-datepicker 
-          [(ngModel)]="nuevoEmpleado.FechaIngresa" 
+          [(ngModel)]="nuevoEmpleado().FechaIngresa" 
           dateFormat="dd/mm/yy" 
           [showIcon]="true"
           class="w-full"
@@ -317,14 +329,14 @@
 
       <div class="flex flex-col gap-2">
         <label class="text-sm font-medium text-surface-600">Fotografía (URL)</label>
-        <input pInputText class="w-full" [(ngModel)]="nuevoEmpleado.Fotografia" placeholder="https://..." />
+        <input pInputText class="w-full" [(ngModel)]="nuevoEmpleado().Fotografia" placeholder="https://..." />
       </div>
 
       <div class="flex flex-col gap-2">
         <label class="text-sm font-medium text-surface-600">Género</label>
         <p-select 
-          [options]="generos" 
-          [(ngModel)]="nuevoEmpleado.Genero" 
+          [options]="generos()" 
+          [(ngModel)]="nuevoEmpleado().Genero" 
           optionLabel="label" 
           optionValue="value" 
           placeholder="Seleccionar" 
@@ -334,64 +346,30 @@
       <div class="flex flex-col gap-2">
         <label class="text-sm font-medium text-surface-600">Puesto</label>
         <p-select 
-          [options]="puestos" 
-          [(ngModel)]="nuevoEmpleado.IdPuesto" 
+          [options]="puestos()" 
+          [(ngModel)]="nuevoEmpleado().IdPuesto" 
           optionLabel="NombrePuesto" 
           optionValue="IdPuesto" 
           placeholder="Seleccionar puesto" 
           class="w-full" />
       </div>
 
-    </div>
-
-    <p-divider align="center" type="solid">
-      <span class="text-surface-500 text-sm font-semibold">Configuración de usuario (Opcional)</span>
-    </p-divider>
-
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      
-      <div class="flex flex-col gap-2">
-        <label class="text-sm font-medium text-surface-600">Username</label>
-        <input pInputText class="w-full" [(ngModel)]="nuevoUsuario.Username" placeholder="jlopez" />
-      </div>
 
       <div class="flex flex-col gap-2">
-        <label class="text-sm font-medium text-surface-600">Rol de usuario</label>
+        <label class="text-sm font-medium text-surface-600">Jornada</label>
         <p-select 
-          [options]="roles" 
-          [(ngModel)]="nuevoUsuario.IdRol" 
-          optionLabel="NombreRol" 
-          optionValue="IdRol" 
-          placeholder="Seleccionar rol" 
+          [options]="JornadaLaboral()" 
+          [(ngModel)]="nuevoEmpleado().IdJornada" 
+          optionLabel="NombreJornada" 
+          optionValue="IdJornada" 
+          placeholder="Seleccionar Jornada" 
           class="w-full" />
-      </div>
-
-      <div class="flex flex-col gap-2">
-        <label class="text-sm font-medium text-surface-600">Contraseña</label>
-        <p-password 
-          [(ngModel)]="nuevoUsuario.Contrasena" 
-          [toggleMask]="true" 
-          [feedback]="false"
-          placeholder="********"
-          styleClass="w-full" 
-          inputStyleClass="w-full"></p-password>
-      </div>
-
-      <div class="flex flex-col gap-2">
-        <label class="text-sm font-medium text-surface-600">Clave</label>
-        <p-password 
-          [(ngModel)]="nuevoUsuario.Clave" 
-          [toggleMask]="true" 
-          [feedback]="false"
-          placeholder="********"
-          styleClass="w-full" 
-          inputStyleClass="w-full"></p-password>
-      </div>
+      </div>      
 
     </div>
 
-    <p *ngIf="errorDialog" class="text-red-500 text-sm text-center font-medium mt-2">
-      {{ errorDialog }}
+    <p *ngIf="errorDialog()" class="text-red-500 text-sm text-center font-medium mt-2">
+      {{ errorDialog() }}
     </p>
 
   </div>
@@ -403,10 +381,11 @@
         label="Guardar" 
         severity="success" 
         icon="pi pi-save" 
-        [loading]="loading" 
-        [disabled]="loading"
+        [loading]="loading()" 
+        [disabled]="loading()"
         (click)="onSaveUser()" />
     </div>
   </ng-template>
 
 </p-dialog>
+<p-confirmDialog></p-confirmDialog>

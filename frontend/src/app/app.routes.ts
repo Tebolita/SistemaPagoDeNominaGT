@@ -8,6 +8,7 @@ import { Inicio } from './inicio/inicio';
 import { Usuario } from './usuario/usuario';
 import { Seguridad } from './seguridad/seguridad';
 import { RecursosHumanos } from './rrhh/rrhh';
+import { Roles } from './roles/roles';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'home/inicio', pathMatch: 'full' },
@@ -40,6 +41,7 @@ export const routes: Routes = [
         children: [
             {path: 'inicio', component: Seguridad},
             {path: 'usuarios', component: Usuario},
+            {path: 'roles', component: Roles}
         ]
 
     },    

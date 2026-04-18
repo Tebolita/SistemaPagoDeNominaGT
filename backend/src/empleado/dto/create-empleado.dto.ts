@@ -1,4 +1,4 @@
-import { IsString, IsNumber, IsNotEmpty, IsEmail, IsDate, IsBoolean, IsOptional, MaxLength } from "class-validator";
+import { IsString, IsNumber, IsNotEmpty, IsEmail, IsDate, IsBoolean, IsOptional, MaxLength, IsNumberString } from "class-validator";
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { Type } from "class-transformer";
 
@@ -41,15 +41,14 @@ export class CreateEmpleadoDto {
     @IsNotEmpty()
     IdPuesto!: number;
 
-    // Agregado: Requerido según el nuevo esquema
     @ApiProperty()
     @IsNumber()
     @IsNotEmpty()
     IdJornada!: number;
 
-    // Cambiado de INT a VARCHAR según el esquema (para no perder ceros iniciales)
     @ApiProperty()
-    @IsString()
+    @Type(() => String)
+    @IsNumberString()
     @IsNotEmpty()
     Telefono!: string;
 

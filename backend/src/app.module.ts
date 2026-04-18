@@ -7,9 +7,10 @@ import { IncidenciaModule } from './incidencia/incidencia.module';
 import { AsistenciaModule } from './asistencia/asistencia.module';
 import { ControlvacacionModule } from './control-vacacion/controlvacacion.module';
 import { DetallecontrolvacacionModule } from './detalle-control-vacacion/detallecontrolvacacion.module';
+import { RolModule } from './rol/rol.module';
 
 @Module({
-  imports: [LoginModule, UsuarioModule, EmpleadoModule, IncidenciaModule, AsistenciaModule, ControlvacacionModule, DetallecontrolvacacionModule],
+  imports: [LoginModule, UsuarioModule, EmpleadoModule, IncidenciaModule, AsistenciaModule, ControlvacacionModule, DetallecontrolvacacionModule, RolModule],
   controllers: [],
   providers: [PrismaService],
 })

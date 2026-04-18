@@ -1,0 +1,60 @@
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
+
+<div class="card p-4">
+    <div class="flex justify-content-between align-items-center mb-4">
+        <p-button label="Nuevo Rol" icon="pi pi-plus" (onClick)="abrirNuevo()" severity="success"></p-button>
+    </div>
+
+    <p-table [value]="roles()" [loading]="loading()" [paginator]="true" [rows]="10" [tableStyle]="{ 'min-width': '50rem' }">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>ID</th>
+                <th>Nombre del Rol</th>
+                <th>Estado</th>
+                <th class="text-center">Acciones</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rol>
+            <tr>
+                <td>{{ rol.IdRol }}</td>
+                <td>{{ rol.NombreRol }}</td>
+                <td>
+                    <p-tag [severity]="rol.Activo ? 'success' : 'danger'" 
+                           [value]="rol.Activo ? 'Activo' : 'Inactivo'">
+                    </p-tag>
+                </td>
+                <td class="text-center">
+                    <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true" severity="info" (onClick)="editarRol(rol)"></p-button>
+                    <p-button icon="pi pi-trash" [rounded]="true" [outlined]="true" severity="danger" (onClick)="eliminarRol(rol)"></p-button>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="4" class="text-center">No se encontraron roles registrados.</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-dialog 
+    [visible]="mostrarDialog()" 
+    (visibleChange)="mostrarDialog.set($event)" 
+    [style]="{ width: '450px' }" 
+    [header]="esEdicion() ? 'Editar Rol' : 'Nuevo Rol'" 
+    [modal]="true" 
+    class="p-fluid">
+    
+    <ng-template pTemplate="content">
+        <div class="field mb-3 mt-2">
+            <label for="nombreRol" class="font-bold">Nombre del Rol</label>
+            <input type="text" pInputText id="nombreRol" [(ngModel)]="rolActual().NombreRol" required autofocus placeholder="Ej. Administrador" />
+        </div>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <p-button label="Cancelar" icon="pi pi-times" [text]="true" severity="secondary" (onClick)="mostrarDialog.set(false)"></p-button>
+        <p-button label="Guardar" icon="pi pi-check" [text]="true" (onClick)="guardarRol()"></p-button>
+    </ng-template>
+</p-dialog>
