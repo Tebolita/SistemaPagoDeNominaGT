@@ -11,7 +11,7 @@ export class EmpleadoService {
 
   async create(createEmpleadoDto: CreateEmpleadoDto) {
       
-      const { IdPuesto, IdJornada, Estado, ...dataToCreate } = createEmpleadoDto as any;
+      const { IdPuesto, IdJornada, IdBanco, CuentaBancaria, Estado, ...dataToCreate } = createEmpleadoDto as any;
 
       const nuevoEmpleado = await this.prismaService.empleado.create({
         data: {
@@ -21,7 +21,9 @@ export class EmpleadoService {
             
           ...(IdPuesto && { Puesto: { connect: { IdPuesto: Number(IdPuesto) } } }),
 
-          ...(IdJornada && { JornadaLaboral: {connect: {IdJornada: Number(IdJornada)}}})
+          ...(IdJornada && { JornadaLaboral: { connect: { IdJornada: Number(IdJornada) } } }),
+          ...(IdBanco && { Banco: { connect: { IdBanco: Number(IdBanco) } } }),
+          ...(CuentaBancaria && { CuentaBancaria }),
         },
         select: {
           Nombres: true,
@@ -40,13 +42,14 @@ export class EmpleadoService {
       include: {
         Usuario: { select: { IdUsuario: true, IdRol: true, RolUsuario: { select: { NombreRol: true } } } },
         Puesto: { select: { NombrePuesto: true } },
-        JornadaLaboral: { select: { NombreJornada: true } },
-        Banco: { select: { NombreBanco: true } } 
+        JornadaLaboral: { select: { IdJornada: true, NombreJornada: true } },
+        Banco: { select: { IdBanco: true, NombreBanco: true } } 
       },
     });
 
     return empleados.map((emp) => ({
       ...emp,
+      NombreCompleto: `${emp.Nombres} ${emp.Apellidos}`.trim(),
       FechaEliminacion: emp.FechaEliminacion
         ? emp.FechaEliminacion.toISOString().slice(0, 19).replace('T', ' ')
         : null,
@@ -62,8 +65,8 @@ export class EmpleadoService {
       include: {
         Usuario: { select: { IdUsuario: true, IdRol: true, RolUsuario: { select: { NombreRol: true } } } },
         Puesto: { select: { NombrePuesto: true } },
-        JornadaLaboral: { select: { NombreJornada: true } },
-        Banco: { select: { NombreBanco: true } }
+        JornadaLaboral: { select: { IdJornada: true, NombreJornada: true } },
+        Banco: { select: { IdBanco: true, NombreBanco: true } }
       }
     });
     
@@ -73,7 +76,7 @@ export class EmpleadoService {
   async update(id: number, updateEmpleadoDto: UpdateEmpleadoDto) {
       await this.findOne(id);
 
-      const { IdEmpleado, IdPuesto, Estado, IdRol, ...dataToUpdate } = updateEmpleadoDto as any;
+      const { IdEmpleado, IdPuesto, IdJornada, IdBanco, CuentaBancaria, Estado, IdRol, ...dataToUpdate } = updateEmpleadoDto as any;
 
       const empleadoActualizado = await this.prismaService.empleado.update({
         where: { IdEmpleado: id },
@@ -82,7 +85,10 @@ export class EmpleadoService {
           
           ...(Estado !== undefined && { Activo: Estado }),
           
-          ...(IdPuesto && { Puesto: { connect: { IdPuesto: Number(IdPuesto) } } })
+          ...(IdPuesto && { Puesto: { connect: { IdPuesto: Number(IdPuesto) } } }),
+          ...(IdJornada && { JornadaLaboral: { connect: { IdJornada: Number(IdJornada) } } }),
+          ...(IdBanco && { Banco: { connect: { IdBanco: Number(IdBanco) } } }),
+          ...(CuentaBancaria && { CuentaBancaria }),
         },
       });
 

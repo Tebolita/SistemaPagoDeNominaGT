@@ -28,10 +28,14 @@ export type AggregateEmpresa = {
 
 export type EmpresaAvgAggregateOutputType = {
   IdEmpresa: number | null
+  CapitalInicial: runtime.Decimal | null
+  CapitalActual: runtime.Decimal | null
 }
 
 export type EmpresaSumAggregateOutputType = {
   IdEmpresa: number | null
+  CapitalInicial: runtime.Decimal | null
+  CapitalActual: runtime.Decimal | null
 }
 
 export type EmpresaMinAggregateOutputType = {
@@ -42,6 +46,8 @@ export type EmpresaMinAggregateOutputType = {
   NumeroPatronalIGSS: string | null
   Activo: boolean | null
   FechaEliminacion: Date | null
+  CapitalInicial: runtime.Decimal | null
+  CapitalActual: runtime.Decimal | null
 }
 
 export type EmpresaMaxAggregateOutputType = {
@@ -52,6 +58,8 @@ export type EmpresaMaxAggregateOutputType = {
   NumeroPatronalIGSS: string | null
   Activo: boolean | null
   FechaEliminacion: Date | null
+  CapitalInicial: runtime.Decimal | null
+  CapitalActual: runtime.Decimal | null
 }
 
 export type EmpresaCountAggregateOutputType = {
@@ -62,16 +70,22 @@ export type EmpresaCountAggregateOutputType = {
   NumeroPatronalIGSS: number
   Activo: number
   FechaEliminacion: number
+  CapitalInicial: number
+  CapitalActual: number
   _all: number
 }
 
 
 export type EmpresaAvgAggregateInputType = {
   IdEmpresa?: true
+  CapitalInicial?: true
+  CapitalActual?: true
 }
 
 export type EmpresaSumAggregateInputType = {
   IdEmpresa?: true
+  CapitalInicial?: true
+  CapitalActual?: true
 }
 
 export type EmpresaMinAggregateInputType = {
@@ -82,6 +96,8 @@ export type EmpresaMinAggregateInputType = {
   NumeroPatronalIGSS?: true
   Activo?: true
   FechaEliminacion?: true
+  CapitalInicial?: true
+  CapitalActual?: true
 }
 
 export type EmpresaMaxAggregateInputType = {
@@ -92,6 +108,8 @@ export type EmpresaMaxAggregateInputType = {
   NumeroPatronalIGSS?: true
   Activo?: true
   FechaEliminacion?: true
+  CapitalInicial?: true
+  CapitalActual?: true
 }
 
 export type EmpresaCountAggregateInputType = {
@@ -102,6 +120,8 @@ export type EmpresaCountAggregateInputType = {
   NumeroPatronalIGSS?: true
   Activo?: true
   FechaEliminacion?: true
+  CapitalInicial?: true
+  CapitalActual?: true
   _all?: true
 }
 
@@ -199,6 +219,8 @@ export type EmpresaGroupByOutputType = {
   NumeroPatronalIGSS: string
   Activo: boolean | null
   FechaEliminacion: Date | null
+  CapitalInicial: runtime.Decimal | null
+  CapitalActual: runtime.Decimal | null
   _count: EmpresaCountAggregateOutputType | null
   _avg: EmpresaAvgAggregateOutputType | null
   _sum: EmpresaSumAggregateOutputType | null
@@ -232,6 +254,8 @@ export type EmpresaWhereInput = {
   NumeroPatronalIGSS?: Prisma.StringFilter<"Empresa"> | string
   Activo?: Prisma.BoolNullableFilter<"Empresa"> | boolean | null
   FechaEliminacion?: Prisma.DateTimeNullableFilter<"Empresa"> | Date | string | null
+  CapitalInicial?: Prisma.DecimalNullableFilter<"Empresa"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  CapitalActual?: Prisma.DecimalNullableFilter<"Empresa"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type EmpresaOrderByWithRelationInput = {
@@ -242,6 +266,8 @@ export type EmpresaOrderByWithRelationInput = {
   NumeroPatronalIGSS?: Prisma.SortOrder
   Activo?: Prisma.SortOrderInput | Prisma.SortOrder
   FechaEliminacion?: Prisma.SortOrderInput | Prisma.SortOrder
+  CapitalInicial?: Prisma.SortOrderInput | Prisma.SortOrder
+  CapitalActual?: Prisma.SortOrderInput | Prisma.SortOrder
 }
 
 export type EmpresaWhereUniqueInput = Prisma.AtLeast<{
@@ -255,6 +281,8 @@ export type EmpresaWhereUniqueInput = Prisma.AtLeast<{
   NumeroPatronalIGSS?: Prisma.StringFilter<"Empresa"> | string
   Activo?: Prisma.BoolNullableFilter<"Empresa"> | boolean | null
   FechaEliminacion?: Prisma.DateTimeNullableFilter<"Empresa"> | Date | string | null
+  CapitalInicial?: Prisma.DecimalNullableFilter<"Empresa"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  CapitalActual?: Prisma.DecimalNullableFilter<"Empresa"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }, "IdEmpresa">
 
 export type EmpresaOrderByWithAggregationInput = {
@@ -265,6 +293,8 @@ export type EmpresaOrderByWithAggregationInput = {
   NumeroPatronalIGSS?: Prisma.SortOrder
   Activo?: Prisma.SortOrderInput | Prisma.SortOrder
   FechaEliminacion?: Prisma.SortOrderInput | Prisma.SortOrder
+  CapitalInicial?: Prisma.SortOrderInput | Prisma.SortOrder
+  CapitalActual?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.EmpresaCountOrderByAggregateInput
   _avg?: Prisma.EmpresaAvgOrderByAggregateInput
   _max?: Prisma.EmpresaMaxOrderByAggregateInput
@@ -283,6 +313,8 @@ export type EmpresaScalarWhereWithAggregatesInput = {
   NumeroPatronalIGSS?: Prisma.StringWithAggregatesFilter<"Empresa"> | string
   Activo?: Prisma.BoolNullableWithAggregatesFilter<"Empresa"> | boolean | null
   FechaEliminacion?: Prisma.DateTimeNullableWithAggregatesFilter<"Empresa"> | Date | string | null
+  CapitalInicial?: Prisma.DecimalNullableWithAggregatesFilter<"Empresa"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  CapitalActual?: Prisma.DecimalNullableWithAggregatesFilter<"Empresa"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type EmpresaCreateInput = {
@@ -292,6 +324,8 @@ export type EmpresaCreateInput = {
   NumeroPatronalIGSS: string
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  CapitalInicial?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  CapitalActual?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type EmpresaUncheckedCreateInput = {
@@ -302,6 +336,8 @@ export type EmpresaUncheckedCreateInput = {
   NumeroPatronalIGSS: string
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  CapitalInicial?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  CapitalActual?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type EmpresaUpdateInput = {
@@ -311,6 +347,8 @@ export type EmpresaUpdateInput = {
   NumeroPatronalIGSS?: Prisma.StringFieldUpdateOperationsInput | string
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  CapitalInicial?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  CapitalActual?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type EmpresaUncheckedUpdateInput = {
@@ -321,6 +359,8 @@ export type EmpresaUncheckedUpdateInput = {
   NumeroPatronalIGSS?: Prisma.StringFieldUpdateOperationsInput | string
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  CapitalInicial?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  CapitalActual?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type EmpresaCreateManyInput = {
@@ -330,6 +370,8 @@ export type EmpresaCreateManyInput = {
   NumeroPatronalIGSS: string
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  CapitalInicial?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  CapitalActual?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type EmpresaUpdateManyMutationInput = {
@@ -339,6 +381,8 @@ export type EmpresaUpdateManyMutationInput = {
   NumeroPatronalIGSS?: Prisma.StringFieldUpdateOperationsInput | string
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  CapitalInicial?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  CapitalActual?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type EmpresaUncheckedUpdateManyInput = {
@@ -349,6 +393,8 @@ export type EmpresaUncheckedUpdateManyInput = {
   NumeroPatronalIGSS?: Prisma.StringFieldUpdateOperationsInput | string
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  CapitalInicial?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  CapitalActual?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type EmpresaCountOrderByAggregateInput = {
@@ -359,10 +405,14 @@ export type EmpresaCountOrderByAggregateInput = {
   NumeroPatronalIGSS?: Prisma.SortOrder
   Activo?: Prisma.SortOrder
   FechaEliminacion?: Prisma.SortOrder
+  CapitalInicial?: Prisma.SortOrder
+  CapitalActual?: Prisma.SortOrder
 }
 
 export type EmpresaAvgOrderByAggregateInput = {
   IdEmpresa?: Prisma.SortOrder
+  CapitalInicial?: Prisma.SortOrder
+  CapitalActual?: Prisma.SortOrder
 }
 
 export type EmpresaMaxOrderByAggregateInput = {
@@ -373,6 +423,8 @@ export type EmpresaMaxOrderByAggregateInput = {
   NumeroPatronalIGSS?: Prisma.SortOrder
   Activo?: Prisma.SortOrder
   FechaEliminacion?: Prisma.SortOrder
+  CapitalInicial?: Prisma.SortOrder
+  CapitalActual?: Prisma.SortOrder
 }
 
 export type EmpresaMinOrderByAggregateInput = {
@@ -383,10 +435,14 @@ export type EmpresaMinOrderByAggregateInput = {
   NumeroPatronalIGSS?: Prisma.SortOrder
   Activo?: Prisma.SortOrder
   FechaEliminacion?: Prisma.SortOrder
+  CapitalInicial?: Prisma.SortOrder
+  CapitalActual?: Prisma.SortOrder
 }
 
 export type EmpresaSumOrderByAggregateInput = {
   IdEmpresa?: Prisma.SortOrder
+  CapitalInicial?: Prisma.SortOrder
+  CapitalActual?: Prisma.SortOrder
 }
 
 
@@ -399,6 +455,8 @@ export type EmpresaSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   NumeroPatronalIGSS?: boolean
   Activo?: boolean
   FechaEliminacion?: boolean
+  CapitalInicial?: boolean
+  CapitalActual?: boolean
 }, ExtArgs["result"]["empresa"]>
 
 
@@ -411,9 +469,11 @@ export type EmpresaSelectScalar = {
   NumeroPatronalIGSS?: boolean
   Activo?: boolean
   FechaEliminacion?: boolean
+  CapitalInicial?: boolean
+  CapitalActual?: boolean
 }
 
-export type EmpresaOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"IdEmpresa" | "NombreRazonSocial" | "NombreComercial" | "NIT" | "NumeroPatronalIGSS" | "Activo" | "FechaEliminacion", ExtArgs["result"]["empresa"]>
+export type EmpresaOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"IdEmpresa" | "NombreRazonSocial" | "NombreComercial" | "NIT" | "NumeroPatronalIGSS" | "Activo" | "FechaEliminacion" | "CapitalInicial" | "CapitalActual", ExtArgs["result"]["empresa"]>
 
 export type $EmpresaPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Empresa"
@@ -426,6 +486,8 @@ export type $EmpresaPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     NumeroPatronalIGSS: string
     Activo: boolean | null
     FechaEliminacion: Date | null
+    CapitalInicial: runtime.Decimal | null
+    CapitalActual: runtime.Decimal | null
   }, ExtArgs["result"]["empresa"]>
   composites: {}
 }
@@ -802,6 +864,8 @@ export interface EmpresaFieldRefs {
   readonly NumeroPatronalIGSS: Prisma.FieldRef<"Empresa", 'String'>
   readonly Activo: Prisma.FieldRef<"Empresa", 'Boolean'>
   readonly FechaEliminacion: Prisma.FieldRef<"Empresa", 'DateTime'>
+  readonly CapitalInicial: Prisma.FieldRef<"Empresa", 'Decimal'>
+  readonly CapitalActual: Prisma.FieldRef<"Empresa", 'Decimal'>
 }
     
 

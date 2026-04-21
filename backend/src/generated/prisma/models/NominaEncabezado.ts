@@ -32,6 +32,7 @@ export type NominaEncabezadoAvgAggregateOutputType = {
   Anio: number | null
   Quincena: number | null
   IdUsuarioGerente: number | null
+  IdEstadoActual: number | null
 }
 
 export type NominaEncabezadoSumAggregateOutputType = {
@@ -40,6 +41,7 @@ export type NominaEncabezadoSumAggregateOutputType = {
   Anio: number | null
   Quincena: number | null
   IdUsuarioGerente: number | null
+  IdEstadoActual: number | null
 }
 
 export type NominaEncabezadoMinAggregateOutputType = {
@@ -52,6 +54,7 @@ export type NominaEncabezadoMinAggregateOutputType = {
   IdUsuarioGerente: number | null
   Activo: boolean | null
   FechaEliminacion: Date | null
+  IdEstadoActual: number | null
 }
 
 export type NominaEncabezadoMaxAggregateOutputType = {
@@ -64,6 +67,7 @@ export type NominaEncabezadoMaxAggregateOutputType = {
   IdUsuarioGerente: number | null
   Activo: boolean | null
   FechaEliminacion: Date | null
+  IdEstadoActual: number | null
 }
 
 export type NominaEncabezadoCountAggregateOutputType = {
@@ -76,6 +80,7 @@ export type NominaEncabezadoCountAggregateOutputType = {
   IdUsuarioGerente: number
   Activo: number
   FechaEliminacion: number
+  IdEstadoActual: number
   _all: number
 }
 
@@ -86,6 +91,7 @@ export type NominaEncabezadoAvgAggregateInputType = {
   Anio?: true
   Quincena?: true
   IdUsuarioGerente?: true
+  IdEstadoActual?: true
 }
 
 export type NominaEncabezadoSumAggregateInputType = {
@@ -94,6 +100,7 @@ export type NominaEncabezadoSumAggregateInputType = {
   Anio?: true
   Quincena?: true
   IdUsuarioGerente?: true
+  IdEstadoActual?: true
 }
 
 export type NominaEncabezadoMinAggregateInputType = {
@@ -106,6 +113,7 @@ export type NominaEncabezadoMinAggregateInputType = {
   IdUsuarioGerente?: true
   Activo?: true
   FechaEliminacion?: true
+  IdEstadoActual?: true
 }
 
 export type NominaEncabezadoMaxAggregateInputType = {
@@ -118,6 +126,7 @@ export type NominaEncabezadoMaxAggregateInputType = {
   IdUsuarioGerente?: true
   Activo?: true
   FechaEliminacion?: true
+  IdEstadoActual?: true
 }
 
 export type NominaEncabezadoCountAggregateInputType = {
@@ -130,6 +139,7 @@ export type NominaEncabezadoCountAggregateInputType = {
   IdUsuarioGerente?: true
   Activo?: true
   FechaEliminacion?: true
+  IdEstadoActual?: true
   _all?: true
 }
 
@@ -229,6 +239,7 @@ export type NominaEncabezadoGroupByOutputType = {
   IdUsuarioGerente: number | null
   Activo: boolean | null
   FechaEliminacion: Date | null
+  IdEstadoActual: number | null
   _count: NominaEncabezadoCountAggregateOutputType | null
   _avg: NominaEncabezadoAvgAggregateOutputType | null
   _sum: NominaEncabezadoSumAggregateOutputType | null
@@ -264,7 +275,11 @@ export type NominaEncabezadoWhereInput = {
   IdUsuarioGerente?: Prisma.IntNullableFilter<"NominaEncabezado"> | number | null
   Activo?: Prisma.BoolNullableFilter<"NominaEncabezado"> | boolean | null
   FechaEliminacion?: Prisma.DateTimeNullableFilter<"NominaEncabezado"> | Date | string | null
+  IdEstadoActual?: Prisma.IntNullableFilter<"NominaEncabezado"> | number | null
+  HistorialEstadoNomina?: Prisma.HistorialEstadoNominaListRelationFilter
+  MovimientoFinanciero?: Prisma.MovimientoFinancieroListRelationFilter
   NominaDetalle?: Prisma.NominaDetalleListRelationFilter
+  EstadoNomina?: Prisma.XOR<Prisma.EstadoNominaNullableScalarRelationFilter, Prisma.EstadoNominaWhereInput> | null
   Usuario?: Prisma.XOR<Prisma.UsuarioNullableScalarRelationFilter, Prisma.UsuarioWhereInput> | null
 }
 
@@ -278,7 +293,11 @@ export type NominaEncabezadoOrderByWithRelationInput = {
   IdUsuarioGerente?: Prisma.SortOrderInput | Prisma.SortOrder
   Activo?: Prisma.SortOrderInput | Prisma.SortOrder
   FechaEliminacion?: Prisma.SortOrderInput | Prisma.SortOrder
+  IdEstadoActual?: Prisma.SortOrderInput | Prisma.SortOrder
+  HistorialEstadoNomina?: Prisma.HistorialEstadoNominaOrderByRelationAggregateInput
+  MovimientoFinanciero?: Prisma.MovimientoFinancieroOrderByRelationAggregateInput
   NominaDetalle?: Prisma.NominaDetalleOrderByRelationAggregateInput
+  EstadoNomina?: Prisma.EstadoNominaOrderByWithRelationInput
   Usuario?: Prisma.UsuarioOrderByWithRelationInput
 }
 
@@ -295,7 +314,11 @@ export type NominaEncabezadoWhereUniqueInput = Prisma.AtLeast<{
   IdUsuarioGerente?: Prisma.IntNullableFilter<"NominaEncabezado"> | number | null
   Activo?: Prisma.BoolNullableFilter<"NominaEncabezado"> | boolean | null
   FechaEliminacion?: Prisma.DateTimeNullableFilter<"NominaEncabezado"> | Date | string | null
+  IdEstadoActual?: Prisma.IntNullableFilter<"NominaEncabezado"> | number | null
+  HistorialEstadoNomina?: Prisma.HistorialEstadoNominaListRelationFilter
+  MovimientoFinanciero?: Prisma.MovimientoFinancieroListRelationFilter
   NominaDetalle?: Prisma.NominaDetalleListRelationFilter
+  EstadoNomina?: Prisma.XOR<Prisma.EstadoNominaNullableScalarRelationFilter, Prisma.EstadoNominaWhereInput> | null
   Usuario?: Prisma.XOR<Prisma.UsuarioNullableScalarRelationFilter, Prisma.UsuarioWhereInput> | null
 }, "IdNomina">
 
@@ -309,6 +332,7 @@ export type NominaEncabezadoOrderByWithAggregationInput = {
   IdUsuarioGerente?: Prisma.SortOrderInput | Prisma.SortOrder
   Activo?: Prisma.SortOrderInput | Prisma.SortOrder
   FechaEliminacion?: Prisma.SortOrderInput | Prisma.SortOrder
+  IdEstadoActual?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.NominaEncabezadoCountOrderByAggregateInput
   _avg?: Prisma.NominaEncabezadoAvgOrderByAggregateInput
   _max?: Prisma.NominaEncabezadoMaxOrderByAggregateInput
@@ -329,6 +353,7 @@ export type NominaEncabezadoScalarWhereWithAggregatesInput = {
   IdUsuarioGerente?: Prisma.IntNullableWithAggregatesFilter<"NominaEncabezado"> | number | null
   Activo?: Prisma.BoolNullableWithAggregatesFilter<"NominaEncabezado"> | boolean | null
   FechaEliminacion?: Prisma.DateTimeNullableWithAggregatesFilter<"NominaEncabezado"> | Date | string | null
+  IdEstadoActual?: Prisma.IntNullableWithAggregatesFilter<"NominaEncabezado"> | number | null
 }
 
 export type NominaEncabezadoCreateInput = {
@@ -339,7 +364,10 @@ export type NominaEncabezadoCreateInput = {
   Estado?: string | null
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  HistorialEstadoNomina?: Prisma.HistorialEstadoNominaCreateNestedManyWithoutNominaEncabezadoInput
+  MovimientoFinanciero?: Prisma.MovimientoFinancieroCreateNestedManyWithoutNominaEncabezadoInput
   NominaDetalle?: Prisma.NominaDetalleCreateNestedManyWithoutNominaEncabezadoInput
+  EstadoNomina?: Prisma.EstadoNominaCreateNestedOneWithoutNominaEncabezadoInput
   Usuario?: Prisma.UsuarioCreateNestedOneWithoutNominaEncabezadoInput
 }
 
@@ -353,6 +381,9 @@ export type NominaEncabezadoUncheckedCreateInput = {
   IdUsuarioGerente?: number | null
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  IdEstadoActual?: number | null
+  HistorialEstadoNomina?: Prisma.HistorialEstadoNominaUncheckedCreateNestedManyWithoutNominaEncabezadoInput
+  MovimientoFinanciero?: Prisma.MovimientoFinancieroUncheckedCreateNestedManyWithoutNominaEncabezadoInput
   NominaDetalle?: Prisma.NominaDetalleUncheckedCreateNestedManyWithoutNominaEncabezadoInput
 }
 
@@ -364,7 +395,10 @@ export type NominaEncabezadoUpdateInput = {
   Estado?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  HistorialEstadoNomina?: Prisma.HistorialEstadoNominaUpdateManyWithoutNominaEncabezadoNestedInput
+  MovimientoFinanciero?: Prisma.MovimientoFinancieroUpdateManyWithoutNominaEncabezadoNestedInput
   NominaDetalle?: Prisma.NominaDetalleUpdateManyWithoutNominaEncabezadoNestedInput
+  EstadoNomina?: Prisma.EstadoNominaUpdateOneWithoutNominaEncabezadoNestedInput
   Usuario?: Prisma.UsuarioUpdateOneWithoutNominaEncabezadoNestedInput
 }
 
@@ -378,6 +412,9 @@ export type NominaEncabezadoUncheckedUpdateInput = {
   IdUsuarioGerente?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  IdEstadoActual?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  HistorialEstadoNomina?: Prisma.HistorialEstadoNominaUncheckedUpdateManyWithoutNominaEncabezadoNestedInput
+  MovimientoFinanciero?: Prisma.MovimientoFinancieroUncheckedUpdateManyWithoutNominaEncabezadoNestedInput
   NominaDetalle?: Prisma.NominaDetalleUncheckedUpdateManyWithoutNominaEncabezadoNestedInput
 }
 
@@ -390,6 +427,7 @@ export type NominaEncabezadoCreateManyInput = {
   IdUsuarioGerente?: number | null
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  IdEstadoActual?: number | null
 }
 
 export type NominaEncabezadoUpdateManyMutationInput = {
@@ -412,11 +450,27 @@ export type NominaEncabezadoUncheckedUpdateManyInput = {
   IdUsuarioGerente?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  IdEstadoActual?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+}
+
+export type NominaEncabezadoListRelationFilter = {
+  every?: Prisma.NominaEncabezadoWhereInput
+  some?: Prisma.NominaEncabezadoWhereInput
+  none?: Prisma.NominaEncabezadoWhereInput
+}
+
+export type NominaEncabezadoOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type NominaEncabezadoScalarRelationFilter = {
   is?: Prisma.NominaEncabezadoWhereInput
   isNot?: Prisma.NominaEncabezadoWhereInput
+}
+
+export type NominaEncabezadoNullableScalarRelationFilter = {
+  is?: Prisma.NominaEncabezadoWhereInput | null
+  isNot?: Prisma.NominaEncabezadoWhereInput | null
 }
 
 export type NominaEncabezadoCountOrderByAggregateInput = {
@@ -429,6 +483,7 @@ export type NominaEncabezadoCountOrderByAggregateInput = {
   IdUsuarioGerente?: Prisma.SortOrder
   Activo?: Prisma.SortOrder
   FechaEliminacion?: Prisma.SortOrder
+  IdEstadoActual?: Prisma.SortOrder
 }
 
 export type NominaEncabezadoAvgOrderByAggregateInput = {
@@ -437,6 +492,7 @@ export type NominaEncabezadoAvgOrderByAggregateInput = {
   Anio?: Prisma.SortOrder
   Quincena?: Prisma.SortOrder
   IdUsuarioGerente?: Prisma.SortOrder
+  IdEstadoActual?: Prisma.SortOrder
 }
 
 export type NominaEncabezadoMaxOrderByAggregateInput = {
@@ -449,6 +505,7 @@ export type NominaEncabezadoMaxOrderByAggregateInput = {
   IdUsuarioGerente?: Prisma.SortOrder
   Activo?: Prisma.SortOrder
   FechaEliminacion?: Prisma.SortOrder
+  IdEstadoActual?: Prisma.SortOrder
 }
 
 export type NominaEncabezadoMinOrderByAggregateInput = {
@@ -461,6 +518,7 @@ export type NominaEncabezadoMinOrderByAggregateInput = {
   IdUsuarioGerente?: Prisma.SortOrder
   Activo?: Prisma.SortOrder
   FechaEliminacion?: Prisma.SortOrder
+  IdEstadoActual?: Prisma.SortOrder
 }
 
 export type NominaEncabezadoSumOrderByAggregateInput = {
@@ -469,16 +527,79 @@ export type NominaEncabezadoSumOrderByAggregateInput = {
   Anio?: Prisma.SortOrder
   Quincena?: Prisma.SortOrder
   IdUsuarioGerente?: Prisma.SortOrder
+  IdEstadoActual?: Prisma.SortOrder
 }
 
-export type NominaEncabezadoListRelationFilter = {
-  every?: Prisma.NominaEncabezadoWhereInput
-  some?: Prisma.NominaEncabezadoWhereInput
-  none?: Prisma.NominaEncabezadoWhereInput
+export type NominaEncabezadoCreateNestedManyWithoutEstadoNominaInput = {
+  create?: Prisma.XOR<Prisma.NominaEncabezadoCreateWithoutEstadoNominaInput, Prisma.NominaEncabezadoUncheckedCreateWithoutEstadoNominaInput> | Prisma.NominaEncabezadoCreateWithoutEstadoNominaInput[] | Prisma.NominaEncabezadoUncheckedCreateWithoutEstadoNominaInput[]
+  connectOrCreate?: Prisma.NominaEncabezadoCreateOrConnectWithoutEstadoNominaInput | Prisma.NominaEncabezadoCreateOrConnectWithoutEstadoNominaInput[]
+  createMany?: Prisma.NominaEncabezadoCreateManyEstadoNominaInputEnvelope
+  connect?: Prisma.NominaEncabezadoWhereUniqueInput | Prisma.NominaEncabezadoWhereUniqueInput[]
 }
 
-export type NominaEncabezadoOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
+export type NominaEncabezadoUncheckedCreateNestedManyWithoutEstadoNominaInput = {
+  create?: Prisma.XOR<Prisma.NominaEncabezadoCreateWithoutEstadoNominaInput, Prisma.NominaEncabezadoUncheckedCreateWithoutEstadoNominaInput> | Prisma.NominaEncabezadoCreateWithoutEstadoNominaInput[] | Prisma.NominaEncabezadoUncheckedCreateWithoutEstadoNominaInput[]
+  connectOrCreate?: Prisma.NominaEncabezadoCreateOrConnectWithoutEstadoNominaInput | Prisma.NominaEncabezadoCreateOrConnectWithoutEstadoNominaInput[]
+  createMany?: Prisma.NominaEncabezadoCreateManyEstadoNominaInputEnvelope
+  connect?: Prisma.NominaEncabezadoWhereUniqueInput | Prisma.NominaEncabezadoWhereUniqueInput[]
+}
+
+export type NominaEncabezadoUpdateManyWithoutEstadoNominaNestedInput = {
+  create?: Prisma.XOR<Prisma.NominaEncabezadoCreateWithoutEstadoNominaInput, Prisma.NominaEncabezadoUncheckedCreateWithoutEstadoNominaInput> | Prisma.NominaEncabezadoCreateWithoutEstadoNominaInput[] | Prisma.NominaEncabezadoUncheckedCreateWithoutEstadoNominaInput[]
+  connectOrCreate?: Prisma.NominaEncabezadoCreateOrConnectWithoutEstadoNominaInput | Prisma.NominaEncabezadoCreateOrConnectWithoutEstadoNominaInput[]
+  upsert?: Prisma.NominaEncabezadoUpsertWithWhereUniqueWithoutEstadoNominaInput | Prisma.NominaEncabezadoUpsertWithWhereUniqueWithoutEstadoNominaInput[]
+  createMany?: Prisma.NominaEncabezadoCreateManyEstadoNominaInputEnvelope
+  set?: Prisma.NominaEncabezadoWhereUniqueInput | Prisma.NominaEncabezadoWhereUniqueInput[]
+  disconnect?: Prisma.NominaEncabezadoWhereUniqueInput | Prisma.NominaEncabezadoWhereUniqueInput[]
+  delete?: Prisma.NominaEncabezadoWhereUniqueInput | Prisma.NominaEncabezadoWhereUniqueInput[]
+  connect?: Prisma.NominaEncabezadoWhereUniqueInput | Prisma.NominaEncabezadoWhereUniqueInput[]
+  update?: Prisma.NominaEncabezadoUpdateWithWhereUniqueWithoutEstadoNominaInput | Prisma.NominaEncabezadoUpdateWithWhereUniqueWithoutEstadoNominaInput[]
+  updateMany?: Prisma.NominaEncabezadoUpdateManyWithWhereWithoutEstadoNominaInput | Prisma.NominaEncabezadoUpdateManyWithWhereWithoutEstadoNominaInput[]
+  deleteMany?: Prisma.NominaEncabezadoScalarWhereInput | Prisma.NominaEncabezadoScalarWhereInput[]
+}
+
+export type NominaEncabezadoUncheckedUpdateManyWithoutEstadoNominaNestedInput = {
+  create?: Prisma.XOR<Prisma.NominaEncabezadoCreateWithoutEstadoNominaInput, Prisma.NominaEncabezadoUncheckedCreateWithoutEstadoNominaInput> | Prisma.NominaEncabezadoCreateWithoutEstadoNominaInput[] | Prisma.NominaEncabezadoUncheckedCreateWithoutEstadoNominaInput[]
+  connectOrCreate?: Prisma.NominaEncabezadoCreateOrConnectWithoutEstadoNominaInput | Prisma.NominaEncabezadoCreateOrConnectWithoutEstadoNominaInput[]
+  upsert?: Prisma.NominaEncabezadoUpsertWithWhereUniqueWithoutEstadoNominaInput | Prisma.NominaEncabezadoUpsertWithWhereUniqueWithoutEstadoNominaInput[]
+  createMany?: Prisma.NominaEncabezadoCreateManyEstadoNominaInputEnvelope
+  set?: Prisma.NominaEncabezadoWhereUniqueInput | Prisma.NominaEncabezadoWhereUniqueInput[]
+  disconnect?: Prisma.NominaEncabezadoWhereUniqueInput | Prisma.NominaEncabezadoWhereUniqueInput[]
+  delete?: Prisma.NominaEncabezadoWhereUniqueInput | Prisma.NominaEncabezadoWhereUniqueInput[]
+  connect?: Prisma.NominaEncabezadoWhereUniqueInput | Prisma.NominaEncabezadoWhereUniqueInput[]
+  update?: Prisma.NominaEncabezadoUpdateWithWhereUniqueWithoutEstadoNominaInput | Prisma.NominaEncabezadoUpdateWithWhereUniqueWithoutEstadoNominaInput[]
+  updateMany?: Prisma.NominaEncabezadoUpdateManyWithWhereWithoutEstadoNominaInput | Prisma.NominaEncabezadoUpdateManyWithWhereWithoutEstadoNominaInput[]
+  deleteMany?: Prisma.NominaEncabezadoScalarWhereInput | Prisma.NominaEncabezadoScalarWhereInput[]
+}
+
+export type NominaEncabezadoCreateNestedOneWithoutHistorialEstadoNominaInput = {
+  create?: Prisma.XOR<Prisma.NominaEncabezadoCreateWithoutHistorialEstadoNominaInput, Prisma.NominaEncabezadoUncheckedCreateWithoutHistorialEstadoNominaInput>
+  connectOrCreate?: Prisma.NominaEncabezadoCreateOrConnectWithoutHistorialEstadoNominaInput
+  connect?: Prisma.NominaEncabezadoWhereUniqueInput
+}
+
+export type NominaEncabezadoUpdateOneRequiredWithoutHistorialEstadoNominaNestedInput = {
+  create?: Prisma.XOR<Prisma.NominaEncabezadoCreateWithoutHistorialEstadoNominaInput, Prisma.NominaEncabezadoUncheckedCreateWithoutHistorialEstadoNominaInput>
+  connectOrCreate?: Prisma.NominaEncabezadoCreateOrConnectWithoutHistorialEstadoNominaInput
+  upsert?: Prisma.NominaEncabezadoUpsertWithoutHistorialEstadoNominaInput
+  connect?: Prisma.NominaEncabezadoWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.NominaEncabezadoUpdateToOneWithWhereWithoutHistorialEstadoNominaInput, Prisma.NominaEncabezadoUpdateWithoutHistorialEstadoNominaInput>, Prisma.NominaEncabezadoUncheckedUpdateWithoutHistorialEstadoNominaInput>
+}
+
+export type NominaEncabezadoCreateNestedOneWithoutMovimientoFinancieroInput = {
+  create?: Prisma.XOR<Prisma.NominaEncabezadoCreateWithoutMovimientoFinancieroInput, Prisma.NominaEncabezadoUncheckedCreateWithoutMovimientoFinancieroInput>
+  connectOrCreate?: Prisma.NominaEncabezadoCreateOrConnectWithoutMovimientoFinancieroInput
+  connect?: Prisma.NominaEncabezadoWhereUniqueInput
+}
+
+export type NominaEncabezadoUpdateOneWithoutMovimientoFinancieroNestedInput = {
+  create?: Prisma.XOR<Prisma.NominaEncabezadoCreateWithoutMovimientoFinancieroInput, Prisma.NominaEncabezadoUncheckedCreateWithoutMovimientoFinancieroInput>
+  connectOrCreate?: Prisma.NominaEncabezadoCreateOrConnectWithoutMovimientoFinancieroInput
+  upsert?: Prisma.NominaEncabezadoUpsertWithoutMovimientoFinancieroInput
+  disconnect?: Prisma.NominaEncabezadoWhereInput | boolean
+  delete?: Prisma.NominaEncabezadoWhereInput | boolean
+  connect?: Prisma.NominaEncabezadoWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.NominaEncabezadoUpdateToOneWithWhereWithoutMovimientoFinancieroInput, Prisma.NominaEncabezadoUpdateWithoutMovimientoFinancieroInput>, Prisma.NominaEncabezadoUncheckedUpdateWithoutMovimientoFinancieroInput>
 }
 
 export type NominaEncabezadoCreateNestedOneWithoutNominaDetalleInput = {
@@ -537,6 +658,224 @@ export type NominaEncabezadoUncheckedUpdateManyWithoutUsuarioNestedInput = {
   deleteMany?: Prisma.NominaEncabezadoScalarWhereInput | Prisma.NominaEncabezadoScalarWhereInput[]
 }
 
+export type NominaEncabezadoCreateWithoutEstadoNominaInput = {
+  Mes: number
+  Anio: number
+  Quincena?: number | null
+  FechaGeneracion?: Date | string | null
+  Estado?: string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
+  HistorialEstadoNomina?: Prisma.HistorialEstadoNominaCreateNestedManyWithoutNominaEncabezadoInput
+  MovimientoFinanciero?: Prisma.MovimientoFinancieroCreateNestedManyWithoutNominaEncabezadoInput
+  NominaDetalle?: Prisma.NominaDetalleCreateNestedManyWithoutNominaEncabezadoInput
+  Usuario?: Prisma.UsuarioCreateNestedOneWithoutNominaEncabezadoInput
+}
+
+export type NominaEncabezadoUncheckedCreateWithoutEstadoNominaInput = {
+  IdNomina?: number
+  Mes: number
+  Anio: number
+  Quincena?: number | null
+  FechaGeneracion?: Date | string | null
+  Estado?: string | null
+  IdUsuarioGerente?: number | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
+  HistorialEstadoNomina?: Prisma.HistorialEstadoNominaUncheckedCreateNestedManyWithoutNominaEncabezadoInput
+  MovimientoFinanciero?: Prisma.MovimientoFinancieroUncheckedCreateNestedManyWithoutNominaEncabezadoInput
+  NominaDetalle?: Prisma.NominaDetalleUncheckedCreateNestedManyWithoutNominaEncabezadoInput
+}
+
+export type NominaEncabezadoCreateOrConnectWithoutEstadoNominaInput = {
+  where: Prisma.NominaEncabezadoWhereUniqueInput
+  create: Prisma.XOR<Prisma.NominaEncabezadoCreateWithoutEstadoNominaInput, Prisma.NominaEncabezadoUncheckedCreateWithoutEstadoNominaInput>
+}
+
+export type NominaEncabezadoCreateManyEstadoNominaInputEnvelope = {
+  data: Prisma.NominaEncabezadoCreateManyEstadoNominaInput | Prisma.NominaEncabezadoCreateManyEstadoNominaInput[]
+}
+
+export type NominaEncabezadoUpsertWithWhereUniqueWithoutEstadoNominaInput = {
+  where: Prisma.NominaEncabezadoWhereUniqueInput
+  update: Prisma.XOR<Prisma.NominaEncabezadoUpdateWithoutEstadoNominaInput, Prisma.NominaEncabezadoUncheckedUpdateWithoutEstadoNominaInput>
+  create: Prisma.XOR<Prisma.NominaEncabezadoCreateWithoutEstadoNominaInput, Prisma.NominaEncabezadoUncheckedCreateWithoutEstadoNominaInput>
+}
+
+export type NominaEncabezadoUpdateWithWhereUniqueWithoutEstadoNominaInput = {
+  where: Prisma.NominaEncabezadoWhereUniqueInput
+  data: Prisma.XOR<Prisma.NominaEncabezadoUpdateWithoutEstadoNominaInput, Prisma.NominaEncabezadoUncheckedUpdateWithoutEstadoNominaInput>
+}
+
+export type NominaEncabezadoUpdateManyWithWhereWithoutEstadoNominaInput = {
+  where: Prisma.NominaEncabezadoScalarWhereInput
+  data: Prisma.XOR<Prisma.NominaEncabezadoUpdateManyMutationInput, Prisma.NominaEncabezadoUncheckedUpdateManyWithoutEstadoNominaInput>
+}
+
+export type NominaEncabezadoScalarWhereInput = {
+  AND?: Prisma.NominaEncabezadoScalarWhereInput | Prisma.NominaEncabezadoScalarWhereInput[]
+  OR?: Prisma.NominaEncabezadoScalarWhereInput[]
+  NOT?: Prisma.NominaEncabezadoScalarWhereInput | Prisma.NominaEncabezadoScalarWhereInput[]
+  IdNomina?: Prisma.IntFilter<"NominaEncabezado"> | number
+  Mes?: Prisma.IntFilter<"NominaEncabezado"> | number
+  Anio?: Prisma.IntFilter<"NominaEncabezado"> | number
+  Quincena?: Prisma.IntNullableFilter<"NominaEncabezado"> | number | null
+  FechaGeneracion?: Prisma.DateTimeNullableFilter<"NominaEncabezado"> | Date | string | null
+  Estado?: Prisma.StringNullableFilter<"NominaEncabezado"> | string | null
+  IdUsuarioGerente?: Prisma.IntNullableFilter<"NominaEncabezado"> | number | null
+  Activo?: Prisma.BoolNullableFilter<"NominaEncabezado"> | boolean | null
+  FechaEliminacion?: Prisma.DateTimeNullableFilter<"NominaEncabezado"> | Date | string | null
+  IdEstadoActual?: Prisma.IntNullableFilter<"NominaEncabezado"> | number | null
+}
+
+export type NominaEncabezadoCreateWithoutHistorialEstadoNominaInput = {
+  Mes: number
+  Anio: number
+  Quincena?: number | null
+  FechaGeneracion?: Date | string | null
+  Estado?: string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
+  MovimientoFinanciero?: Prisma.MovimientoFinancieroCreateNestedManyWithoutNominaEncabezadoInput
+  NominaDetalle?: Prisma.NominaDetalleCreateNestedManyWithoutNominaEncabezadoInput
+  EstadoNomina?: Prisma.EstadoNominaCreateNestedOneWithoutNominaEncabezadoInput
+  Usuario?: Prisma.UsuarioCreateNestedOneWithoutNominaEncabezadoInput
+}
+
+export type NominaEncabezadoUncheckedCreateWithoutHistorialEstadoNominaInput = {
+  IdNomina?: number
+  Mes: number
+  Anio: number
+  Quincena?: number | null
+  FechaGeneracion?: Date | string | null
+  Estado?: string | null
+  IdUsuarioGerente?: number | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
+  IdEstadoActual?: number | null
+  MovimientoFinanciero?: Prisma.MovimientoFinancieroUncheckedCreateNestedManyWithoutNominaEncabezadoInput
+  NominaDetalle?: Prisma.NominaDetalleUncheckedCreateNestedManyWithoutNominaEncabezadoInput
+}
+
+export type NominaEncabezadoCreateOrConnectWithoutHistorialEstadoNominaInput = {
+  where: Prisma.NominaEncabezadoWhereUniqueInput
+  create: Prisma.XOR<Prisma.NominaEncabezadoCreateWithoutHistorialEstadoNominaInput, Prisma.NominaEncabezadoUncheckedCreateWithoutHistorialEstadoNominaInput>
+}
+
+export type NominaEncabezadoUpsertWithoutHistorialEstadoNominaInput = {
+  update: Prisma.XOR<Prisma.NominaEncabezadoUpdateWithoutHistorialEstadoNominaInput, Prisma.NominaEncabezadoUncheckedUpdateWithoutHistorialEstadoNominaInput>
+  create: Prisma.XOR<Prisma.NominaEncabezadoCreateWithoutHistorialEstadoNominaInput, Prisma.NominaEncabezadoUncheckedCreateWithoutHistorialEstadoNominaInput>
+  where?: Prisma.NominaEncabezadoWhereInput
+}
+
+export type NominaEncabezadoUpdateToOneWithWhereWithoutHistorialEstadoNominaInput = {
+  where?: Prisma.NominaEncabezadoWhereInput
+  data: Prisma.XOR<Prisma.NominaEncabezadoUpdateWithoutHistorialEstadoNominaInput, Prisma.NominaEncabezadoUncheckedUpdateWithoutHistorialEstadoNominaInput>
+}
+
+export type NominaEncabezadoUpdateWithoutHistorialEstadoNominaInput = {
+  Mes?: Prisma.IntFieldUpdateOperationsInput | number
+  Anio?: Prisma.IntFieldUpdateOperationsInput | number
+  Quincena?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  FechaGeneracion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Estado?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  MovimientoFinanciero?: Prisma.MovimientoFinancieroUpdateManyWithoutNominaEncabezadoNestedInput
+  NominaDetalle?: Prisma.NominaDetalleUpdateManyWithoutNominaEncabezadoNestedInput
+  EstadoNomina?: Prisma.EstadoNominaUpdateOneWithoutNominaEncabezadoNestedInput
+  Usuario?: Prisma.UsuarioUpdateOneWithoutNominaEncabezadoNestedInput
+}
+
+export type NominaEncabezadoUncheckedUpdateWithoutHistorialEstadoNominaInput = {
+  IdNomina?: Prisma.IntFieldUpdateOperationsInput | number
+  Mes?: Prisma.IntFieldUpdateOperationsInput | number
+  Anio?: Prisma.IntFieldUpdateOperationsInput | number
+  Quincena?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  FechaGeneracion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Estado?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  IdUsuarioGerente?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  IdEstadoActual?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  MovimientoFinanciero?: Prisma.MovimientoFinancieroUncheckedUpdateManyWithoutNominaEncabezadoNestedInput
+  NominaDetalle?: Prisma.NominaDetalleUncheckedUpdateManyWithoutNominaEncabezadoNestedInput
+}
+
+export type NominaEncabezadoCreateWithoutMovimientoFinancieroInput = {
+  Mes: number
+  Anio: number
+  Quincena?: number | null
+  FechaGeneracion?: Date | string | null
+  Estado?: string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
+  HistorialEstadoNomina?: Prisma.HistorialEstadoNominaCreateNestedManyWithoutNominaEncabezadoInput
+  NominaDetalle?: Prisma.NominaDetalleCreateNestedManyWithoutNominaEncabezadoInput
+  EstadoNomina?: Prisma.EstadoNominaCreateNestedOneWithoutNominaEncabezadoInput
+  Usuario?: Prisma.UsuarioCreateNestedOneWithoutNominaEncabezadoInput
+}
+
+export type NominaEncabezadoUncheckedCreateWithoutMovimientoFinancieroInput = {
+  IdNomina?: number
+  Mes: number
+  Anio: number
+  Quincena?: number | null
+  FechaGeneracion?: Date | string | null
+  Estado?: string | null
+  IdUsuarioGerente?: number | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
+  IdEstadoActual?: number | null
+  HistorialEstadoNomina?: Prisma.HistorialEstadoNominaUncheckedCreateNestedManyWithoutNominaEncabezadoInput
+  NominaDetalle?: Prisma.NominaDetalleUncheckedCreateNestedManyWithoutNominaEncabezadoInput
+}
+
+export type NominaEncabezadoCreateOrConnectWithoutMovimientoFinancieroInput = {
+  where: Prisma.NominaEncabezadoWhereUniqueInput
+  create: Prisma.XOR<Prisma.NominaEncabezadoCreateWithoutMovimientoFinancieroInput, Prisma.NominaEncabezadoUncheckedCreateWithoutMovimientoFinancieroInput>
+}
+
+export type NominaEncabezadoUpsertWithoutMovimientoFinancieroInput = {
+  update: Prisma.XOR<Prisma.NominaEncabezadoUpdateWithoutMovimientoFinancieroInput, Prisma.NominaEncabezadoUncheckedUpdateWithoutMovimientoFinancieroInput>
+  create: Prisma.XOR<Prisma.NominaEncabezadoCreateWithoutMovimientoFinancieroInput, Prisma.NominaEncabezadoUncheckedCreateWithoutMovimientoFinancieroInput>
+  where?: Prisma.NominaEncabezadoWhereInput
+}
+
+export type NominaEncabezadoUpdateToOneWithWhereWithoutMovimientoFinancieroInput = {
+  where?: Prisma.NominaEncabezadoWhereInput
+  data: Prisma.XOR<Prisma.NominaEncabezadoUpdateWithoutMovimientoFinancieroInput, Prisma.NominaEncabezadoUncheckedUpdateWithoutMovimientoFinancieroInput>
+}
+
+export type NominaEncabezadoUpdateWithoutMovimientoFinancieroInput = {
+  Mes?: Prisma.IntFieldUpdateOperationsInput | number
+  Anio?: Prisma.IntFieldUpdateOperationsInput | number
+  Quincena?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  FechaGeneracion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Estado?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  HistorialEstadoNomina?: Prisma.HistorialEstadoNominaUpdateManyWithoutNominaEncabezadoNestedInput
+  NominaDetalle?: Prisma.NominaDetalleUpdateManyWithoutNominaEncabezadoNestedInput
+  EstadoNomina?: Prisma.EstadoNominaUpdateOneWithoutNominaEncabezadoNestedInput
+  Usuario?: Prisma.UsuarioUpdateOneWithoutNominaEncabezadoNestedInput
+}
+
+export type NominaEncabezadoUncheckedUpdateWithoutMovimientoFinancieroInput = {
+  IdNomina?: Prisma.IntFieldUpdateOperationsInput | number
+  Mes?: Prisma.IntFieldUpdateOperationsInput | number
+  Anio?: Prisma.IntFieldUpdateOperationsInput | number
+  Quincena?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  FechaGeneracion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Estado?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  IdUsuarioGerente?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  IdEstadoActual?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  HistorialEstadoNomina?: Prisma.HistorialEstadoNominaUncheckedUpdateManyWithoutNominaEncabezadoNestedInput
+  NominaDetalle?: Prisma.NominaDetalleUncheckedUpdateManyWithoutNominaEncabezadoNestedInput
+}
+
 export type NominaEncabezadoCreateWithoutNominaDetalleInput = {
   Mes: number
   Anio: number
@@ -545,6 +884,9 @@ export type NominaEncabezadoCreateWithoutNominaDetalleInput = {
   Estado?: string | null
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  HistorialEstadoNomina?: Prisma.HistorialEstadoNominaCreateNestedManyWithoutNominaEncabezadoInput
+  MovimientoFinanciero?: Prisma.MovimientoFinancieroCreateNestedManyWithoutNominaEncabezadoInput
+  EstadoNomina?: Prisma.EstadoNominaCreateNestedOneWithoutNominaEncabezadoInput
   Usuario?: Prisma.UsuarioCreateNestedOneWithoutNominaEncabezadoInput
 }
 
@@ -558,6 +900,9 @@ export type NominaEncabezadoUncheckedCreateWithoutNominaDetalleInput = {
   IdUsuarioGerente?: number | null
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  IdEstadoActual?: number | null
+  HistorialEstadoNomina?: Prisma.HistorialEstadoNominaUncheckedCreateNestedManyWithoutNominaEncabezadoInput
+  MovimientoFinanciero?: Prisma.MovimientoFinancieroUncheckedCreateNestedManyWithoutNominaEncabezadoInput
 }
 
 export type NominaEncabezadoCreateOrConnectWithoutNominaDetalleInput = {
@@ -584,6 +929,9 @@ export type NominaEncabezadoUpdateWithoutNominaDetalleInput = {
   Estado?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  HistorialEstadoNomina?: Prisma.HistorialEstadoNominaUpdateManyWithoutNominaEncabezadoNestedInput
+  MovimientoFinanciero?: Prisma.MovimientoFinancieroUpdateManyWithoutNominaEncabezadoNestedInput
+  EstadoNomina?: Prisma.EstadoNominaUpdateOneWithoutNominaEncabezadoNestedInput
   Usuario?: Prisma.UsuarioUpdateOneWithoutNominaEncabezadoNestedInput
 }
 
@@ -597,6 +945,9 @@ export type NominaEncabezadoUncheckedUpdateWithoutNominaDetalleInput = {
   IdUsuarioGerente?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  IdEstadoActual?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  HistorialEstadoNomina?: Prisma.HistorialEstadoNominaUncheckedUpdateManyWithoutNominaEncabezadoNestedInput
+  MovimientoFinanciero?: Prisma.MovimientoFinancieroUncheckedUpdateManyWithoutNominaEncabezadoNestedInput
 }
 
 export type NominaEncabezadoCreateWithoutUsuarioInput = {
@@ -607,7 +958,10 @@ export type NominaEncabezadoCreateWithoutUsuarioInput = {
   Estado?: string | null
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  HistorialEstadoNomina?: Prisma.HistorialEstadoNominaCreateNestedManyWithoutNominaEncabezadoInput
+  MovimientoFinanciero?: Prisma.MovimientoFinancieroCreateNestedManyWithoutNominaEncabezadoInput
   NominaDetalle?: Prisma.NominaDetalleCreateNestedManyWithoutNominaEncabezadoInput
+  EstadoNomina?: Prisma.EstadoNominaCreateNestedOneWithoutNominaEncabezadoInput
 }
 
 export type NominaEncabezadoUncheckedCreateWithoutUsuarioInput = {
@@ -619,6 +973,9 @@ export type NominaEncabezadoUncheckedCreateWithoutUsuarioInput = {
   Estado?: string | null
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  IdEstadoActual?: number | null
+  HistorialEstadoNomina?: Prisma.HistorialEstadoNominaUncheckedCreateNestedManyWithoutNominaEncabezadoInput
+  MovimientoFinanciero?: Prisma.MovimientoFinancieroUncheckedCreateNestedManyWithoutNominaEncabezadoInput
   NominaDetalle?: Prisma.NominaDetalleUncheckedCreateNestedManyWithoutNominaEncabezadoInput
 }
 
@@ -647,19 +1004,56 @@ export type NominaEncabezadoUpdateManyWithWhereWithoutUsuarioInput = {
   data: Prisma.XOR<Prisma.NominaEncabezadoUpdateManyMutationInput, Prisma.NominaEncabezadoUncheckedUpdateManyWithoutUsuarioInput>
 }
 
-export type NominaEncabezadoScalarWhereInput = {
-  AND?: Prisma.NominaEncabezadoScalarWhereInput | Prisma.NominaEncabezadoScalarWhereInput[]
-  OR?: Prisma.NominaEncabezadoScalarWhereInput[]
-  NOT?: Prisma.NominaEncabezadoScalarWhereInput | Prisma.NominaEncabezadoScalarWhereInput[]
-  IdNomina?: Prisma.IntFilter<"NominaEncabezado"> | number
-  Mes?: Prisma.IntFilter<"NominaEncabezado"> | number
-  Anio?: Prisma.IntFilter<"NominaEncabezado"> | number
-  Quincena?: Prisma.IntNullableFilter<"NominaEncabezado"> | number | null
-  FechaGeneracion?: Prisma.DateTimeNullableFilter<"NominaEncabezado"> | Date | string | null
-  Estado?: Prisma.StringNullableFilter<"NominaEncabezado"> | string | null
-  IdUsuarioGerente?: Prisma.IntNullableFilter<"NominaEncabezado"> | number | null
-  Activo?: Prisma.BoolNullableFilter<"NominaEncabezado"> | boolean | null
-  FechaEliminacion?: Prisma.DateTimeNullableFilter<"NominaEncabezado"> | Date | string | null
+export type NominaEncabezadoCreateManyEstadoNominaInput = {
+  Mes: number
+  Anio: number
+  Quincena?: number | null
+  FechaGeneracion?: Date | string | null
+  Estado?: string | null
+  IdUsuarioGerente?: number | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
+}
+
+export type NominaEncabezadoUpdateWithoutEstadoNominaInput = {
+  Mes?: Prisma.IntFieldUpdateOperationsInput | number
+  Anio?: Prisma.IntFieldUpdateOperationsInput | number
+  Quincena?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  FechaGeneracion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Estado?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  HistorialEstadoNomina?: Prisma.HistorialEstadoNominaUpdateManyWithoutNominaEncabezadoNestedInput
+  MovimientoFinanciero?: Prisma.MovimientoFinancieroUpdateManyWithoutNominaEncabezadoNestedInput
+  NominaDetalle?: Prisma.NominaDetalleUpdateManyWithoutNominaEncabezadoNestedInput
+  Usuario?: Prisma.UsuarioUpdateOneWithoutNominaEncabezadoNestedInput
+}
+
+export type NominaEncabezadoUncheckedUpdateWithoutEstadoNominaInput = {
+  IdNomina?: Prisma.IntFieldUpdateOperationsInput | number
+  Mes?: Prisma.IntFieldUpdateOperationsInput | number
+  Anio?: Prisma.IntFieldUpdateOperationsInput | number
+  Quincena?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  FechaGeneracion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Estado?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  IdUsuarioGerente?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  HistorialEstadoNomina?: Prisma.HistorialEstadoNominaUncheckedUpdateManyWithoutNominaEncabezadoNestedInput
+  MovimientoFinanciero?: Prisma.MovimientoFinancieroUncheckedUpdateManyWithoutNominaEncabezadoNestedInput
+  NominaDetalle?: Prisma.NominaDetalleUncheckedUpdateManyWithoutNominaEncabezadoNestedInput
+}
+
+export type NominaEncabezadoUncheckedUpdateManyWithoutEstadoNominaInput = {
+  IdNomina?: Prisma.IntFieldUpdateOperationsInput | number
+  Mes?: Prisma.IntFieldUpdateOperationsInput | number
+  Anio?: Prisma.IntFieldUpdateOperationsInput | number
+  Quincena?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  FechaGeneracion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Estado?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  IdUsuarioGerente?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type NominaEncabezadoCreateManyUsuarioInput = {
@@ -670,6 +1064,7 @@ export type NominaEncabezadoCreateManyUsuarioInput = {
   Estado?: string | null
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  IdEstadoActual?: number | null
 }
 
 export type NominaEncabezadoUpdateWithoutUsuarioInput = {
@@ -680,7 +1075,10 @@ export type NominaEncabezadoUpdateWithoutUsuarioInput = {
   Estado?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  HistorialEstadoNomina?: Prisma.HistorialEstadoNominaUpdateManyWithoutNominaEncabezadoNestedInput
+  MovimientoFinanciero?: Prisma.MovimientoFinancieroUpdateManyWithoutNominaEncabezadoNestedInput
   NominaDetalle?: Prisma.NominaDetalleUpdateManyWithoutNominaEncabezadoNestedInput
+  EstadoNomina?: Prisma.EstadoNominaUpdateOneWithoutNominaEncabezadoNestedInput
 }
 
 export type NominaEncabezadoUncheckedUpdateWithoutUsuarioInput = {
@@ -692,6 +1090,9 @@ export type NominaEncabezadoUncheckedUpdateWithoutUsuarioInput = {
   Estado?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  IdEstadoActual?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  HistorialEstadoNomina?: Prisma.HistorialEstadoNominaUncheckedUpdateManyWithoutNominaEncabezadoNestedInput
+  MovimientoFinanciero?: Prisma.MovimientoFinancieroUncheckedUpdateManyWithoutNominaEncabezadoNestedInput
   NominaDetalle?: Prisma.NominaDetalleUncheckedUpdateManyWithoutNominaEncabezadoNestedInput
 }
 
@@ -704,6 +1105,7 @@ export type NominaEncabezadoUncheckedUpdateManyWithoutUsuarioInput = {
   Estado?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  IdEstadoActual?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 
@@ -712,10 +1114,14 @@ export type NominaEncabezadoUncheckedUpdateManyWithoutUsuarioInput = {
  */
 
 export type NominaEncabezadoCountOutputType = {
+  HistorialEstadoNomina: number
+  MovimientoFinanciero: number
   NominaDetalle: number
 }
 
 export type NominaEncabezadoCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  HistorialEstadoNomina?: boolean | NominaEncabezadoCountOutputTypeCountHistorialEstadoNominaArgs
+  MovimientoFinanciero?: boolean | NominaEncabezadoCountOutputTypeCountMovimientoFinancieroArgs
   NominaDetalle?: boolean | NominaEncabezadoCountOutputTypeCountNominaDetalleArgs
 }
 
@@ -727,6 +1133,20 @@ export type NominaEncabezadoCountOutputTypeDefaultArgs<ExtArgs extends runtime.T
    * Select specific fields to fetch from the NominaEncabezadoCountOutputType
    */
   select?: Prisma.NominaEncabezadoCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * NominaEncabezadoCountOutputType without action
+ */
+export type NominaEncabezadoCountOutputTypeCountHistorialEstadoNominaArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.HistorialEstadoNominaWhereInput
+}
+
+/**
+ * NominaEncabezadoCountOutputType without action
+ */
+export type NominaEncabezadoCountOutputTypeCountMovimientoFinancieroArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.MovimientoFinancieroWhereInput
 }
 
 /**
@@ -747,7 +1167,11 @@ export type NominaEncabezadoSelect<ExtArgs extends runtime.Types.Extensions.Inte
   IdUsuarioGerente?: boolean
   Activo?: boolean
   FechaEliminacion?: boolean
+  IdEstadoActual?: boolean
+  HistorialEstadoNomina?: boolean | Prisma.NominaEncabezado$HistorialEstadoNominaArgs<ExtArgs>
+  MovimientoFinanciero?: boolean | Prisma.NominaEncabezado$MovimientoFinancieroArgs<ExtArgs>
   NominaDetalle?: boolean | Prisma.NominaEncabezado$NominaDetalleArgs<ExtArgs>
+  EstadoNomina?: boolean | Prisma.NominaEncabezado$EstadoNominaArgs<ExtArgs>
   Usuario?: boolean | Prisma.NominaEncabezado$UsuarioArgs<ExtArgs>
   _count?: boolean | Prisma.NominaEncabezadoCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["nominaEncabezado"]>
@@ -764,11 +1188,15 @@ export type NominaEncabezadoSelectScalar = {
   IdUsuarioGerente?: boolean
   Activo?: boolean
   FechaEliminacion?: boolean
+  IdEstadoActual?: boolean
 }
 
-export type NominaEncabezadoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"IdNomina" | "Mes" | "Anio" | "Quincena" | "FechaGeneracion" | "Estado" | "IdUsuarioGerente" | "Activo" | "FechaEliminacion", ExtArgs["result"]["nominaEncabezado"]>
+export type NominaEncabezadoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"IdNomina" | "Mes" | "Anio" | "Quincena" | "FechaGeneracion" | "Estado" | "IdUsuarioGerente" | "Activo" | "FechaEliminacion" | "IdEstadoActual", ExtArgs["result"]["nominaEncabezado"]>
 export type NominaEncabezadoInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  HistorialEstadoNomina?: boolean | Prisma.NominaEncabezado$HistorialEstadoNominaArgs<ExtArgs>
+  MovimientoFinanciero?: boolean | Prisma.NominaEncabezado$MovimientoFinancieroArgs<ExtArgs>
   NominaDetalle?: boolean | Prisma.NominaEncabezado$NominaDetalleArgs<ExtArgs>
+  EstadoNomina?: boolean | Prisma.NominaEncabezado$EstadoNominaArgs<ExtArgs>
   Usuario?: boolean | Prisma.NominaEncabezado$UsuarioArgs<ExtArgs>
   _count?: boolean | Prisma.NominaEncabezadoCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -776,7 +1204,10 @@ export type NominaEncabezadoInclude<ExtArgs extends runtime.Types.Extensions.Int
 export type $NominaEncabezadoPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "NominaEncabezado"
   objects: {
+    HistorialEstadoNomina: Prisma.$HistorialEstadoNominaPayload<ExtArgs>[]
+    MovimientoFinanciero: Prisma.$MovimientoFinancieroPayload<ExtArgs>[]
     NominaDetalle: Prisma.$NominaDetallePayload<ExtArgs>[]
+    EstadoNomina: Prisma.$EstadoNominaPayload<ExtArgs> | null
     Usuario: Prisma.$UsuarioPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -789,6 +1220,7 @@ export type $NominaEncabezadoPayload<ExtArgs extends runtime.Types.Extensions.In
     IdUsuarioGerente: number | null
     Activo: boolean | null
     FechaEliminacion: Date | null
+    IdEstadoActual: number | null
   }, ExtArgs["result"]["nominaEncabezado"]>
   composites: {}
 }
@@ -1129,7 +1561,10 @@ readonly fields: NominaEncabezadoFieldRefs;
  */
 export interface Prisma__NominaEncabezadoClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  HistorialEstadoNomina<T extends Prisma.NominaEncabezado$HistorialEstadoNominaArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.NominaEncabezado$HistorialEstadoNominaArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HistorialEstadoNominaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  MovimientoFinanciero<T extends Prisma.NominaEncabezado$MovimientoFinancieroArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.NominaEncabezado$MovimientoFinancieroArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MovimientoFinancieroPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   NominaDetalle<T extends Prisma.NominaEncabezado$NominaDetalleArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.NominaEncabezado$NominaDetalleArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NominaDetallePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  EstadoNomina<T extends Prisma.NominaEncabezado$EstadoNominaArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.NominaEncabezado$EstadoNominaArgs<ExtArgs>>): Prisma.Prisma__EstadoNominaClient<runtime.Types.Result.GetResult<Prisma.$EstadoNominaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   Usuario<T extends Prisma.NominaEncabezado$UsuarioArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.NominaEncabezado$UsuarioArgs<ExtArgs>>): Prisma.Prisma__UsuarioClient<runtime.Types.Result.GetResult<Prisma.$UsuarioPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1169,6 +1604,7 @@ export interface NominaEncabezadoFieldRefs {
   readonly IdUsuarioGerente: Prisma.FieldRef<"NominaEncabezado", 'Int'>
   readonly Activo: Prisma.FieldRef<"NominaEncabezado", 'Boolean'>
   readonly FechaEliminacion: Prisma.FieldRef<"NominaEncabezado", 'DateTime'>
+  readonly IdEstadoActual: Prisma.FieldRef<"NominaEncabezado", 'Int'>
 }
     
 
@@ -1516,6 +1952,54 @@ export type NominaEncabezadoDeleteManyArgs<ExtArgs extends runtime.Types.Extensi
 }
 
 /**
+ * NominaEncabezado.HistorialEstadoNomina
+ */
+export type NominaEncabezado$HistorialEstadoNominaArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the HistorialEstadoNomina
+   */
+  select?: Prisma.HistorialEstadoNominaSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the HistorialEstadoNomina
+   */
+  omit?: Prisma.HistorialEstadoNominaOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.HistorialEstadoNominaInclude<ExtArgs> | null
+  where?: Prisma.HistorialEstadoNominaWhereInput
+  orderBy?: Prisma.HistorialEstadoNominaOrderByWithRelationInput | Prisma.HistorialEstadoNominaOrderByWithRelationInput[]
+  cursor?: Prisma.HistorialEstadoNominaWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.HistorialEstadoNominaScalarFieldEnum | Prisma.HistorialEstadoNominaScalarFieldEnum[]
+}
+
+/**
+ * NominaEncabezado.MovimientoFinanciero
+ */
+export type NominaEncabezado$MovimientoFinancieroArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the MovimientoFinanciero
+   */
+  select?: Prisma.MovimientoFinancieroSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the MovimientoFinanciero
+   */
+  omit?: Prisma.MovimientoFinancieroOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MovimientoFinancieroInclude<ExtArgs> | null
+  where?: Prisma.MovimientoFinancieroWhereInput
+  orderBy?: Prisma.MovimientoFinancieroOrderByWithRelationInput | Prisma.MovimientoFinancieroOrderByWithRelationInput[]
+  cursor?: Prisma.MovimientoFinancieroWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.MovimientoFinancieroScalarFieldEnum | Prisma.MovimientoFinancieroScalarFieldEnum[]
+}
+
+/**
  * NominaEncabezado.NominaDetalle
  */
 export type NominaEncabezado$NominaDetalleArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1537,6 +2021,25 @@ export type NominaEncabezado$NominaDetalleArgs<ExtArgs extends runtime.Types.Ext
   take?: number
   skip?: number
   distinct?: Prisma.NominaDetalleScalarFieldEnum | Prisma.NominaDetalleScalarFieldEnum[]
+}
+
+/**
+ * NominaEncabezado.EstadoNomina
+ */
+export type NominaEncabezado$EstadoNominaArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the EstadoNomina
+   */
+  select?: Prisma.EstadoNominaSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the EstadoNomina
+   */
+  omit?: Prisma.EstadoNominaOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EstadoNominaInclude<ExtArgs> | null
+  where?: Prisma.EstadoNominaWhereInput
 }
 
 /**

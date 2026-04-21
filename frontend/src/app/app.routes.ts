@@ -14,6 +14,7 @@ import { PuestoComponent } from './puesto/puesto';
 import { JornadaLaboralComponent } from './jornada-laboral/jornada-laboral';
 import { BancoComponent } from './banco/banco';
 import { ParametroGlobalComponent } from './parametro-global/parametro-global';
+import { NominaComponent } from './nomina/nomina';
 import { authGuard } from './auth.guard';
 
 export const routes: Routes = [
@@ -65,7 +66,14 @@ export const routes: Routes = [
             {path: 'bancos', component: BancoComponent},
             {path: 'parametros', component: ParametroGlobalComponent}
         ]
-
+    },
+    {
+        path: 'nomina',
+        component: Home,
+        canActivate: [authGuard],
+        children: [
+            {path: 'generar', component: NominaComponent}
+        ]
     },    
     { path: '**', redirectTo: 'login' }
 ];

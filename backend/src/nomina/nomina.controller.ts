@@ -14,7 +14,7 @@ import { CreateNominaDto } from './dto/create-nomina.dto';
 import { UpdateNominaDto } from './dto/update-nomina.dto';
 import { AuthGuard } from '../login/login.guard';
 
-@Controller('api/nomina')
+@Controller('nomina')
 @UseGuards(AuthGuard)
 export class NominaController {
   constructor(private readonly nominaService: NominaService) {}
@@ -35,6 +35,16 @@ export class NominaController {
       body.idEmpleado,
       body.salarioBase,
     );
+  }
+
+  @Post('generar-masiva')
+  generarNominaMasiva() {
+    return this.nominaService.generarNominaMasiva();
+  }
+
+  @Get('parametros')
+  getParametros() {
+    return this.nominaService.getParametros();
   }
 
   @Get()

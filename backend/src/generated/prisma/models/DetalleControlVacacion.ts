@@ -463,6 +463,14 @@ export type DetalleControlVacacionUncheckedUpdateManyWithoutControlVacacionNeste
   deleteMany?: Prisma.DetalleControlVacacionScalarWhereInput | Prisma.DetalleControlVacacionScalarWhereInput[]
 }
 
+export type DecimalFieldUpdateOperationsInput = {
+  set?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  increment?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  decrement?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  multiply?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
+}
+
 export type DetalleControlVacacionCreateNestedManyWithoutIncidenciaInput = {
   create?: Prisma.XOR<Prisma.DetalleControlVacacionCreateWithoutIncidenciaInput, Prisma.DetalleControlVacacionUncheckedCreateWithoutIncidenciaInput> | Prisma.DetalleControlVacacionCreateWithoutIncidenciaInput[] | Prisma.DetalleControlVacacionUncheckedCreateWithoutIncidenciaInput[]
   connectOrCreate?: Prisma.DetalleControlVacacionCreateOrConnectWithoutIncidenciaInput | Prisma.DetalleControlVacacionCreateOrConnectWithoutIncidenciaInput[]

@@ -549,14 +549,6 @@ export type MovimientoEmpleadoUncheckedUpdateManyWithoutEmpleadoNestedInput = {
   deleteMany?: Prisma.MovimientoEmpleadoScalarWhereInput | Prisma.MovimientoEmpleadoScalarWhereInput[]
 }
 
-export type DecimalFieldUpdateOperationsInput = {
-  set?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  increment?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  decrement?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  multiply?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
-}
-
 export type MovimientoEmpleadoCreateNestedManyWithoutTipoMovimientoInput = {
   create?: Prisma.XOR<Prisma.MovimientoEmpleadoCreateWithoutTipoMovimientoInput, Prisma.MovimientoEmpleadoUncheckedCreateWithoutTipoMovimientoInput> | Prisma.MovimientoEmpleadoCreateWithoutTipoMovimientoInput[] | Prisma.MovimientoEmpleadoUncheckedCreateWithoutTipoMovimientoInput[]
   connectOrCreate?: Prisma.MovimientoEmpleadoCreateOrConnectWithoutTipoMovimientoInput | Prisma.MovimientoEmpleadoCreateOrConnectWithoutTipoMovimientoInput[]

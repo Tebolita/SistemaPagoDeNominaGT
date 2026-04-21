@@ -72,11 +72,11 @@
     </div>
     <div>
       <label class="block text-sm font-medium mb-2">Horas Diarias</label>
-      <p-inputNumber [(ngModel)]="form.HorasDiarias" [minFractionDigits]="1" [maxFractionDigits]="2" class="w-full"></p-inputNumber>
+      <p-inputNumber [(ngModel)]="form.HorasDiarias" [min]="1" [max]="24" [minFractionDigits]="0" [maxFractionDigits]="2" class="w-full" [required]="true"></p-inputNumber>
     </div>
     <div>
       <label class="block text-sm font-medium mb-2">Horas Semanales</label>
-      <p-inputNumber [(ngModel)]="form.HorasSemanales" [minFractionDigits]="1" [maxFractionDigits]="2" class="w-full"></p-inputNumber>
+      <p-inputNumber [(ngModel)]="form.HorasSemanales" [min]="1" [max]="168" [minFractionDigits]="0" [maxFractionDigits]="2" class="w-full" [required]="true"></p-inputNumber>
     </div>
   </div>
   <ng-template pTemplate="footer">

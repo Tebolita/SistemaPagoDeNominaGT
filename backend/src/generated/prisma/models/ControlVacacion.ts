@@ -422,6 +422,11 @@ export type ControlVacacionSumOrderByAggregateInput = {
   DiasGozados?: Prisma.SortOrder
 }
 
+export type ControlVacacionScalarRelationFilter = {
+  is?: Prisma.ControlVacacionWhereInput
+  isNot?: Prisma.ControlVacacionWhereInput
+}
+
 export type ControlVacacionListRelationFilter = {
   every?: Prisma.ControlVacacionWhereInput
   some?: Prisma.ControlVacacionWhereInput
@@ -432,17 +437,26 @@ export type ControlVacacionOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type ControlVacacionScalarRelationFilter = {
-  is?: Prisma.ControlVacacionWhereInput
-  isNot?: Prisma.ControlVacacionWhereInput
-}
-
 export type NullableIntFieldUpdateOperationsInput = {
   set?: number | null
   increment?: number
   decrement?: number
   multiply?: number
   divide?: number
+}
+
+export type ControlVacacionCreateNestedOneWithoutDetalleControlVacacionInput = {
+  create?: Prisma.XOR<Prisma.ControlVacacionCreateWithoutDetalleControlVacacionInput, Prisma.ControlVacacionUncheckedCreateWithoutDetalleControlVacacionInput>
+  connectOrCreate?: Prisma.ControlVacacionCreateOrConnectWithoutDetalleControlVacacionInput
+  connect?: Prisma.ControlVacacionWhereUniqueInput
+}
+
+export type ControlVacacionUpdateOneRequiredWithoutDetalleControlVacacionNestedInput = {
+  create?: Prisma.XOR<Prisma.ControlVacacionCreateWithoutDetalleControlVacacionInput, Prisma.ControlVacacionUncheckedCreateWithoutDetalleControlVacacionInput>
+  connectOrCreate?: Prisma.ControlVacacionCreateOrConnectWithoutDetalleControlVacacionInput
+  upsert?: Prisma.ControlVacacionUpsertWithoutDetalleControlVacacionInput
+  connect?: Prisma.ControlVacacionWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ControlVacacionUpdateToOneWithWhereWithoutDetalleControlVacacionInput, Prisma.ControlVacacionUpdateWithoutDetalleControlVacacionInput>, Prisma.ControlVacacionUncheckedUpdateWithoutDetalleControlVacacionInput>
 }
 
 export type ControlVacacionCreateNestedManyWithoutEmpleadoInput = {
@@ -487,18 +501,58 @@ export type ControlVacacionUncheckedUpdateManyWithoutEmpleadoNestedInput = {
   deleteMany?: Prisma.ControlVacacionScalarWhereInput | Prisma.ControlVacacionScalarWhereInput[]
 }
 
-export type ControlVacacionCreateNestedOneWithoutDetalleControlVacacionInput = {
-  create?: Prisma.XOR<Prisma.ControlVacacionCreateWithoutDetalleControlVacacionInput, Prisma.ControlVacacionUncheckedCreateWithoutDetalleControlVacacionInput>
-  connectOrCreate?: Prisma.ControlVacacionCreateOrConnectWithoutDetalleControlVacacionInput
-  connect?: Prisma.ControlVacacionWhereUniqueInput
+export type ControlVacacionCreateWithoutDetalleControlVacacionInput = {
+  AnioCorriente: number
+  DiasGanados?: number | null
+  DiasGozados?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
+  Empleado: Prisma.EmpleadoCreateNestedOneWithoutControlVacacionInput
 }
 
-export type ControlVacacionUpdateOneRequiredWithoutDetalleControlVacacionNestedInput = {
-  create?: Prisma.XOR<Prisma.ControlVacacionCreateWithoutDetalleControlVacacionInput, Prisma.ControlVacacionUncheckedCreateWithoutDetalleControlVacacionInput>
-  connectOrCreate?: Prisma.ControlVacacionCreateOrConnectWithoutDetalleControlVacacionInput
-  upsert?: Prisma.ControlVacacionUpsertWithoutDetalleControlVacacionInput
-  connect?: Prisma.ControlVacacionWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.ControlVacacionUpdateToOneWithWhereWithoutDetalleControlVacacionInput, Prisma.ControlVacacionUpdateWithoutDetalleControlVacacionInput>, Prisma.ControlVacacionUncheckedUpdateWithoutDetalleControlVacacionInput>
+export type ControlVacacionUncheckedCreateWithoutDetalleControlVacacionInput = {
+  IdControlVacacion?: number
+  IdEmpleado: number
+  AnioCorriente: number
+  DiasGanados?: number | null
+  DiasGozados?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
+}
+
+export type ControlVacacionCreateOrConnectWithoutDetalleControlVacacionInput = {
+  where: Prisma.ControlVacacionWhereUniqueInput
+  create: Prisma.XOR<Prisma.ControlVacacionCreateWithoutDetalleControlVacacionInput, Prisma.ControlVacacionUncheckedCreateWithoutDetalleControlVacacionInput>
+}
+
+export type ControlVacacionUpsertWithoutDetalleControlVacacionInput = {
+  update: Prisma.XOR<Prisma.ControlVacacionUpdateWithoutDetalleControlVacacionInput, Prisma.ControlVacacionUncheckedUpdateWithoutDetalleControlVacacionInput>
+  create: Prisma.XOR<Prisma.ControlVacacionCreateWithoutDetalleControlVacacionInput, Prisma.ControlVacacionUncheckedCreateWithoutDetalleControlVacacionInput>
+  where?: Prisma.ControlVacacionWhereInput
+}
+
+export type ControlVacacionUpdateToOneWithWhereWithoutDetalleControlVacacionInput = {
+  where?: Prisma.ControlVacacionWhereInput
+  data: Prisma.XOR<Prisma.ControlVacacionUpdateWithoutDetalleControlVacacionInput, Prisma.ControlVacacionUncheckedUpdateWithoutDetalleControlVacacionInput>
+}
+
+export type ControlVacacionUpdateWithoutDetalleControlVacacionInput = {
+  AnioCorriente?: Prisma.IntFieldUpdateOperationsInput | number
+  DiasGanados?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  DiasGozados?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Empleado?: Prisma.EmpleadoUpdateOneRequiredWithoutControlVacacionNestedInput
+}
+
+export type ControlVacacionUncheckedUpdateWithoutDetalleControlVacacionInput = {
+  IdControlVacacion?: Prisma.IntFieldUpdateOperationsInput | number
+  IdEmpleado?: Prisma.IntFieldUpdateOperationsInput | number
+  AnioCorriente?: Prisma.IntFieldUpdateOperationsInput | number
+  DiasGanados?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  DiasGozados?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ControlVacacionCreateWithoutEmpleadoInput = {
@@ -556,60 +610,6 @@ export type ControlVacacionScalarWhereInput = {
   DiasGozados?: Prisma.DecimalNullableFilter<"ControlVacacion"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   Activo?: Prisma.BoolNullableFilter<"ControlVacacion"> | boolean | null
   FechaEliminacion?: Prisma.DateTimeNullableFilter<"ControlVacacion"> | Date | string | null
-}
-
-export type ControlVacacionCreateWithoutDetalleControlVacacionInput = {
-  AnioCorriente: number
-  DiasGanados?: number | null
-  DiasGozados?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  Activo?: boolean | null
-  FechaEliminacion?: Date | string | null
-  Empleado: Prisma.EmpleadoCreateNestedOneWithoutControlVacacionInput
-}
-
-export type ControlVacacionUncheckedCreateWithoutDetalleControlVacacionInput = {
-  IdControlVacacion?: number
-  IdEmpleado: number
-  AnioCorriente: number
-  DiasGanados?: number | null
-  DiasGozados?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  Activo?: boolean | null
-  FechaEliminacion?: Date | string | null
-}
-
-export type ControlVacacionCreateOrConnectWithoutDetalleControlVacacionInput = {
-  where: Prisma.ControlVacacionWhereUniqueInput
-  create: Prisma.XOR<Prisma.ControlVacacionCreateWithoutDetalleControlVacacionInput, Prisma.ControlVacacionUncheckedCreateWithoutDetalleControlVacacionInput>
-}
-
-export type ControlVacacionUpsertWithoutDetalleControlVacacionInput = {
-  update: Prisma.XOR<Prisma.ControlVacacionUpdateWithoutDetalleControlVacacionInput, Prisma.ControlVacacionUncheckedUpdateWithoutDetalleControlVacacionInput>
-  create: Prisma.XOR<Prisma.ControlVacacionCreateWithoutDetalleControlVacacionInput, Prisma.ControlVacacionUncheckedCreateWithoutDetalleControlVacacionInput>
-  where?: Prisma.ControlVacacionWhereInput
-}
-
-export type ControlVacacionUpdateToOneWithWhereWithoutDetalleControlVacacionInput = {
-  where?: Prisma.ControlVacacionWhereInput
-  data: Prisma.XOR<Prisma.ControlVacacionUpdateWithoutDetalleControlVacacionInput, Prisma.ControlVacacionUncheckedUpdateWithoutDetalleControlVacacionInput>
-}
-
-export type ControlVacacionUpdateWithoutDetalleControlVacacionInput = {
-  AnioCorriente?: Prisma.IntFieldUpdateOperationsInput | number
-  DiasGanados?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  DiasGozados?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  Empleado?: Prisma.EmpleadoUpdateOneRequiredWithoutControlVacacionNestedInput
-}
-
-export type ControlVacacionUncheckedUpdateWithoutDetalleControlVacacionInput = {
-  IdControlVacacion?: Prisma.IntFieldUpdateOperationsInput | number
-  IdEmpleado?: Prisma.IntFieldUpdateOperationsInput | number
-  AnioCorriente?: Prisma.IntFieldUpdateOperationsInput | number
-  DiasGanados?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  DiasGozados?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ControlVacacionCreateManyEmpleadoInput = {

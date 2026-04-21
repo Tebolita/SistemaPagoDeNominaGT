@@ -52,26 +52,37 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   Asistencia: 'Asistencia',
+  Banco: 'Banco',
+  Cliente: 'Cliente',
   ControlVacacion: 'ControlVacacion',
+  CuentaBancariaEmpresa: 'CuentaBancariaEmpresa',
   Departamento: 'Departamento',
+  DetalleControlVacacion: 'DetalleControlVacacion',
+  DetalleVenta: 'DetalleVenta',
   Empleado: 'Empleado',
+  Empresa: 'Empresa',
+  EstadisticaMensual: 'EstadisticaMensual',
+  EstadoNomina: 'EstadoNomina',
+  HistorialEstadoNomina: 'HistorialEstadoNomina',
   Incidencia: 'Incidencia',
+  IndicadorEficiencia: 'IndicadorEficiencia',
+  JornadaLaboral: 'JornadaLaboral',
   MovimientoEmpleado: 'MovimientoEmpleado',
+  MovimientoFinanciero: 'MovimientoFinanciero',
   NominaDetalle: 'NominaDetalle',
   NominaEncabezado: 'NominaEncabezado',
   ParametroGlobal: 'ParametroGlobal',
+  PresupuestoAnual: 'PresupuestoAnual',
+  ProductoServicio: 'ProductoServicio',
+  ProvisionPrestacion: 'ProvisionPrestacion',
   Puesto: 'Puesto',
   RegistroEnvioBoleta: 'RegistroEnvioBoleta',
   RolUsuario: 'RolUsuario',
   Salario: 'Salario',
+  sysdiagrams: 'sysdiagrams',
   TipoMovimiento: 'TipoMovimiento',
   Usuario: 'Usuario',
-  DetalleControlVacacion: 'DetalleControlVacacion',
-  Banco: 'Banco',
-  Empresa: 'Empresa',
-  JornadaLaboral: 'JornadaLaboral',
-  ProvisionPrestacion: 'ProvisionPrestacion',
-  sysdiagrams: 'sysdiagrams'
+  Venta: 'Venta'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -105,6 +116,32 @@ export const AsistenciaScalarFieldEnum = {
 export type AsistenciaScalarFieldEnum = (typeof AsistenciaScalarFieldEnum)[keyof typeof AsistenciaScalarFieldEnum]
 
 
+export const BancoScalarFieldEnum = {
+  IdBanco: 'IdBanco',
+  NombreBanco: 'NombreBanco',
+  Activo: 'Activo',
+  FechaEliminacion: 'FechaEliminacion'
+} as const
+
+export type BancoScalarFieldEnum = (typeof BancoScalarFieldEnum)[keyof typeof BancoScalarFieldEnum]
+
+
+export const ClienteScalarFieldEnum = {
+  IdCliente: 'IdCliente',
+  NombreCliente: 'NombreCliente',
+  TipoCliente: 'TipoCliente',
+  NIT: 'NIT',
+  DPI: 'DPI',
+  Correo: 'Correo',
+  Telefono: 'Telefono',
+  Direccion: 'Direccion',
+  Activo: 'Activo',
+  FechaEliminacion: 'FechaEliminacion'
+} as const
+
+export type ClienteScalarFieldEnum = (typeof ClienteScalarFieldEnum)[keyof typeof ClienteScalarFieldEnum]
+
+
 export const ControlVacacionScalarFieldEnum = {
   IdControlVacacion: 'IdControlVacacion',
   IdEmpleado: 'IdEmpleado',
@@ -118,6 +155,21 @@ export const ControlVacacionScalarFieldEnum = {
 export type ControlVacacionScalarFieldEnum = (typeof ControlVacacionScalarFieldEnum)[keyof typeof ControlVacacionScalarFieldEnum]
 
 
+export const CuentaBancariaEmpresaScalarFieldEnum = {
+  IdCuenta: 'IdCuenta',
+  IdBanco: 'IdBanco',
+  NumeroCuenta: 'NumeroCuenta',
+  NombreCuenta: 'NombreCuenta',
+  TipoCuenta: 'TipoCuenta',
+  SaldoActual: 'SaldoActual',
+  Moneda: 'Moneda',
+  Activo: 'Activo',
+  FechaEliminacion: 'FechaEliminacion'
+} as const
+
+export type CuentaBancariaEmpresaScalarFieldEnum = (typeof CuentaBancariaEmpresaScalarFieldEnum)[keyof typeof CuentaBancariaEmpresaScalarFieldEnum]
+
+
 export const DepartamentoScalarFieldEnum = {
   IdDepartamento: 'IdDepartamento',
   NombreDepartamento: 'NombreDepartamento',
@@ -126,6 +178,34 @@ export const DepartamentoScalarFieldEnum = {
 } as const
 
 export type DepartamentoScalarFieldEnum = (typeof DepartamentoScalarFieldEnum)[keyof typeof DepartamentoScalarFieldEnum]
+
+
+export const DetalleControlVacacionScalarFieldEnum = {
+  IdDetalleVacacion: 'IdDetalleVacacion',
+  IdControlVacacion: 'IdControlVacacion',
+  IdIncidencia: 'IdIncidencia',
+  DiasDescontados: 'DiasDescontados',
+  FechaRegistro: 'FechaRegistro',
+  Activo: 'Activo',
+  FechaEliminacion: 'FechaEliminacion'
+} as const
+
+export type DetalleControlVacacionScalarFieldEnum = (typeof DetalleControlVacacionScalarFieldEnum)[keyof typeof DetalleControlVacacionScalarFieldEnum]
+
+
+export const DetalleVentaScalarFieldEnum = {
+  IdDetalleVenta: 'IdDetalleVenta',
+  IdVenta: 'IdVenta',
+  IdProducto: 'IdProducto',
+  Cantidad: 'Cantidad',
+  PrecioUnitario: 'PrecioUnitario',
+  Descuento: 'Descuento',
+  Subtotal: 'Subtotal',
+  Activo: 'Activo',
+  FechaEliminacion: 'FechaEliminacion'
+} as const
+
+export type DetalleVentaScalarFieldEnum = (typeof DetalleVentaScalarFieldEnum)[keyof typeof DetalleVentaScalarFieldEnum]
 
 
 export const EmpleadoScalarFieldEnum = {
@@ -152,6 +232,65 @@ export const EmpleadoScalarFieldEnum = {
 export type EmpleadoScalarFieldEnum = (typeof EmpleadoScalarFieldEnum)[keyof typeof EmpleadoScalarFieldEnum]
 
 
+export const EmpresaScalarFieldEnum = {
+  IdEmpresa: 'IdEmpresa',
+  NombreRazonSocial: 'NombreRazonSocial',
+  NombreComercial: 'NombreComercial',
+  NIT: 'NIT',
+  NumeroPatronalIGSS: 'NumeroPatronalIGSS',
+  Activo: 'Activo',
+  FechaEliminacion: 'FechaEliminacion',
+  CapitalInicial: 'CapitalInicial',
+  CapitalActual: 'CapitalActual'
+} as const
+
+export type EmpresaScalarFieldEnum = (typeof EmpresaScalarFieldEnum)[keyof typeof EmpresaScalarFieldEnum]
+
+
+export const EstadisticaMensualScalarFieldEnum = {
+  IdEstadistica: 'IdEstadistica',
+  Anio: 'Anio',
+  Mes: 'Mes',
+  IdIndicador: 'IdIndicador',
+  Valor: 'Valor',
+  FechaRegistro: 'FechaRegistro',
+  IdUsuarioRegistra: 'IdUsuarioRegistra',
+  Notas: 'Notas',
+  Activo: 'Activo',
+  FechaEliminacion: 'FechaEliminacion'
+} as const
+
+export type EstadisticaMensualScalarFieldEnum = (typeof EstadisticaMensualScalarFieldEnum)[keyof typeof EstadisticaMensualScalarFieldEnum]
+
+
+export const EstadoNominaScalarFieldEnum = {
+  IdEstadoNomina: 'IdEstadoNomina',
+  NombreEstado: 'NombreEstado',
+  Descripcion: 'Descripcion',
+  Orden: 'Orden',
+  RequiereAprobacion: 'RequiereAprobacion',
+  Activo: 'Activo',
+  FechaEliminacion: 'FechaEliminacion'
+} as const
+
+export type EstadoNominaScalarFieldEnum = (typeof EstadoNominaScalarFieldEnum)[keyof typeof EstadoNominaScalarFieldEnum]
+
+
+export const HistorialEstadoNominaScalarFieldEnum = {
+  IdHistorial: 'IdHistorial',
+  IdNomina: 'IdNomina',
+  IdEstadoAnterior: 'IdEstadoAnterior',
+  IdEstadoNuevo: 'IdEstadoNuevo',
+  IdUsuarioCambio: 'IdUsuarioCambio',
+  FechaCambio: 'FechaCambio',
+  Comentarios: 'Comentarios',
+  Activo: 'Activo',
+  FechaEliminacion: 'FechaEliminacion'
+} as const
+
+export type HistorialEstadoNominaScalarFieldEnum = (typeof HistorialEstadoNominaScalarFieldEnum)[keyof typeof HistorialEstadoNominaScalarFieldEnum]
+
+
 export const IncidenciaScalarFieldEnum = {
   IdIncidencia: 'IdIncidencia',
   IdEmpleado: 'IdEmpleado',
@@ -165,6 +304,33 @@ export const IncidenciaScalarFieldEnum = {
 } as const
 
 export type IncidenciaScalarFieldEnum = (typeof IncidenciaScalarFieldEnum)[keyof typeof IncidenciaScalarFieldEnum]
+
+
+export const IndicadorEficienciaScalarFieldEnum = {
+  IdIndicador: 'IdIndicador',
+  NombreIndicador: 'NombreIndicador',
+  TipoIndicador: 'TipoIndicador',
+  UnidadMedida: 'UnidadMedida',
+  FormulaCalculo: 'FormulaCalculo',
+  MetaMinima: 'MetaMinima',
+  MetaMaxima: 'MetaMaxima',
+  Activo: 'Activo',
+  FechaEliminacion: 'FechaEliminacion'
+} as const
+
+export type IndicadorEficienciaScalarFieldEnum = (typeof IndicadorEficienciaScalarFieldEnum)[keyof typeof IndicadorEficienciaScalarFieldEnum]
+
+
+export const JornadaLaboralScalarFieldEnum = {
+  IdJornada: 'IdJornada',
+  NombreJornada: 'NombreJornada',
+  HorasDiarias: 'HorasDiarias',
+  HorasSemanales: 'HorasSemanales',
+  Activo: 'Activo',
+  FechaEliminacion: 'FechaEliminacion'
+} as const
+
+export type JornadaLaboralScalarFieldEnum = (typeof JornadaLaboralScalarFieldEnum)[keyof typeof JornadaLaboralScalarFieldEnum]
 
 
 export const MovimientoEmpleadoScalarFieldEnum = {
@@ -181,6 +347,26 @@ export const MovimientoEmpleadoScalarFieldEnum = {
 } as const
 
 export type MovimientoEmpleadoScalarFieldEnum = (typeof MovimientoEmpleadoScalarFieldEnum)[keyof typeof MovimientoEmpleadoScalarFieldEnum]
+
+
+export const MovimientoFinancieroScalarFieldEnum = {
+  IdMovimiento: 'IdMovimiento',
+  IdCuenta: 'IdCuenta',
+  TipoMovimiento: 'TipoMovimiento',
+  Categoria: 'Categoria',
+  Subcategoria: 'Subcategoria',
+  Monto: 'Monto',
+  FechaMovimiento: 'FechaMovimiento',
+  Referencia: 'Referencia',
+  IdUsuarioRegistra: 'IdUsuarioRegistra',
+  IdVenta: 'IdVenta',
+  IdNomina: 'IdNomina',
+  Notas: 'Notas',
+  Activo: 'Activo',
+  FechaEliminacion: 'FechaEliminacion'
+} as const
+
+export type MovimientoFinancieroScalarFieldEnum = (typeof MovimientoFinancieroScalarFieldEnum)[keyof typeof MovimientoFinancieroScalarFieldEnum]
 
 
 export const NominaDetalleScalarFieldEnum = {
@@ -211,7 +397,8 @@ export const NominaEncabezadoScalarFieldEnum = {
   Estado: 'Estado',
   IdUsuarioGerente: 'IdUsuarioGerente',
   Activo: 'Activo',
-  FechaEliminacion: 'FechaEliminacion'
+  FechaEliminacion: 'FechaEliminacion',
+  IdEstadoActual: 'IdEstadoActual'
 } as const
 
 export type NominaEncabezadoScalarFieldEnum = (typeof NominaEncabezadoScalarFieldEnum)[keyof typeof NominaEncabezadoScalarFieldEnum]
@@ -227,6 +414,52 @@ export const ParametroGlobalScalarFieldEnum = {
 } as const
 
 export type ParametroGlobalScalarFieldEnum = (typeof ParametroGlobalScalarFieldEnum)[keyof typeof ParametroGlobalScalarFieldEnum]
+
+
+export const PresupuestoAnualScalarFieldEnum = {
+  IdPresupuesto: 'IdPresupuesto',
+  Anio: 'Anio',
+  PresupuestoVentas: 'PresupuestoVentas',
+  PresupuestoGastos: 'PresupuestoGastos',
+  PresupuestoNomina: 'PresupuestoNomina',
+  PresupuestoInversiones: 'PresupuestoInversiones',
+  IdUsuarioRegistra: 'IdUsuarioRegistra',
+  FechaRegistro: 'FechaRegistro',
+  Activo: 'Activo',
+  FechaEliminacion: 'FechaEliminacion'
+} as const
+
+export type PresupuestoAnualScalarFieldEnum = (typeof PresupuestoAnualScalarFieldEnum)[keyof typeof PresupuestoAnualScalarFieldEnum]
+
+
+export const ProductoServicioScalarFieldEnum = {
+  IdProducto: 'IdProducto',
+  NombreProducto: 'NombreProducto',
+  TipoProducto: 'TipoProducto',
+  PrecioUnitario: 'PrecioUnitario',
+  CostoUnitario: 'CostoUnitario',
+  UnidadMedida: 'UnidadMedida',
+  Activo: 'Activo',
+  FechaEliminacion: 'FechaEliminacion'
+} as const
+
+export type ProductoServicioScalarFieldEnum = (typeof ProductoServicioScalarFieldEnum)[keyof typeof ProductoServicioScalarFieldEnum]
+
+
+export const ProvisionPrestacionScalarFieldEnum = {
+  IdProvision: 'IdProvision',
+  IdEmpleado: 'IdEmpleado',
+  Mes: 'Mes',
+  Anio: 'Anio',
+  ProvisionBono14: 'ProvisionBono14',
+  ProvisionAguinaldo: 'ProvisionAguinaldo',
+  ProvisionIndemnizacion: 'ProvisionIndemnizacion',
+  ProvisionVacaciones: 'ProvisionVacaciones',
+  Activo: 'Activo',
+  FechaEliminacion: 'FechaEliminacion'
+} as const
+
+export type ProvisionPrestacionScalarFieldEnum = (typeof ProvisionPrestacionScalarFieldEnum)[keyof typeof ProvisionPrestacionScalarFieldEnum]
 
 
 export const PuestoScalarFieldEnum = {
@@ -276,6 +509,17 @@ export const SalarioScalarFieldEnum = {
 export type SalarioScalarFieldEnum = (typeof SalarioScalarFieldEnum)[keyof typeof SalarioScalarFieldEnum]
 
 
+export const SysdiagramsScalarFieldEnum = {
+  name: 'name',
+  principal_id: 'principal_id',
+  diagram_id: 'diagram_id',
+  version: 'version',
+  definition: 'definition'
+} as const
+
+export type SysdiagramsScalarFieldEnum = (typeof SysdiagramsScalarFieldEnum)[keyof typeof SysdiagramsScalarFieldEnum]
+
+
 export const TipoMovimientoScalarFieldEnum = {
   IdTipoMovimiento: 'IdTipoMovimiento',
   NombreMovimiento: 'NombreMovimiento',
@@ -304,79 +548,24 @@ export const UsuarioScalarFieldEnum = {
 export type UsuarioScalarFieldEnum = (typeof UsuarioScalarFieldEnum)[keyof typeof UsuarioScalarFieldEnum]
 
 
-export const DetalleControlVacacionScalarFieldEnum = {
-  IdDetalleVacacion: 'IdDetalleVacacion',
-  IdControlVacacion: 'IdControlVacacion',
-  IdIncidencia: 'IdIncidencia',
-  DiasDescontados: 'DiasDescontados',
-  FechaRegistro: 'FechaRegistro',
+export const VentaScalarFieldEnum = {
+  IdVenta: 'IdVenta',
+  IdCliente: 'IdCliente',
+  FechaVenta: 'FechaVenta',
+  TipoVenta: 'TipoVenta',
+  Subtotal: 'Subtotal',
+  Descuento: 'Descuento',
+  Impuestos: 'Impuestos',
+  Total: 'Total',
+  EstadoPago: 'EstadoPago',
+  FechaVencimiento: 'FechaVencimiento',
+  IdUsuarioRegistra: 'IdUsuarioRegistra',
+  Notas: 'Notas',
   Activo: 'Activo',
   FechaEliminacion: 'FechaEliminacion'
 } as const
 
-export type DetalleControlVacacionScalarFieldEnum = (typeof DetalleControlVacacionScalarFieldEnum)[keyof typeof DetalleControlVacacionScalarFieldEnum]
-
-
-export const BancoScalarFieldEnum = {
-  IdBanco: 'IdBanco',
-  NombreBanco: 'NombreBanco',
-  Activo: 'Activo',
-  FechaEliminacion: 'FechaEliminacion'
-} as const
-
-export type BancoScalarFieldEnum = (typeof BancoScalarFieldEnum)[keyof typeof BancoScalarFieldEnum]
-
-
-export const EmpresaScalarFieldEnum = {
-  IdEmpresa: 'IdEmpresa',
-  NombreRazonSocial: 'NombreRazonSocial',
-  NombreComercial: 'NombreComercial',
-  NIT: 'NIT',
-  NumeroPatronalIGSS: 'NumeroPatronalIGSS',
-  Activo: 'Activo',
-  FechaEliminacion: 'FechaEliminacion'
-} as const
-
-export type EmpresaScalarFieldEnum = (typeof EmpresaScalarFieldEnum)[keyof typeof EmpresaScalarFieldEnum]
-
-
-export const JornadaLaboralScalarFieldEnum = {
-  IdJornada: 'IdJornada',
-  NombreJornada: 'NombreJornada',
-  HorasDiarias: 'HorasDiarias',
-  HorasSemanales: 'HorasSemanales',
-  Activo: 'Activo',
-  FechaEliminacion: 'FechaEliminacion'
-} as const
-
-export type JornadaLaboralScalarFieldEnum = (typeof JornadaLaboralScalarFieldEnum)[keyof typeof JornadaLaboralScalarFieldEnum]
-
-
-export const ProvisionPrestacionScalarFieldEnum = {
-  IdProvision: 'IdProvision',
-  IdEmpleado: 'IdEmpleado',
-  Mes: 'Mes',
-  Anio: 'Anio',
-  ProvisionBono14: 'ProvisionBono14',
-  ProvisionAguinaldo: 'ProvisionAguinaldo',
-  ProvisionIndemnizacion: 'ProvisionIndemnizacion',
-  ProvisionVacaciones: 'ProvisionVacaciones',
-  Activo: 'Activo',
-  FechaEliminacion: 'FechaEliminacion'
-} as const
-
-export type ProvisionPrestacionScalarFieldEnum = (typeof ProvisionPrestacionScalarFieldEnum)[keyof typeof ProvisionPrestacionScalarFieldEnum]
-
-
-export const SysdiagramsScalarFieldEnum = {
-  name: 'name',
-  principal_id: 'principal_id',
-  diagram_id: 'diagram_id',
-  version: 'version',
-  definition: 'definition'
-} as const
-
-export type SysdiagramsScalarFieldEnum = (typeof SysdiagramsScalarFieldEnum)[keyof typeof SysdiagramsScalarFieldEnum]
+export type VentaScalarFieldEnum = (typeof VentaScalarFieldEnum)[keyof typeof VentaScalarFieldEnum]
 
 
 export const SortOrder = {

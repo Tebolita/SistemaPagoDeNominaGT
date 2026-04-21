@@ -1,0 +1,36 @@
+/* Nomina component styles */
+
+/* Media queries para diálogos responsivos */
+@media (max-width: 768px) {
+  :host ::ng-deep .p-dialog {
+    width: 95vw !important;
+    max-width: 95vw !important;
+  }
+}
+
+@media (max-width: 640px) {
+  :host ::ng-deep .p-dialog {
+    width: 98vw !important;
+    max-width: 98vw !important;
+  }
+
+  :host ::ng-deep .grid.grid-cols-2 {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Asegurar que el dropdown se muestre correctamente */
+:host ::ng-deep .p-select-label {
+  overflow: visible;
+}
+
+:host ::ng-deep .p-select {
+  width: 100%;
+}
+
+/* Scroll para diálogos en pantallas pequeñas */
+:host ::ng-deep .p-dialog-content {
+  max-height: 70vh;
+  overflow-y: auto;
+}
+

@@ -335,10 +335,6 @@ export type DepartamentoScalarRelationFilter = {
   isNot?: Prisma.DepartamentoWhereInput
 }
 
-export type StringFieldUpdateOperationsInput = {
-  set?: string
-}
-
 export type DepartamentoCreateNestedOneWithoutPuestoInput = {
   create?: Prisma.XOR<Prisma.DepartamentoCreateWithoutPuestoInput, Prisma.DepartamentoUncheckedCreateWithoutPuestoInput>
   connectOrCreate?: Prisma.DepartamentoCreateOrConnectWithoutPuestoInput

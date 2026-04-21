@@ -13,6 +13,7 @@ import { PuestoModule } from './puesto/puesto.module';
 import { JornadaLaboralModule } from './jornada-laboral/jornada-laboral.module';
 import { BancoModule } from './banco/banco.module';
 import { ParametroGlobalModule } from './parametro-global/parametro-global.module';
+import { NominaModule } from './nomina/nomina.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { ParametroGlobalModule } from './parametro-global/parametro-global.modul
     JornadaLaboralModule,
     BancoModule,
     ParametroGlobalModule,
+    NominaModule,
   ],
   controllers: [],
   providers: [PrismaService],

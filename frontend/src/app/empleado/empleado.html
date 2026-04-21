@@ -354,17 +354,32 @@
           class="w-full" />
       </div>
 
-
       <div class="flex flex-col gap-2">
         <label class="text-sm font-medium text-surface-600">Jornada</label>
         <p-select 
-          [options]="JornadaLaboral()" 
+          [options]="jornadas()" 
           [(ngModel)]="nuevoEmpleado().IdJornada" 
           optionLabel="NombreJornada" 
           optionValue="IdJornada" 
           placeholder="Seleccionar Jornada" 
           class="w-full" />
-      </div>      
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <label class="text-sm font-medium text-surface-600">Banco</label>
+        <p-select
+          [options]="bancos()"
+          [(ngModel)]="nuevoEmpleado().IdBanco"
+          optionLabel="NombreBanco"
+          optionValue="IdBanco"
+          placeholder="Seleccionar banco"
+          class="w-full" />
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <label class="text-sm font-medium text-surface-600">Cuenta bancaria</label>
+        <input pInputText class="w-full" [(ngModel)]="nuevoEmpleado().CuentaBancaria" placeholder="Número de cuenta" />
+      </div>
 
     </div>
 

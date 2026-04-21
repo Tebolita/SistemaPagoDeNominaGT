@@ -23,30 +23,90 @@ export * from './enums.js';
  */
 export type Asistencia = Prisma.AsistenciaModel
 /**
+ * Model Banco
+ * 
+ */
+export type Banco = Prisma.BancoModel
+/**
+ * Model Cliente
+ * 
+ */
+export type Cliente = Prisma.ClienteModel
+/**
  * Model ControlVacacion
  * 
  */
 export type ControlVacacion = Prisma.ControlVacacionModel
+/**
+ * Model CuentaBancariaEmpresa
+ * 
+ */
+export type CuentaBancariaEmpresa = Prisma.CuentaBancariaEmpresaModel
 /**
  * Model Departamento
  * 
  */
 export type Departamento = Prisma.DepartamentoModel
 /**
+ * Model DetalleControlVacacion
+ * 
+ */
+export type DetalleControlVacacion = Prisma.DetalleControlVacacionModel
+/**
+ * Model DetalleVenta
+ * 
+ */
+export type DetalleVenta = Prisma.DetalleVentaModel
+/**
  * Model Empleado
  * 
  */
 export type Empleado = Prisma.EmpleadoModel
+/**
+ * Model Empresa
+ * 
+ */
+export type Empresa = Prisma.EmpresaModel
+/**
+ * Model EstadisticaMensual
+ * 
+ */
+export type EstadisticaMensual = Prisma.EstadisticaMensualModel
+/**
+ * Model EstadoNomina
+ * 
+ */
+export type EstadoNomina = Prisma.EstadoNominaModel
+/**
+ * Model HistorialEstadoNomina
+ * 
+ */
+export type HistorialEstadoNomina = Prisma.HistorialEstadoNominaModel
 /**
  * Model Incidencia
  * 
  */
 export type Incidencia = Prisma.IncidenciaModel
 /**
+ * Model IndicadorEficiencia
+ * 
+ */
+export type IndicadorEficiencia = Prisma.IndicadorEficienciaModel
+/**
+ * Model JornadaLaboral
+ * 
+ */
+export type JornadaLaboral = Prisma.JornadaLaboralModel
+/**
  * Model MovimientoEmpleado
  * 
  */
 export type MovimientoEmpleado = Prisma.MovimientoEmpleadoModel
+/**
+ * Model MovimientoFinanciero
+ * 
+ */
+export type MovimientoFinanciero = Prisma.MovimientoFinancieroModel
 /**
  * Model NominaDetalle
  * 
@@ -62,6 +122,21 @@ export type NominaEncabezado = Prisma.NominaEncabezadoModel
  * 
  */
 export type ParametroGlobal = Prisma.ParametroGlobalModel
+/**
+ * Model PresupuestoAnual
+ * 
+ */
+export type PresupuestoAnual = Prisma.PresupuestoAnualModel
+/**
+ * Model ProductoServicio
+ * 
+ */
+export type ProductoServicio = Prisma.ProductoServicioModel
+/**
+ * Model ProvisionPrestacion
+ * 
+ */
+export type ProvisionPrestacion = Prisma.ProvisionPrestacionModel
 /**
  * Model Puesto
  * 
@@ -83,6 +158,11 @@ export type RolUsuario = Prisma.RolUsuarioModel
  */
 export type Salario = Prisma.SalarioModel
 /**
+ * Model sysdiagrams
+ * 
+ */
+export type sysdiagrams = Prisma.sysdiagramsModel
+/**
  * Model TipoMovimiento
  * 
  */
@@ -93,32 +173,7 @@ export type TipoMovimiento = Prisma.TipoMovimientoModel
  */
 export type Usuario = Prisma.UsuarioModel
 /**
- * Model DetalleControlVacacion
+ * Model Venta
  * 
  */
-export type DetalleControlVacacion = Prisma.DetalleControlVacacionModel
-/**
- * Model Banco
- * 
- */
-export type Banco = Prisma.BancoModel
-/**
- * Model Empresa
- * 
- */
-export type Empresa = Prisma.EmpresaModel
-/**
- * Model JornadaLaboral
- * 
- */
-export type JornadaLaboral = Prisma.JornadaLaboralModel
-/**
- * Model ProvisionPrestacion
- * 
- */
-export type ProvisionPrestacion = Prisma.ProvisionPrestacionModel
-/**
- * Model sysdiagrams
- * 
- */
-export type sysdiagrams = Prisma.sysdiagramsModel
+export type Venta = Prisma.VentaModel

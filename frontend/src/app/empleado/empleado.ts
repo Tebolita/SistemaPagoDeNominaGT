@@ -26,11 +26,16 @@ import { RolService } from '../services/rol.service';
 import { AsistenciaService } from '../services/asistencia.service';
 import { VacacionesService } from '../vacacion/vacacion.service';
 import { UsuarioService } from '../services/usuario.service';
-// import { PuestoService } from '../services/puesto.service'; <-- Descomenta cuando lo tengas
+import { PuestoService } from '../services/puesto.service'; // ✅ Descomentado
+import { JornadaLaboralService } from '../services/jornada-laboral.service';
+import { BancoService } from '../services/banco.service';
 
 import { EmpleadoResponse, EmpleadoRequest } from '../models/Empleado.model';
 import { RolInterface } from '../models/Rol.model';
 import { UsuarioInterface } from '../models/Usuario.model';
+import { Puesto } from '../models/Puesto.model'; // ✅ Importado
+import { JornadaLaboral } from '../models/JornadaLaboral.model';
+import { Banco } from '../models/Banco.model';
 
 @Component({
   selector: 'app-empleados',
@@ -67,7 +72,9 @@ export class Empleado implements OnInit {
   private asistenciaService = inject(AsistenciaService);
   private vacacionesService = inject(VacacionesService);
   private usuarioService = inject(UsuarioService);
-  // private puestoService = inject(PuestoService); 
+  private puestoService = inject(PuestoService); // ✅ Inyectado 
+  private jornadaService = inject(JornadaLaboralService);
+  private bancoService = inject(BancoService);
 
   // --- ESTADOS PRINCIPALES (UI y Datos) ---
   users = signal<EmpleadoResponse[]>([]);
@@ -93,7 +100,9 @@ export class Empleado implements OnInit {
 
   // --- CATÁLOGOS PARA DROPDOWNS ---
   roles = signal<RolInterface[]>([]);
-  puestos = signal<any[]>([]); // Cambia 'any' por tu PuestoInterface
+  puestos = signal<Puesto[]>([]); // ✅ Tipo correcto
+  jornadas = signal<JornadaLaboral[]>([]);
+  bancos = signal<Banco[]>([]);
   generos = signal<{label: string, value: boolean}[]>([
     { label: 'Masculino', value: false },
     { label: 'Femenino', value: true }
@@ -124,6 +133,8 @@ export class Empleado implements OnInit {
     this.cargarEmpleados();
     this.cargarRoles();
     this.cargarPuestos();
+    this.cargarJornadas();
+    this.cargarBancos();
   }
 
   cargarEmpleados() {
@@ -149,11 +160,36 @@ export class Empleado implements OnInit {
   }
 
   cargarPuestos() {
-    // Aquí llamas a tu PuestoService. Por ahora dejo un mock para que el dropdown no esté vacío.
-    this.puestos.set([
-      { IdPuesto: 1, NombrePuesto: 'Gerente' },
-      { IdPuesto: 2, NombrePuesto: 'Desarrollador' }
-    ]);
+    this.puestoService.getAll().subscribe({
+      next: (data) => this.puestos.set(data),
+      error: () => this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'No se pudieron cargar los puestos'
+      })
+    });
+  }
+
+  cargarJornadas() {
+    this.jornadaService.getAll().subscribe({
+      next: (data) => this.jornadas.set(data),
+      error: () => this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'No se pudieron cargar las jornadas laborales'
+      })
+    });
+  }
+
+  cargarBancos() {
+    this.bancoService.getAll().subscribe({
+      next: (data) => this.bancos.set(data),
+      error: () => this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'No se pudieron cargar los bancos'
+      })
+    });
   }
 
   loadVacaciones(idEmpleado: number) {
@@ -246,7 +282,9 @@ export class Empleado implements OnInit {
       Telefono: userToUpdate.Telefono.toString(),
       Direccion: userToUpdate.Direccion,
       EstadoCivil: userToUpdate.EstadoCivil,
-      IdJornada: 1
+      IdJornada: userToUpdate.IdJornada ?? userToUpdate.JornadaLaboral?.IdJornada,
+      IdBanco: userToUpdate.IdBanco ?? userToUpdate.Banco?.IdBanco,
+      CuentaBancaria: userToUpdate.CuentaBancaria
     };
 
     this.empleadoService.ActualizarEmpleado(userToUpdate.IdEmpleado, payload).subscribe({

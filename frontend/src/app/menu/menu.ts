@@ -116,6 +116,16 @@ export class MenuPrincipal implements OnInit {
                 ]
             },
             {
+                label: 'Nómina',
+                items: [
+                    {
+                        label: 'Generar Nómina',
+                        icon: 'pi pi-calculator',
+                        routerLink: '/nomina/generar'
+                    },
+                ]
+            },
+            {
                 separator: true
             }
         ];

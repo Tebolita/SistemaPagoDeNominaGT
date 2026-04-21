@@ -40,7 +40,7 @@ export class JornadaLaboralComponent implements OnInit {
   jornadas = signal<JornadaLaboral[]>([]);
   displayDialog = signal(false);
   isEditMode = signal(false);
-  form = { NombreJornada: '', HorasDiarias: 0, HorasSemanales: 0 };
+  form = { NombreJornada: '', HorasDiarias: 8, HorasSemanales: 40 };
   selectedJornada: JornadaLaboral | null = null;
 
   ngOnInit() {
@@ -56,41 +56,65 @@ export class JornadaLaboralComponent implements OnInit {
 
   showDialog() {
     this.isEditMode.set(false);
-    this.form = { NombreJornada: '', HorasDiarias: 0, HorasSemanales: 0 };
+    this.form = { NombreJornada: '', HorasDiarias: 8, HorasSemanales: 40 };
     this.selectedJornada = null;
     this.displayDialog.set(true);
   }
 
   editJornada(jornada: JornadaLaboral) {
     this.isEditMode.set(true);
-    this.form = { ...jornada };
+    this.form = {
+      NombreJornada: jornada.NombreJornada,
+      HorasDiarias: jornada.HorasDiarias,
+      HorasSemanales: jornada.HorasSemanales
+    };
     this.selectedJornada = jornada;
     this.displayDialog.set(true);
   }
 
   saveJornada() {
-    if (!this.form.NombreJornada || !this.form.HorasDiarias || !this.form.HorasSemanales) {
-      this.messageService.add({ severity: 'warn', summary: 'Validación', detail: 'Completa todos los campos' });
+    console.log('Form values:', this.form);
+    console.log('HorasDiarias type:', typeof this.form.HorasDiarias, 'value:', this.form.HorasDiarias);
+    console.log('HorasSemanales type:', typeof this.form.HorasSemanales, 'value:', this.form.HorasSemanales);
+
+    // Ensure numeric values are valid
+    const horasDiarias = Number(this.form.HorasDiarias);
+    const horasSemanales = Number(this.form.HorasSemanales);
+
+    if (!this.form.NombreJornada || isNaN(horasDiarias) || isNaN(horasSemanales) || horasDiarias < 1 || horasDiarias > 24 || horasSemanales < 1 || horasSemanales > 168) {
+      this.messageService.add({ severity: 'warn', summary: 'Validación', detail: 'Completa todos los campos con valores válidos' });
       return;
     }
 
+    const formData = {
+      NombreJornada: this.form.NombreJornada,
+      HorasDiarias: horasDiarias,
+      HorasSemanales: horasSemanales
+    };
+
     if (this.isEditMode() && this.selectedJornada) {
-      this.jornadaService.update(this.selectedJornada.IdJornada, this.form).subscribe({
+      this.jornadaService.update(this.selectedJornada.IdJornada, formData).subscribe({
         next: () => {
           this.messageService.add({ severity: 'success', summary: 'Actualizado', detail: 'Jornada actualizada' });
           this.displayDialog.set(false);
           this.loadJornadas();
         },
-        error: (err) => this.messageService.add({ severity: 'error', summary: 'Error', detail: err.message }),
+        error: (err) => {
+          console.error('Update error:', err);
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: err.message });
+        },
       });
     } else {
-      this.jornadaService.create(this.form).subscribe({
+      this.jornadaService.create(formData).subscribe({
         next: () => {
           this.messageService.add({ severity: 'success', summary: 'Creado', detail: 'Jornada creada' });
           this.displayDialog.set(false);
           this.loadJornadas();
         },
-        error: (err) => this.messageService.add({ severity: 'error', summary: 'Error', detail: err.message }),
+        error: (err) => {
+          console.error('Create error:', err);
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: err.message });
+        },
       });
     }
   }
