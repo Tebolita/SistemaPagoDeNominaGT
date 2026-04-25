@@ -29,6 +29,7 @@ import { UsuarioService } from '../services/usuario.service';
 import { PuestoService } from '../services/puesto.service'; // ✅ Descomentado
 import { JornadaLaboralService } from '../services/jornada-laboral.service';
 import { BancoService } from '../services/banco.service';
+import { SalarioService } from '../services/salario.service';
 
 import { EmpleadoResponse, EmpleadoRequest } from '../models/Empleado.model';
 import { RolInterface } from '../models/Rol.model';
@@ -36,6 +37,7 @@ import { UsuarioInterface } from '../models/Usuario.model';
 import { Puesto } from '../models/Puesto.model'; // ✅ Importado
 import { JornadaLaboral } from '../models/JornadaLaboral.model';
 import { Banco } from '../models/Banco.model';
+import { SalarioResponse } from '../models/Salario.model';
 
 @Component({
   selector: 'app-empleados',
@@ -75,6 +77,7 @@ export class Empleado implements OnInit {
   private puestoService = inject(PuestoService); // ✅ Inyectado 
   private jornadaService = inject(JornadaLaboralService);
   private bancoService = inject(BancoService);
+  private salarioService = inject(SalarioService);
 
   // --- ESTADOS PRINCIPALES (UI y Datos) ---
   users = signal<EmpleadoResponse[]>([]);
@@ -85,6 +88,7 @@ export class Empleado implements OnInit {
 
   vacacionesEmpleado = signal<any[]>([]);
   asistenciasEmpleado = signal<any[]>([]);
+  historialSalario = signal<SalarioResponse[]>([]);
 
   items = signal<MenuItem[]>([]);
   usuarios = signal<MenuItem[]>([]); 
@@ -97,6 +101,10 @@ export class Empleado implements OnInit {
   
   nuevoEmpleado = signal<Partial<EmpleadoRequest>>({});
   nuevoUsuario = signal<Partial<UsuarioInterface>>({}); 
+
+  // --- ESTADOS PARA EL DIÁLOGO DE SALARIO ---
+  salarioDialogVisible = signal<boolean>(false);
+  nuevoSalario = signal<{SalarioBase: number, FechaInicioVigencia: string, FechaFinVigencia: string}>({SalarioBase: 0, FechaInicioVigencia: '', FechaFinVigencia: ''}); 
 
   // --- CATÁLOGOS PARA DROPDOWNS ---
   roles = signal<RolInterface[]>([]);
@@ -208,6 +216,14 @@ export class Empleado implements OnInit {
     });
   }
 
+  loadSalarios(idEmpleado: number) {
+    this.historialSalario.set([]);
+    this.salarioService.findByEmpleado(idEmpleado).subscribe({
+      next: (data) => this.historialSalario.set(data),
+      error: () => this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo cargar el historial de salarios' })
+    });
+  }
+
   // --- INTERACCIONES DE LA VISTA ---
   
   onSelectUser(user: EmpleadoResponse) {
@@ -215,6 +231,7 @@ export class Empleado implements OnInit {
     this.messageResponsive.set('');
     this.loadVacaciones(user.IdEmpleado);
     this.loadAsistencias(user.IdEmpleado);
+    this.loadSalarios(user.IdEmpleado);
   }
 
   onContextMenu(event: Event, user: EmpleadoResponse) {

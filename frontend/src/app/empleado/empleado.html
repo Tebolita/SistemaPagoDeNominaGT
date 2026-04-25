@@ -190,6 +190,32 @@
                             [disabled]="!editarUsuario()"
                             class="w-full md:w-56" />
                     </div>
+                    <div class="flex flex-col gap-1">
+                        <label class="text-xs text-surface-500">Jornada Laboral</label>
+                        <p-select 
+                            [options]="jornadas()" 
+                            [(ngModel)]="selected.IdJornada" 
+                            optionLabel="NombreJornada" 
+                            optionValue="IdJornada"
+                            placeholder="Seleccionar Jornada" 
+                            [disabled]="!editarUsuario()"
+                            class="w-full md:w-56" />
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <label class="text-xs text-surface-500">Banco</label>
+                        <p-select 
+                            [options]="bancos()" 
+                            [(ngModel)]="selected.IdBanco" 
+                            optionLabel="NombreBanco" 
+                            optionValue="IdBanco"
+                            placeholder="Seleccionar Banco" 
+                            [disabled]="!editarUsuario()"
+                            class="w-full md:w-56" />
+                    </div>
+                    <div class="flex flex-col gap-1 col-span-2">
+                        <label class="text-xs text-surface-500">Cuenta Bancaria</label>
+                        <input pInputText [(ngModel)]="selected.CuentaBancaria" [readonly]="!editarUsuario()" placeholder="No. de cuenta" />
+                    </div>
                 </div>
             </p-fieldset>
         </div>
@@ -252,6 +278,42 @@
                                     <p-tag severity="info" value="+{{ asistencia.HorasExtra }} hrs" icon="pi pi-star-fill"></p-tag>
                                 } @else {
                                     <span class="text-500">0</span>
+                                }
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </p-fieldset>
+        </div>
+
+        <div class="card mt-4">
+            <p-fieldset class="w-full" legend="Historial de Salarios">
+                <p-table [value]="historialSalario()" [rows]="5" [paginator]="true" [rowHover]="true"
+                    emptyMessage="Este empleado no tiene historial de salarios.">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>Salario Base</th>
+                            <th>Inicio Vigencia</th>
+                            <th>Fin Vigencia</th>
+                            <th>Estado</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-salario>
+                        <tr>
+                            <td class="font-medium text-green-600">Q{{ salario.SalarioBase | number:'1.2-2' }}</td>
+                            <td><i class="pi pi-calendar mr-2 text-surface-500"></i>{{ salario.FechaInicioVigencia | date:'dd/MM/yyyy' }}</td>
+                            <td>
+                                @if (salario.FechaFinVigencia) {
+                                    <i class="pi pi-calendar-times mr-2 text-surface-500"></i>{{ salario.FechaFinVigencia | date:'dd/MM/yyyy' }}
+                                } @else {
+                                    <span class="text-500">Actual</span>
+                                }
+                            </td>
+                            <td>
+                                @if (salario.Activo) {
+                                    <p-tag severity="success" value="Activo" icon="pi pi-check"></p-tag>
+                                } @else {
+                                    <p-tag severity="secondary" value="Inactivo" icon="pi pi-times"></p-tag>
                                 }
                             </td>
                         </tr>
