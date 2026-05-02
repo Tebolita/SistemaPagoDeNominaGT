@@ -44,10 +44,15 @@ export class MenuPrincipal implements OnInit {
                 label: 'Reportería',
                 items: [
                     {
-                        label: 'Reportes',
-                        icon: 'pi pi-chart-bar',
+                        label: 'Inicio',
+                        icon: 'pi pi-home',
                         routerLink: '/reporteria/inicio'
                     },
+                    {
+                        label: 'Reportes',
+                        icon: 'pi pi-chart-bar',
+                        routerLink: '/reporteria/reportes'
+                    },                    
                 ]   
             },            
             {
@@ -99,6 +104,11 @@ export class MenuPrincipal implements OnInit {
                 label: 'Configuración',
                 items: [
                     {
+                        label: 'Inicio',
+                        icon: 'pi pi-home',
+                        routerLink: '/configuracion/inicio'
+                    },
+                    {
                         label: 'Departamentos',
                         icon: 'pi pi-building',
                         routerLink: '/configuracion/departamentos'
@@ -123,15 +133,25 @@ export class MenuPrincipal implements OnInit {
                         icon: 'pi pi-sliders-h',
                         routerLink: '/configuracion/parametros'
                     },
+                    {
+                        label: 'Estados de Nómina',
+                        icon: 'pi pi-tags',
+                        routerLink: '/configuracion/estados-nomina'
+                    },
                 ]
             },
             {
                 label: 'Nómina',
                 items: [
                     {
+                        label: 'Inicio',
+                        icon: 'pi pi-home',
+                        routerLink: '/nomina/inicio'
+                    },
+                    {
                         label: 'Generar Nómina',
                         icon: 'pi pi-calculator',
-                        routerLink: '/nomina/generar'
+                        routerLink: '/nomina/nominas'
                     },
                 ]
             },

@@ -7,19 +7,19 @@
 }
 
 .surface-card {
-  background: #ffffff;
+  background: #283A5E;
 }
 
 .surface-50 {
-  background: #fafafa;
+  background: #283A5E;
 }
 
 .surface-100 {
-  background: #f5f5f5;
+  background: #283A5E;
 }
 
 .border-round-xl {
-  border-radius: 12px;
+  border-radius: 12px;  
 }
 
 .shadow-2 {

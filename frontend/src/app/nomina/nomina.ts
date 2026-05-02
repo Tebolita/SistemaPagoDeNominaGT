@@ -11,11 +11,14 @@ import { TagModule } from 'primeng/tag';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { TooltipModule } from 'primeng/tooltip';
+import { TextareaModule } from 'primeng/textarea';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { NominaService } from '../services/nomina.service';
 import { EmpleadoService } from '../services/empleado.service';
+import { EstadoNominaService } from '../services/estado-nomina.service';
 import { Nomina, NominaCalculo, NominaMasivaResultado } from '../models/Nomina.model';
 import { EmpleadoResponse } from '../models/Empleado.model';
+import { EstadoNomina, HistorialEstadoNomina, CambiarEstadoNominaDto } from '../models/EstadoNomina.model';
 
 @Component({
   selector: 'app-nomina',
@@ -33,6 +36,7 @@ import { EmpleadoResponse } from '../models/Empleado.model';
     ToastModule,
     ConfirmDialogModule,
     TooltipModule,
+    TextareaModule,
   ],
   providers: [MessageService, ConfirmationService],
   templateUrl: './nomina.html',
@@ -41,20 +45,28 @@ import { EmpleadoResponse } from '../models/Empleado.model';
 export class NominaComponent implements OnInit {
   private nominaService = inject(NominaService);
   private empleadoService = inject(EmpleadoService);
+  private estadoNominaService = inject(EstadoNominaService);
   private messageService = inject(MessageService);
   private confirmationService = inject(ConfirmationService);
 
   nominas = signal<Nomina[]>([]);
   empleados = signal<EmpleadoResponse[]>([]);
+  estados = signal<EstadoNomina[]>([]);
+  historialEstados = signal<HistorialEstadoNomina[]>([]);
+
   displayDialog = signal(false);
   displayDetalles = signal(false);
+  displayCambiarEstado = signal(false);
+  displayHistorial = signal(false);
   form = { IdEmpleado: 0, SalarioBase: 0 };
+  cambioEstadoForm = { IdEstadoNuevo: 0, Comentarios: '' };
   calculoPreview: NominaCalculo | null = null;
   nominaSeleccionada: Nomina | null = null;
 
   ngOnInit() {
     this.loadNominas();
     this.loadEmpleados();
+    this.loadEstados();
   }
 
   private handleError(error: any, defaultMessage: string = 'Ha ocurrido un error inesperado'): string {
@@ -115,6 +127,20 @@ export class NominaComponent implements OnInit {
           severity: 'error',
           summary: 'Error al cargar empleados',
           detail: errorMessage
+        });
+      },
+    });
+  }
+
+  loadEstados() {
+    this.estadoNominaService.getAll().subscribe({
+      next: (data) => this.estados.set(data),
+      error: (err) => {
+        const errorMessage = this.handleError(err, 'No se pudieron cargar los estados de nómina');
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error al cargar estados',
+          detail: errorMessage,
         });
       },
     });
@@ -263,5 +289,83 @@ export class NominaComponent implements OnInit {
         });
       },
     });
+  }
+
+  // Métodos para gestión de estados
+  cambiarEstado(nomina: Nomina) {
+    this.nominaSeleccionada = nomina;
+    this.cambioEstadoForm = { IdEstadoNuevo: 0, Comentarios: '' };
+    this.displayCambiarEstado.set(true);
+  }
+
+  confirmarCambioEstado() {
+    if (!this.nominaSeleccionada || !this.cambioEstadoForm.IdEstadoNuevo) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Validación',
+        detail: 'Selecciona un estado nuevo',
+      });
+      return;
+    }
+
+    const cambioData: CambiarEstadoNominaDto = {
+      IdNomina: this.nominaSeleccionada.IdNomina,
+      IdEstadoNuevo: this.cambioEstadoForm.IdEstadoNuevo,
+      Comentarios: this.cambioEstadoForm.Comentarios,
+    };
+
+    this.estadoNominaService.cambiarEstado(cambioData).subscribe({
+      next: () => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Estado Cambiado',
+          detail: 'El estado de la nómina se cambió exitosamente',
+        });
+        this.displayCambiarEstado.set(false);
+        this.loadNominas();
+      },
+      error: (err) => {
+        const errorMessage = this.handleError(err, 'No se pudo cambiar el estado de la nómina');
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error al cambiar estado',
+          detail: errorMessage,
+        });
+      },
+    });
+  }
+
+  verHistorialEstados(nomina: Nomina) {
+    this.estadoNominaService.getHistorial(nomina.IdNomina).subscribe({
+      next: (data) => {
+        this.historialEstados.set(data);
+        this.nominaSeleccionada = nomina;
+        this.displayHistorial.set(true);
+      },
+      error: (err) => {
+        const errorMessage = this.handleError(err, 'No se pudo cargar el historial de estados');
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error al cargar historial',
+          detail: errorMessage,
+        });
+      },
+    });
+  }
+
+  getEstadoNombre(nomina: Nomina): string {
+    return nomina.EstadoNomina?.NombreEstado || 'Sin estado';
+  }
+
+  getEstadoSeverity(nomina: Nomina): 'success' | 'info' | 'warn' | 'danger' {
+    const estado = nomina.EstadoNomina?.NombreEstado;
+    switch (estado) {
+      case 'GENERADA': return 'info';
+      case 'PENDIENTE_APROBACION': return 'warn';
+      case 'APROBADA': return 'success';
+      case 'RECHAZADA': return 'danger';
+      case 'PROCESADA': return 'success';
+      default: return 'info';
+    }
   }
 }

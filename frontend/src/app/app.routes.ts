@@ -15,7 +15,11 @@ import { JornadaLaboralComponent } from './jornada-laboral/jornada-laboral';
 import { BancoComponent } from './banco/banco';
 import { ParametroGlobalComponent } from './parametro-global/parametro-global';
 import { NominaComponent } from './nomina/nomina';
+import { EstadoNominaComponent } from './estado-nomina/estado-nomina';
 import { Reporteria } from './reporteria/reporteria';
+import { NominaInicio } from './nomina/nomina-inicio/nomina-inicio';
+import { ReporteriaInicio } from './reporteria-inicio/reporteria-inicio';
+import { ConfiguracionInicio } from './configuracion/configuracion-inicio/configuracion-inicio';
 import { authGuard } from './auth.guard';
 
 export const routes: Routes = [
@@ -61,11 +65,13 @@ export const routes: Routes = [
         component: Home,
         canActivate: [authGuard],
         children: [
+            {path: 'inicio', component: ConfiguracionInicio},
             {path: 'departamentos', component: DepartamentoComponent},
             {path: 'puestos', component: PuestoComponent},
             {path: 'jornadas', component: JornadaLaboralComponent},
             {path: 'bancos', component: BancoComponent},
-            {path: 'parametros', component: ParametroGlobalComponent}
+            {path: 'parametros', component: ParametroGlobalComponent},
+            {path: 'estados-nomina', component: EstadoNominaComponent}
         ]
     },
     {
@@ -73,6 +79,8 @@ export const routes: Routes = [
         component: Home,
         canActivate: [authGuard],
         children: [
+            {path: 'inicio', component: NominaInicio},
+            {path: 'nominas', component: NominaComponent},
             {path: 'generar', component: NominaComponent}
         ]
     },
@@ -81,7 +89,9 @@ export const routes: Routes = [
         component: Home,
         canActivate: [authGuard],
         children: [
-            {path: 'inicio', component: Reporteria}
+            {path: 'inicio', component: ReporteriaInicio},
+            {path: 'reportes', component: Reporteria},
+            {path: '**', component: ReporteriaInicio}
         ]
     },    
     { path: '**', redirectTo: 'login' }

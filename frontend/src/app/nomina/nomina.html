@@ -46,8 +46,8 @@
         <td>Q {{ getLiquidoTotal(nomina) | number: '1.2-2' }}</td>
         <td>
           <p-tag
-            [value]="nomina.Activo ? 'Activa' : 'Inactiva'"
-            [severity]="nomina.Activo ? 'success' : 'danger'"
+            [value]="getEstadoNombre(nomina)"
+            [severity]="getEstadoSeverity(nomina)"
           ></p-tag>
         </td>
         <td>
@@ -58,6 +58,24 @@
             (onClick)="verDetalles(nomina)"
             severity="info"
             pTooltip="Ver Detalles"
+            tooltipPosition="top"
+          ></p-button>
+          <p-button
+            icon="pi pi-pen-to-square"
+            [rounded]="true"
+            [text]="true"
+            (onClick)="cambiarEstado(nomina)"
+            severity="warn"
+            pTooltip="Cambiar Estado"
+            tooltipPosition="top"
+          ></p-button>
+          <p-button
+            icon="pi pi-history"
+            [rounded]="true"
+            [text]="true"
+            (onClick)="verHistorialEstados(nomina)"
+            severity="secondary"
+            pTooltip="Ver Historial"
             tooltipPosition="top"
           ></p-button>
           <p-button
@@ -198,4 +216,127 @@
   <div *ngIf="!nominaSeleccionada?.NominaDetalle?.length" class="text-center text-gray-500">
     No hay detalles disponibles
   </div>
+</p-dialog>
+
+<!-- Diálogo para cambiar estado -->
+<p-dialog
+  [visible]="displayCambiarEstado()"
+  (visibleChange)="displayCambiarEstado.set($event)"
+  header="Cambiar Estado de Nómina"
+  [modal]="true"
+  [style]="{ width: '50vw', maxWidth: '90vw' }"
+  [resizable]="false"
+
+>
+  <div class="flex flex-col gap-4">
+    <div *ngIf="nominaSeleccionada">
+      <div class="bg-black-50 p-3 rounded">
+        <div class="text-xl font-bold">Nómina actual</div>
+        <br>
+        <div class="font-bold">{{ getEmpleadoLabel(nominaSeleccionada) }}</div>
+        <div class="text-sm">Estado actual:
+          <p-tag
+            [value]="getEstadoNombre(nominaSeleccionada)"
+            [severity]="getEstadoSeverity(nominaSeleccionada)"
+            class="ml-2"
+          ></p-tag>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium mb-2">Nuevo Estado *</label>
+      <p-select
+        [options]="estados()"
+        [(ngModel)]="cambioEstadoForm.IdEstadoNuevo"
+        optionLabel="NombreEstado"
+        optionValue="IdEstadoNomina"
+        placeholder="Seleccionar nuevo estado"
+        class="w-full"
+        appendTo="body"
+      ></p-select>
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium mb-2">Comentarios</label>
+      <textarea
+        pInputTextarea
+        [(ngModel)]="cambioEstadoForm.Comentarios"
+        placeholder="Comentarios opcionales sobre el cambio"
+        class="w-full"
+        rows="3"
+        maxlength="500"
+      ></textarea>
+    </div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <p-button
+      label="Cancelar"
+      icon="pi pi-times"
+      (onClick)="displayCambiarEstado.set(false)"
+      severity="secondary"
+    ></p-button>
+    <p-button
+      label="Cambiar Estado"
+      icon="pi pi-check"
+      (onClick)="confirmarCambioEstado()"
+      severity="success"
+    ></p-button>
+  </ng-template>
+</p-dialog>
+
+<!-- Diálogo para ver historial de estados -->
+<p-dialog
+  [visible]="displayHistorial()"
+  (visibleChange)="displayHistorial.set($event)"
+  [header]="'Historial de Estados - ' + (nominaSeleccionada ? getEmpleadoLabel(nominaSeleccionada) : 'N/A')"
+  [modal]="true"
+  [style]="{ width: '70vw', maxWidth: '95vw', height: 'auto', maxHeight: '80vh' }"
+  [resizable]="false"
+>
+  <p-table
+    [value]="historialEstados()"
+    [tableStyle]="{ 'min-width': '100%' }"
+    [scrollable]="true"
+    scrollHeight="400px"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Fecha Cambio</th>
+        <th>Estado Anterior</th>
+        <th>Estado Nuevo</th>
+        <th>Usuario</th>
+        <th>Comentarios</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-historial>
+      <tr>
+        <td>{{ historial.FechaCambio | date: 'short' }}</td>
+        <td>
+          <p-tag
+            *ngIf="historial.EstadoNomina_HistorialEstadoNomina_IdEstadoAnteriorToEstadoNomina?.NombreEstado"
+            [value]="historial.EstadoNomina_HistorialEstadoNomina_IdEstadoAnteriorToEstadoNomina?.NombreEstado"
+            severity="secondary"
+          ></p-tag>
+          <span *ngIf="!historial.EstadoNomina_HistorialEstadoNomina_IdEstadoAnteriorToEstadoNomina?.NombreEstado">-</span>
+        </td>
+        <td>
+          <p-tag
+            [value]="historial.EstadoNomina_HistorialEstadoNomina_IdEstadoNuevoToEstadoNomina?.NombreEstado"
+            severity="success"
+          ></p-tag>
+        </td>
+        <td>{{ historial.Usuario?.Username }}</td>
+        <td>{{ historial.Comentarios || '-' }}</td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="5" class="text-center text-gray-500">
+          No hay historial de cambios de estado
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
 </p-dialog>

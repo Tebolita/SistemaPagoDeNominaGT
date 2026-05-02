@@ -16,6 +16,7 @@ import { ParametroGlobalModule } from './parametro-global/parametro-global.modul
 import { NominaModule } from './nomina/nomina.module';
 import { SalarioModule } from './salario/salario.module';
 import { ReporteriaModule } from './reporteria/reporteria.module';
+import { EstadoNominaModule } from './estado-nomina/estado-nomina.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { ReporteriaModule } from './reporteria/reporteria.module';
     NominaModule,
     SalarioModule,
     ReporteriaModule,
+    EstadoNominaModule,
   ],
   controllers: [],
   providers: [PrismaService],
