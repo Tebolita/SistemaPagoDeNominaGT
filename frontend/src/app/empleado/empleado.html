@@ -221,6 +221,61 @@
         </div>
 
         <div class="card mt-4">
+            <p-fieldset class="w-full" legend="Historial de Salarios">
+                <div class="flex justify-end mb-3">
+                    <p-button 
+                        icon="pi pi-plus" 
+                        label="Agregar Salario" 
+                        severity="success"
+                        (click)="onAddSalario()"
+                        [disabled]="!selectedUser()" />
+                </div>
+                <p-table [value]="historialSalario()" [rows]="5" [paginator]="true" [rowHover]="true"
+                    emptyMessage="Este empleado no tiene historial de salarios.">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>Salario Base</th>
+                            <th>Inicio Vigencia</th>
+                            <th>Fin Vigencia</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-salario>
+                        <tr>
+                            <td class="font-medium text-green-600">Q{{ salario.SalarioBase | number:'1.2-2' }}</td>
+                            <td><i class="pi pi-calendar mr-2 text-surface-500"></i>{{ salario.FechaInicioVigencia | date:'dd/MM/yyyy' }}</td>
+                            <td>
+                                @if (salario.FechaFinVigencia) {
+                                    <i class="pi pi-calendar-times mr-2 text-surface-500"></i>{{ salario.FechaFinVigencia | date:'dd/MM/yyyy' }}
+                                } @else {
+                                    <span class="text-500">Actual</span>
+                                }
+                            </td>
+                            <td>
+                                @if (salario.Activo) {
+                                    <p-tag severity="success" value="Activo" icon="pi pi-check"></p-tag>
+                                } @else {
+                                    <p-tag severity="secondary" value="Inactivo" icon="pi pi-times"></p-tag>
+                                }
+                            </td>
+                            <td>
+                                <p-button 
+                                    [icon]="salario.Activo ? 'pi pi-times' : 'pi pi-check'" 
+                                    [severity]="salario.Activo ? 'danger' : 'success'"
+                                    [rounded]="true"
+                                    [text]="true"
+                                    pTooltip="{{ salario.Activo ? 'Desactivar' : 'Activar' }}"
+                                    (onClick)="toggleSalario(salario)"
+                                    [disabled]="loading()" />
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </p-fieldset>
+        </div>        
+
+        <div class="card mt-4">
             <p-fieldset class="w-full" legend="Vacaciones">
                 <p-table [value]="vacacionesEmpleado()" [rows]="5" [paginator]="true" [rowHover]="true" 
                     emptyMessage="Este empleado no tiene registros de vacaciones.">
@@ -286,41 +341,6 @@
             </p-fieldset>
         </div>
 
-        <div class="card mt-4">
-            <p-fieldset class="w-full" legend="Historial de Salarios">
-                <p-table [value]="historialSalario()" [rows]="5" [paginator]="true" [rowHover]="true"
-                    emptyMessage="Este empleado no tiene historial de salarios.">
-                    <ng-template pTemplate="header">
-                        <tr>
-                            <th>Salario Base</th>
-                            <th>Inicio Vigencia</th>
-                            <th>Fin Vigencia</th>
-                            <th>Estado</th>
-                        </tr>
-                    </ng-template>
-                    <ng-template pTemplate="body" let-salario>
-                        <tr>
-                            <td class="font-medium text-green-600">Q{{ salario.SalarioBase | number:'1.2-2' }}</td>
-                            <td><i class="pi pi-calendar mr-2 text-surface-500"></i>{{ salario.FechaInicioVigencia | date:'dd/MM/yyyy' }}</td>
-                            <td>
-                                @if (salario.FechaFinVigencia) {
-                                    <i class="pi pi-calendar-times mr-2 text-surface-500"></i>{{ salario.FechaFinVigencia | date:'dd/MM/yyyy' }}
-                                } @else {
-                                    <span class="text-500">Actual</span>
-                                }
-                            </td>
-                            <td>
-                                @if (salario.Activo) {
-                                    <p-tag severity="success" value="Activo" icon="pi pi-check"></p-tag>
-                                } @else {
-                                    <p-tag severity="secondary" value="Inactivo" icon="pi pi-times"></p-tag>
-                                }
-                            </td>
-                        </tr>
-                    </ng-template>
-                </p-table>
-            </p-fieldset>
-        </div>
     }
   </main>
 </div>
@@ -463,6 +483,74 @@
         (click)="onSaveUser()" />
     </div>
   </ng-template>
+
+</p-dialog>
+
+<p-dialog 
+  header="Agregar Salario" 
+  [visible]="salarioDialogVisible()" 
+  (visibleChange)="salarioDialogVisible.set($event)"
+  [modal]="true" 
+  [style]="{ width: '100%', maxWidth: '450px' }"
+  [breakpoints]="{ '768px': '95vw' }"
+  [draggable]="false"
+  [resizable]="false">
+
+  <div class="flex flex-col gap-6 pt-4">
+    <div class="flex flex-col gap-2">
+      <label class="text-sm font-medium text-surface-600">Salario Base (Q)</label>
+      <p-inputNumber 
+        [(ngModel)]="nuevoSalario().SalarioBase" 
+        [minFractionDigits]="2" 
+        [maxFractionDigits]="2"
+        mode="decimal"
+        locale="es-GT"
+        class="w-full" 
+        placeholder="0.00" />
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <label class="text-sm font-medium text-surface-600">Fecha Inicio de Vigencia</label>
+      <p-datePicker 
+        [(ngModel)]="nuevoSalario().FechaInicioVigencia" 
+        dateFormat="dd/mm/yy"
+        [showIcon]="true"
+        appendTo="body"
+        class="w-full" />
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <label class="text-sm font-medium text-surface-600">Fecha Fin de Vigencia (Opcional)</label>
+      <p-datePicker 
+        [(ngModel)]="nuevoSalario().FechaFinVigencia" 
+        dateFormat="dd/mm/yy"
+        [showIcon]="true"
+        appendTo="body"
+        [showClear]="true"
+        class="w-full" />
+    </div>
+
+    <div class="flex align-items-center gap-2">
+      <p-checkbox 
+        [(ngModel)]="nuevoSalario().Activo" 
+        [binary]="true" 
+        inputId="activoSalario" />
+      <label for="activoSalario" class="text-sm text-surface-700">Salario activo</label>
+    </div>
+
+    <div class="flex justify-end gap-2">
+      <p-button 
+        label="Cancelar" 
+        severity="secondary" 
+        (click)="salarioDialogVisible.set(false)" />
+      <p-button 
+        label="Guardar" 
+        severity="success"
+        icon="pi pi-check"
+        [disabled]="loading()"
+        (click)="onSaveSalario()" />
+    </div>
+  </div>
 
 </p-dialog>
 <p-confirmDialog></p-confirmDialog>

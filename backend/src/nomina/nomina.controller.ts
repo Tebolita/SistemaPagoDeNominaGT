@@ -8,6 +8,7 @@ import {
   Delete,
   UseGuards,
   ParseIntPipe,
+  Request,
 } from '@nestjs/common';
 import { NominaService } from './nomina.service';
 import { CreateNominaDto } from './dto/create-nomina.dto';
@@ -20,8 +21,8 @@ export class NominaController {
   constructor(private readonly nominaService: NominaService) {}
 
   @Post()
-  create(@Body() createNominaDto: CreateNominaDto) {
-    return this.nominaService.create(createNominaDto);
+  create(@Request() req: any, @Body() createNominaDto: CreateNominaDto) {
+    return this.nominaService.create(createNominaDto, req.user?.sub);
   }
 
   @Post('calcular')
@@ -30,16 +31,20 @@ export class NominaController {
   }
 
   @Post('generar')
-  generarNomina(@Body() body: { idEmpleado: number; salarioBase: number }) {
+  generarNomina(
+    @Request() req: any,
+    @Body() body: { idEmpleado: number; salarioBase: number },
+  ) {
     return this.nominaService.crearNominaConDetalles(
       body.idEmpleado,
       body.salarioBase,
+      req.user?.sub,
     );
   }
 
   @Post('generar-masiva')
-  generarNominaMasiva() {
-    return this.nominaService.generarNominaMasiva();
+  generarNominaMasiva(@Request() req: any) {
+    return this.nominaService.generarNominaMasiva(req.user?.sub);
   }
 
   @Get('parametros')

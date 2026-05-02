@@ -14,6 +14,7 @@ export interface SalarioRequest {
   SalarioBase: number;
   FechaInicioVigencia: string;
   FechaFinVigencia?: string;
+  Activo: boolean;
 }
 
 export interface SalarioResponseCUD {

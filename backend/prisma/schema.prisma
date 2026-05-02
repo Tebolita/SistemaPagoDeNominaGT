@@ -70,10 +70,11 @@ model CuentaBancariaEmpresa {
 }
 
 model Departamento {
-  IdDepartamento     Int       @id(map: "PK__Departam__787A433DFF32EB91") @default(autoincrement())
-  NombreDepartamento String    @db.VarChar(100)
+  IdDepartamento     Int        @id(map: "PK__Departam__787A433DFF32EB91") @default(autoincrement())
+  NombreDepartamento String     @db.VarChar(100)
   Activo             Boolean?
-  FechaEliminacion   DateTime? @db.DateTime
+  FechaEliminacion   DateTime?  @db.DateTime
+  Empleado           Empleado[]
   Puesto             Puesto[]
 }
 
@@ -124,9 +125,11 @@ model Empleado {
   Fotografia          String?               @db.VarChar(200)
   Activo              Boolean?
   FechaEliminacion    DateTime?             @db.DateTime
+  IdDepartamento      Int?
   Asistencia          Asistencia[]
   ControlVacacion     ControlVacacion[]
   Banco               Banco?                @relation(fields: [IdBanco], references: [IdBanco], onDelete: NoAction, onUpdate: NoAction, map: "FK_Empleado_Banco")
+  Departamento        Departamento?         @relation(fields: [IdDepartamento], references: [IdDepartamento], onDelete: NoAction, onUpdate: NoAction, map: "FK_Empleado_Departamento")
   JornadaLaboral      JornadaLaboral        @relation(fields: [IdJornada], references: [IdJornada], onUpdate: NoAction, map: "FK_Empleado_Jornada")
   Puesto              Puesto                @relation(fields: [IdPuesto], references: [IdPuesto], onUpdate: NoAction, map: "FK_Empleado_Puesto")
   Incidencia          Incidencia[]

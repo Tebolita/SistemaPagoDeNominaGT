@@ -15,6 +15,7 @@ import { JornadaLaboralComponent } from './jornada-laboral/jornada-laboral';
 import { BancoComponent } from './banco/banco';
 import { ParametroGlobalComponent } from './parametro-global/parametro-global';
 import { NominaComponent } from './nomina/nomina';
+import { Reporteria } from './reporteria/reporteria';
 import { authGuard } from './auth.guard';
 
 export const routes: Routes = [
@@ -73,6 +74,14 @@ export const routes: Routes = [
         canActivate: [authGuard],
         children: [
             {path: 'generar', component: NominaComponent}
+        ]
+    },
+    {
+        path: 'reporteria',
+        component: Home,
+        canActivate: [authGuard],
+        children: [
+            {path: 'inicio', component: Reporteria}
         ]
     },    
     { path: '**', redirectTo: 'login' }

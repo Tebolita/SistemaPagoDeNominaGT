@@ -41,6 +41,16 @@ export class MenuPrincipal implements OnInit {
                 separator: true
             },
             {
+                label: 'Reportería',
+                items: [
+                    {
+                        label: 'Reportes',
+                        icon: 'pi pi-chart-bar',
+                        routerLink: '/reporteria/inicio'
+                    },
+                ]   
+            },            
+            {
                 label: 'Seguridad',
                 items: [
                     {

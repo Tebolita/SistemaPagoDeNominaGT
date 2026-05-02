@@ -15,6 +15,7 @@ import { BancoModule } from './banco/banco.module';
 import { ParametroGlobalModule } from './parametro-global/parametro-global.module';
 import { NominaModule } from './nomina/nomina.module';
 import { SalarioModule } from './salario/salario.module';
+import { ReporteriaModule } from './reporteria/reporteria.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { SalarioModule } from './salario/salario.module';
     ParametroGlobalModule,
     NominaModule,
     SalarioModule,
+    ReporteriaModule,
   ],
   controllers: [],
   providers: [PrismaService],

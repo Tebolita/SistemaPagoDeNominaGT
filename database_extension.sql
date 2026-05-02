@@ -1,3 +1,278 @@
+CREATE DATABASE PagoPlanilla;
+GO
+USE PagoPlanilla;
+GO
+
+BEGIN TRY
+    BEGIN TRANSACTION;
+
+        -- ==========================================
+        -- 0. DATOS DEL PATRONO (Nuevo)
+        -- ==========================================
+        CREATE TABLE Empresa (
+            IdEmpresa INT PRIMARY KEY IDENTITY(1,1),
+            NombreRazonSocial VARCHAR(200) NOT NULL,
+            NombreComercial VARCHAR(200),
+            NIT VARCHAR(15) NOT NULL,
+            NumeroPatronalIGSS VARCHAR(50) NOT NULL,
+            Activo BIT DEFAULT 1,
+            FechaEliminacion DATETIME
+        );
+
+        -- ==========================================
+        -- 1. ESTRUCTURA ORGANIZATIVA Y CATÁLOGOS
+        -- ==========================================
+        CREATE TABLE Departamento (
+            IdDepartamento INT PRIMARY KEY IDENTITY(1,1),
+            NombreDepartamento VARCHAR(100) NOT NULL,
+            Activo BIT DEFAULT 1,
+            FechaEliminacion DATETIME
+        );
+
+        CREATE TABLE Puesto (
+            IdPuesto INT PRIMARY KEY IDENTITY(1,1),
+            NombrePuesto VARCHAR(100) NOT NULL,
+            IdDepartamento INT NOT NULL,
+            Activo BIT DEFAULT 1,
+            FechaEliminacion DATETIME,
+            CONSTRAINT FK_Puesto_Departamento FOREIGN KEY (IdDepartamento) REFERENCES Departamento(IdDepartamento)
+        );
+
+        -- Tipos de Jornada en Guatemala (Diurna, Nocturna, Mixta)
+        CREATE TABLE JornadaLaboral (
+            IdJornada INT PRIMARY KEY IDENTITY(1,1),
+            NombreJornada VARCHAR(50) NOT NULL,
+            HorasDiarias DECIMAL(4,2) NOT NULL,
+            HorasSemanales DECIMAL(4,2) NOT NULL,
+            Activo BIT DEFAULT 1,
+            FechaEliminacion DATETIME
+        );
+
+        CREATE TABLE Banco (
+            IdBanco INT PRIMARY KEY IDENTITY(1,1),
+            NombreBanco VARCHAR(100) NOT NULL,
+            Activo BIT DEFAULT 1,
+            FechaEliminacion DATETIME
+        );
+
+        -- ==========================================
+        -- 2. MÓDULO DE EMPLEADOS
+        -- ==========================================
+        CREATE TABLE Empleado (
+            IdEmpleado INT PRIMARY KEY IDENTITY(1,1),
+            DPI VARCHAR(13) NOT NULL UNIQUE, 
+            NIT VARCHAR(15) NOT NULL, 
+            Nombres VARCHAR(100) NOT NULL,
+            Apellidos VARCHAR(100) NOT NULL,
+            CorreoPersonal VARCHAR(100) NOT NULL,
+            FechaIngresa DATETIME NOT NULL DEFAULT GETDATE(),
+            IdPuesto INT NOT NULL,
+            IdJornada INT NOT NULL, -- Requerido para horas extra
+            IdBanco INT, -- Banco donde se le deposita
+            IdDepartamento INT,
+            CuentaBancaria VARCHAR(50),
+            Telefono VARCHAR(15) NOT NULL, -- Cambiado de INT a VARCHAR
+            Genero BIT NOT NULL,
+            EstadoCivil VARCHAR(100),
+            Direccion VARCHAR(200),
+            Fotografia VARCHAR(200),
+            Activo BIT DEFAULT 1,
+            FechaEliminacion DATETIME,
+            CONSTRAINT FK_Empleado_Puesto FOREIGN KEY (IdPuesto) REFERENCES Puesto(IdPuesto),
+            CONSTRAINT FK_Empleado_Jornada FOREIGN KEY (IdJornada) REFERENCES JornadaLaboral(IdJornada),
+            CONSTRAINT FK_Empleado_Banco FOREIGN KEY (IdBanco) REFERENCES Banco(IdBanco),
+            CONSTRAINT FK_Empleado_Departamento FOREIGN KEY (IdDepartamento) REFERENCES Departamento(IdDepartamento)
+        );
+
+        CREATE TABLE Salario (
+            IdHistorico INT PRIMARY KEY IDENTITY(1,1),
+            IdEmpleado INT NOT NULL,
+            SalarioBase DECIMAL(18,2) NOT NULL, -- No incluye Bonificación Incentivo
+            FechaInicioVigencia DATETIME NOT NULL,
+            FechaFinVigencia DATETIME,
+            Activo BIT DEFAULT 1,
+            FechaEliminacion DATETIME,
+            CONSTRAINT FK_Historico_Empleado FOREIGN KEY (IdEmpleado) REFERENCES Empleado(IdEmpleado)
+        );
+
+        -- ==========================================
+        -- 3. MÓDULO DE SEGURIDAD
+        -- ==========================================
+        CREATE TABLE RolUsuario (
+            IdRol INT PRIMARY KEY IDENTITY(1,1),
+            NombreRol VARCHAR(50) NOT NULL,
+            Activo BIT DEFAULT 1,
+            FechaEliminacion DATETIME
+        );
+
+        CREATE TABLE Usuario (
+            IdUsuario INT PRIMARY KEY IDENTITY(1,1),
+            Username VARCHAR(50) NOT NULL UNIQUE,
+            Contrasena VARCHAR(200) NOT NULL,
+            IdRol INT NOT NULL,
+            IdEmpleado INT NOT NULL,
+            Clave VARCHAR(200),
+            Activo BIT DEFAULT 1,
+            FechaEliminacion DATETIME,
+            CONSTRAINT FK_Usuario_Rol FOREIGN KEY (IdRol) REFERENCES RolUsuario(IdRol),
+            CONSTRAINT FK_Usuario_Empleado FOREIGN KEY (IdEmpleado) REFERENCES Empleado(IdEmpleado)
+        );
+
+        -- ==========================================
+        -- 4. MÓDULO DE ASISTENCIAS E INCIDENCIAS
+        -- ==========================================
+        CREATE TABLE Asistencia (
+            IdAsistencia INT PRIMARY KEY IDENTITY(1,1),
+            IdEmpleado INT NOT NULL,
+            Fecha DATE NOT NULL,
+            HoraEntrada DATETIME,
+            HoraSalida DATETIME,
+            HorasExtra DECIMAL(4,2) DEFAULT 0,
+            Activo BIT DEFAULT 1,
+            FechaEliminacion DATETIME,
+            CONSTRAINT FK_Asistencia_Empleado FOREIGN KEY (IdEmpleado) REFERENCES Empleado(IdEmpleado)
+        );
+
+        CREATE TABLE Incidencia (
+            IdIncidencia INT PRIMARY KEY IDENTITY(1,1),
+            IdEmpleado INT NOT NULL,
+            TipoIncidencia VARCHAR(50) NOT NULL, -- Falta, Suspension IGSS, Vacaciones, Permiso
+            FechaInicio DATETIME NOT NULL,
+            FechaFin DATETIME NOT NULL,
+            ConGoceSueldo BIT DEFAULT 0,
+            IdUsuarioAutoriza INT NOT NULL,
+            Activo BIT DEFAULT 1,
+            FechaEliminacion DATETIME,
+            CONSTRAINT FK_Incidencia_Empleado FOREIGN KEY (IdEmpleado) REFERENCES Empleado(IdEmpleado),
+            CONSTRAINT FK_Incidencia_Usuario FOREIGN KEY (IdUsuarioAutoriza) REFERENCES Usuario(IdUsuario)
+        );
+
+        CREATE TABLE ControlVacacion (
+            IdControlVacacion INT PRIMARY KEY IDENTITY(1,1),
+            IdEmpleado INT NOT NULL,
+            AnioCorriente INT NOT NULL,
+            DiasGanados INT DEFAULT 15, -- Mínimo legal en Guatemala
+            DiasGozados DECIMAL(4,2) DEFAULT 0, -- Cambiado a DECIMAL por medios días
+            Activo BIT DEFAULT 1,
+            FechaEliminacion DATETIME,
+            CONSTRAINT FK_Vacacion_Empleado FOREIGN KEY (IdEmpleado) REFERENCES Empleado(IdEmpleado)
+        );
+
+        CREATE TABLE DetalleControlVacacion (
+            IdDetalleVacacion INT PRIMARY KEY IDENTITY(1,1),
+            IdControlVacacion INT NOT NULL,
+            IdIncidencia INT NOT NULL,      
+            DiasDescontados DECIMAL(4,2) NOT NULL,
+            FechaRegistro DATETIME DEFAULT GETDATE(),
+            Activo BIT DEFAULT 1,
+            FechaEliminacion DATETIME,
+            CONSTRAINT FK_DetalleVac_Control FOREIGN KEY (IdControlVacacion) REFERENCES ControlVacacion(IdControlVacacion),
+            CONSTRAINT FK_DetalleVac_Incidencia FOREIGN KEY (IdIncidencia) REFERENCES Incidencia(IdIncidencia)
+        );
+
+        -- ==========================================
+        -- 5. MÓDULO DE MOVIMIENTOS Y PRESTACIONES
+        -- ==========================================
+        CREATE TABLE TipoMovimiento (
+            IdTipoMovimiento INT PRIMARY KEY IDENTITY(1,1),
+            NombreMovimiento VARCHAR(50) NOT NULL,
+            Clasificacion VARCHAR(20) NOT NULL, -- 'Ingreso' o 'Descuento'
+            EsFijo BIT DEFAULT 0, -- Ej: Bonificación Incentivo Q250.00
+            AfectaIGSS BIT DEFAULT 1, -- Indica si suma para la base imponible del IGSS
+            AfectaISR BIT DEFAULT 1,  -- Indica si suma para retención de ISR
+            Activo BIT DEFAULT 1,
+            FechaEliminacion DATETIME
+        );
+
+        CREATE TABLE MovimientoEmpleado (
+            IdMovimiento INT PRIMARY KEY IDENTITY(1,1),
+            IdEmpleado INT NOT NULL,
+            IdTipoMovimiento INT NOT NULL,
+            Monto DECIMAL(18,2) NOT NULL,
+            MesAplicacion INT NOT NULL,
+            AnioAplicacion INT NOT NULL,
+            FechaRegistro DATETIME DEFAULT GETDATE(),
+            IdUsuarioIngresa INT NOT NULL,
+            Activo BIT DEFAULT 1,
+            FechaEliminacion DATETIME,
+            CONSTRAINT FK_Movimiento_Empleado FOREIGN KEY (IdEmpleado) REFERENCES Empleado(IdEmpleado),
+            CONSTRAINT FK_Movimiento_Tipo FOREIGN KEY (IdTipoMovimiento) REFERENCES TipoMovimiento(IdTipoMovimiento),
+            CONSTRAINT FK_Movimiento_Usuario FOREIGN KEY (IdUsuarioIngresa) REFERENCES Usuario(IdUsuario)
+        );
+
+        -- Nuevo: Para llevar el control contable de las prestaciones de Ley (Aguinaldo, Bono 14, Indemnización)
+        CREATE TABLE ProvisionPrestacion (
+            IdProvision INT PRIMARY KEY IDENTITY(1,1),
+            IdEmpleado INT NOT NULL,
+            Mes INT NOT NULL,
+            Anio INT NOT NULL,
+            ProvisionBono14 DECIMAL(18,2) DEFAULT 0,
+            ProvisionAguinaldo DECIMAL(18,2) DEFAULT 0,
+            ProvisionIndemnizacion DECIMAL(18,2) DEFAULT 0,
+            ProvisionVacaciones DECIMAL(18,2) DEFAULT 0,
+            Activo BIT DEFAULT 1,
+            FechaEliminacion DATETIME,
+            CONSTRAINT FK_Provision_Empleado FOREIGN KEY (IdEmpleado) REFERENCES Empleado(IdEmpleado)
+        );
+
+        -- ==========================================
+        -- 6. MÓDULO DE PLANILLA Y PARÁMETROS
+        -- ==========================================
+        CREATE TABLE ParametroGlobal (
+            IdParametro INT PRIMARY KEY IDENTITY(1,1),
+            NombreParametro VARCHAR(50) NOT NULL, -- Ej: IGSS_LABORAL (4.83), BONO_DECRETO_37_2001 (250)
+            Valor DECIMAL(18,4) NOT NULL,
+            Descripcion VARCHAR(255),
+            Activo BIT DEFAULT 1,
+            FechaEliminacion DATETIME
+        );
+
+        CREATE TABLE NominaEncabezado (
+            IdNomina INT PRIMARY KEY IDENTITY(1,1),
+            Mes INT NOT NULL,
+            Anio INT NOT NULL,
+            Quincena INT NULL, -- 1, 2 o NULL si es pago mensual
+            FechaGeneracion DATETIME DEFAULT GETDATE(),
+            Estado VARCHAR(20) DEFAULT 'Pendiente', -- Pendiente, Autorizada, Pagada
+            IdUsuarioGerente INT,
+            Activo BIT DEFAULT 1,
+            FechaEliminacion DATETIME,
+            CONSTRAINT FK_Planilla_Gerente FOREIGN KEY (IdUsuarioGerente) REFERENCES Usuario(IdUsuario)
+        );
+
+        CREATE TABLE NominaDetalle (
+            IdNominaDetalle INT PRIMARY KEY IDENTITY(1,1),
+            IdNomina INT NOT NULL,
+            IdEmpleado INT NOT NULL,
+            DiasLaborados DECIMAL(4,2) DEFAULT 30, -- Para descuentos de faltas
+            SueldoBase DECIMAL(18,2) NOT NULL,
+            BonificacionIncentivo DECIMAL(18,2) DEFAULT 250.00, -- Decreto 37-2001 separado por ley
+            OtrosIngresos DECIMAL(18,2) DEFAULT 0,
+            DescuentoIGSS DECIMAL(18,2) DEFAULT 0,
+            DescuentoISR DECIMAL(18,2) DEFAULT 0,
+            OtrosDescuentos DECIMAL(18,2) DEFAULT 0,
+            LiquidoRecibir DECIMAL(18,2) DEFAULT 0,
+            Activo BIT DEFAULT 1,
+            FechaEliminacion DATETIME,
+            CONSTRAINT FK_Detalle_Nomina FOREIGN KEY (IdNomina) REFERENCES NominaEncabezado(IdNomina),
+            CONSTRAINT FK_Detalle_Empleado FOREIGN KEY (IdEmpleado) REFERENCES Empleado(IdEmpleado)
+        );
+
+        -- ==========================================
+        -- 7. MÓDULO DE SALIDA
+        -- ==========================================
+        CREATE TABLE RegistroEnvioBoleta (
+            IdEnvio INT PRIMARY KEY IDENTITY(1,1),
+            IdNominaDetalle INT NOT NULL,
+            FechaEnvio DATETIME DEFAULT GETDATE(),
+            Exitoso BIT DEFAULT 0,
+            IdUsuarioEnvia INT NOT NULL,
+            Activo BIT DEFAULT 1,
+            FechaEliminacion DATETIME,
+            CONSTRAINT FK_Envio_Detalle FOREIGN KEY (IdNominaDetalle) REFERENCES NominaDetalle(IdNominaDetalle),
+            CONSTRAINT FK_Envio_Usuario FOREIGN KEY (IdUsuarioEnvia) REFERENCES Usuario(IdUsuario)
+        );
+
 -- =============================================
 -- SISTEMA DE GESTIÓN DE NÓMINA - EXTENSIÓN DE BASE DE DATOS
 -- Script para agregar funcionalidades de estados de nómina,
@@ -336,3 +611,19 @@ INNER JOIN [dbo].[IndicadorEficiencia] ie ON em.IdIndicador = ie.IdIndicador
 WHERE em.Activo = 1 AND ie.Activo = 1;
 
 PRINT 'Script ejecutado exitosamente. Base de datos extendida con funcionalidades de estados de nómina, ventas, capital y estadísticas.';
+
+
+    COMMIT TRANSACTION;
+    PRINT 'Base de datos PagoPlanilla (Guatemala) generada exitosamente con borrados lógicos.';
+
+END TRY
+BEGIN CATCH
+    IF (XACT_STATE()) <> 0 ROLLBACK TRANSACTION;
+    
+    SELECT 
+        ERROR_NUMBER() AS NumeroError,
+        ERROR_MESSAGE() AS MensajeError,
+        ERROR_LINE() as LineaError;
+END CATCH;
+
+

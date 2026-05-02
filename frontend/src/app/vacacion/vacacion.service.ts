@@ -17,9 +17,10 @@ export class VacacionesService {
     private errorService: ErrorService
   ) { }
 
-  // Filtrar en el frontend o backend para mostrar solo 'Vacaciones'
+  // Obtiene las vacaciones desde el endpoint especializado que combina 
+  // Incidencia + ControlVacacion + DetalleControlVacacion
   getVacaciones(): Observable<IncidenciaVacacion[]> {
-    return this.http.get<IncidenciaVacacion[]>(API_URL).pipe(
+    return this.http.get<IncidenciaVacacion[]>(`${API_URL}/vacaciones`).pipe(
       catchError(this.errorService.handleError)
     );
   }

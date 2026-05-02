@@ -226,7 +226,8 @@ export const EmpleadoScalarFieldEnum = {
   Direccion: 'Direccion',
   Fotografia: 'Fotografia',
   Activo: 'Activo',
-  FechaEliminacion: 'FechaEliminacion'
+  FechaEliminacion: 'FechaEliminacion',
+  IdDepartamento: 'IdDepartamento'
 } as const
 
 export type EmpleadoScalarFieldEnum = (typeof EmpleadoScalarFieldEnum)[keyof typeof EmpleadoScalarFieldEnum]

@@ -75,7 +75,8 @@ export class Vacacion implements OnInit, OnDestroy {
         this.vacacionesService.getVacaciones()
         .pipe(takeUntil(this.destroy$))
         .subscribe((data) => {
-            this.vacaciones = data.filter(v => v.TipoIncidencia === 'Vacaciones');
+            // El backend ya filtra solo vacaciones, no necesitamos filtrar aquí
+            this.vacaciones = data;
             this.cdr.detectChanges();
         });
     }

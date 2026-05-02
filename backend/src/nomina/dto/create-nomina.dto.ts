@@ -57,6 +57,15 @@ export class CreateNominaDto {
   IdUsuarioGerente?: number;
 
   @ApiPropertyOptional({
+    description: 'ID del estado actual de la nómina',
+    example: 1,
+  })
+  @IsOptional()
+  @IsNumber()
+  @Min(1)
+  IdEstadoActual?: number;
+
+  @ApiPropertyOptional({
     description: 'Activo/Activo lógico para la nómina',
     example: true,
   })

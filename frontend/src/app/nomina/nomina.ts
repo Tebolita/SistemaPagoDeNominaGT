@@ -83,6 +83,25 @@ export class NominaComponent implements OnInit {
     });
   }
 
+  getSalarioTotal(nomina: Nomina | null | undefined): number {
+    return nomina?.NominaDetalle?.reduce((sum, detalle) => sum + (detalle.SueldoBase || 0), 0) ?? 0;
+  }
+
+  getLiquidoTotal(nomina: Nomina | null | undefined): number {
+    return nomina?.NominaDetalle?.reduce((sum, detalle) => sum + (detalle.LiquidoRecibir || 0), 0) ?? 0;
+  }
+
+  getEmpleadoLabel(nomina: Nomina | undefined | null): string {
+    if (!nomina?.NominaDetalle || nomina.NominaDetalle.length === 0) {
+      return 'N/A';
+    }
+    if (nomina.NominaDetalle.length === 1) {
+      const empleado = nomina.NominaDetalle[0]?.Empleado;
+      return `${empleado?.Nombres || ''} ${empleado?.Apellidos || ''}`.trim() || 'N/A';
+    }
+    return `${nomina.NominaDetalle.length} empleados`;
+  }
+
   loadEmpleados() {
     this.empleadoService.ObtenerEmplados().subscribe({
       next: (data: EmpleadoResponse[]) => {

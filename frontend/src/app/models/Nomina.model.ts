@@ -6,6 +6,10 @@ export interface Nomina {
   FechaGeneracion?: Date;
   Estado?: string;
   IdUsuarioGerente?: number;
+  IdEstadoActual?: number;
+  EstadoNomina?: {
+    NombreEstado: string;
+  };
   Activo?: boolean;
   FechaEliminacion?: Date;
   NominaDetalle?: NominaDetalle[];

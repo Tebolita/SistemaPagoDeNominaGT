@@ -7,21 +7,24 @@ import { UpdateNominaDto } from './dto/update-nomina.dto';
 export class NominaService {
   constructor(private prisma: PrismaService) {}
 
-  async create(createNominaDto: CreateNominaDto) {
+  async create(createNominaDto: CreateNominaDto, usuarioGerenteId?: number) {
     const fechaGeneracion = createNominaDto.FechaGeneracion
       ? new Date(createNominaDto.FechaGeneracion)
       : new Date();
 
+    const data: any = {
+      Mes: createNominaDto.Mes,
+      Anio: createNominaDto.Anio,
+      Quincena: createNominaDto.Quincena,
+      FechaGeneracion: fechaGeneracion,
+      Estado: createNominaDto.Estado,
+      IdUsuarioGerente: createNominaDto.IdUsuarioGerente ?? usuarioGerenteId,
+      IdEstadoActual: createNominaDto.IdEstadoActual,
+      Activo: createNominaDto.Activo ?? true,
+    };
+
     const nomina = await this.prisma.nominaEncabezado.create({
-      data: {
-        Mes: createNominaDto.Mes,
-        Anio: createNominaDto.Anio,
-        Quincena: createNominaDto.Quincena,
-        FechaGeneracion: fechaGeneracion,
-        Estado: createNominaDto.Estado,
-        IdUsuarioGerente: createNominaDto.IdUsuarioGerente,
-        Activo: createNominaDto.Activo ?? true,
-      },
+      data,
       include: {
         NominaDetalle: {
           include: {
@@ -148,6 +151,7 @@ export class NominaService {
       Quincena: updateNominaDto.Quincena,
       Estado: updateNominaDto.Estado,
       IdUsuarioGerente: updateNominaDto.IdUsuarioGerente,
+      IdEstadoActual: updateNominaDto.IdEstadoActual,
       Activo: updateNominaDto.Activo,
     };
 
@@ -293,7 +297,7 @@ export class NominaService {
     };
   }
 
-  async crearNominaConDetalles(idEmpleado: number, salarioBase: number) {
+  async crearNominaConDetalles(idEmpleado: number, salarioBase: number, usuarioGerenteId?: number) {
     // Validar que el empleado existe
     const empleado = await this.prisma.empleado.findUnique({
       where: { IdEmpleado: idEmpleado, Activo: true }
@@ -312,17 +316,26 @@ export class NominaService {
     const fechaGeneracion = new Date();
     const ahora = new Date();
 
+    const estadoGeneradaId = await this.getEstadoGeneradoId();
+    const diasLaborados = await this.getDiasLaborados(
+      idEmpleado,
+      fechaGeneracion.getMonth() + 1,
+      fechaGeneracion.getFullYear(),
+    );
+
     const nomina = await this.prisma.nominaEncabezado.create({
       data: {
         Mes: ahora.getMonth() + 1,
         Anio: ahora.getFullYear(),
         FechaGeneracion: fechaGeneracion,
         Estado: 'GENERADA',
+        IdEstadoActual: estadoGeneradaId ?? undefined,
+        IdUsuarioGerente: usuarioGerenteId ?? undefined,
         Activo: true,
         NominaDetalle: {
           create: {
             IdEmpleado: idEmpleado,
-            DiasLaborados: 30,
+            DiasLaborados: diasLaborados,
             SueldoBase: detalles.salarioBase,
             BonificacionIncentivo:
               detalles.bono14 + detalles.aguinaldo + detalles.bonoProductividad,
@@ -368,6 +381,35 @@ export class NominaService {
     };
   }
 
+  private async getEstadoGeneradoId(): Promise<number | null> {
+    const estado = await this.prisma.estadoNomina.findUnique({
+      where: { NombreEstado: 'GENERADA' },
+    });
+    return estado?.IdEstadoNomina ?? null;
+  }
+
+  private async getDiasLaborados(idEmpleado: number, mes: number, anio: number): Promise<number> {
+    const inicioMes = new Date(anio, mes - 1, 1);
+    const finMes = new Date(anio, mes, 0, 23, 59, 59, 999);
+
+    const asistencias = await this.prisma.asistencia.findMany({
+      where: {
+        IdEmpleado: idEmpleado,
+        Activo: true,
+        Fecha: {
+          gte: inicioMes,
+          lte: finMes,
+        },
+      },
+    });
+
+    const diasUnicos = new Set(
+      asistencias.map((a) => a.Fecha.toISOString().slice(0, 10)),
+    );
+
+    return diasUnicos.size;
+  }
+
   async getParametros() {
     const parametros = await this.prisma.parametroGlobal.findMany({
       where: { Activo: true },
@@ -384,7 +426,7 @@ export class NominaService {
     }));
   }
 
-  async generarNominaMasiva() {
+  async generarNominaMasiva(usuarioGerenteId?: number) {
     const fechaActual = new Date();
     const mes = fechaActual.getMonth() + 1;
     const anio = fechaActual.getFullYear();
@@ -431,15 +473,16 @@ export class NominaService {
     }
 
     // Crear encabezado de nómina
+    const estadoGeneradaId = await this.getEstadoGeneradoId();
     const nominaEncabezado = await this.prisma.nominaEncabezado.create({
       data: {
         Mes: mes,
         Anio: anio,
         FechaGeneracion: fechaActual,
         Estado: 'GENERADA',
+        IdEstadoActual: estadoGeneradaId ?? undefined,
         Activo: true,
-        // TODO: Asignar IdUsuarioGerente cuando esté disponible en el contexto
-        IdUsuarioGerente: 1 // Usuario por defecto, debería venir del JWT
+        IdUsuarioGerente: usuarioGerenteId ?? undefined,
       }
     });
 
@@ -447,12 +490,13 @@ export class NominaService {
     const detallesPromises = empleados.map(async (empleado) => {
       const salarioBase = parseFloat(empleado.Salario[0].SalarioBase.toString());
       const calculo = await this.calcularNomina(empleado.IdEmpleado, salarioBase);
+      const diasLaborados = await this.getDiasLaborados(empleado.IdEmpleado, mes, anio);
 
       return this.prisma.nominaDetalle.create({
         data: {
           IdNomina: nominaEncabezado.IdNomina,
           IdEmpleado: empleado.IdEmpleado,
-          DiasLaborados: 30, // TODO: Calcular basado en asistencias
+          DiasLaborados: diasLaborados,
           SueldoBase: calculo.salarioBase,
           BonificacionIncentivo: calculo.bono14 + calculo.aguinaldo + calculo.bonoProductividad,
           OtrosIngresos: 0,

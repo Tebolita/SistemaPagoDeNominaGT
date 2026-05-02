@@ -31,6 +31,7 @@ export type EmpleadoAvgAggregateOutputType = {
   IdPuesto: number | null
   IdJornada: number | null
   IdBanco: number | null
+  IdDepartamento: number | null
 }
 
 export type EmpleadoSumAggregateOutputType = {
@@ -38,6 +39,7 @@ export type EmpleadoSumAggregateOutputType = {
   IdPuesto: number | null
   IdJornada: number | null
   IdBanco: number | null
+  IdDepartamento: number | null
 }
 
 export type EmpleadoMinAggregateOutputType = {
@@ -59,6 +61,7 @@ export type EmpleadoMinAggregateOutputType = {
   Fotografia: string | null
   Activo: boolean | null
   FechaEliminacion: Date | null
+  IdDepartamento: number | null
 }
 
 export type EmpleadoMaxAggregateOutputType = {
@@ -80,6 +83,7 @@ export type EmpleadoMaxAggregateOutputType = {
   Fotografia: string | null
   Activo: boolean | null
   FechaEliminacion: Date | null
+  IdDepartamento: number | null
 }
 
 export type EmpleadoCountAggregateOutputType = {
@@ -101,6 +105,7 @@ export type EmpleadoCountAggregateOutputType = {
   Fotografia: number
   Activo: number
   FechaEliminacion: number
+  IdDepartamento: number
   _all: number
 }
 
@@ -110,6 +115,7 @@ export type EmpleadoAvgAggregateInputType = {
   IdPuesto?: true
   IdJornada?: true
   IdBanco?: true
+  IdDepartamento?: true
 }
 
 export type EmpleadoSumAggregateInputType = {
@@ -117,6 +123,7 @@ export type EmpleadoSumAggregateInputType = {
   IdPuesto?: true
   IdJornada?: true
   IdBanco?: true
+  IdDepartamento?: true
 }
 
 export type EmpleadoMinAggregateInputType = {
@@ -138,6 +145,7 @@ export type EmpleadoMinAggregateInputType = {
   Fotografia?: true
   Activo?: true
   FechaEliminacion?: true
+  IdDepartamento?: true
 }
 
 export type EmpleadoMaxAggregateInputType = {
@@ -159,6 +167,7 @@ export type EmpleadoMaxAggregateInputType = {
   Fotografia?: true
   Activo?: true
   FechaEliminacion?: true
+  IdDepartamento?: true
 }
 
 export type EmpleadoCountAggregateInputType = {
@@ -180,6 +189,7 @@ export type EmpleadoCountAggregateInputType = {
   Fotografia?: true
   Activo?: true
   FechaEliminacion?: true
+  IdDepartamento?: true
   _all?: true
 }
 
@@ -288,6 +298,7 @@ export type EmpleadoGroupByOutputType = {
   Fotografia: string | null
   Activo: boolean | null
   FechaEliminacion: Date | null
+  IdDepartamento: number | null
   _count: EmpleadoCountAggregateOutputType | null
   _avg: EmpleadoAvgAggregateOutputType | null
   _sum: EmpleadoSumAggregateOutputType | null
@@ -332,9 +343,11 @@ export type EmpleadoWhereInput = {
   Fotografia?: Prisma.StringNullableFilter<"Empleado"> | string | null
   Activo?: Prisma.BoolNullableFilter<"Empleado"> | boolean | null
   FechaEliminacion?: Prisma.DateTimeNullableFilter<"Empleado"> | Date | string | null
+  IdDepartamento?: Prisma.IntNullableFilter<"Empleado"> | number | null
   Asistencia?: Prisma.AsistenciaListRelationFilter
   ControlVacacion?: Prisma.ControlVacacionListRelationFilter
   Banco?: Prisma.XOR<Prisma.BancoNullableScalarRelationFilter, Prisma.BancoWhereInput> | null
+  Departamento?: Prisma.XOR<Prisma.DepartamentoNullableScalarRelationFilter, Prisma.DepartamentoWhereInput> | null
   JornadaLaboral?: Prisma.XOR<Prisma.JornadaLaboralScalarRelationFilter, Prisma.JornadaLaboralWhereInput>
   Puesto?: Prisma.XOR<Prisma.PuestoScalarRelationFilter, Prisma.PuestoWhereInput>
   Incidencia?: Prisma.IncidenciaListRelationFilter
@@ -364,9 +377,11 @@ export type EmpleadoOrderByWithRelationInput = {
   Fotografia?: Prisma.SortOrderInput | Prisma.SortOrder
   Activo?: Prisma.SortOrderInput | Prisma.SortOrder
   FechaEliminacion?: Prisma.SortOrderInput | Prisma.SortOrder
+  IdDepartamento?: Prisma.SortOrderInput | Prisma.SortOrder
   Asistencia?: Prisma.AsistenciaOrderByRelationAggregateInput
   ControlVacacion?: Prisma.ControlVacacionOrderByRelationAggregateInput
   Banco?: Prisma.BancoOrderByWithRelationInput
+  Departamento?: Prisma.DepartamentoOrderByWithRelationInput
   JornadaLaboral?: Prisma.JornadaLaboralOrderByWithRelationInput
   Puesto?: Prisma.PuestoOrderByWithRelationInput
   Incidencia?: Prisma.IncidenciaOrderByRelationAggregateInput
@@ -399,9 +414,11 @@ export type EmpleadoWhereUniqueInput = Prisma.AtLeast<{
   Fotografia?: Prisma.StringNullableFilter<"Empleado"> | string | null
   Activo?: Prisma.BoolNullableFilter<"Empleado"> | boolean | null
   FechaEliminacion?: Prisma.DateTimeNullableFilter<"Empleado"> | Date | string | null
+  IdDepartamento?: Prisma.IntNullableFilter<"Empleado"> | number | null
   Asistencia?: Prisma.AsistenciaListRelationFilter
   ControlVacacion?: Prisma.ControlVacacionListRelationFilter
   Banco?: Prisma.XOR<Prisma.BancoNullableScalarRelationFilter, Prisma.BancoWhereInput> | null
+  Departamento?: Prisma.XOR<Prisma.DepartamentoNullableScalarRelationFilter, Prisma.DepartamentoWhereInput> | null
   JornadaLaboral?: Prisma.XOR<Prisma.JornadaLaboralScalarRelationFilter, Prisma.JornadaLaboralWhereInput>
   Puesto?: Prisma.XOR<Prisma.PuestoScalarRelationFilter, Prisma.PuestoWhereInput>
   Incidencia?: Prisma.IncidenciaListRelationFilter
@@ -431,6 +448,7 @@ export type EmpleadoOrderByWithAggregationInput = {
   Fotografia?: Prisma.SortOrderInput | Prisma.SortOrder
   Activo?: Prisma.SortOrderInput | Prisma.SortOrder
   FechaEliminacion?: Prisma.SortOrderInput | Prisma.SortOrder
+  IdDepartamento?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.EmpleadoCountOrderByAggregateInput
   _avg?: Prisma.EmpleadoAvgOrderByAggregateInput
   _max?: Prisma.EmpleadoMaxOrderByAggregateInput
@@ -460,6 +478,7 @@ export type EmpleadoScalarWhereWithAggregatesInput = {
   Fotografia?: Prisma.StringNullableWithAggregatesFilter<"Empleado"> | string | null
   Activo?: Prisma.BoolNullableWithAggregatesFilter<"Empleado"> | boolean | null
   FechaEliminacion?: Prisma.DateTimeNullableWithAggregatesFilter<"Empleado"> | Date | string | null
+  IdDepartamento?: Prisma.IntNullableWithAggregatesFilter<"Empleado"> | number | null
 }
 
 export type EmpleadoCreateInput = {
@@ -480,6 +499,7 @@ export type EmpleadoCreateInput = {
   Asistencia?: Prisma.AsistenciaCreateNestedManyWithoutEmpleadoInput
   ControlVacacion?: Prisma.ControlVacacionCreateNestedManyWithoutEmpleadoInput
   Banco?: Prisma.BancoCreateNestedOneWithoutEmpleadoInput
+  Departamento?: Prisma.DepartamentoCreateNestedOneWithoutEmpleadoInput
   JornadaLaboral: Prisma.JornadaLaboralCreateNestedOneWithoutEmpleadoInput
   Puesto: Prisma.PuestoCreateNestedOneWithoutEmpleadoInput
   Incidencia?: Prisma.IncidenciaCreateNestedManyWithoutEmpleadoInput
@@ -509,6 +529,7 @@ export type EmpleadoUncheckedCreateInput = {
   Fotografia?: string | null
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  IdDepartamento?: number | null
   Asistencia?: Prisma.AsistenciaUncheckedCreateNestedManyWithoutEmpleadoInput
   ControlVacacion?: Prisma.ControlVacacionUncheckedCreateNestedManyWithoutEmpleadoInput
   Incidencia?: Prisma.IncidenciaUncheckedCreateNestedManyWithoutEmpleadoInput
@@ -537,6 +558,7 @@ export type EmpleadoUpdateInput = {
   Asistencia?: Prisma.AsistenciaUpdateManyWithoutEmpleadoNestedInput
   ControlVacacion?: Prisma.ControlVacacionUpdateManyWithoutEmpleadoNestedInput
   Banco?: Prisma.BancoUpdateOneWithoutEmpleadoNestedInput
+  Departamento?: Prisma.DepartamentoUpdateOneWithoutEmpleadoNestedInput
   JornadaLaboral?: Prisma.JornadaLaboralUpdateOneRequiredWithoutEmpleadoNestedInput
   Puesto?: Prisma.PuestoUpdateOneRequiredWithoutEmpleadoNestedInput
   Incidencia?: Prisma.IncidenciaUpdateManyWithoutEmpleadoNestedInput
@@ -566,6 +588,7 @@ export type EmpleadoUncheckedUpdateInput = {
   Fotografia?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  IdDepartamento?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   Asistencia?: Prisma.AsistenciaUncheckedUpdateManyWithoutEmpleadoNestedInput
   ControlVacacion?: Prisma.ControlVacacionUncheckedUpdateManyWithoutEmpleadoNestedInput
   Incidencia?: Prisma.IncidenciaUncheckedUpdateManyWithoutEmpleadoNestedInput
@@ -594,6 +617,7 @@ export type EmpleadoCreateManyInput = {
   Fotografia?: string | null
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  IdDepartamento?: number | null
 }
 
 export type EmpleadoUpdateManyMutationInput = {
@@ -632,6 +656,7 @@ export type EmpleadoUncheckedUpdateManyInput = {
   Fotografia?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  IdDepartamento?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type EmpleadoScalarRelationFilter = {
@@ -668,6 +693,7 @@ export type EmpleadoCountOrderByAggregateInput = {
   Fotografia?: Prisma.SortOrder
   Activo?: Prisma.SortOrder
   FechaEliminacion?: Prisma.SortOrder
+  IdDepartamento?: Prisma.SortOrder
 }
 
 export type EmpleadoAvgOrderByAggregateInput = {
@@ -675,6 +701,7 @@ export type EmpleadoAvgOrderByAggregateInput = {
   IdPuesto?: Prisma.SortOrder
   IdJornada?: Prisma.SortOrder
   IdBanco?: Prisma.SortOrder
+  IdDepartamento?: Prisma.SortOrder
 }
 
 export type EmpleadoMaxOrderByAggregateInput = {
@@ -696,6 +723,7 @@ export type EmpleadoMaxOrderByAggregateInput = {
   Fotografia?: Prisma.SortOrder
   Activo?: Prisma.SortOrder
   FechaEliminacion?: Prisma.SortOrder
+  IdDepartamento?: Prisma.SortOrder
 }
 
 export type EmpleadoMinOrderByAggregateInput = {
@@ -717,6 +745,7 @@ export type EmpleadoMinOrderByAggregateInput = {
   Fotografia?: Prisma.SortOrder
   Activo?: Prisma.SortOrder
   FechaEliminacion?: Prisma.SortOrder
+  IdDepartamento?: Prisma.SortOrder
 }
 
 export type EmpleadoSumOrderByAggregateInput = {
@@ -724,6 +753,7 @@ export type EmpleadoSumOrderByAggregateInput = {
   IdPuesto?: Prisma.SortOrder
   IdJornada?: Prisma.SortOrder
   IdBanco?: Prisma.SortOrder
+  IdDepartamento?: Prisma.SortOrder
 }
 
 export type EmpleadoCreateNestedOneWithoutAsistenciaInput = {
@@ -794,6 +824,48 @@ export type EmpleadoUpdateOneRequiredWithoutControlVacacionNestedInput = {
   upsert?: Prisma.EmpleadoUpsertWithoutControlVacacionInput
   connect?: Prisma.EmpleadoWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.EmpleadoUpdateToOneWithWhereWithoutControlVacacionInput, Prisma.EmpleadoUpdateWithoutControlVacacionInput>, Prisma.EmpleadoUncheckedUpdateWithoutControlVacacionInput>
+}
+
+export type EmpleadoCreateNestedManyWithoutDepartamentoInput = {
+  create?: Prisma.XOR<Prisma.EmpleadoCreateWithoutDepartamentoInput, Prisma.EmpleadoUncheckedCreateWithoutDepartamentoInput> | Prisma.EmpleadoCreateWithoutDepartamentoInput[] | Prisma.EmpleadoUncheckedCreateWithoutDepartamentoInput[]
+  connectOrCreate?: Prisma.EmpleadoCreateOrConnectWithoutDepartamentoInput | Prisma.EmpleadoCreateOrConnectWithoutDepartamentoInput[]
+  createMany?: Prisma.EmpleadoCreateManyDepartamentoInputEnvelope
+  connect?: Prisma.EmpleadoWhereUniqueInput | Prisma.EmpleadoWhereUniqueInput[]
+}
+
+export type EmpleadoUncheckedCreateNestedManyWithoutDepartamentoInput = {
+  create?: Prisma.XOR<Prisma.EmpleadoCreateWithoutDepartamentoInput, Prisma.EmpleadoUncheckedCreateWithoutDepartamentoInput> | Prisma.EmpleadoCreateWithoutDepartamentoInput[] | Prisma.EmpleadoUncheckedCreateWithoutDepartamentoInput[]
+  connectOrCreate?: Prisma.EmpleadoCreateOrConnectWithoutDepartamentoInput | Prisma.EmpleadoCreateOrConnectWithoutDepartamentoInput[]
+  createMany?: Prisma.EmpleadoCreateManyDepartamentoInputEnvelope
+  connect?: Prisma.EmpleadoWhereUniqueInput | Prisma.EmpleadoWhereUniqueInput[]
+}
+
+export type EmpleadoUpdateManyWithoutDepartamentoNestedInput = {
+  create?: Prisma.XOR<Prisma.EmpleadoCreateWithoutDepartamentoInput, Prisma.EmpleadoUncheckedCreateWithoutDepartamentoInput> | Prisma.EmpleadoCreateWithoutDepartamentoInput[] | Prisma.EmpleadoUncheckedCreateWithoutDepartamentoInput[]
+  connectOrCreate?: Prisma.EmpleadoCreateOrConnectWithoutDepartamentoInput | Prisma.EmpleadoCreateOrConnectWithoutDepartamentoInput[]
+  upsert?: Prisma.EmpleadoUpsertWithWhereUniqueWithoutDepartamentoInput | Prisma.EmpleadoUpsertWithWhereUniqueWithoutDepartamentoInput[]
+  createMany?: Prisma.EmpleadoCreateManyDepartamentoInputEnvelope
+  set?: Prisma.EmpleadoWhereUniqueInput | Prisma.EmpleadoWhereUniqueInput[]
+  disconnect?: Prisma.EmpleadoWhereUniqueInput | Prisma.EmpleadoWhereUniqueInput[]
+  delete?: Prisma.EmpleadoWhereUniqueInput | Prisma.EmpleadoWhereUniqueInput[]
+  connect?: Prisma.EmpleadoWhereUniqueInput | Prisma.EmpleadoWhereUniqueInput[]
+  update?: Prisma.EmpleadoUpdateWithWhereUniqueWithoutDepartamentoInput | Prisma.EmpleadoUpdateWithWhereUniqueWithoutDepartamentoInput[]
+  updateMany?: Prisma.EmpleadoUpdateManyWithWhereWithoutDepartamentoInput | Prisma.EmpleadoUpdateManyWithWhereWithoutDepartamentoInput[]
+  deleteMany?: Prisma.EmpleadoScalarWhereInput | Prisma.EmpleadoScalarWhereInput[]
+}
+
+export type EmpleadoUncheckedUpdateManyWithoutDepartamentoNestedInput = {
+  create?: Prisma.XOR<Prisma.EmpleadoCreateWithoutDepartamentoInput, Prisma.EmpleadoUncheckedCreateWithoutDepartamentoInput> | Prisma.EmpleadoCreateWithoutDepartamentoInput[] | Prisma.EmpleadoUncheckedCreateWithoutDepartamentoInput[]
+  connectOrCreate?: Prisma.EmpleadoCreateOrConnectWithoutDepartamentoInput | Prisma.EmpleadoCreateOrConnectWithoutDepartamentoInput[]
+  upsert?: Prisma.EmpleadoUpsertWithWhereUniqueWithoutDepartamentoInput | Prisma.EmpleadoUpsertWithWhereUniqueWithoutDepartamentoInput[]
+  createMany?: Prisma.EmpleadoCreateManyDepartamentoInputEnvelope
+  set?: Prisma.EmpleadoWhereUniqueInput | Prisma.EmpleadoWhereUniqueInput[]
+  disconnect?: Prisma.EmpleadoWhereUniqueInput | Prisma.EmpleadoWhereUniqueInput[]
+  delete?: Prisma.EmpleadoWhereUniqueInput | Prisma.EmpleadoWhereUniqueInput[]
+  connect?: Prisma.EmpleadoWhereUniqueInput | Prisma.EmpleadoWhereUniqueInput[]
+  update?: Prisma.EmpleadoUpdateWithWhereUniqueWithoutDepartamentoInput | Prisma.EmpleadoUpdateWithWhereUniqueWithoutDepartamentoInput[]
+  updateMany?: Prisma.EmpleadoUpdateManyWithWhereWithoutDepartamentoInput | Prisma.EmpleadoUpdateManyWithWhereWithoutDepartamentoInput[]
+  deleteMany?: Prisma.EmpleadoScalarWhereInput | Prisma.EmpleadoScalarWhereInput[]
 }
 
 export type BoolFieldUpdateOperationsInput = {
@@ -985,6 +1057,7 @@ export type EmpleadoCreateWithoutAsistenciaInput = {
   FechaEliminacion?: Date | string | null
   ControlVacacion?: Prisma.ControlVacacionCreateNestedManyWithoutEmpleadoInput
   Banco?: Prisma.BancoCreateNestedOneWithoutEmpleadoInput
+  Departamento?: Prisma.DepartamentoCreateNestedOneWithoutEmpleadoInput
   JornadaLaboral: Prisma.JornadaLaboralCreateNestedOneWithoutEmpleadoInput
   Puesto: Prisma.PuestoCreateNestedOneWithoutEmpleadoInput
   Incidencia?: Prisma.IncidenciaCreateNestedManyWithoutEmpleadoInput
@@ -1014,6 +1087,7 @@ export type EmpleadoUncheckedCreateWithoutAsistenciaInput = {
   Fotografia?: string | null
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  IdDepartamento?: number | null
   ControlVacacion?: Prisma.ControlVacacionUncheckedCreateNestedManyWithoutEmpleadoInput
   Incidencia?: Prisma.IncidenciaUncheckedCreateNestedManyWithoutEmpleadoInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUncheckedCreateNestedManyWithoutEmpleadoInput
@@ -1056,6 +1130,7 @@ export type EmpleadoUpdateWithoutAsistenciaInput = {
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   ControlVacacion?: Prisma.ControlVacacionUpdateManyWithoutEmpleadoNestedInput
   Banco?: Prisma.BancoUpdateOneWithoutEmpleadoNestedInput
+  Departamento?: Prisma.DepartamentoUpdateOneWithoutEmpleadoNestedInput
   JornadaLaboral?: Prisma.JornadaLaboralUpdateOneRequiredWithoutEmpleadoNestedInput
   Puesto?: Prisma.PuestoUpdateOneRequiredWithoutEmpleadoNestedInput
   Incidencia?: Prisma.IncidenciaUpdateManyWithoutEmpleadoNestedInput
@@ -1085,6 +1160,7 @@ export type EmpleadoUncheckedUpdateWithoutAsistenciaInput = {
   Fotografia?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  IdDepartamento?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ControlVacacion?: Prisma.ControlVacacionUncheckedUpdateManyWithoutEmpleadoNestedInput
   Incidencia?: Prisma.IncidenciaUncheckedUpdateManyWithoutEmpleadoNestedInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUncheckedUpdateManyWithoutEmpleadoNestedInput
@@ -1111,6 +1187,7 @@ export type EmpleadoCreateWithoutBancoInput = {
   FechaEliminacion?: Date | string | null
   Asistencia?: Prisma.AsistenciaCreateNestedManyWithoutEmpleadoInput
   ControlVacacion?: Prisma.ControlVacacionCreateNestedManyWithoutEmpleadoInput
+  Departamento?: Prisma.DepartamentoCreateNestedOneWithoutEmpleadoInput
   JornadaLaboral: Prisma.JornadaLaboralCreateNestedOneWithoutEmpleadoInput
   Puesto: Prisma.PuestoCreateNestedOneWithoutEmpleadoInput
   Incidencia?: Prisma.IncidenciaCreateNestedManyWithoutEmpleadoInput
@@ -1139,6 +1216,7 @@ export type EmpleadoUncheckedCreateWithoutBancoInput = {
   Fotografia?: string | null
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  IdDepartamento?: number | null
   Asistencia?: Prisma.AsistenciaUncheckedCreateNestedManyWithoutEmpleadoInput
   ControlVacacion?: Prisma.ControlVacacionUncheckedCreateNestedManyWithoutEmpleadoInput
   Incidencia?: Prisma.IncidenciaUncheckedCreateNestedManyWithoutEmpleadoInput
@@ -1196,6 +1274,7 @@ export type EmpleadoScalarWhereInput = {
   Fotografia?: Prisma.StringNullableFilter<"Empleado"> | string | null
   Activo?: Prisma.BoolNullableFilter<"Empleado"> | boolean | null
   FechaEliminacion?: Prisma.DateTimeNullableFilter<"Empleado"> | Date | string | null
+  IdDepartamento?: Prisma.IntNullableFilter<"Empleado"> | number | null
 }
 
 export type EmpleadoCreateWithoutControlVacacionInput = {
@@ -1215,6 +1294,7 @@ export type EmpleadoCreateWithoutControlVacacionInput = {
   FechaEliminacion?: Date | string | null
   Asistencia?: Prisma.AsistenciaCreateNestedManyWithoutEmpleadoInput
   Banco?: Prisma.BancoCreateNestedOneWithoutEmpleadoInput
+  Departamento?: Prisma.DepartamentoCreateNestedOneWithoutEmpleadoInput
   JornadaLaboral: Prisma.JornadaLaboralCreateNestedOneWithoutEmpleadoInput
   Puesto: Prisma.PuestoCreateNestedOneWithoutEmpleadoInput
   Incidencia?: Prisma.IncidenciaCreateNestedManyWithoutEmpleadoInput
@@ -1244,6 +1324,7 @@ export type EmpleadoUncheckedCreateWithoutControlVacacionInput = {
   Fotografia?: string | null
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  IdDepartamento?: number | null
   Asistencia?: Prisma.AsistenciaUncheckedCreateNestedManyWithoutEmpleadoInput
   Incidencia?: Prisma.IncidenciaUncheckedCreateNestedManyWithoutEmpleadoInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUncheckedCreateNestedManyWithoutEmpleadoInput
@@ -1286,6 +1367,7 @@ export type EmpleadoUpdateWithoutControlVacacionInput = {
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Asistencia?: Prisma.AsistenciaUpdateManyWithoutEmpleadoNestedInput
   Banco?: Prisma.BancoUpdateOneWithoutEmpleadoNestedInput
+  Departamento?: Prisma.DepartamentoUpdateOneWithoutEmpleadoNestedInput
   JornadaLaboral?: Prisma.JornadaLaboralUpdateOneRequiredWithoutEmpleadoNestedInput
   Puesto?: Prisma.PuestoUpdateOneRequiredWithoutEmpleadoNestedInput
   Incidencia?: Prisma.IncidenciaUpdateManyWithoutEmpleadoNestedInput
@@ -1315,6 +1397,7 @@ export type EmpleadoUncheckedUpdateWithoutControlVacacionInput = {
   Fotografia?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  IdDepartamento?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   Asistencia?: Prisma.AsistenciaUncheckedUpdateManyWithoutEmpleadoNestedInput
   Incidencia?: Prisma.IncidenciaUncheckedUpdateManyWithoutEmpleadoNestedInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUncheckedUpdateManyWithoutEmpleadoNestedInput
@@ -1322,6 +1405,88 @@ export type EmpleadoUncheckedUpdateWithoutControlVacacionInput = {
   ProvisionPrestacion?: Prisma.ProvisionPrestacionUncheckedUpdateManyWithoutEmpleadoNestedInput
   Salario?: Prisma.SalarioUncheckedUpdateManyWithoutEmpleadoNestedInput
   Usuario?: Prisma.UsuarioUncheckedUpdateManyWithoutEmpleadoNestedInput
+}
+
+export type EmpleadoCreateWithoutDepartamentoInput = {
+  DPI: string
+  NIT: string
+  Nombres: string
+  Apellidos: string
+  CorreoPersonal: string
+  FechaIngresa: Date | string
+  CuentaBancaria?: string | null
+  Telefono: string
+  Genero: boolean
+  EstadoCivil?: string | null
+  Direccion?: string | null
+  Fotografia?: string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
+  Asistencia?: Prisma.AsistenciaCreateNestedManyWithoutEmpleadoInput
+  ControlVacacion?: Prisma.ControlVacacionCreateNestedManyWithoutEmpleadoInput
+  Banco?: Prisma.BancoCreateNestedOneWithoutEmpleadoInput
+  JornadaLaboral: Prisma.JornadaLaboralCreateNestedOneWithoutEmpleadoInput
+  Puesto: Prisma.PuestoCreateNestedOneWithoutEmpleadoInput
+  Incidencia?: Prisma.IncidenciaCreateNestedManyWithoutEmpleadoInput
+  MovimientoEmpleado?: Prisma.MovimientoEmpleadoCreateNestedManyWithoutEmpleadoInput
+  NominaDetalle?: Prisma.NominaDetalleCreateNestedManyWithoutEmpleadoInput
+  ProvisionPrestacion?: Prisma.ProvisionPrestacionCreateNestedManyWithoutEmpleadoInput
+  Salario?: Prisma.SalarioCreateNestedManyWithoutEmpleadoInput
+  Usuario?: Prisma.UsuarioCreateNestedManyWithoutEmpleadoInput
+}
+
+export type EmpleadoUncheckedCreateWithoutDepartamentoInput = {
+  IdEmpleado?: number
+  DPI: string
+  NIT: string
+  Nombres: string
+  Apellidos: string
+  CorreoPersonal: string
+  FechaIngresa: Date | string
+  IdPuesto: number
+  IdJornada: number
+  IdBanco?: number | null
+  CuentaBancaria?: string | null
+  Telefono: string
+  Genero: boolean
+  EstadoCivil?: string | null
+  Direccion?: string | null
+  Fotografia?: string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
+  Asistencia?: Prisma.AsistenciaUncheckedCreateNestedManyWithoutEmpleadoInput
+  ControlVacacion?: Prisma.ControlVacacionUncheckedCreateNestedManyWithoutEmpleadoInput
+  Incidencia?: Prisma.IncidenciaUncheckedCreateNestedManyWithoutEmpleadoInput
+  MovimientoEmpleado?: Prisma.MovimientoEmpleadoUncheckedCreateNestedManyWithoutEmpleadoInput
+  NominaDetalle?: Prisma.NominaDetalleUncheckedCreateNestedManyWithoutEmpleadoInput
+  ProvisionPrestacion?: Prisma.ProvisionPrestacionUncheckedCreateNestedManyWithoutEmpleadoInput
+  Salario?: Prisma.SalarioUncheckedCreateNestedManyWithoutEmpleadoInput
+  Usuario?: Prisma.UsuarioUncheckedCreateNestedManyWithoutEmpleadoInput
+}
+
+export type EmpleadoCreateOrConnectWithoutDepartamentoInput = {
+  where: Prisma.EmpleadoWhereUniqueInput
+  create: Prisma.XOR<Prisma.EmpleadoCreateWithoutDepartamentoInput, Prisma.EmpleadoUncheckedCreateWithoutDepartamentoInput>
+}
+
+export type EmpleadoCreateManyDepartamentoInputEnvelope = {
+  data: Prisma.EmpleadoCreateManyDepartamentoInput | Prisma.EmpleadoCreateManyDepartamentoInput[]
+}
+
+export type EmpleadoUpsertWithWhereUniqueWithoutDepartamentoInput = {
+  where: Prisma.EmpleadoWhereUniqueInput
+  update: Prisma.XOR<Prisma.EmpleadoUpdateWithoutDepartamentoInput, Prisma.EmpleadoUncheckedUpdateWithoutDepartamentoInput>
+  create: Prisma.XOR<Prisma.EmpleadoCreateWithoutDepartamentoInput, Prisma.EmpleadoUncheckedCreateWithoutDepartamentoInput>
+}
+
+export type EmpleadoUpdateWithWhereUniqueWithoutDepartamentoInput = {
+  where: Prisma.EmpleadoWhereUniqueInput
+  data: Prisma.XOR<Prisma.EmpleadoUpdateWithoutDepartamentoInput, Prisma.EmpleadoUncheckedUpdateWithoutDepartamentoInput>
+}
+
+export type EmpleadoUpdateManyWithWhereWithoutDepartamentoInput = {
+  where: Prisma.EmpleadoScalarWhereInput
+  data: Prisma.XOR<Prisma.EmpleadoUpdateManyMutationInput, Prisma.EmpleadoUncheckedUpdateManyWithoutDepartamentoInput>
 }
 
 export type EmpleadoCreateWithoutIncidenciaInput = {
@@ -1342,6 +1507,7 @@ export type EmpleadoCreateWithoutIncidenciaInput = {
   Asistencia?: Prisma.AsistenciaCreateNestedManyWithoutEmpleadoInput
   ControlVacacion?: Prisma.ControlVacacionCreateNestedManyWithoutEmpleadoInput
   Banco?: Prisma.BancoCreateNestedOneWithoutEmpleadoInput
+  Departamento?: Prisma.DepartamentoCreateNestedOneWithoutEmpleadoInput
   JornadaLaboral: Prisma.JornadaLaboralCreateNestedOneWithoutEmpleadoInput
   Puesto: Prisma.PuestoCreateNestedOneWithoutEmpleadoInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoCreateNestedManyWithoutEmpleadoInput
@@ -1370,6 +1536,7 @@ export type EmpleadoUncheckedCreateWithoutIncidenciaInput = {
   Fotografia?: string | null
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  IdDepartamento?: number | null
   Asistencia?: Prisma.AsistenciaUncheckedCreateNestedManyWithoutEmpleadoInput
   ControlVacacion?: Prisma.ControlVacacionUncheckedCreateNestedManyWithoutEmpleadoInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUncheckedCreateNestedManyWithoutEmpleadoInput
@@ -1413,6 +1580,7 @@ export type EmpleadoUpdateWithoutIncidenciaInput = {
   Asistencia?: Prisma.AsistenciaUpdateManyWithoutEmpleadoNestedInput
   ControlVacacion?: Prisma.ControlVacacionUpdateManyWithoutEmpleadoNestedInput
   Banco?: Prisma.BancoUpdateOneWithoutEmpleadoNestedInput
+  Departamento?: Prisma.DepartamentoUpdateOneWithoutEmpleadoNestedInput
   JornadaLaboral?: Prisma.JornadaLaboralUpdateOneRequiredWithoutEmpleadoNestedInput
   Puesto?: Prisma.PuestoUpdateOneRequiredWithoutEmpleadoNestedInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUpdateManyWithoutEmpleadoNestedInput
@@ -1441,6 +1609,7 @@ export type EmpleadoUncheckedUpdateWithoutIncidenciaInput = {
   Fotografia?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  IdDepartamento?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   Asistencia?: Prisma.AsistenciaUncheckedUpdateManyWithoutEmpleadoNestedInput
   ControlVacacion?: Prisma.ControlVacacionUncheckedUpdateManyWithoutEmpleadoNestedInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUncheckedUpdateManyWithoutEmpleadoNestedInput
@@ -1468,6 +1637,7 @@ export type EmpleadoCreateWithoutJornadaLaboralInput = {
   Asistencia?: Prisma.AsistenciaCreateNestedManyWithoutEmpleadoInput
   ControlVacacion?: Prisma.ControlVacacionCreateNestedManyWithoutEmpleadoInput
   Banco?: Prisma.BancoCreateNestedOneWithoutEmpleadoInput
+  Departamento?: Prisma.DepartamentoCreateNestedOneWithoutEmpleadoInput
   Puesto: Prisma.PuestoCreateNestedOneWithoutEmpleadoInput
   Incidencia?: Prisma.IncidenciaCreateNestedManyWithoutEmpleadoInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoCreateNestedManyWithoutEmpleadoInput
@@ -1495,6 +1665,7 @@ export type EmpleadoUncheckedCreateWithoutJornadaLaboralInput = {
   Fotografia?: string | null
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  IdDepartamento?: number | null
   Asistencia?: Prisma.AsistenciaUncheckedCreateNestedManyWithoutEmpleadoInput
   ControlVacacion?: Prisma.ControlVacacionUncheckedCreateNestedManyWithoutEmpleadoInput
   Incidencia?: Prisma.IncidenciaUncheckedCreateNestedManyWithoutEmpleadoInput
@@ -1548,6 +1719,7 @@ export type EmpleadoCreateWithoutMovimientoEmpleadoInput = {
   Asistencia?: Prisma.AsistenciaCreateNestedManyWithoutEmpleadoInput
   ControlVacacion?: Prisma.ControlVacacionCreateNestedManyWithoutEmpleadoInput
   Banco?: Prisma.BancoCreateNestedOneWithoutEmpleadoInput
+  Departamento?: Prisma.DepartamentoCreateNestedOneWithoutEmpleadoInput
   JornadaLaboral: Prisma.JornadaLaboralCreateNestedOneWithoutEmpleadoInput
   Puesto: Prisma.PuestoCreateNestedOneWithoutEmpleadoInput
   Incidencia?: Prisma.IncidenciaCreateNestedManyWithoutEmpleadoInput
@@ -1576,6 +1748,7 @@ export type EmpleadoUncheckedCreateWithoutMovimientoEmpleadoInput = {
   Fotografia?: string | null
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  IdDepartamento?: number | null
   Asistencia?: Prisma.AsistenciaUncheckedCreateNestedManyWithoutEmpleadoInput
   ControlVacacion?: Prisma.ControlVacacionUncheckedCreateNestedManyWithoutEmpleadoInput
   Incidencia?: Prisma.IncidenciaUncheckedCreateNestedManyWithoutEmpleadoInput
@@ -1619,6 +1792,7 @@ export type EmpleadoUpdateWithoutMovimientoEmpleadoInput = {
   Asistencia?: Prisma.AsistenciaUpdateManyWithoutEmpleadoNestedInput
   ControlVacacion?: Prisma.ControlVacacionUpdateManyWithoutEmpleadoNestedInput
   Banco?: Prisma.BancoUpdateOneWithoutEmpleadoNestedInput
+  Departamento?: Prisma.DepartamentoUpdateOneWithoutEmpleadoNestedInput
   JornadaLaboral?: Prisma.JornadaLaboralUpdateOneRequiredWithoutEmpleadoNestedInput
   Puesto?: Prisma.PuestoUpdateOneRequiredWithoutEmpleadoNestedInput
   Incidencia?: Prisma.IncidenciaUpdateManyWithoutEmpleadoNestedInput
@@ -1647,6 +1821,7 @@ export type EmpleadoUncheckedUpdateWithoutMovimientoEmpleadoInput = {
   Fotografia?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  IdDepartamento?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   Asistencia?: Prisma.AsistenciaUncheckedUpdateManyWithoutEmpleadoNestedInput
   ControlVacacion?: Prisma.ControlVacacionUncheckedUpdateManyWithoutEmpleadoNestedInput
   Incidencia?: Prisma.IncidenciaUncheckedUpdateManyWithoutEmpleadoNestedInput
@@ -1674,6 +1849,7 @@ export type EmpleadoCreateWithoutNominaDetalleInput = {
   Asistencia?: Prisma.AsistenciaCreateNestedManyWithoutEmpleadoInput
   ControlVacacion?: Prisma.ControlVacacionCreateNestedManyWithoutEmpleadoInput
   Banco?: Prisma.BancoCreateNestedOneWithoutEmpleadoInput
+  Departamento?: Prisma.DepartamentoCreateNestedOneWithoutEmpleadoInput
   JornadaLaboral: Prisma.JornadaLaboralCreateNestedOneWithoutEmpleadoInput
   Puesto: Prisma.PuestoCreateNestedOneWithoutEmpleadoInput
   Incidencia?: Prisma.IncidenciaCreateNestedManyWithoutEmpleadoInput
@@ -1702,6 +1878,7 @@ export type EmpleadoUncheckedCreateWithoutNominaDetalleInput = {
   Fotografia?: string | null
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  IdDepartamento?: number | null
   Asistencia?: Prisma.AsistenciaUncheckedCreateNestedManyWithoutEmpleadoInput
   ControlVacacion?: Prisma.ControlVacacionUncheckedCreateNestedManyWithoutEmpleadoInput
   Incidencia?: Prisma.IncidenciaUncheckedCreateNestedManyWithoutEmpleadoInput
@@ -1745,6 +1922,7 @@ export type EmpleadoUpdateWithoutNominaDetalleInput = {
   Asistencia?: Prisma.AsistenciaUpdateManyWithoutEmpleadoNestedInput
   ControlVacacion?: Prisma.ControlVacacionUpdateManyWithoutEmpleadoNestedInput
   Banco?: Prisma.BancoUpdateOneWithoutEmpleadoNestedInput
+  Departamento?: Prisma.DepartamentoUpdateOneWithoutEmpleadoNestedInput
   JornadaLaboral?: Prisma.JornadaLaboralUpdateOneRequiredWithoutEmpleadoNestedInput
   Puesto?: Prisma.PuestoUpdateOneRequiredWithoutEmpleadoNestedInput
   Incidencia?: Prisma.IncidenciaUpdateManyWithoutEmpleadoNestedInput
@@ -1773,6 +1951,7 @@ export type EmpleadoUncheckedUpdateWithoutNominaDetalleInput = {
   Fotografia?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  IdDepartamento?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   Asistencia?: Prisma.AsistenciaUncheckedUpdateManyWithoutEmpleadoNestedInput
   ControlVacacion?: Prisma.ControlVacacionUncheckedUpdateManyWithoutEmpleadoNestedInput
   Incidencia?: Prisma.IncidenciaUncheckedUpdateManyWithoutEmpleadoNestedInput
@@ -1800,6 +1979,7 @@ export type EmpleadoCreateWithoutProvisionPrestacionInput = {
   Asistencia?: Prisma.AsistenciaCreateNestedManyWithoutEmpleadoInput
   ControlVacacion?: Prisma.ControlVacacionCreateNestedManyWithoutEmpleadoInput
   Banco?: Prisma.BancoCreateNestedOneWithoutEmpleadoInput
+  Departamento?: Prisma.DepartamentoCreateNestedOneWithoutEmpleadoInput
   JornadaLaboral: Prisma.JornadaLaboralCreateNestedOneWithoutEmpleadoInput
   Puesto: Prisma.PuestoCreateNestedOneWithoutEmpleadoInput
   Incidencia?: Prisma.IncidenciaCreateNestedManyWithoutEmpleadoInput
@@ -1828,6 +2008,7 @@ export type EmpleadoUncheckedCreateWithoutProvisionPrestacionInput = {
   Fotografia?: string | null
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  IdDepartamento?: number | null
   Asistencia?: Prisma.AsistenciaUncheckedCreateNestedManyWithoutEmpleadoInput
   ControlVacacion?: Prisma.ControlVacacionUncheckedCreateNestedManyWithoutEmpleadoInput
   Incidencia?: Prisma.IncidenciaUncheckedCreateNestedManyWithoutEmpleadoInput
@@ -1871,6 +2052,7 @@ export type EmpleadoUpdateWithoutProvisionPrestacionInput = {
   Asistencia?: Prisma.AsistenciaUpdateManyWithoutEmpleadoNestedInput
   ControlVacacion?: Prisma.ControlVacacionUpdateManyWithoutEmpleadoNestedInput
   Banco?: Prisma.BancoUpdateOneWithoutEmpleadoNestedInput
+  Departamento?: Prisma.DepartamentoUpdateOneWithoutEmpleadoNestedInput
   JornadaLaboral?: Prisma.JornadaLaboralUpdateOneRequiredWithoutEmpleadoNestedInput
   Puesto?: Prisma.PuestoUpdateOneRequiredWithoutEmpleadoNestedInput
   Incidencia?: Prisma.IncidenciaUpdateManyWithoutEmpleadoNestedInput
@@ -1899,6 +2081,7 @@ export type EmpleadoUncheckedUpdateWithoutProvisionPrestacionInput = {
   Fotografia?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  IdDepartamento?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   Asistencia?: Prisma.AsistenciaUncheckedUpdateManyWithoutEmpleadoNestedInput
   ControlVacacion?: Prisma.ControlVacacionUncheckedUpdateManyWithoutEmpleadoNestedInput
   Incidencia?: Prisma.IncidenciaUncheckedUpdateManyWithoutEmpleadoNestedInput
@@ -1926,6 +2109,7 @@ export type EmpleadoCreateWithoutPuestoInput = {
   Asistencia?: Prisma.AsistenciaCreateNestedManyWithoutEmpleadoInput
   ControlVacacion?: Prisma.ControlVacacionCreateNestedManyWithoutEmpleadoInput
   Banco?: Prisma.BancoCreateNestedOneWithoutEmpleadoInput
+  Departamento?: Prisma.DepartamentoCreateNestedOneWithoutEmpleadoInput
   JornadaLaboral: Prisma.JornadaLaboralCreateNestedOneWithoutEmpleadoInput
   Incidencia?: Prisma.IncidenciaCreateNestedManyWithoutEmpleadoInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoCreateNestedManyWithoutEmpleadoInput
@@ -1953,6 +2137,7 @@ export type EmpleadoUncheckedCreateWithoutPuestoInput = {
   Fotografia?: string | null
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  IdDepartamento?: number | null
   Asistencia?: Prisma.AsistenciaUncheckedCreateNestedManyWithoutEmpleadoInput
   ControlVacacion?: Prisma.ControlVacacionUncheckedCreateNestedManyWithoutEmpleadoInput
   Incidencia?: Prisma.IncidenciaUncheckedCreateNestedManyWithoutEmpleadoInput
@@ -2006,6 +2191,7 @@ export type EmpleadoCreateWithoutSalarioInput = {
   Asistencia?: Prisma.AsistenciaCreateNestedManyWithoutEmpleadoInput
   ControlVacacion?: Prisma.ControlVacacionCreateNestedManyWithoutEmpleadoInput
   Banco?: Prisma.BancoCreateNestedOneWithoutEmpleadoInput
+  Departamento?: Prisma.DepartamentoCreateNestedOneWithoutEmpleadoInput
   JornadaLaboral: Prisma.JornadaLaboralCreateNestedOneWithoutEmpleadoInput
   Puesto: Prisma.PuestoCreateNestedOneWithoutEmpleadoInput
   Incidencia?: Prisma.IncidenciaCreateNestedManyWithoutEmpleadoInput
@@ -2034,6 +2220,7 @@ export type EmpleadoUncheckedCreateWithoutSalarioInput = {
   Fotografia?: string | null
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  IdDepartamento?: number | null
   Asistencia?: Prisma.AsistenciaUncheckedCreateNestedManyWithoutEmpleadoInput
   ControlVacacion?: Prisma.ControlVacacionUncheckedCreateNestedManyWithoutEmpleadoInput
   Incidencia?: Prisma.IncidenciaUncheckedCreateNestedManyWithoutEmpleadoInput
@@ -2077,6 +2264,7 @@ export type EmpleadoUpdateWithoutSalarioInput = {
   Asistencia?: Prisma.AsistenciaUpdateManyWithoutEmpleadoNestedInput
   ControlVacacion?: Prisma.ControlVacacionUpdateManyWithoutEmpleadoNestedInput
   Banco?: Prisma.BancoUpdateOneWithoutEmpleadoNestedInput
+  Departamento?: Prisma.DepartamentoUpdateOneWithoutEmpleadoNestedInput
   JornadaLaboral?: Prisma.JornadaLaboralUpdateOneRequiredWithoutEmpleadoNestedInput
   Puesto?: Prisma.PuestoUpdateOneRequiredWithoutEmpleadoNestedInput
   Incidencia?: Prisma.IncidenciaUpdateManyWithoutEmpleadoNestedInput
@@ -2105,6 +2293,7 @@ export type EmpleadoUncheckedUpdateWithoutSalarioInput = {
   Fotografia?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  IdDepartamento?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   Asistencia?: Prisma.AsistenciaUncheckedUpdateManyWithoutEmpleadoNestedInput
   ControlVacacion?: Prisma.ControlVacacionUncheckedUpdateManyWithoutEmpleadoNestedInput
   Incidencia?: Prisma.IncidenciaUncheckedUpdateManyWithoutEmpleadoNestedInput
@@ -2132,6 +2321,7 @@ export type EmpleadoCreateWithoutUsuarioInput = {
   Asistencia?: Prisma.AsistenciaCreateNestedManyWithoutEmpleadoInput
   ControlVacacion?: Prisma.ControlVacacionCreateNestedManyWithoutEmpleadoInput
   Banco?: Prisma.BancoCreateNestedOneWithoutEmpleadoInput
+  Departamento?: Prisma.DepartamentoCreateNestedOneWithoutEmpleadoInput
   JornadaLaboral: Prisma.JornadaLaboralCreateNestedOneWithoutEmpleadoInput
   Puesto: Prisma.PuestoCreateNestedOneWithoutEmpleadoInput
   Incidencia?: Prisma.IncidenciaCreateNestedManyWithoutEmpleadoInput
@@ -2160,6 +2350,7 @@ export type EmpleadoUncheckedCreateWithoutUsuarioInput = {
   Fotografia?: string | null
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  IdDepartamento?: number | null
   Asistencia?: Prisma.AsistenciaUncheckedCreateNestedManyWithoutEmpleadoInput
   ControlVacacion?: Prisma.ControlVacacionUncheckedCreateNestedManyWithoutEmpleadoInput
   Incidencia?: Prisma.IncidenciaUncheckedCreateNestedManyWithoutEmpleadoInput
@@ -2203,6 +2394,7 @@ export type EmpleadoUpdateWithoutUsuarioInput = {
   Asistencia?: Prisma.AsistenciaUpdateManyWithoutEmpleadoNestedInput
   ControlVacacion?: Prisma.ControlVacacionUpdateManyWithoutEmpleadoNestedInput
   Banco?: Prisma.BancoUpdateOneWithoutEmpleadoNestedInput
+  Departamento?: Prisma.DepartamentoUpdateOneWithoutEmpleadoNestedInput
   JornadaLaboral?: Prisma.JornadaLaboralUpdateOneRequiredWithoutEmpleadoNestedInput
   Puesto?: Prisma.PuestoUpdateOneRequiredWithoutEmpleadoNestedInput
   Incidencia?: Prisma.IncidenciaUpdateManyWithoutEmpleadoNestedInput
@@ -2231,6 +2423,7 @@ export type EmpleadoUncheckedUpdateWithoutUsuarioInput = {
   Fotografia?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  IdDepartamento?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   Asistencia?: Prisma.AsistenciaUncheckedUpdateManyWithoutEmpleadoNestedInput
   ControlVacacion?: Prisma.ControlVacacionUncheckedUpdateManyWithoutEmpleadoNestedInput
   Incidencia?: Prisma.IncidenciaUncheckedUpdateManyWithoutEmpleadoNestedInput
@@ -2257,6 +2450,7 @@ export type EmpleadoCreateManyBancoInput = {
   Fotografia?: string | null
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  IdDepartamento?: number | null
 }
 
 export type EmpleadoUpdateWithoutBancoInput = {
@@ -2276,6 +2470,7 @@ export type EmpleadoUpdateWithoutBancoInput = {
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Asistencia?: Prisma.AsistenciaUpdateManyWithoutEmpleadoNestedInput
   ControlVacacion?: Prisma.ControlVacacionUpdateManyWithoutEmpleadoNestedInput
+  Departamento?: Prisma.DepartamentoUpdateOneWithoutEmpleadoNestedInput
   JornadaLaboral?: Prisma.JornadaLaboralUpdateOneRequiredWithoutEmpleadoNestedInput
   Puesto?: Prisma.PuestoUpdateOneRequiredWithoutEmpleadoNestedInput
   Incidencia?: Prisma.IncidenciaUpdateManyWithoutEmpleadoNestedInput
@@ -2304,6 +2499,7 @@ export type EmpleadoUncheckedUpdateWithoutBancoInput = {
   Fotografia?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  IdDepartamento?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   Asistencia?: Prisma.AsistenciaUncheckedUpdateManyWithoutEmpleadoNestedInput
   ControlVacacion?: Prisma.ControlVacacionUncheckedUpdateManyWithoutEmpleadoNestedInput
   Incidencia?: Prisma.IncidenciaUncheckedUpdateManyWithoutEmpleadoNestedInput
@@ -2332,6 +2528,105 @@ export type EmpleadoUncheckedUpdateManyWithoutBancoInput = {
   Fotografia?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  IdDepartamento?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+}
+
+export type EmpleadoCreateManyDepartamentoInput = {
+  DPI: string
+  NIT: string
+  Nombres: string
+  Apellidos: string
+  CorreoPersonal: string
+  FechaIngresa: Date | string
+  IdPuesto: number
+  IdJornada: number
+  IdBanco?: number | null
+  CuentaBancaria?: string | null
+  Telefono: string
+  Genero: boolean
+  EstadoCivil?: string | null
+  Direccion?: string | null
+  Fotografia?: string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
+}
+
+export type EmpleadoUpdateWithoutDepartamentoInput = {
+  DPI?: Prisma.StringFieldUpdateOperationsInput | string
+  NIT?: Prisma.StringFieldUpdateOperationsInput | string
+  Nombres?: Prisma.StringFieldUpdateOperationsInput | string
+  Apellidos?: Prisma.StringFieldUpdateOperationsInput | string
+  CorreoPersonal?: Prisma.StringFieldUpdateOperationsInput | string
+  FechaIngresa?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  CuentaBancaria?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Telefono?: Prisma.StringFieldUpdateOperationsInput | string
+  Genero?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  EstadoCivil?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Direccion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Fotografia?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Asistencia?: Prisma.AsistenciaUpdateManyWithoutEmpleadoNestedInput
+  ControlVacacion?: Prisma.ControlVacacionUpdateManyWithoutEmpleadoNestedInput
+  Banco?: Prisma.BancoUpdateOneWithoutEmpleadoNestedInput
+  JornadaLaboral?: Prisma.JornadaLaboralUpdateOneRequiredWithoutEmpleadoNestedInput
+  Puesto?: Prisma.PuestoUpdateOneRequiredWithoutEmpleadoNestedInput
+  Incidencia?: Prisma.IncidenciaUpdateManyWithoutEmpleadoNestedInput
+  MovimientoEmpleado?: Prisma.MovimientoEmpleadoUpdateManyWithoutEmpleadoNestedInput
+  NominaDetalle?: Prisma.NominaDetalleUpdateManyWithoutEmpleadoNestedInput
+  ProvisionPrestacion?: Prisma.ProvisionPrestacionUpdateManyWithoutEmpleadoNestedInput
+  Salario?: Prisma.SalarioUpdateManyWithoutEmpleadoNestedInput
+  Usuario?: Prisma.UsuarioUpdateManyWithoutEmpleadoNestedInput
+}
+
+export type EmpleadoUncheckedUpdateWithoutDepartamentoInput = {
+  IdEmpleado?: Prisma.IntFieldUpdateOperationsInput | number
+  DPI?: Prisma.StringFieldUpdateOperationsInput | string
+  NIT?: Prisma.StringFieldUpdateOperationsInput | string
+  Nombres?: Prisma.StringFieldUpdateOperationsInput | string
+  Apellidos?: Prisma.StringFieldUpdateOperationsInput | string
+  CorreoPersonal?: Prisma.StringFieldUpdateOperationsInput | string
+  FechaIngresa?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  IdPuesto?: Prisma.IntFieldUpdateOperationsInput | number
+  IdJornada?: Prisma.IntFieldUpdateOperationsInput | number
+  IdBanco?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  CuentaBancaria?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Telefono?: Prisma.StringFieldUpdateOperationsInput | string
+  Genero?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  EstadoCivil?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Direccion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Fotografia?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Asistencia?: Prisma.AsistenciaUncheckedUpdateManyWithoutEmpleadoNestedInput
+  ControlVacacion?: Prisma.ControlVacacionUncheckedUpdateManyWithoutEmpleadoNestedInput
+  Incidencia?: Prisma.IncidenciaUncheckedUpdateManyWithoutEmpleadoNestedInput
+  MovimientoEmpleado?: Prisma.MovimientoEmpleadoUncheckedUpdateManyWithoutEmpleadoNestedInput
+  NominaDetalle?: Prisma.NominaDetalleUncheckedUpdateManyWithoutEmpleadoNestedInput
+  ProvisionPrestacion?: Prisma.ProvisionPrestacionUncheckedUpdateManyWithoutEmpleadoNestedInput
+  Salario?: Prisma.SalarioUncheckedUpdateManyWithoutEmpleadoNestedInput
+  Usuario?: Prisma.UsuarioUncheckedUpdateManyWithoutEmpleadoNestedInput
+}
+
+export type EmpleadoUncheckedUpdateManyWithoutDepartamentoInput = {
+  IdEmpleado?: Prisma.IntFieldUpdateOperationsInput | number
+  DPI?: Prisma.StringFieldUpdateOperationsInput | string
+  NIT?: Prisma.StringFieldUpdateOperationsInput | string
+  Nombres?: Prisma.StringFieldUpdateOperationsInput | string
+  Apellidos?: Prisma.StringFieldUpdateOperationsInput | string
+  CorreoPersonal?: Prisma.StringFieldUpdateOperationsInput | string
+  FechaIngresa?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  IdPuesto?: Prisma.IntFieldUpdateOperationsInput | number
+  IdJornada?: Prisma.IntFieldUpdateOperationsInput | number
+  IdBanco?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  CuentaBancaria?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Telefono?: Prisma.StringFieldUpdateOperationsInput | string
+  Genero?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  EstadoCivil?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Direccion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Fotografia?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type EmpleadoCreateManyJornadaLaboralInput = {
@@ -2351,6 +2646,7 @@ export type EmpleadoCreateManyJornadaLaboralInput = {
   Fotografia?: string | null
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  IdDepartamento?: number | null
 }
 
 export type EmpleadoUpdateWithoutJornadaLaboralInput = {
@@ -2371,6 +2667,7 @@ export type EmpleadoUpdateWithoutJornadaLaboralInput = {
   Asistencia?: Prisma.AsistenciaUpdateManyWithoutEmpleadoNestedInput
   ControlVacacion?: Prisma.ControlVacacionUpdateManyWithoutEmpleadoNestedInput
   Banco?: Prisma.BancoUpdateOneWithoutEmpleadoNestedInput
+  Departamento?: Prisma.DepartamentoUpdateOneWithoutEmpleadoNestedInput
   Puesto?: Prisma.PuestoUpdateOneRequiredWithoutEmpleadoNestedInput
   Incidencia?: Prisma.IncidenciaUpdateManyWithoutEmpleadoNestedInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUpdateManyWithoutEmpleadoNestedInput
@@ -2398,6 +2695,7 @@ export type EmpleadoUncheckedUpdateWithoutJornadaLaboralInput = {
   Fotografia?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  IdDepartamento?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   Asistencia?: Prisma.AsistenciaUncheckedUpdateManyWithoutEmpleadoNestedInput
   ControlVacacion?: Prisma.ControlVacacionUncheckedUpdateManyWithoutEmpleadoNestedInput
   Incidencia?: Prisma.IncidenciaUncheckedUpdateManyWithoutEmpleadoNestedInput
@@ -2426,6 +2724,7 @@ export type EmpleadoUncheckedUpdateManyWithoutJornadaLaboralInput = {
   Fotografia?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  IdDepartamento?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type EmpleadoCreateManyPuestoInput = {
@@ -2445,6 +2744,7 @@ export type EmpleadoCreateManyPuestoInput = {
   Fotografia?: string | null
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  IdDepartamento?: number | null
 }
 
 export type EmpleadoUpdateWithoutPuestoInput = {
@@ -2465,6 +2765,7 @@ export type EmpleadoUpdateWithoutPuestoInput = {
   Asistencia?: Prisma.AsistenciaUpdateManyWithoutEmpleadoNestedInput
   ControlVacacion?: Prisma.ControlVacacionUpdateManyWithoutEmpleadoNestedInput
   Banco?: Prisma.BancoUpdateOneWithoutEmpleadoNestedInput
+  Departamento?: Prisma.DepartamentoUpdateOneWithoutEmpleadoNestedInput
   JornadaLaboral?: Prisma.JornadaLaboralUpdateOneRequiredWithoutEmpleadoNestedInput
   Incidencia?: Prisma.IncidenciaUpdateManyWithoutEmpleadoNestedInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUpdateManyWithoutEmpleadoNestedInput
@@ -2492,6 +2793,7 @@ export type EmpleadoUncheckedUpdateWithoutPuestoInput = {
   Fotografia?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  IdDepartamento?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   Asistencia?: Prisma.AsistenciaUncheckedUpdateManyWithoutEmpleadoNestedInput
   ControlVacacion?: Prisma.ControlVacacionUncheckedUpdateManyWithoutEmpleadoNestedInput
   Incidencia?: Prisma.IncidenciaUncheckedUpdateManyWithoutEmpleadoNestedInput
@@ -2520,6 +2822,7 @@ export type EmpleadoUncheckedUpdateManyWithoutPuestoInput = {
   Fotografia?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  IdDepartamento?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 
@@ -2635,9 +2938,11 @@ export type EmpleadoSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   Fotografia?: boolean
   Activo?: boolean
   FechaEliminacion?: boolean
+  IdDepartamento?: boolean
   Asistencia?: boolean | Prisma.Empleado$AsistenciaArgs<ExtArgs>
   ControlVacacion?: boolean | Prisma.Empleado$ControlVacacionArgs<ExtArgs>
   Banco?: boolean | Prisma.Empleado$BancoArgs<ExtArgs>
+  Departamento?: boolean | Prisma.Empleado$DepartamentoArgs<ExtArgs>
   JornadaLaboral?: boolean | Prisma.JornadaLaboralDefaultArgs<ExtArgs>
   Puesto?: boolean | Prisma.PuestoDefaultArgs<ExtArgs>
   Incidencia?: boolean | Prisma.Empleado$IncidenciaArgs<ExtArgs>
@@ -2670,13 +2975,15 @@ export type EmpleadoSelectScalar = {
   Fotografia?: boolean
   Activo?: boolean
   FechaEliminacion?: boolean
+  IdDepartamento?: boolean
 }
 
-export type EmpleadoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"IdEmpleado" | "DPI" | "NIT" | "Nombres" | "Apellidos" | "CorreoPersonal" | "FechaIngresa" | "IdPuesto" | "IdJornada" | "IdBanco" | "CuentaBancaria" | "Telefono" | "Genero" | "EstadoCivil" | "Direccion" | "Fotografia" | "Activo" | "FechaEliminacion", ExtArgs["result"]["empleado"]>
+export type EmpleadoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"IdEmpleado" | "DPI" | "NIT" | "Nombres" | "Apellidos" | "CorreoPersonal" | "FechaIngresa" | "IdPuesto" | "IdJornada" | "IdBanco" | "CuentaBancaria" | "Telefono" | "Genero" | "EstadoCivil" | "Direccion" | "Fotografia" | "Activo" | "FechaEliminacion" | "IdDepartamento", ExtArgs["result"]["empleado"]>
 export type EmpleadoInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   Asistencia?: boolean | Prisma.Empleado$AsistenciaArgs<ExtArgs>
   ControlVacacion?: boolean | Prisma.Empleado$ControlVacacionArgs<ExtArgs>
   Banco?: boolean | Prisma.Empleado$BancoArgs<ExtArgs>
+  Departamento?: boolean | Prisma.Empleado$DepartamentoArgs<ExtArgs>
   JornadaLaboral?: boolean | Prisma.JornadaLaboralDefaultArgs<ExtArgs>
   Puesto?: boolean | Prisma.PuestoDefaultArgs<ExtArgs>
   Incidencia?: boolean | Prisma.Empleado$IncidenciaArgs<ExtArgs>
@@ -2694,6 +3001,7 @@ export type $EmpleadoPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     Asistencia: Prisma.$AsistenciaPayload<ExtArgs>[]
     ControlVacacion: Prisma.$ControlVacacionPayload<ExtArgs>[]
     Banco: Prisma.$BancoPayload<ExtArgs> | null
+    Departamento: Prisma.$DepartamentoPayload<ExtArgs> | null
     JornadaLaboral: Prisma.$JornadaLaboralPayload<ExtArgs>
     Puesto: Prisma.$PuestoPayload<ExtArgs>
     Incidencia: Prisma.$IncidenciaPayload<ExtArgs>[]
@@ -2722,6 +3030,7 @@ export type $EmpleadoPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     Fotografia: string | null
     Activo: boolean | null
     FechaEliminacion: Date | null
+    IdDepartamento: number | null
   }, ExtArgs["result"]["empleado"]>
   composites: {}
 }
@@ -3065,6 +3374,7 @@ export interface Prisma__EmpleadoClient<T, Null = never, ExtArgs extends runtime
   Asistencia<T extends Prisma.Empleado$AsistenciaArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Empleado$AsistenciaArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AsistenciaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   ControlVacacion<T extends Prisma.Empleado$ControlVacacionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Empleado$ControlVacacionArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ControlVacacionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   Banco<T extends Prisma.Empleado$BancoArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Empleado$BancoArgs<ExtArgs>>): Prisma.Prisma__BancoClient<runtime.Types.Result.GetResult<Prisma.$BancoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  Departamento<T extends Prisma.Empleado$DepartamentoArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Empleado$DepartamentoArgs<ExtArgs>>): Prisma.Prisma__DepartamentoClient<runtime.Types.Result.GetResult<Prisma.$DepartamentoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   JornadaLaboral<T extends Prisma.JornadaLaboralDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.JornadaLaboralDefaultArgs<ExtArgs>>): Prisma.Prisma__JornadaLaboralClient<runtime.Types.Result.GetResult<Prisma.$JornadaLaboralPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   Puesto<T extends Prisma.PuestoDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PuestoDefaultArgs<ExtArgs>>): Prisma.Prisma__PuestoClient<runtime.Types.Result.GetResult<Prisma.$PuestoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   Incidencia<T extends Prisma.Empleado$IncidenciaArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Empleado$IncidenciaArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$IncidenciaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -3120,6 +3430,7 @@ export interface EmpleadoFieldRefs {
   readonly Fotografia: Prisma.FieldRef<"Empleado", 'String'>
   readonly Activo: Prisma.FieldRef<"Empleado", 'Boolean'>
   readonly FechaEliminacion: Prisma.FieldRef<"Empleado", 'DateTime'>
+  readonly IdDepartamento: Prisma.FieldRef<"Empleado", 'Int'>
 }
     
 
@@ -3531,6 +3842,25 @@ export type Empleado$BancoArgs<ExtArgs extends runtime.Types.Extensions.Internal
    */
   include?: Prisma.BancoInclude<ExtArgs> | null
   where?: Prisma.BancoWhereInput
+}
+
+/**
+ * Empleado.Departamento
+ */
+export type Empleado$DepartamentoArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Departamento
+   */
+  select?: Prisma.DepartamentoSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Departamento
+   */
+  omit?: Prisma.DepartamentoOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DepartamentoInclude<ExtArgs> | null
+  where?: Prisma.DepartamentoWhereInput
 }
 
 /**

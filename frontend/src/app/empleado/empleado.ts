@@ -18,6 +18,9 @@ import { ContextMenuModule } from 'primeng/contextmenu';
 import { FieldsetModule } from 'primeng/fieldset';
 import { AvatarModule } from 'primeng/avatar';
 import { DatePickerModule } from 'primeng/datepicker'; // O CalendarModule dependiendo de tu versión exacta
+import { InputNumberModule } from 'primeng/inputnumber';
+import { CheckboxModule } from 'primeng/checkbox';
+import { TooltipModule } from 'primeng/tooltip';
 import { MessageService, ConfirmationService, MenuItem } from 'primeng/api';
 
 // --- Servicios y Modelos ---
@@ -49,6 +52,9 @@ import { SalarioResponse } from '../models/Salario.model';
     ButtonModule,
     DialogModule,
     InputTextModule,
+    InputNumberModule,
+    CheckboxModule,
+    TooltipModule,
     PasswordModule,
     ToastModule,
     ConfirmDialogModule,
@@ -104,7 +110,7 @@ export class Empleado implements OnInit {
 
   // --- ESTADOS PARA EL DIÁLOGO DE SALARIO ---
   salarioDialogVisible = signal<boolean>(false);
-  nuevoSalario = signal<{SalarioBase: number, FechaInicioVigencia: string, FechaFinVigencia: string}>({SalarioBase: 0, FechaInicioVigencia: '', FechaFinVigencia: ''}); 
+  nuevoSalario = signal<{SalarioBase: number, FechaInicioVigencia: string, FechaFinVigencia: string, Activo: boolean}>({SalarioBase: 0, FechaInicioVigencia: '', FechaFinVigencia: '', Activo: true}); 
 
   // --- CATÁLOGOS PARA DROPDOWNS ---
   roles = signal<RolInterface[]>([]);
@@ -278,6 +284,79 @@ export class Empleado implements OnInit {
       },
       error: (err) => {
         this.errorDialog.set(err.error?.message || 'Ocurrió un error al guardar el empleado.');
+        this.loading.set(false);
+      }
+    });
+  }
+
+  // --- GESTIÓN DE SALARIOS ---
+  onAddSalario() {
+    const user = this.selectedUser();
+    if (!user) return;
+    
+    this.nuevoSalario.set({
+      SalarioBase: 0,
+      FechaInicioVigencia: new Date().toISOString().split('T')[0],
+      FechaFinVigencia: '',
+      Activo: true
+    });
+    this.salarioDialogVisible.set(true);
+  }
+
+  onSaveSalario() {
+    const user = this.selectedUser();
+    if (!user) return;
+
+    const salaryData = this.nuevoSalario();
+    if (!salaryData.SalarioBase || salaryData.SalarioBase <= 0) {
+      this.messageService.add({ severity: 'warn', summary: 'Advertencia', detail: 'Ingrese un salario válido' });
+      return;
+    }
+
+    this.loading.set(true);
+    this.salarioService.create({
+      IdEmpleado: user.IdEmpleado,
+      SalarioBase: salaryData.SalarioBase,
+      FechaInicioVigencia: salaryData.FechaInicioVigencia,
+      FechaFinVigencia: salaryData.FechaFinVigencia || undefined,
+      Activo: salaryData.Activo
+    }).subscribe({
+      next: (res) => {
+        this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Salario registrado correctamente' });
+        this.salarioDialogVisible.set(false);
+        this.loadSalarios(user.IdEmpleado);
+        this.loading.set(false);
+      },
+      error: (err) => {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error?.message || 'Error al registrar salario' });
+        this.loading.set(false);
+      }
+    });
+  }
+
+  toggleSalario(salario: SalarioResponse) {
+    const user = this.selectedUser();
+    if (!user) return;
+
+    this.loading.set(true);
+    this.salarioService.update(salario.IdHistorico, {
+      IdEmpleado: user.IdEmpleado,
+      SalarioBase: salario.SalarioBase,
+      FechaInicioVigencia: salario.FechaInicioVigencia || '',
+      FechaFinVigencia: salario.FechaFinVigencia || undefined,
+      Activo: !salario.Activo
+    }).subscribe({
+      next: () => {
+        this.messageService.add({ 
+          severity: 'success', 
+          summary: 'Éxito', 
+          detail: salario.Activo ? 'Salario desactivado' : 'Salario activado' 
+        });
+        this.loadSalarios(user.IdEmpleado);
+        this.loading.set(false);
+      },
+      error: (err) => {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error?.message || 'Error al actualizar salario' });
         this.loading.set(false);
       }
     });

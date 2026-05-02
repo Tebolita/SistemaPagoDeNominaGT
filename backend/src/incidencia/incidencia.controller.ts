@@ -21,6 +21,12 @@ export class IncidenciaController {
     return this.incidenciaService.findAll();
   }
 
+  // Endpoint específico para obtener vacaciones con datos de ControlVacacion y DetalleControlVacacion
+  @Get('vacaciones')
+  findVacaciones() {
+    return this.incidenciaService.findVacaciones();
+  }
+
   @Get(':idIncidencia')
   findOne(@Param('idIncidencia') idIncidencia: string) {
     return this.incidenciaService.findOne(+idIncidencia);
