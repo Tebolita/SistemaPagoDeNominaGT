@@ -1,0 +1,105 @@
+<div class="movimiento-page">
+  <div class="movimiento-header">
+    <div>
+      <h2>Movimientos Financieros</h2>
+      <p>Registra y administra los movimientos de las cuentas bancarias.</p>
+    </div>
+    <button pButton type="button" label="Nuevo Movimiento" icon="pi pi-plus" class="p-button-success" (click)="openNew()"></button>
+  </div>
+
+  <div class="movimiento-filters">
+    <div class="movimiento-filter-item">
+      <label>Cuenta</label>
+      <ng-container *ngIf="cuentas.length > 0; else cuentasCargando">
+        <p-select [options]="cuentas" optionLabel="NombreCuenta" optionValue="IdCuenta" [(ngModel)]="filtroCuenta" placeholder="Todas"></p-select>
+      </ng-container>
+      <ng-template #cuentasCargando>
+        <p-select [options]="[]" disabled placeholder="Cargando cuentas..."></p-select>
+      </ng-template>
+    </div>
+    <div class="movimiento-filter-item">
+      <label>Tipo</label>
+      <p-select [options]="tiposMovimiento" [(ngModel)]="filtroTipo" placeholder="Todos"></p-select>
+    </div>
+    <div class="movimiento-filter-item movimiento-filter-button">
+      <button pButton type="button" label="Filtrar" icon="pi pi-filter" (click)="loadMovimientos()"></button>
+    </div>
+  </div>
+
+  <p-table [value]="movimientos" [loading]="loading" dataKey="IdMovimiento" responsiveLayout="scroll">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Fecha</th>
+        <th>Cuenta</th>
+        <th>Tipo</th>
+        <th>Categoría</th>
+        <th>Monto</th>
+        <th>Referencia</th>
+        <th>Acciones</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-movimiento>
+      <tr>
+        <td>{{ movimiento.FechaMovimiento | date:'shortDate' }}</td>
+        <td>{{ cuentas.find(c => c.IdCuenta === movimiento.IdCuenta)?.NombreCuenta || 'N/A' }}</td>
+        <td>
+          <p-tag [value]="movimiento.TipoMovimiento" [severity]="getColorPorTipo(movimiento.TipoMovimiento)"></p-tag>
+        </td>
+        <td>{{ movimiento.Categoria }}</td>
+        <td [ngClass]="movimiento.TipoMovimiento === 'INGRESO' ? 'color-green' : 'color-red'">
+          {{ movimiento.Monto | currency:'GTQ' }}
+        </td>
+        <td>{{ movimiento.Referencia || 'N/A' }}</td>
+        <td>
+          <button pButton type="button" icon="pi pi-trash" class="p-button-rounded p-button-danger p-button-text" (click)="deleteMovimiento(movimiento, $event)" [disabled]="deletingMovimiento"></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <p-dialog header="Nuevo Movimiento" [(visible)]="movimientoDialog" [style]="{ width: '650px' }" [modal]="true" [closable]="true" [dismissableMask]="true" appendTo="body">
+    <div class="p-fluid">
+      <div class="form-grid">
+        <div class="p-field">
+          <label for="cuenta">Cuenta Bancaria <span class="required">*</span></label>
+          <p-select id="cuenta" [options]="cuentas" optionLabel="NombreCuenta" optionValue="IdCuenta" [(ngModel)]="movimientoForm.IdCuenta" placeholder="Seleccionar cuenta"></p-select>
+        </div>
+        <div class="p-field">
+          <label for="tipoMovimiento">Tipo de Movimiento <span class="required">*</span></label>
+          <p-select id="tipoMovimiento" [options]="tiposMovimiento" [(ngModel)]="movimientoForm.TipoMovimiento" placeholder="Seleccionar tipo"></p-select>
+        </div>
+        <div class="p-field">
+          <label for="categoria">Categoría <span class="required">*</span></label>
+          <p-select id="categoria" [options]="categorias" [(ngModel)]="movimientoForm.Categoria" placeholder="Seleccionar categoría"></p-select>
+        </div>
+        <div class="p-field">
+          <label for="subcategoria">Subcategoría</label>
+          <input pInputText id="subcategoria" [(ngModel)]="movimientoForm.Subcategoria" placeholder="Opcional" />
+        </div>
+        <div class="p-field">
+          <label for="monto">Monto <span class="required">*</span></label>
+          <p-inputNumber id="monto" [(ngModel)]="movimientoForm.Monto" [mode]="'currency'" currency="GTQ" locale="es-GT" [min]="0" placeholder="0.00"></p-inputNumber>
+        </div>
+        <div class="p-field">
+          <label for="fechaMovimiento">Fecha del Movimiento <span class="required">*</span></label>
+          <p-datepicker id="fechaMovimiento" [(ngModel)]="movimientoForm.FechaMovimiento" dateFormat="yy-mm-dd" appendTo="body"></p-datepicker>
+        </div>
+      </div>
+      <div class="form-grid">
+        <div class="p-field">
+          <label for="referencia">Referencia</label>
+          <input pInputText id="referencia" [(ngModel)]="movimientoForm.Referencia" placeholder="Número de referencia o comprobante" />
+        </div>
+      </div>
+      <div class="p-field">
+        <label for="notas">Notas</label>
+        <textarea pInputTextarea id="notas" rows="3" [(ngModel)]="movimientoForm.Notas" placeholder="Notas adicionales del movimiento"></textarea>
+      </div>
+    </div>
+
+    <ng-template pTemplate="footer">
+      <button pButton type="button" label="Cancelar" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+      <button pButton type="button" label="Guardar" icon="pi pi-check" class="p-button-primary" (click)="saveMovimiento()" [disabled]="savingMovimiento"></button>
+    </ng-template>
+  </p-dialog>
+</div>

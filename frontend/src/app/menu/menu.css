@@ -1,0 +1,70 @@
+.menu-card {
+  min-height: 100vh;
+  max-height: 100vh;
+  height: 120vh;
+  border-radius: 1rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  background: #161619;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08);
+}
+
+.menu-card::-webkit-scrollbar {
+  width: 8px;
+}
+
+.menu-card::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.45);
+  border-radius: 999px;
+}
+
+.menu-card::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.avatar-button {
+  width: 100%;
+  text-align: left;
+  padding: 12px 14px;
+  transition: background-color 0.2s ease;
+}
+
+.avatar-button:hover {
+  background: rgba(15, 23, 42, 0.04);
+}
+
+.menu-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.menu-logo img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+}
+
+.menu-logo .brand {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.menu-logo .brand .text-primary {
+  color: #0ea5e9;
+}
+
+.menu-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.85rem 1rem;
+  border-radius: 0.75rem;
+}
+
+.menu-link:hover {
+  background: rgba(59, 130, 246, 0.08);
+}

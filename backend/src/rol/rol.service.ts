@@ -11,7 +11,7 @@ export class RolService {
     return await this.prisma.rolUsuario.create({
       data: {
         NombreRol: createRolDto.NombreRol,
-        Activo: true, 
+        Activo: true,
       },
     });
   }
@@ -23,12 +23,14 @@ export class RolService {
   async findOne(id: number) {
     const rol = await this.prisma.rolUsuario.findFirst({
       where: {
-        IdRol: id
+        IdRol: id,
       },
     });
 
     if (!rol) {
-      throw new NotFoundException(`Rol con ID ${id} no encontrado o fue eliminado`);
+      throw new NotFoundException(
+        `Rol con ID ${id} no encontrado o fue eliminado`,
+      );
     }
 
     return rol;

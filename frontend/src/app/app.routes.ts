@@ -17,9 +17,16 @@ import { ParametroGlobalComponent } from './parametro-global/parametro-global';
 import { NominaComponent } from './nomina/nomina';
 import { EstadoNominaComponent } from './estado-nomina/estado-nomina';
 import { Reporteria } from './reporteria/reporteria';
+import { ClienteComponent } from './cliente/cliente';
+import { ProductoServicioComponent } from './producto-servicio/producto-servicio';
+import { VentaComponent } from './ventas/venta';
+import { VentaInicioComponent } from './ventas/venta-inicio/venta-inicio';
 import { NominaInicio } from './nomina/nomina-inicio/nomina-inicio';
 import { ReporteriaInicio } from './reporteria-inicio/reporteria-inicio';
 import { ConfiguracionInicio } from './configuracion/configuracion-inicio/configuracion-inicio';
+import { FinanzasInicioComponent } from './finanzas/finanzas-inicio/finanzas-inicio';
+import { CuentaBancariaComponent } from './finanzas/cuenta-bancaria/cuenta-bancaria';
+import { MovimientoFinancieroComponent } from './finanzas/movimiento-financiero/movimiento-financiero';
 import { authGuard } from './auth.guard';
 
 export const routes: Routes = [
@@ -85,6 +92,26 @@ export const routes: Routes = [
         ]
     },
     {
+        path: 'ventas',
+        component: Home,
+        canActivate: [authGuard],
+        children: [
+            { path: 'inicio', component: VentaInicioComponent },
+            { path: 'clientes', component: ClienteComponent },
+            { path: 'productos', component: ProductoServicioComponent }
+        ]
+    },
+    {
+        path: 'finanzas',
+        component: Home,
+        canActivate: [authGuard],
+        children: [
+            { path: 'inicio', component: FinanzasInicioComponent },
+            { path: 'cuentas', component: CuentaBancariaComponent },
+            { path: 'movimientos', component: MovimientoFinancieroComponent }
+        ]
+    },
+    {
         path: 'reporteria',
         component: Home,
         canActivate: [authGuard],
@@ -93,6 +120,6 @@ export const routes: Routes = [
             {path: 'reportes', component: Reporteria},
             {path: '**', component: ReporteriaInicio}
         ]
-    },    
+    },
     { path: '**', redirectTo: 'login' }
 ];

@@ -1,4 +1,6 @@
 import { PartialType } from '@nestjs/swagger';
 import { CreateControlVacacionDto } from './create-control-vacacion.dto';
 
-export class UpdateControlVacacionDto extends PartialType(CreateControlVacacionDto) {}
+export class UpdateControlVacacionDto extends PartialType(
+  CreateControlVacacionDto,
+) {}

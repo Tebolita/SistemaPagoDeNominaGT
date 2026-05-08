@@ -80,6 +80,12 @@ export class Login implements OnInit {
     this.authService.signIn(payload).subscribe({
       next: (res: LoginResponse) => {
           localStorage.setItem('access_token', res.access_token);
+          if (res.role) {
+            localStorage.setItem('user_role', res.role);
+          }
+          if (res.username) {
+            localStorage.setItem('username', res.username);
+          }
           this.router.navigate(['/home/inicio']);
       },
       error: (err) => {

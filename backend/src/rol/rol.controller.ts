@@ -1,10 +1,19 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  ParseIntPipe,
+  UseGuards,
+} from '@nestjs/common';
 import { RolService } from './rol.service';
 import { CreateRolDto } from './dto/create-rol.dto';
 import { UpdateRolDto } from './dto/update-rol.dto';
 import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { AuthGuard } from 'src/login/login.guard';
-
 
 @ApiTags('Roles')
 @ApiBearerAuth()
@@ -30,8 +39,8 @@ export class RolController {
 
   @Patch(':id')
   update(
-    @Param('id', ParseIntPipe) id: number, 
-    @Body() updateRolDto: UpdateRolDto
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateRolDto: UpdateRolDto,
   ) {
     return this.rolService.update(id, updateRolDto);
   }

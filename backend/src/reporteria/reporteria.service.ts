@@ -7,7 +7,7 @@ export class ReporteriaService {
   constructor(private prisma: PrismaService) {}
 
   // ========== REPORTES DE EMPLEADOS ==========
-  
+
   async getReporteEmpleados(fechaInicio?: string, fechaFin?: string) {
     const where: Prisma.EmpleadoWhereInput = {
       Activo: true,
@@ -24,7 +24,7 @@ export class ReporteriaService {
       where,
       include: {
         Puesto: {
-          include: { Departamento: true }
+          include: { Departamento: true },
         },
         JornadaLaboral: true,
         Banco: true,
@@ -46,7 +46,8 @@ export class ReporteriaService {
       Telefono: emp.Telefono,
       FechaIngresa: emp.FechaIngresa,
       Puesto: emp.Puesto?.NombrePuesto || 'No asignado',
-      Departamento: emp.Puesto?.Departamento?.NombreDepartamento || 'No asignado',
+      Departamento:
+        emp.Puesto?.Departamento?.NombreDepartamento || 'No asignado',
       JornadaLaboral: emp.JornadaLaboral?.NombreJornada,
       Banco: emp.Banco?.NombreBanco,
       CuentaBancaria: emp.CuentaBancaria,
@@ -61,7 +62,7 @@ export class ReporteriaService {
         Empleado: {
           include: {
             Puesto: {
-              include: { Departamento: true }
+              include: { Departamento: true },
             },
           },
         },
@@ -95,7 +96,7 @@ export class ReporteriaService {
                 Salario: {
                   where: { Activo: true },
                   take: 1,
-                  orderBy: { FechaInicioVigencia: 'desc' }
+                  orderBy: { FechaInicioVigencia: 'desc' },
                 },
               },
             },
@@ -109,9 +110,9 @@ export class ReporteriaService {
       let totalMasa = 0;
 
       // Un solo recorrido para calcular ambos totales mejora el rendimiento
-      dept.Puesto.forEach(p => {
+      dept.Puesto.forEach((p) => {
         totalEmp += p.Empleado.length;
-        p.Empleado.forEach(e => {
+        p.Empleado.forEach((e) => {
           totalMasa += Number(e.Salario[0]?.SalarioBase || 0);
         });
       });
@@ -155,15 +156,19 @@ export class ReporteriaService {
 
     return nominas.map((n) => {
       // Calculamos totales en un solo paso para evitar múltiples reduces
-      const totales = n.NominaDetalle.reduce((acc, d) => ({
-        sueldos: acc.sueldos + Number(d.SueldoBase || 0),
-        bonos: acc.bonos + Number(d.BonificacionIncentivo || 0),
-        descuentos: acc.descuentos + 
-          Number(d.DescuentoIGSS || 0) + 
-          Number(d.DescuentoISR || 0) + 
-          Number(d.OtrosDescuentos || 0),
-        liquido: acc.liquido + Number(d.LiquidoRecibir || 0)
-      }), { sueldos: 0, bonos: 0, descuentos: 0, liquido: 0 });
+      const totales = n.NominaDetalle.reduce(
+        (acc, d) => ({
+          sueldos: acc.sueldos + Number(d.SueldoBase || 0),
+          bonos: acc.bonos + Number(d.BonificacionIncentivo || 0),
+          descuentos:
+            acc.descuentos +
+            Number(d.DescuentoIGSS || 0) +
+            Number(d.DescuentoISR || 0) +
+            Number(d.OtrosDescuentos || 0),
+          liquido: acc.liquido + Number(d.LiquidoRecibir || 0),
+        }),
+        { sueldos: 0, bonos: 0, descuentos: 0, liquido: 0 },
+      );
 
       return {
         IdNomina: n.IdNomina,
@@ -210,17 +215,20 @@ export class ReporteriaService {
           },
         },
         Puesto: {
-          include: { Departamento: true }
+          include: { Departamento: true },
         },
       },
     });
 
     return empleados.map((emp) => {
-      const stats = emp.Asistencia.reduce((acc, a) => ({
-        entradas: acc.entradas + (a.HoraEntrada ? 1 : 0),
-        salidas: acc.salidas + (a.HoraSalida ? 1 : 0),
-        extras: acc.extras + Number(a.HorasExtra || 0)
-      }), { entradas: 0, salidas: 0, extras: 0 });
+      const stats = emp.Asistencia.reduce(
+        (acc, a) => ({
+          entradas: acc.entradas + (a.HoraEntrada ? 1 : 0),
+          salidas: acc.salidas + (a.HoraSalida ? 1 : 0),
+          extras: acc.extras + Number(a.HorasExtra || 0),
+        }),
+        { entradas: 0, salidas: 0, extras: 0 },
+      );
 
       return {
         IdEmpleado: emp.IdEmpleado,
@@ -249,7 +257,7 @@ export class ReporteriaService {
         Empleado: {
           include: {
             Puesto: {
-              include: { Departamento: true }
+              include: { Departamento: true },
             },
           },
         },
@@ -290,7 +298,7 @@ export class ReporteriaService {
       ultimaNomina,
       totalVacaciones,
       departamentos,
-      puestos
+      puestos,
     ] = await Promise.all([
       this.prisma.empleado.count({ where: { Activo: true } }),
       this.prisma.salario.count({ where: { Activo: true } }),

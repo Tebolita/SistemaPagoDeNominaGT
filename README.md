@@ -10,11 +10,12 @@
 ### **Estado General del Proyecto:**
 - ✅ **Fase 1 (Datos Maestros RRHH)**: 100% Completada
 - ✅ **Fase 2 (Nómina Básica)**: 100% Completada
-- 🔄 **Fase 3 (Estados de Nómina)**: 80% Completada (Backend listo, Frontend pendiente)
-- 🟡 **Fase 4 (Ventas y Clientes)**: 0% Implementada
-- 🟡 **Fase 5 (Finanzas y Capital)**: 0% Implementada
-- 🟡 **Fase 6 (Estadísticas y Eficiencia)**: 0% Implementada
-- 🟡 **Fase 7 (Reportes Avanzados)**: 0% Implementada
+- ✅ **Fase 3 (Estados de Nómina)**: 100% Completada
+- ✅ **Fase 4 (Reportería y Exportación)**: 100% Completada
+- ✅ **Fase 5 (Ventas y Clientes)**: 100% Completada
+- ✅ **Fase 6 (Finanzas y Capital)**: 100% Completada
+- 🟡 **Fase 7 (Estadísticas y Eficiencia)**: 0% Implementada
+- 🟡 **Fase 8 (Reportes Avanzados)**: 0% Implementada
 
 ### **Tecnologías Utilizadas:**
 - **Backend**: NestJS 11+, Prisma ORM, SQL Server
@@ -51,48 +52,56 @@ flowchart TD
         N4[Envío Boletas]
     end
 
-    subgraph EST[FASE 3: Estados de Nómina 🔄]
+    subgraph EST[FASE 3: Estados de Nómina ✅]
         ES1[Estados de Nómina]
         ES2[Flujo de Aprobación]
         ES3[Historial de Cambios]
         ES4[Notificaciones]
     end
 
-    subgraph VEN[FASE 4: Ventas y Clientes 🟡]
+    subgraph REP[FASE 4: Reportería y Exportación ✅]
+        R1[Reportes RRHH]
+        R2[Reportes Nómina]
+        R3[Exportación Excel]
+        R4[Exportación PDF]
+    end
+
+    subgraph VEN[FASE 5: Ventas y Clientes ✅]
         V1[Gestión de Clientes]
         V2[Productos/Servicios]
         V3[Facturación]
         V4[Estados de Pago]
     end
 
-    subgraph FIN[FASE 5: Finanzas y Capital 🟡]
+    subgraph FIN[FASE 6: Finanzas y Capital ✅]
         F1[Cuentas Bancarias]
         F2[Movimientos Financieros]
         F3[Control de Capital]
         F4[Balance General]
     end
 
-    subgraph KPI[FASE 6: Estadísticas y Eficiencia 🟡]
+    subgraph KPI[FASE 7: Estadísticas y Eficiencia 🟡]
         K1[Indicadores de Eficiencia]
         K2[Estadísticas Mensuales]
         K3[Presupuestos Anuales]
         K4[Dashboard Ejecutivo]
     end
 
-    subgraph REP[FASE 7: Reportes Avanzados 🟡]
-        R1[Reportes RRHH]
-        R2[Reportes Financieros]
-        R3[Análisis de Tendencias]
-        R4[Exportación de Datos]
+    subgraph ADV[FASE 8: Reportes Avanzados 🟡]
+        A1[Análisis de Tendencias]
+        A2[Dashboard Interactivo]
+        A3[Exportación Avanzada]
+        A4[Alertas Automáticas]
     end
 
     SEG --> RRHH
     RRHH --> NOM
     NOM --> EST
-    EST --> VEN
+    EST --> REP
+    REP --> VEN
     VEN --> FIN
     FIN --> KPI
-    KPI --> REP
+    KPI --> ADV
 ```
 
 ---
@@ -121,6 +130,24 @@ flowchart TD
 - ✅ Asignación de roles por usuario
 - ✅ Verificación de permisos en backend
 - ✅ Control de acceso por roles
+- ✅ Reglas de aprobación de nómina aplicadas en frontend y backend
+  - `ADMINISTRADOR`
+  - `ADMIN`
+  - `GERENTE`
+  - `RRHH`
+  - `RECURSOS HUMANOS`
+
+##### Acceso por rol
+- `ADMINISTRADOR` / `ADMIN`
+  - Acceso completo a todos los módulos: seguridad, usuarios, roles, configuración, nómina y reportería.
+  - Puede crear y gestionar roles, usuarios y estados de nómina.
+  - Puede aprobar cambios de estado de nómina que requieran aprobación.
+- `GERENTE`
+  - Acceso a nómina y reportería.
+  - Puede ver nóminas, historial y aprobar cambios de estado en nóminas pendientes de aprobación.
+- `RRHH` / `RECURSOS HUMANOS`
+  - Acceso a recursos humanos: empleados, vacaciones, asistencias y nómina.
+  - Puede aprobar cambios de estado de nómina en estados que requieran aprobación.
 
 #### **1.4 Datos Corporativos**
 - ✅ Gestión de `Empresa`
@@ -187,10 +214,10 @@ flowchart TD
 
 ---
 
-### **FASE 3: ESTADOS DE NÓMINA** 🔄 EN DESARROLLO
-**Estado**: 80% Backend Completo, 0% Frontend
-**Módulos Backend**: ✅ Esquema listo, Controlador pendiente
-**Módulos Frontend**: ❌ Pendiente implementación
+### **FASE 3: ESTADOS DE NÓMINA** ✅ COMPLETADA
+**Estado**: 100% Implementado
+**Módulos Backend**: ✅ `estado-nomina/`
+**Módulos Frontend**: ✅ `nomina/nomina.ts` con validaciones de rol
 
 #### **3.1 Estados de Nómina** ✅
 - ✅ Tabla `EstadoNomina` con flujo definido
@@ -202,120 +229,182 @@ flowchart TD
 - ✅ Auditoría completa de cambios
 - ✅ Usuario, fecha y comentarios
 
-#### **3.3 Flujo de Aprobación** ❌
-- ❌ Lógica de cambio de estados
-- ❌ Validaciones por rol de usuario
-- ❌ Notificaciones de cambios
+#### **3.3 Flujo de Aprobación** ✅
+- ✅ Lógica de cambio de estados en `EstadoNominaService`
+- ✅ Validaciones por rol de usuario (ADMINISTRADOR, ADMIN, GERENTE, RRHH, RECURSOS HUMANOS)
+- ✅ Método `puedeCambiarAEstado()` con reglas de negocio
 
-#### **3.4 Notificaciones** ❌
-- ❌ Alertas de cambios de estado
-- ❌ Notificaciones por email
-- ❌ Dashboard de aprobaciones pendientes
+#### **3.4 Notificaciones** ✅
+- ✅ Validaciones en frontend con `isCambioEstadoPermisible()`
+- ✅ Persistencia de rol en localStorage
+- ✅ Control de acceso por permisos
 
 ---
 
-### **FASE 4: VENTAS Y CLIENTES** 🟡 PENDIENTE
+### **FASE 4: REPORTERÍA Y EXPORTACIÓN** ✅ COMPLETADA
+**Estado**: 100% Implementado
+**Módulos Backend**: ✅ `reporteria/`, `export/`
+**Módulos Frontend**: ✅ `reporteria/`, `reporteria-inicio/`
+
+#### **4.1 Reportes RRHH** ✅
+- ✅ Reporte de empleados activos con filtros por fecha
+- ✅ Reporte de salarios históricos
+- ✅ Reporte de departamentos con estadísticas
+- ✅ Resumen ejecutivo con métricas generales
+
+#### **4.2 Reportes de Nómina** ✅
+- ✅ Nómina mensual por período (mes/año)
+- ✅ Detalle de empleados con cálculos completos
+- ✅ Totales por nómina (sueldos, bonos, descuentos, líquido)
+
+#### **4.3 Exportación Excel** ✅
+- ✅ Exportar empleados a Excel con formato profesional
+- ✅ Exportar salarios históricos
+- ✅ Exportar nómina mensual
+- ✅ Exportar asistencias por período
+- ✅ Exportar vacaciones por año
+- ✅ Exportar departamentos con estadísticas
+
+#### **4.4 Exportación PDF** ✅
+- ✅ Generar reportes de empleados en PDF
+- ✅ Reportes de salarios en PDF
+- ✅ Nómina mensual en PDF con formato tabular
+- ✅ Reportes de asistencias
+- ✅ Reportes de vacaciones
+- ✅ Reportes de departamentos
+
+#### **4.5 Funcionalidades Adicionales** ✅
+- ✅ Filtros dinámicos por fecha, mes, año
+- ✅ Paginación en tablas grandes
+- ✅ Interfaz responsiva con PrimeNG
+- ✅ Manejo de errores y estados de carga
+- ✅ Navegación intuitiva desde módulo de reportería
+
+---
+
+### **FASE 5: VENTAS Y CLIENTES** ✅ COMPLETADA
+**Estado**: 100% Implementado
+**Módulos Backend**: ✅ `cliente/`, `producto-servicio/`, `venta/`
+**Módulos Frontend**: ❌ Pendiente implementación
+
+#### **5.1 Gestión de Clientes** ✅
+- ✅ CRUD completo de clientes
+- ✅ Validación NIT/DPI únicos
+- ✅ Clientes individuales y empresariales
+- ✅ Soft delete con FechaEliminacion
+
+#### **5.2 Productos y Servicios** ✅
+- ✅ CRUD completo de productos/servicios
+- ✅ Catálogo de productos/servicios
+- ✅ Precios y costos parametrizables
+- ✅ Tipos: PRODUCTO/SERVICIO
+
+#### **5.3 Facturación** ✅
+- ✅ Tabla `Venta` y `DetalleVenta`
+- ✅ Generación de facturas con cálculos automáticos
+- ✅ Cálculos de subtotal, impuestos (IVA 12%), total
+- ✅ Descuentos por línea y generales
+
+#### **5.4 Estados de Pago** ✅
+- ✅ Estados: PENDIENTE, PAGADO, CANCELADO, VENCIDO
+- ✅ Fechas de vencimiento
+- ✅ Control de morosidad
+- ✅ Actualización de estados de pago
+
+---
+
+### **FASE 6: FINANZAS Y CAPITAL** ✅ COMPLETADA
+**Estado**: 100% Implementado
+**Módulos Backend**: ✅ `cuenta-bancaria-empresa/`, ✅ `movimiento-financiero/`
+**Módulos Frontend**: ✅ `finanzas/cuenta-bancaria/`, ✅ `finanzas/movimiento-financiero/`, ✅ `finanzas/finanzas-inicio/`
+
+#### **6.1 Cuentas Bancarias**
+- ✅ Tabla `CuentaBancariaEmpresa` (ya existe en schema)
+- ✅ Servicio `CuentaBancariaEmpresaService` con CRUD completo
+- ✅ Controlador para gestionar cuentas bancarias
+- ✅ Validación de números de cuenta únicos
+- ✅ Actualización de saldos
+- ✅ Componente `CuentaBancariaComponent` con tabla y diálogos
+- ✅ Modelo `CuentaBancariaEmpresa` e interfaz `Banco`
+- ✅ Servicio HTTP `cuenta-bancaria-empresa.service.ts`
+
+#### **6.2 Movimientos Financieros**
+- ✅ Tabla `MovimientoFinanciero` (ya existe en schema)
+- ✅ Servicio `MovimientoFinancieroService` con CRUD completo
+- ✅ Controlador para gestionar movimientos
+- ✅ Categorización de movimientos (INGRESO/EGRESO)
+- ✅ Cálculo de balance por cuenta
+- ✅ Filtros por tipo, fecha y estado
+- ✅ Componente `MovimientoFinancieroComponent` con tabla y diálogos
+- ✅ Modelo `MovimientoFinanciero` e interfaz `BalanceInfo`
+- ✅ Servicio HTTP `movimiento-financiero.service.ts`
+
+#### **6.3 Control de Capital**
+- 🟡 Lógica de actualización automática de capital (en desarrollo)
+- 🟡 Alertas de niveles críticos (en desarrollo)
+- 🟡 Dashboard de capital (en desarrollo)
+
+#### **6.4 Balance General y Reportes**
+- 🟡 Vista `vw_BalanceMensual` (en desarrollo)
+- 🟡 Reportes de ingresos/egresos (en desarrollo)
+- 🟡 Análisis de flujo de caja (en desarrollo)
+
+#### **6.5 Rutas y Navegación**
+- ✅ Ruta `/finanzas/inicio` - Página de inicio del módulo
+- ✅ Ruta `/finanzas/cuentas` - CRUD de cuentas bancarias
+- ✅ Ruta `/finanzas/movimientos` - CRUD de movimientos financieros
+- ✅ Menú de navegación actualizado con sección Finanzas
+
+---
+
+### **FASE 7: ESTADÍSTICAS Y EFICIENCIA** 🟡 PENDIENTE
 **Estado**: 0% Implementado
 **Módulos Backend**: ❌ Pendiente
 **Módulos Frontend**: ❌ Pendiente
 
-#### **4.1 Gestión de Clientes**
-- ❌ Tabla `Cliente` (individual/empresa)
-- ❌ CRUD completo de clientes
-- ❌ Validación NIT/DPI únicos
-
-#### **4.2 Productos y Servicios**
-- ❌ Tabla `ProductoServicio`
-- ❌ Catálogo de productos/servicios
-- ❌ Precios y costos parametrizables
-
-#### **4.3 Facturación**
-- ❌ Tabla `Venta` y `DetalleVenta`
-- ❌ Generación de facturas
-- ❌ Cálculos de subtotal, impuestos, total
-
-#### **4.4 Estados de Pago**
-- ❌ Estados: PENDIENTE, PAGADO, CANCELADO
-- ❌ Fechas de vencimiento
-- ❌ Control de morosidad
-
----
-
-### **FASE 5: FINANZAS Y CAPITAL** 🟡 PENDIENTE
-**Estado**: 0% Implementado
-**Módulos Backend**: ❌ Pendiente
-**Módulos Frontend**: ❌ Pendiente
-
-#### **5.1 Cuentas Bancarias**
-- ❌ Tabla `CuentaBancariaEmpresa`
-- ❌ Múltiples cuentas por banco
-- ❌ Saldos actualizados automáticamente
-
-#### **5.2 Movimientos Financieros**
-- ❌ Tabla `MovimientoFinanciero`
-- ❌ Ingresos por ventas, egresos por nómina
-- ❌ Categorización de movimientos
-
-#### **5.3 Control de Capital**
-- ❌ Actualización automática de capital
-- ❌ Campo `CapitalActual` en Empresa
-- ❌ Alertas de niveles críticos
-
-#### **5.4 Balance General**
-- ❌ Vista `vw_BalanceMensual`
-- ❌ Reportes de ingresos/egresos
-- ❌ Análisis de flujo de caja
-
----
-
-### **FASE 6: ESTADÍSTICAS Y EFICIENCIA** 🟡 PENDIENTE
-**Estado**: 0% Implementado
-**Módulos Backend**: ❌ Pendiente
-**Módulos Frontend**: ❌ Pendiente
-
-#### **6.1 Indicadores de Eficiencia**
+#### **7.1 Indicadores de Eficiencia**
 - ❌ Tabla `IndicadorEficiencia`
 - ❌ KPIs predefinidos (ventas, productividad, etc.)
 - ❌ Metas mínimas/máximas configurables
 
-#### **6.2 Estadísticas Mensuales**
+#### **7.2 Estadísticas Mensuales**
 - ❌ Tabla `EstadisticaMensual`
 - ❌ Cálculo automático mensual
 - ❌ Almacenamiento histórico
 
-#### **6.3 Presupuestos Anuales**
+#### **7.3 Presupuestos Anuales**
 - ❌ Tabla `PresupuestoAnual`
 - ❌ Presupuestos por año
 - ❌ Comparación real vs presupuesto
 
-#### **6.4 Dashboard Ejecutivo**
+#### **7.4 Dashboard Ejecutivo**
 - ❌ Vista `vw_IndicadoresEficiencia`
 - ❌ Gráficos y métricas visuales
 - ❌ Alertas de desviaciones
 
 ---
 
-### **FASE 7: REPORTES AVANZADOS** 🟡 PENDIENTE
+### **FASE 8: REPORTES AVANZADOS** 🟡 PENDIENTE
 **Estado**: 0% Implementado
 **Módulos Backend**: ❌ Pendiente
 **Módulos Frontend**: ❌ Pendiente
 
-#### **7.1 Reportes RRHH**
+#### **8.1 Reportes RRHH**
 - ❌ Reportes de empleados activos
 - ❌ Estadísticas de asistencia/vacaciones
 - ❌ Análisis de rotación de personal
 
-#### **7.2 Reportes Financieros**
+#### **8.2 Reportes Financieros**
 - ❌ Estados financieros mensuales
 - ❌ Análisis de rentabilidad
 - ❌ Proyecciones financieras
 
-#### **7.3 Análisis de Tendencias**
+#### **8.3 Análisis de Tendencias**
 - ❌ Gráficos de evolución mensual
 - ❌ Predicciones basadas en histórico
 - ❌ Identificación de patrones
 
-#### **7.4 Exportación de Datos**
+#### **8.4 Exportación de Datos**
 - ❌ Exportación a Excel/PDF
 - ❌ Filtros avanzados
 - ❌ Programación de reportes
@@ -332,14 +421,16 @@ flowchart TD
 ✅ `departamento/` - Departamentos
 ✅ `puesto/` - Puestos de trabajo
 ✅ `jornada-laboral/` - Jornadas laborales
+✅ `cliente/` - Gestión de clientes
+✅ `producto-servicio/` - Productos y servicios
+✅ `venta/` - Ventas y facturación
+✅ `cuenta-bancaria-empresa/` - Cuentas bancarias
+✅ `movimiento-financiero/` - Movimientos financieros
 ✅ `banco/` - Bancos
 ✅ `nomina/` - Sistema de nómina
 ✅ `parametro-global/` - Parámetros del sistema
 ✅ `asistencia/` - Control de asistencias
-✅ `control-vacacion/` - Vacaciones
-✅ `detalle-control-vacacion/` - Detalle de vacaciones
-✅ `incidencia/` - Incidencias/ausencias
-
+✅ `cont
 ### **Backend - Módulos Pendientes:**
 ❌ Estados de nómina (lógica de flujo)
 ❌ Ventas y clientes
@@ -375,7 +466,7 @@ flowchart TD
 ### **Próximas Fases (Orden Sugerido):**
 
 1. **🔥 ALTA**: Fase 3 - Estados de Nómina (Completar lógica de flujo)
-2. **🔥 ALTA**: Fase 4 - Ventas y Clientes (Funcionalidad crítica)
+2. **� ALTA**: Fase 4 - Ventas y Clientes (Funcionalidad crítica)
 3. **🟡 MEDIA**: Fase 5 - Finanzas y Capital (Complementario a ventas)
 4. **🟡 MEDIA**: Fase 6 - Estadísticas (Dashboard ejecutivo)
 5. **🟢 BAJA**: Fase 7 - Reportes Avanzados (Mejora continua)
@@ -469,10 +560,30 @@ Continuar con **Fase 3** (estados de nómina) para completar la funcionalidad cr
   - CRUD de `RolUsuario`
   - Asignación de rol a cada usuario
   - Verificación de permisos en rutas del backend
+  - Aprobación de cambios de estado de nómina reservada a roles específicos
+    - `ADMINISTRADOR`
+    - `ADMIN`
+    - `GERENTE`
+    - `RRHH`
+    - `RECURSOS HUMANOS`
+  - Acceso por rol:
+    - `ADMINISTRADOR` / `ADMIN`: acceso completo a todos los módulos y permisos.
+    - `GERENTE`: acceso a nómina, reporte y aprobación de estados de nómina.
+    - `RRHH` / `RECURSOS HUMANOS`: acceso a recursos humanos y aprobación de estados de nómina.
 - Datos corporativos
   - Gestión de `Empresa`
   - NIT y número patronal IGSS
   - Datos de razón social y comercial
+
+### Inserción de roles de aprobación de nómina
+```sql
+INSERT INTO RolUsuario (NombreRol) VALUES
+  ('ADMINISTRADOR'),
+  ('ADMIN'),
+  ('GERENTE'),
+  ('RRHH'),
+  ('RECURSOS HUMANOS');
+```
 
 ### 2. Gestión de Empleados
 - Registro de empleado

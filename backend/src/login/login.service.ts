@@ -7,22 +7,37 @@ import * as bcryptjs from 'bcryptjs';
 export class LoginService {
   constructor(
     private userService: UsuarioService,
-    private jwtService: JwtService
+    private jwtService: JwtService,
   ) {}
 
-  async SignIn(username: string, contrasena: string, clave: number): Promise<any> {
+  async SignIn(
+    username: string,
+    contrasena: string,
+    clave: number,
+  ): Promise<any> {
     const user = await this.userService.findOne(username);
     if (!user) {
       throw new UnauthorizedException('Tu usuario no es valido');
     }
-    const isPasswordValid = await bcryptjs.compare(contrasena, user?.Contrasena!);
+    const isPasswordValid = await bcryptjs.compare(
+      contrasena,
+      user?.Contrasena,
+    );
     const isClaveValid = await bcryptjs.compare(clave.toString(), user?.Clave!);
-    
+
     if (!isPasswordValid || !isClaveValid) {
       throw new UnauthorizedException('Contraseña o usuario incorrecto');
     }
-    const payload = { sub: user?.IdUsuario, username: user?.Username };
-    return { access_token: await this.jwtService.signAsync(payload) };
+    const payload = {
+      sub: user?.IdUsuario,
+      username: user?.Username,
+      role: user?.RolUsuario?.NombreRol,
+    };
+    return {
+      access_token: await this.jwtService.signAsync(payload),
+      username: payload.username,
+      role: payload.role,
+    };
   }
 
   // Método de Logout

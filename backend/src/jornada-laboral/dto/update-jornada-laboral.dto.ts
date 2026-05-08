@@ -1,9 +1,18 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { IsString, IsNumber, IsOptional, MaxLength, Min, Max } from 'class-validator';
+import {
+  IsString,
+  IsNumber,
+  IsOptional,
+  MaxLength,
+  Min,
+  Max,
+} from 'class-validator';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { CreateJornadaLaboralDto } from './create-jornada-laboral.dto';
 
-export class UpdateJornadaLaboralDto extends PartialType(CreateJornadaLaboralDto) {
+export class UpdateJornadaLaboralDto extends PartialType(
+  CreateJornadaLaboralDto,
+) {
   @ApiPropertyOptional({
     description: 'Nombre de la jornada laboral',
     example: 'Jornada Ordinaria',

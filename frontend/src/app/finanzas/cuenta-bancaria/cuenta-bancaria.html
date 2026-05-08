@@ -1,0 +1,85 @@
+<div class="cuenta-page">
+  <div class="cuenta-header">
+    <div>
+      <h2>Cuentas Bancarias</h2>
+      <p>Administra las cuentas bancarias de la empresa.</p>
+    </div>
+    <button pButton type="button" label="Nueva Cuenta" icon="pi pi-plus" class="p-button-success" (click)="openNew()"></button>
+  </div>
+
+  <p-table [value]="cuentas" [loading]="loading" dataKey="IdCuenta" responsiveLayout="scroll">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Banco</th>
+        <th>Número de Cuenta</th>
+        <th>Nombre Cuenta</th>
+        <th>Tipo</th>
+        <th>Saldo Actual</th>
+        <th>Moneda</th>
+        <th>Activo</th>
+        <th>Acciones</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-cuenta>
+      <tr>
+        <td>{{ cuenta.Banco?.NombreBanco }}</td>
+        <td>{{ cuenta.NumeroCuenta }}</td>
+        <td>{{ cuenta.NombreCuenta }}</td>
+        <td>{{ cuenta.TipoCuenta || 'N/A' }}</td>
+        <td>{{ cuenta.SaldoActual | currency:cuenta.Moneda }}</td>
+        <td>{{ cuenta.Moneda || 'GTQ' }}</td>
+        <td>
+          <p-tag [value]="cuenta.Activo ? 'Activo' : 'Inactivo'" [severity]="cuenta.Activo ? 'success' : 'danger'"></p-tag>
+        </td>
+        <td>
+          <ng-container *ngIf="cuenta.Activo; else inactiveActions">
+            <button pButton type="button" icon="pi pi-pencil" class="p-button-rounded p-button-text" (click)="editCuenta(cuenta)"></button>
+            <button pButton type="button" icon="pi pi-trash" class="p-button-rounded p-button-danger p-button-text" (click)="deleteCuenta(cuenta, $event)" [disabled]="deletingCuenta"></button>
+          </ng-container>
+          <ng-template #inactiveActions>
+            <button pButton type="button" icon="pi pi-refresh" class="p-button-rounded p-button-success p-button-text" (click)="reactivateCuenta(cuenta, $event)" pTooltip="Reactivar cuenta"></button>
+          </ng-template>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <p-dialog header="{{ isEdit ? 'Editar Cuenta' : 'Nueva Cuenta' }}" [(visible)]="cuentaDialog" [style]="{ width: '600px' }" [modal]="true" [closable]="true" [dismissableMask]="true">
+    <div class="form-grid">
+        <div class="p-field">
+          <label for="banco">Banco <span class="required">*</span></label>
+          <ng-container *ngIf="bancos.length > 0; else bancoCargando">
+            <p-select id="banco" [options]="bancos" optionLabel="NombreBanco" optionValue="IdBanco" [(ngModel)]="cuentaForm.IdBanco" placeholder="Seleccionar banco" appendTo="body"></p-select>
+          </ng-container>
+          <ng-template #bancoCargando>
+            <p-select [options]="[]" disabled placeholder="Cargando bancos..." appendTo="body"></p-select>
+          </ng-template>
+        </div>
+        <div class="p-field">
+          <label for="numeroCuenta">Número de Cuenta <span class="required">*</span></label>
+          <input pInputText id="numeroCuenta" [(ngModel)]="cuentaForm.NumeroCuenta" placeholder="Ingrese el número de cuenta" />
+        </div>
+        <div class="p-field">
+          <label for="nombreCuenta">Nombre de Cuenta <span class="required">*</span></label>
+          <input pInputText id="nombreCuenta" [(ngModel)]="cuentaForm.NombreCuenta" placeholder="Ingrese el nombre de la cuenta" />
+        </div>
+        <div class="p-field">
+          <label for="tipoCuenta">Tipo de Cuenta</label>
+          <p-select id="tipoCuenta" [options]="tiposCuenta" optionLabel="label" optionValue="value" [(ngModel)]="cuentaForm.TipoCuenta" placeholder="Seleccionar tipo" appendTo="body"></p-select>
+        </div>
+        <div class="p-field">
+          <label for="saldoInicial">Saldo Inicial</label>
+          <p-inputNumber id="saldoInicial" [(ngModel)]="cuentaForm.SaldoActual" [mode]="'currency'" currency="GTQ" locale="es-GT" placeholder="0.00"></p-inputNumber>
+        </div>
+        <div class="p-field">
+          <label for="moneda">Moneda</label>
+          <p-select id="moneda" [options]="monedas" optionLabel="label" optionValue="value" [(ngModel)]="cuentaForm.Moneda" placeholder="Seleccionar moneda" appendTo="body"></p-select>
+        </div>
+      </div>
+
+    <ng-template pTemplate="footer">
+      <button pButton type="button" label="Cancelar" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+      <button pButton type="button" label="Guardar" icon="pi pi-check" class="p-button-primary" (click)="saveCuenta()" [disabled]="savingCuenta"></button>
+    </ng-template>
+  </p-dialog>
+</div>

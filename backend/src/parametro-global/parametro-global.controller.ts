@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { ParametroGlobalService } from './parametro-global.service';
 import { CreateParametroGlobalDto } from './dto/create-parametro-global.dto';
 import { UpdateParametroGlobalDto } from './dto/update-parametro-global.dto';
@@ -6,7 +15,9 @@ import { AuthGuard } from '../login/login.guard';
 
 @Controller('parametro-global')
 export class ParametroGlobalController {
-  constructor(private readonly parametroGlobalService: ParametroGlobalService) {}
+  constructor(
+    private readonly parametroGlobalService: ParametroGlobalService,
+  ) {}
 
   @Post()
   @UseGuards(AuthGuard)
@@ -34,7 +45,10 @@ export class ParametroGlobalController {
 
   @Patch(':id')
   @UseGuards(AuthGuard)
-  update(@Param('id') id: string, @Body() updateParametroGlobalDto: UpdateParametroGlobalDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateParametroGlobalDto: UpdateParametroGlobalDto,
+  ) {
     return this.parametroGlobalService.update(+id, updateParametroGlobalDto);
   }
 

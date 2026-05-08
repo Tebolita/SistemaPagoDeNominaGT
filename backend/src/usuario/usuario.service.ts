@@ -14,11 +14,11 @@ export class UsuarioService {
       where: { Username: username },
       select: {
         Username: true,
-        Contrasena: true, 
-        Clave: true,      
+        Contrasena: true,
+        Clave: true,
         IdUsuario: true,
-        RolUsuario: { select: { NombreRol: true } }
-      }
+        RolUsuario: { select: { NombreRol: true } },
+      },
     });
     return userFound;
   }
@@ -26,16 +26,16 @@ export class UsuarioService {
   async create(createUsuarioDto: CreateUsuarioDto) {
     const nuevoUsuario = await this.prismaService.usuario.create({
       data: {
-        ...createUsuarioDto, 
+        ...createUsuarioDto,
         Contrasena: await bcryptjs.hash(createUsuarioDto.Contrasena, 12),
         Clave: await bcryptjs.hash(createUsuarioDto.Clave, 12),
-      }
+      },
     });
     return {
       message: `Se creó el usuario ${nuevoUsuario.Username} correctamente.`,
       id: nuevoUsuario.IdUsuario,
     };
-  }  
+  }
 
   // Obtener todos los usuarios (Sin contraseñas)
   async findAll() {
@@ -47,8 +47,8 @@ export class UsuarioService {
         IdEmpleado: true,
         RolUsuario: { select: { NombreRol: true } },
         // Si tienes la relación con Empleado en tu schema, puedes descomentar esto:
-        Empleado: { select: { Nombres: true, Apellidos: true } }
-      }
+        Empleado: { select: { Nombres: true, Apellidos: true } },
+      },
     });
   }
 
@@ -62,8 +62,8 @@ export class UsuarioService {
         Activo: true,
         IdRol: true,
         IdEmpleado: true,
-        RolUsuario: { select: { NombreRol: true } }
-      }
+        RolUsuario: { select: { NombreRol: true } },
+      },
     });
 
     if (!usuario) {
@@ -82,9 +82,12 @@ export class UsuarioService {
 
     // Si mandaron una nueva contraseña, la encriptamos antes de guardar
     if (dataToUpdate.Contrasena) {
-      dataToUpdate.Contrasena = await bcryptjs.hash(dataToUpdate.Contrasena, 12);
+      dataToUpdate.Contrasena = await bcryptjs.hash(
+        dataToUpdate.Contrasena,
+        12,
+      );
     }
-    
+
     // Si mandaron una nueva clave, la encriptamos antes de guardar
     if (dataToUpdate.Clave) {
       dataToUpdate.Clave = await bcryptjs.hash(dataToUpdate.Clave, 12);
@@ -111,7 +114,7 @@ export class UsuarioService {
 
     const usuarioEliminado = await this.prismaService.usuario.update({
       where: { IdUsuario: id },
-      data: { Activo: !usuario.Activo }
+      data: { Activo: !usuario.Activo },
     });
 
     return {

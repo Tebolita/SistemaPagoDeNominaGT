@@ -33,7 +33,7 @@ export class Inicio {
       title: 'Empleados',
       description: 'Gestión completa del personal: altas, bajas, modificaciones y consulta de información.',
       icon: 'pi pi-users',
-      route: '/home/empleado',
+      route: '/recursoshumanos/empleados',
       status: 'active',
       color: 'blue',
       features: ['Registro de empleados', 'Gestión de puestos', 'Historial salarial']
@@ -42,7 +42,7 @@ export class Inicio {
       title: 'Vacaciones',
       description: 'Control de días de vacaciones ganados, gozados y saldo disponible por empleado.',
       icon: 'pi pi-calendar',
-      route: '/home/vacacion',
+      route: '/recursoshumanos/vacaciones',
       status: 'active',
       color: 'teal',
       features: ['Días ganados', 'Días gozados', 'Saldo disponible']
@@ -51,7 +51,7 @@ export class Inicio {
       title: 'Asistencias',
       description: 'Registro y control de entradas, salidas y horas extras del personal.',
       icon: 'pi pi-clock',
-      route: '/home/asistencia',
+      route: '/recursoshumanos/asistencias',
       status: 'active',
       color: 'violet',
       features: ['Hora de entrada', 'Hora de salida', 'Horas extra']

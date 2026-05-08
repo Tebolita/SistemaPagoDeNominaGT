@@ -1,4 +1,11 @@
-import { IsString, IsNumber, IsNotEmpty, MaxLength, Min, Max } from 'class-validator';
+import {
+  IsString,
+  IsNumber,
+  IsNotEmpty,
+  MaxLength,
+  Min,
+  Max,
+} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateJornadaLaboralDto {

@@ -1,0 +1,73 @@
+.cuenta-page {
+  padding: 1rem;
+}
+
+.cuenta-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.cuenta-header h2 {
+  margin: 0;
+}
+
+.cuenta-header button {
+  min-width: 180px;
+  white-space: nowrap;
+}
+
+.p-field {
+  margin-bottom: 1rem;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.required {
+  color: #e74c3c;
+  font-weight: bold;
+}
+
+.p-field label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.p-inputtext,
+.p-inputtextarea,
+.p-select,
+.p-inputnumber {
+  width: 100%;
+}
+
+/* Estilos específicos para dropdowns en dialog */
+.p-dialog .p-select {
+  position: relative;
+}
+
+.p-dialog .p-select-panel {
+  z-index: 10000 !important;
+}
+
+.p-dialog .p-select-overlay {
+  z-index: 10000 !important;
+}
+
+.p-dialog .p-dialog-content {
+  padding: 1.5rem;
+}
+
+.p-dialog .p-dialog-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #e5e7eb;
+}

@@ -78,7 +78,10 @@ export class ReporteriaController {
     @Query('fechaInicio') fechaInicio?: string,
     @Query('fechaFin') fechaFin?: string,
   ) {
-    const data = await this.reporteriaService.getReporteEmpleados(fechaInicio, fechaFin);
+    const data = await this.reporteriaService.getReporteEmpleados(
+      fechaInicio,
+      fechaFin,
+    );
     return this.exportService.exportEmpleadosExcel(data, res);
   }
 
@@ -88,7 +91,10 @@ export class ReporteriaController {
     @Query('fechaInicio') fechaInicio?: string,
     @Query('fechaFin') fechaFin?: string,
   ) {
-    const data = await this.reporteriaService.getReporteEmpleados(fechaInicio, fechaFin);
+    const data = await this.reporteriaService.getReporteEmpleados(
+      fechaInicio,
+      fechaFin,
+    );
     return this.exportService.exportEmpleadosPDF(data, res);
   }
 
@@ -152,7 +158,10 @@ export class ReporteriaController {
     @Query('fechaInicio') fechaInicio: string,
     @Query('fechaFin') fechaFin: string,
   ) {
-    const data = await this.reporteriaService.getReporteAsistencias(fechaInicio, fechaFin);
+    const data = await this.reporteriaService.getReporteAsistencias(
+      fechaInicio,
+      fechaFin,
+    );
     return this.exportService.exportAsistenciasExcel(data, res);
   }
 
@@ -162,7 +171,10 @@ export class ReporteriaController {
     @Query('fechaInicio') fechaInicio: string,
     @Query('fechaFin') fechaFin: string,
   ) {
-    const data = await this.reporteriaService.getReporteAsistencias(fechaInicio, fechaFin);
+    const data = await this.reporteriaService.getReporteAsistencias(
+      fechaInicio,
+      fechaFin,
+    );
     return this.exportService.exportAsistenciasPDF(data, res);
   }
 

@@ -1,4 +1,11 @@
-import { IsString, IsNumber, IsNotEmpty, IsOptional, MaxLength, Min } from 'class-validator';
+import {
+  IsString,
+  IsNumber,
+  IsNotEmpty,
+  IsOptional,
+  MaxLength,
+  Min,
+} from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreateParametroGlobalDto {

@@ -16,6 +16,7 @@ import { MessageService, ConfirmationService } from 'primeng/api';
 import { NominaService } from '../services/nomina.service';
 import { EmpleadoService } from '../services/empleado.service';
 import { EstadoNominaService } from '../services/estado-nomina.service';
+import { LoginService } from '../services/login.service';
 import { Nomina, NominaCalculo, NominaMasivaResultado } from '../models/Nomina.model';
 import { EmpleadoResponse } from '../models/Empleado.model';
 import { EstadoNomina, HistorialEstadoNomina, CambiarEstadoNominaDto } from '../models/EstadoNomina.model';
@@ -46,13 +47,16 @@ export class NominaComponent implements OnInit {
   private nominaService = inject(NominaService);
   private empleadoService = inject(EmpleadoService);
   private estadoNominaService = inject(EstadoNominaService);
+  private authService = inject(LoginService);
   private messageService = inject(MessageService);
   private confirmationService = inject(ConfirmationService);
 
   nominas = signal<Nomina[]>([]);
   empleados = signal<EmpleadoResponse[]>([]);
   estados = signal<EstadoNomina[]>([]);
+  estadosDisponibles = signal<EstadoNomina[]>([]);
   historialEstados = signal<HistorialEstadoNomina[]>([]);
+  userRole = signal<string>('');
 
   displayDialog = signal(false);
   displayDetalles = signal(false);
@@ -64,6 +68,7 @@ export class NominaComponent implements OnInit {
   nominaSeleccionada: Nomina | null = null;
 
   ngOnInit() {
+    this.loadUserProfile();
     this.loadNominas();
     this.loadEmpleados();
     this.loadEstados();
@@ -291,11 +296,52 @@ export class NominaComponent implements OnInit {
     });
   }
 
+  private loadUserProfile() {
+    const storedRole = localStorage.getItem('user_role');
+    if (storedRole) {
+      this.userRole.set(storedRole);
+      return;
+    }
+    this.authService.getProfile().subscribe({
+      next: (profile) => {
+        this.userRole.set(profile.role);
+        localStorage.setItem('user_role', profile.role);
+        if (profile.username) {
+          localStorage.setItem('username', profile.username);
+        }
+      },
+      error: (err) => {
+        console.warn('No se pudo cargar el perfil de usuario:', err);
+      },
+    });
+  }
+
   // Métodos para gestión de estados
   cambiarEstado(nomina: Nomina) {
     this.nominaSeleccionada = nomina;
     this.cambioEstadoForm = { IdEstadoNuevo: 0, Comentarios: '' };
-    this.displayCambiarEstado.set(true);
+    this.estadoNominaService.getEstadosDisponibles(nomina.IdNomina).subscribe({
+      next: (data) => {
+        this.estadosDisponibles.set(data);
+        if (!data.length) {
+          this.messageService.add({
+            severity: 'warn',
+            summary: 'Sin estados disponibles',
+            detail: 'No hay estados válidos para cambiar en esta nómina.',
+          });
+          return;
+        }
+        this.displayCambiarEstado.set(true);
+      },
+      error: (err) => {
+        const errorMessage = this.handleError(err, 'No se pudieron cargar los estados disponibles');
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error al cargar estados',
+          detail: errorMessage,
+        });
+      },
+    });
   }
 
   confirmarCambioEstado() {
@@ -355,6 +401,41 @@ export class NominaComponent implements OnInit {
 
   getEstadoNombre(nomina: Nomina): string {
     return nomina.EstadoNomina?.NombreEstado || 'Sin estado';
+  }
+
+  isCambioEstadoPermisible(nomina: Nomina): boolean {
+    const nombre = nomina.EstadoNomina?.NombreEstado;
+    if (!nombre) {
+      return true;
+    }
+
+    if (nombre === 'PROCESADA') {
+      return false;
+    }
+
+    if (nombre === 'PENDIENTE_APROBACION') {
+      return this.isApprovalRole(this.userRole());
+    }
+
+    return true;
+  }
+
+  private isApprovalRole(role: string | null): boolean {
+    if (!role) {
+      return false;
+    }
+
+    const normalizedRole = role.trim().toUpperCase().replace(/\s+/g, '_');
+    const rolesPermitidos = [
+      'ADMINISTRADOR',
+      'ADMIN',
+      'GERENTE',
+      'RRHH',
+      'RECURSOS_HUMANOS',
+      'RECURSOS HUMANOS',
+    ];
+
+    return rolesPermitidos.includes(normalizedRole);
   }
 
   getEstadoSeverity(nomina: Nomina): 'success' | 'info' | 'warn' | 'danger' {

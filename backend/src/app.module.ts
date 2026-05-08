@@ -17,6 +17,12 @@ import { NominaModule } from './nomina/nomina.module';
 import { SalarioModule } from './salario/salario.module';
 import { ReporteriaModule } from './reporteria/reporteria.module';
 import { EstadoNominaModule } from './estado-nomina/estado-nomina.module';
+import { ClienteModule } from './cliente/cliente.module';
+import { ExportModule } from './export/export.module';
+import { ProductoServicioModule } from './producto-servicio/producto-servicio.module';
+import { VentaModule } from './venta/venta.module';
+import { CuentaBancariaEmpresaModule } from './cuenta-bancaria-empresa/cuenta-bancaria-empresa.module';
+import { MovimientoFinancieroModule } from './movimiento-financiero/movimiento-financiero.module';
 
 @Module({
   imports: [
@@ -37,6 +43,12 @@ import { EstadoNominaModule } from './estado-nomina/estado-nomina.module';
     SalarioModule,
     ReporteriaModule,
     EstadoNominaModule,
+    ClienteModule,
+    ExportModule,
+    ProductoServicioModule,
+    VentaModule,
+    CuentaBancariaEmpresaModule,
+    MovimientoFinancieroModule,
   ],
   controllers: [],
   providers: [PrismaService],

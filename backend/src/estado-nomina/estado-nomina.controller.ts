@@ -8,6 +8,9 @@ import {
   Delete,
   ParseIntPipe,
   UseGuards,
+  Request,
+  UnauthorizedException,
+  ForbiddenException,
 } from '@nestjs/common';
 import { EstadoNominaService } from './estado-nomina.service';
 import { CreateEstadoNominaDto } from './dto/create-estado-nomina.dto';
@@ -52,12 +55,19 @@ export class EstadoNominaController {
   // Endpoints específicos para flujo de estados
   @Post('cambiar-estado')
   cambiarEstadoNomina(
+    @Request() req: any,
     @Body() cambiarEstadoDto: CambiarEstadoNominaDto,
-    // Aquí se debería obtener el ID del usuario del token JWT
-    // Por ahora, hardcodeado para testing
   ) {
-    const idUsuario = 1; // TODO: Obtener del JWT
-    return this.estadoNominaService.cambiarEstadoNomina(cambiarEstadoDto, idUsuario);
+    const idUsuario = req.user?.sub;
+    const userRole = req.user?.role;
+    if (!idUsuario) {
+      throw new UnauthorizedException('Usuario no autenticado');
+    }
+    return this.estadoNominaService.cambiarEstadoNomina(
+      cambiarEstadoDto,
+      idUsuario,
+      userRole,
+    );
   }
 
   @Get('historial/:idNomina')
@@ -66,7 +76,11 @@ export class EstadoNominaController {
   }
 
   @Get('disponibles/:idNomina')
-  getEstadosDisponibles(@Param('idNomina', ParseIntPipe) idNomina: number) {
-    return this.estadoNominaService.getEstadosDisponibles(idNomina);
+  getEstadosDisponibles(
+    @Request() req: any,
+    @Param('idNomina', ParseIntPipe) idNomina: number,
+  ) {
+    const role = req.user?.role;
+    return this.estadoNominaService.getEstadosDisponibles(idNomina, role);
   }
 }

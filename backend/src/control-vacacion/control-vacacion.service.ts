@@ -21,7 +21,8 @@ export class ControlVacacionService {
     const control = await this.prisma.controlVacacion.findUnique({
       where: { IdControlVacacion: id },
     });
-    if (!control) throw new NotFoundException(`Control de vacaciones #${id} no encontrado`);
+    if (!control)
+      throw new NotFoundException(`Control de vacaciones #${id} no encontrado`);
     return control;
   }
 
@@ -29,7 +30,7 @@ export class ControlVacacionService {
   async findByEmpleado(idEmpleado: number) {
     return await this.prisma.controlVacacion.findMany({
       where: { IdEmpleado: idEmpleado },
-      orderBy: { AnioCorriente: 'asc' } // Ordenado por año (PEPS: Primeras entradas, primeras salidas)
+      orderBy: { AnioCorriente: 'asc' }, // Ordenado por año (PEPS: Primeras entradas, primeras salidas)
     });
   }
 
@@ -47,8 +48,8 @@ export class ControlVacacionService {
       where: { IdControlVacacion: id },
       data: {
         Activo: !controlVacacion.Activo,
-        FechaEliminacion: new Date()
-      }
+        FechaEliminacion: new Date(),
+      },
     });
   }
 }

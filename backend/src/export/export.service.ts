@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import * as ExcelJS from 'exceljs';
 import type { Response } from 'express';
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const PDFKit = require('pdfkit');
 
 @Injectable()
@@ -11,7 +10,12 @@ export class ExportService {
 
   // ========== EXPORTACIÓN A EXCEL ==========
 
-  async exportToExcel(data: any[], filename: string, sheetName: string, res: Response) {
+  async exportToExcel(
+    data: any[],
+    filename: string,
+    sheetName: string,
+    res: Response,
+  ) {
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet(sheetName);
 
@@ -26,13 +30,13 @@ export class ExportService {
       headerRow.fill = {
         type: 'pattern',
         pattern: 'solid',
-        fgColor: { argb: 'FF4F81BD' }
+        fgColor: { argb: 'FF4F81BD' },
       };
       headerRow.alignment = { horizontal: 'center' };
 
       // Agregar datos
       data.forEach((item) => {
-        const row = headers.map(header => {
+        const row = headers.map((header) => {
           const value = item[header];
           // Formatear fechas
           if (value instanceof Date) {
@@ -63,8 +67,14 @@ export class ExportService {
     }
 
     // Configurar respuesta HTTP
-    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-    res.setHeader('Content-Disposition', `attachment; filename=${filename}.xlsx`);
+    res.setHeader(
+      'Content-Type',
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    );
+    res.setHeader(
+      'Content-Disposition',
+      `attachment; filename=${filename}.xlsx`,
+    );
 
     // Enviar archivo
     await workbook.xlsx.write(res);
@@ -73,7 +83,12 @@ export class ExportService {
 
   // ========== EXPORTACIÓN A PDF ==========
 
-  async exportToPDF(data: any[], filename: string, title: string, res: Response) {
+  async exportToPDF(
+    data: any[],
+    filename: string,
+    title: string,
+    res: Response,
+  ) {
     const doc = new PDFKit();
     const buffers: Buffer[] = [];
 
@@ -81,7 +96,10 @@ export class ExportService {
     doc.on('end', () => {
       const pdfData = Buffer.concat(buffers);
       res.setHeader('Content-Type', 'application/pdf');
-      res.setHeader('Content-Disposition', `attachment; filename=${filename}.pdf`);
+      res.setHeader(
+        'Content-Disposition',
+        `attachment; filename=${filename}.pdf`,
+      );
       res.send(pdfData);
     });
 

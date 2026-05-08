@@ -68,11 +68,11 @@ export class NominaInicio {
       ]
     },
     {
-      title: 'Reportería',
+      title: 'Reportería de Nómina',
       description: 'Genera reportes de nóminas, análisis de salarios y comparativas históricas.',
       icon: 'pi pi-chart-bar',
-      route: '/reporteria',
-      status: 'coming',
+      route: '/reporteria/reportes',
+      status: 'active',
       color: 'orange',
       features: [
         'Reportes de nómina',

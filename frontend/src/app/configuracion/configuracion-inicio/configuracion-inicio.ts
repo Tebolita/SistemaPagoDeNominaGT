@@ -46,7 +46,7 @@ export class ConfiguracionInicio {
       description: 'Configura parámetros generales del sistema como tasas, límites e impuestos.',
       icon: 'pi pi-sliders-h',
       route: '/configuracion/parametros',
-      status: 'coming',
+      status: 'active',
       color: 'teal',
       features: [
         'Tasas de impuesto',
@@ -55,29 +55,55 @@ export class ConfiguracionInicio {
       ]
     },
     {
-      title: 'Estructuras Organizativas',
-      description: 'Gestiona la jerarquía: departamentos, puestos, jornadas laborales y bancos.',
-      icon: 'pi pi-sitemap',
-      route: '/configuracion/estructura',
-      status: 'coming',
+      title: 'Departamentos',
+      description: 'Gestiona la estructura departamental de la organización.',
+      icon: 'pi pi-building',
+      route: '/configuracion/departamentos',
+      status: 'active',
       color: 'violet',
       features: [
-        'Departamentos',
-        'Puestos de trabajo',
-        'Jornadas laborales'
+        'Crear departamentos',
+        'Jerarquía organizacional',
+        'Asignación de empleados'
       ]
     },
     {
-      title: 'Moneda y Bancos',
-      description: 'Configuración de monedas, tipo de cambio y datos de bancos para transferencias.',
-      icon: 'pi pi-dollar',
-      route: '/configuracion/bancos',
-      status: 'coming',
+      title: 'Puestos de Trabajo',
+      description: 'Administra los diferentes puestos y roles dentro de la empresa.',
+      icon: 'pi pi-briefcase',
+      route: '/configuracion/puestos',
+      status: 'active',
       color: 'orange',
       features: [
-        'Monedas vigentes',
-        'Tipo de cambio',
-        'Datos de bancos'
+        'Definir puestos',
+        'Salarios por puesto',
+        'Requisitos del cargo'
+      ]
+    },
+    {
+      title: 'Jornadas Laborales',
+      description: 'Configura las diferentes jornadas de trabajo disponibles.',
+      icon: 'pi pi-calendar',
+      route: '/configuracion/jornadas',
+      status: 'active',
+      color: 'green',
+      features: [
+        'Horarios de trabajo',
+        'Días laborables',
+        'Horas semanales'
+      ]
+    },
+    {
+      title: 'Bancos',
+      description: 'Gestiona la información de bancos para transferencias y pagos.',
+      icon: 'pi pi-money-bill',
+      route: '/configuracion/bancos',
+      status: 'active',
+      color: 'red',
+      features: [
+        'Datos bancarios',
+        'Cuentas de empresa',
+        'Transferencias'
       ]
     }
   ];

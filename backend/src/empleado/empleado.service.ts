@@ -5,45 +5,59 @@ import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class EmpleadoService {
-  constructor(
-    private prismaService: PrismaService
-  ) {}
+  constructor(private prismaService: PrismaService) {}
 
   async create(createEmpleadoDto: CreateEmpleadoDto) {
-      
-      const { IdPuesto, IdJornada, IdBanco, CuentaBancaria, Estado, ...dataToCreate } = createEmpleadoDto as any;
+    const {
+      IdPuesto,
+      IdJornada,
+      IdBanco,
+      CuentaBancaria,
+      Estado,
+      ...dataToCreate
+    } = createEmpleadoDto as any;
 
-      const nuevoEmpleado = await this.prismaService.empleado.create({
-        data: {
-          ...dataToCreate,
-         
-          ...(Estado !== undefined && { Activo: Estado }),
-            
-          ...(IdPuesto && { Puesto: { connect: { IdPuesto: Number(IdPuesto) } } }),
+    const nuevoEmpleado = await this.prismaService.empleado.create({
+      data: {
+        ...dataToCreate,
 
-          ...(IdJornada && { JornadaLaboral: { connect: { IdJornada: Number(IdJornada) } } }),
-          ...(IdBanco && { Banco: { connect: { IdBanco: Number(IdBanco) } } }),
-          ...(CuentaBancaria && { CuentaBancaria }),
-        },
-        select: {
-          Nombres: true,
-          IdEmpleado: true,
-        },
-      });
-      
-      return {
-        message: `Se creó el empleado ${nuevoEmpleado.Nombres} correctamente.`,
-        id: nuevoEmpleado.IdEmpleado,
-      };
-    }
+        ...(Estado !== undefined && { Activo: Estado }),
+
+        ...(IdPuesto && {
+          Puesto: { connect: { IdPuesto: Number(IdPuesto) } },
+        }),
+
+        ...(IdJornada && {
+          JornadaLaboral: { connect: { IdJornada: Number(IdJornada) } },
+        }),
+        ...(IdBanco && { Banco: { connect: { IdBanco: Number(IdBanco) } } }),
+        ...(CuentaBancaria && { CuentaBancaria }),
+      },
+      select: {
+        Nombres: true,
+        IdEmpleado: true,
+      },
+    });
+
+    return {
+      message: `Se creó el empleado ${nuevoEmpleado.Nombres} correctamente.`,
+      id: nuevoEmpleado.IdEmpleado,
+    };
+  }
 
   async findAll() {
     const empleados = await this.prismaService.empleado.findMany({
       include: {
-        Usuario: { select: { IdUsuario: true, IdRol: true, RolUsuario: { select: { NombreRol: true } } } },
+        Usuario: {
+          select: {
+            IdUsuario: true,
+            IdRol: true,
+            RolUsuario: { select: { NombreRol: true } },
+          },
+        },
         Puesto: { select: { NombrePuesto: true } },
         JornadaLaboral: { select: { IdJornada: true, NombreJornada: true } },
-        Banco: { select: { IdBanco: true, NombreBanco: true } } 
+        Banco: { select: { IdBanco: true, NombreBanco: true } },
       },
     });
 
@@ -63,40 +77,59 @@ export class EmpleadoService {
     const empleado = await this.prismaService.empleado.findUnique({
       where: { IdEmpleado: idEmpleado },
       include: {
-        Usuario: { select: { IdUsuario: true, IdRol: true, RolUsuario: { select: { NombreRol: true } } } },
+        Usuario: {
+          select: {
+            IdUsuario: true,
+            IdRol: true,
+            RolUsuario: { select: { NombreRol: true } },
+          },
+        },
         Puesto: { select: { NombrePuesto: true } },
         JornadaLaboral: { select: { IdJornada: true, NombreJornada: true } },
-        Banco: { select: { IdBanco: true, NombreBanco: true } }
-      }
+        Banco: { select: { IdBanco: true, NombreBanco: true } },
+      },
     });
-    
+
     return empleado;
   }
 
   async update(id: number, updateEmpleadoDto: UpdateEmpleadoDto) {
-      await this.findOne(id);
+    await this.findOne(id);
 
-      const { IdEmpleado, IdPuesto, IdJornada, IdBanco, CuentaBancaria, Estado, IdRol, ...dataToUpdate } = updateEmpleadoDto as any;
+    const {
+      IdEmpleado,
+      IdPuesto,
+      IdJornada,
+      IdBanco,
+      CuentaBancaria,
+      Estado,
+      IdRol,
+      ...dataToUpdate
+    } = updateEmpleadoDto as any;
 
-      const empleadoActualizado = await this.prismaService.empleado.update({
-        where: { IdEmpleado: id },
-        data: {
-          ...dataToUpdate,
-          
-          ...(Estado !== undefined && { Activo: Estado }),
-          
-          ...(IdPuesto && { Puesto: { connect: { IdPuesto: Number(IdPuesto) } } }),
-          ...(IdJornada && { JornadaLaboral: { connect: { IdJornada: Number(IdJornada) } } }),
-          ...(IdBanco && { Banco: { connect: { IdBanco: Number(IdBanco) } } }),
-          ...(CuentaBancaria && { CuentaBancaria }),
-        },
-      });
+    const empleadoActualizado = await this.prismaService.empleado.update({
+      where: { IdEmpleado: id },
+      data: {
+        ...dataToUpdate,
 
-      return {
-        message: `Empleado actualizado correctamente.`,
-        id: empleadoActualizado.IdEmpleado,
-      };
-    }
+        ...(Estado !== undefined && { Activo: Estado }),
+
+        ...(IdPuesto && {
+          Puesto: { connect: { IdPuesto: Number(IdPuesto) } },
+        }),
+        ...(IdJornada && {
+          JornadaLaboral: { connect: { IdJornada: Number(IdJornada) } },
+        }),
+        ...(IdBanco && { Banco: { connect: { IdBanco: Number(IdBanco) } } }),
+        ...(CuentaBancaria && { CuentaBancaria }),
+      },
+    });
+
+    return {
+      message: `Empleado actualizado correctamente.`,
+      id: empleadoActualizado.IdEmpleado,
+    };
+  }
 
   async remove(id: number) {
     const empelado = await this.findOne(id);

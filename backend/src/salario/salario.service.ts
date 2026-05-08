@@ -8,7 +8,8 @@ export class SalarioService {
   constructor(private prismaService: PrismaService) {}
 
   async create(createSalarioDto: CreateSalarioDto) {
-    const { IdEmpleado, SalarioBase, FechaInicioVigencia, FechaFinVigencia } = createSalarioDto;
+    const { IdEmpleado, SalarioBase, FechaInicioVigencia, FechaFinVigencia } =
+      createSalarioDto;
 
     // Verificar que el empleado existe
     const empleado = await this.prismaService.empleado.findUnique({
@@ -16,7 +17,9 @@ export class SalarioService {
     });
 
     if (!empleado) {
-      throw new NotFoundException(`Empleado con ID ${IdEmpleado} no encontrado`);
+      throw new NotFoundException(
+        `Empleado con ID ${IdEmpleado} no encontrado`,
+      );
     }
 
     // Desactivar salarios anteriores
@@ -106,7 +109,8 @@ export class SalarioService {
 
     return {
       ...salario,
-      NombreEmpleado: `${salario.Empleado.Nombres} ${salario.Empleado.Apellidos}`.trim(),
+      NombreEmpleado:
+        `${salario.Empleado.Nombres} ${salario.Empleado.Apellidos}`.trim(),
       SalarioBase: Number(salario.SalarioBase),
       FechaInicioVigencia: salario.FechaInicioVigencia
         ? salario.FechaInicioVigencia.toISOString().slice(0, 10)
@@ -120,14 +124,21 @@ export class SalarioService {
   async update(id: number, updateSalarioDto: UpdateSalarioDto) {
     await this.findOne(id);
 
-    const { SalarioBase, FechaInicioVigencia, FechaFinVigencia, Activo } = updateSalarioDto;
+    const { SalarioBase, FechaInicioVigencia, FechaFinVigencia, Activo } =
+      updateSalarioDto;
 
     const salarioActualizado = await this.prismaService.salario.update({
       where: { IdHistorico: id },
       data: {
         ...(SalarioBase && { SalarioBase: Number(SalarioBase) }),
-        ...(FechaInicioVigencia && { FechaInicioVigencia: new Date(FechaInicioVigencia) }),
-        ...(FechaFinVigencia !== undefined && { FechaFinVigencia: FechaFinVigencia ? new Date(FechaFinVigencia) : null }),
+        ...(FechaInicioVigencia && {
+          FechaInicioVigencia: new Date(FechaInicioVigencia),
+        }),
+        ...(FechaFinVigencia !== undefined && {
+          FechaFinVigencia: FechaFinVigencia
+            ? new Date(FechaFinVigencia)
+            : null,
+        }),
         ...(Activo !== undefined && { Activo }),
       },
     });

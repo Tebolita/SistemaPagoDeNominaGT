@@ -26,12 +26,12 @@ export class DetalleControlVacacionService {
   }
 
   // --- FUNCIONES EXTRA RECOMENDADAS ---
-  
+
   // Ver qué incidencias han consumido días de un año específico
   async findByControl(idControlVacacion: number) {
     return await this.prisma.detalleControlVacacion.findMany({
       where: { IdControlVacacion: idControlVacacion },
-      include: { Incidencia: true }
+      include: { Incidencia: true },
     });
   }
 
@@ -39,7 +39,7 @@ export class DetalleControlVacacionService {
   async findByIncidencia(idIncidencia: number) {
     return await this.prisma.detalleControlVacacion.findMany({
       where: { IdIncidencia: idIncidencia },
-      include: { ControlVacacion: true }
+      include: { ControlVacacion: true },
     });
   }
 
@@ -57,8 +57,8 @@ export class DetalleControlVacacionService {
       where: { IdDetalleVacacion: id },
       data: {
         Activo: !detalleControlVacacion.Activo,
-        FechaEliminacion: new Date()
-      }
+        FechaEliminacion: new Date(),
+      },
     });
   }
 }

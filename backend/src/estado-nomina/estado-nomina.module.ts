@@ -6,6 +6,6 @@ import { PrismaService } from '../prisma/prisma.service';
 @Module({
   imports: [],
   controllers: [EstadoNominaController],
-  providers: [EstadoNominaService, PrismaService]
+  providers: [EstadoNominaService, PrismaService],
 })
 export class EstadoNominaModule {}

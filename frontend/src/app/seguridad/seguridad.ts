@@ -1,16 +1,33 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { RouterModule } from '@angular/router';
+import { ButtonModule } from 'primeng/button';
+import { CardModule } from 'primeng/card';
+import { BadgeModule } from 'primeng/badge';
+import { RippleModule } from 'primeng/ripple';
+import { CommonModule } from '@angular/common';
+
+interface ModuleCard {
+  title: string;
+  description: string;
+  icon: string;
+  route: string;
+  status: 'active' | 'coming';
+  color: string;
+  features: string[];
+}
 
 @Component({
   selector: 'app-seguridad-dashboard',
   standalone: true,
+  imports: [RouterModule, ButtonModule, CardModule, BadgeModule, RippleModule, CommonModule],
   templateUrl: './seguridad.html',
-  styleUrls: ['./seguridad.css'] // Asumiendo que aquí tienes tu CSS
+  styleUrl: './seguridad.css'
 })
 export class Seguridad {
   private router = inject(Router);
 
-  subModules = [
+  modules: ModuleCard[] = [
     {
       title: 'Usuarios del Sistema',
       description: 'Crea, edita y elimina los accesos para los empleados de la empresa.',
@@ -30,7 +47,7 @@ export class Seguridad {
       icon: 'pi pi-sitemap',
       color: 'teal',
       route: '/seguridad/roles',
-      status: 'coming',
+      status: 'active',
       features: [
         'Creación de nuevos roles',
         'Control de accesos',
@@ -53,10 +70,6 @@ export class Seguridad {
   ];
 
   navigate(route: string) {
-    // Evitar navegación si está en desarrollo
-    const modulo = this.subModules.find(m => m.route === route);
-    if (modulo && modulo.status === 'active') {
-      this.router.navigate([route]);
-    }
+    this.router.navigate([route]);
   }
 }

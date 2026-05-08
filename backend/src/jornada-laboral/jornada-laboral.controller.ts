@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { JornadaLaboralService } from './jornada-laboral.service';
 import { CreateJornadaLaboralDto } from './dto/create-jornada-laboral.dto';
 import { UpdateJornadaLaboralDto } from './dto/update-jornada-laboral.dto';
@@ -28,7 +37,10 @@ export class JornadaLaboralController {
 
   @Patch(':id')
   @UseGuards(AuthGuard)
-  update(@Param('id') id: string, @Body() updateJornadaLaboralDto: UpdateJornadaLaboralDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateJornadaLaboralDto: UpdateJornadaLaboralDto,
+  ) {
     return this.jornadaLaboralService.update(+id, updateJornadaLaboralDto);
   }
 

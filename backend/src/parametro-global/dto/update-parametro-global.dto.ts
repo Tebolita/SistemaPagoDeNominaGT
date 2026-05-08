@@ -1,6 +1,8 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateParametroGlobalDto } from './create-parametro-global.dto';
 
-export class UpdateParametroGlobalDto extends PartialType(CreateParametroGlobalDto) {
+export class UpdateParametroGlobalDto extends PartialType(
+  CreateParametroGlobalDto,
+) {
   // Hereda validaciones de CreateParametroGlobalDto
 }

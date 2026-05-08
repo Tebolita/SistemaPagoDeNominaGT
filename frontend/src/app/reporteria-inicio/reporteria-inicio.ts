@@ -29,16 +29,16 @@ export class ReporteriaInicio {
 
   modules: ModuleCard[] = [
     {
-      title: 'Reportes de Nómina',
-      description: 'Genera reportes detallados de nóminas procesadas por período, departamento o empleado.',
+      title: 'Reportes del Sistema',
+      description: 'Genera y visualiza reportes detallados del sistema de nóminas y recursos humanos.',
       icon: 'pi pi-file-pdf',
-      route: '/reporteria/nomina',
-      status: 'coming',
+      route: '/reporteria/reportes',
+      status: 'active',
       color: 'blue',
       features: [
         'Exportar a PDF',
-        'Por período',
-        'Filtrar por departamento'
+        'Reportes personalizados',
+        'Visualización de datos'
       ]
     },
     {

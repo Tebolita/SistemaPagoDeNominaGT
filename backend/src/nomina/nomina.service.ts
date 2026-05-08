@@ -1,4 +1,8 @@
-import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateNominaDto } from './dto/create-nomina.dto';
 import { UpdateNominaDto } from './dto/update-nomina.dto';
@@ -26,6 +30,7 @@ export class NominaService {
     const nomina = await this.prisma.nominaEncabezado.create({
       data,
       include: {
+        EstadoNomina: true,
         NominaDetalle: {
           include: {
             Empleado: {
@@ -44,16 +49,30 @@ export class NominaService {
     // Convertir valores decimales de strings a números
     return {
       ...nomina,
-      NominaDetalle: nomina.NominaDetalle.map(detalle => ({
+      NominaDetalle: nomina.NominaDetalle.map((detalle) => ({
         ...detalle,
         SueldoBase: parseFloat(detalle.SueldoBase.toString()),
-        BonificacionIncentivo: detalle.BonificacionIncentivo ? parseFloat(detalle.BonificacionIncentivo.toString()) : 0,
-        OtrosIngresos: detalle.OtrosIngresos ? parseFloat(detalle.OtrosIngresos.toString()) : 0,
-        DescuentoIGSS: detalle.DescuentoIGSS ? parseFloat(detalle.DescuentoIGSS.toString()) : 0,
-        DescuentoISR: detalle.DescuentoISR ? parseFloat(detalle.DescuentoISR.toString()) : 0,
-        OtrosDescuentos: detalle.OtrosDescuentos ? parseFloat(detalle.OtrosDescuentos.toString()) : 0,
-        LiquidoRecibir: detalle.LiquidoRecibir ? parseFloat(detalle.LiquidoRecibir.toString()) : 0,
-        DiasLaborados: detalle.DiasLaborados ? parseFloat(detalle.DiasLaborados.toString()) : 0,
+        BonificacionIncentivo: detalle.BonificacionIncentivo
+          ? parseFloat(detalle.BonificacionIncentivo.toString())
+          : 0,
+        OtrosIngresos: detalle.OtrosIngresos
+          ? parseFloat(detalle.OtrosIngresos.toString())
+          : 0,
+        DescuentoIGSS: detalle.DescuentoIGSS
+          ? parseFloat(detalle.DescuentoIGSS.toString())
+          : 0,
+        DescuentoISR: detalle.DescuentoISR
+          ? parseFloat(detalle.DescuentoISR.toString())
+          : 0,
+        OtrosDescuentos: detalle.OtrosDescuentos
+          ? parseFloat(detalle.OtrosDescuentos.toString())
+          : 0,
+        LiquidoRecibir: detalle.LiquidoRecibir
+          ? parseFloat(detalle.LiquidoRecibir.toString())
+          : 0,
+        DiasLaborados: detalle.DiasLaborados
+          ? parseFloat(detalle.DiasLaborados.toString())
+          : 0,
       })),
     };
   }
@@ -62,6 +81,7 @@ export class NominaService {
     const nominas = await this.prisma.nominaEncabezado.findMany({
       where: { Activo: true },
       include: {
+        EstadoNomina: true,
         NominaDetalle: {
           include: {
             Empleado: {
@@ -79,18 +99,32 @@ export class NominaService {
     });
 
     // Convertir valores decimales de strings a números
-    return nominas.map(nomina => ({
+    return nominas.map((nomina) => ({
       ...nomina,
-      NominaDetalle: nomina.NominaDetalle.map(detalle => ({
+      NominaDetalle: nomina.NominaDetalle.map((detalle) => ({
         ...detalle,
         SueldoBase: parseFloat(detalle.SueldoBase.toString()),
-        BonificacionIncentivo: detalle.BonificacionIncentivo ? parseFloat(detalle.BonificacionIncentivo.toString()) : 0,
-        OtrosIngresos: detalle.OtrosIngresos ? parseFloat(detalle.OtrosIngresos.toString()) : 0,
-        DescuentoIGSS: detalle.DescuentoIGSS ? parseFloat(detalle.DescuentoIGSS.toString()) : 0,
-        DescuentoISR: detalle.DescuentoISR ? parseFloat(detalle.DescuentoISR.toString()) : 0,
-        OtrosDescuentos: detalle.OtrosDescuentos ? parseFloat(detalle.OtrosDescuentos.toString()) : 0,
-        LiquidoRecibir: detalle.LiquidoRecibir ? parseFloat(detalle.LiquidoRecibir.toString()) : 0,
-        DiasLaborados: detalle.DiasLaborados ? parseFloat(detalle.DiasLaborados.toString()) : 0,
+        BonificacionIncentivo: detalle.BonificacionIncentivo
+          ? parseFloat(detalle.BonificacionIncentivo.toString())
+          : 0,
+        OtrosIngresos: detalle.OtrosIngresos
+          ? parseFloat(detalle.OtrosIngresos.toString())
+          : 0,
+        DescuentoIGSS: detalle.DescuentoIGSS
+          ? parseFloat(detalle.DescuentoIGSS.toString())
+          : 0,
+        DescuentoISR: detalle.DescuentoISR
+          ? parseFloat(detalle.DescuentoISR.toString())
+          : 0,
+        OtrosDescuentos: detalle.OtrosDescuentos
+          ? parseFloat(detalle.OtrosDescuentos.toString())
+          : 0,
+        LiquidoRecibir: detalle.LiquidoRecibir
+          ? parseFloat(detalle.LiquidoRecibir.toString())
+          : 0,
+        DiasLaborados: detalle.DiasLaborados
+          ? parseFloat(detalle.DiasLaborados.toString())
+          : 0,
       })),
     }));
   }
@@ -99,6 +133,7 @@ export class NominaService {
     const nomina = await this.prisma.nominaEncabezado.findUnique({
       where: { IdNomina: id },
       include: {
+        EstadoNomina: true,
         NominaDetalle: {
           include: {
             Empleado: {
@@ -121,16 +156,30 @@ export class NominaService {
     // Convertir valores decimales de strings a números
     return {
       ...nomina,
-      NominaDetalle: nomina.NominaDetalle.map(detalle => ({
+      NominaDetalle: nomina.NominaDetalle.map((detalle) => ({
         ...detalle,
         SueldoBase: parseFloat(detalle.SueldoBase.toString()),
-        BonificacionIncentivo: detalle.BonificacionIncentivo ? parseFloat(detalle.BonificacionIncentivo.toString()) : 0,
-        OtrosIngresos: detalle.OtrosIngresos ? parseFloat(detalle.OtrosIngresos.toString()) : 0,
-        DescuentoIGSS: detalle.DescuentoIGSS ? parseFloat(detalle.DescuentoIGSS.toString()) : 0,
-        DescuentoISR: detalle.DescuentoISR ? parseFloat(detalle.DescuentoISR.toString()) : 0,
-        OtrosDescuentos: detalle.OtrosDescuentos ? parseFloat(detalle.OtrosDescuentos.toString()) : 0,
-        LiquidoRecibir: detalle.LiquidoRecibir ? parseFloat(detalle.LiquidoRecibir.toString()) : 0,
-        DiasLaborados: detalle.DiasLaborados ? parseFloat(detalle.DiasLaborados.toString()) : 0,
+        BonificacionIncentivo: detalle.BonificacionIncentivo
+          ? parseFloat(detalle.BonificacionIncentivo.toString())
+          : 0,
+        OtrosIngresos: detalle.OtrosIngresos
+          ? parseFloat(detalle.OtrosIngresos.toString())
+          : 0,
+        DescuentoIGSS: detalle.DescuentoIGSS
+          ? parseFloat(detalle.DescuentoIGSS.toString())
+          : 0,
+        DescuentoISR: detalle.DescuentoISR
+          ? parseFloat(detalle.DescuentoISR.toString())
+          : 0,
+        OtrosDescuentos: detalle.OtrosDescuentos
+          ? parseFloat(detalle.OtrosDescuentos.toString())
+          : 0,
+        LiquidoRecibir: detalle.LiquidoRecibir
+          ? parseFloat(detalle.LiquidoRecibir.toString())
+          : 0,
+        DiasLaborados: detalle.DiasLaborados
+          ? parseFloat(detalle.DiasLaborados.toString())
+          : 0,
       })),
     };
   }
@@ -138,7 +187,7 @@ export class NominaService {
   async update(id: number, updateNominaDto: UpdateNominaDto) {
     // Verificar que la nómina existe
     const nominaExistente = await this.prisma.nominaEncabezado.findUnique({
-      where: { IdNomina: id }
+      where: { IdNomina: id },
     });
 
     if (!nominaExistente) {
@@ -163,6 +212,7 @@ export class NominaService {
       where: { IdNomina: id },
       data,
       include: {
+        EstadoNomina: true,
         NominaDetalle: {
           include: {
             Empleado: true,
@@ -174,16 +224,30 @@ export class NominaService {
     // Convertir valores decimales de strings a números
     return {
       ...nomina,
-      NominaDetalle: nomina.NominaDetalle.map(detalle => ({
+      NominaDetalle: nomina.NominaDetalle.map((detalle) => ({
         ...detalle,
         SueldoBase: parseFloat(detalle.SueldoBase.toString()),
-        BonificacionIncentivo: detalle.BonificacionIncentivo ? parseFloat(detalle.BonificacionIncentivo.toString()) : 0,
-        OtrosIngresos: detalle.OtrosIngresos ? parseFloat(detalle.OtrosIngresos.toString()) : 0,
-        DescuentoIGSS: detalle.DescuentoIGSS ? parseFloat(detalle.DescuentoIGSS.toString()) : 0,
-        DescuentoISR: detalle.DescuentoISR ? parseFloat(detalle.DescuentoISR.toString()) : 0,
-        OtrosDescuentos: detalle.OtrosDescuentos ? parseFloat(detalle.OtrosDescuentos.toString()) : 0,
-        LiquidoRecibir: detalle.LiquidoRecibir ? parseFloat(detalle.LiquidoRecibir.toString()) : 0,
-        DiasLaborados: detalle.DiasLaborados ? parseFloat(detalle.DiasLaborados.toString()) : 0,
+        BonificacionIncentivo: detalle.BonificacionIncentivo
+          ? parseFloat(detalle.BonificacionIncentivo.toString())
+          : 0,
+        OtrosIngresos: detalle.OtrosIngresos
+          ? parseFloat(detalle.OtrosIngresos.toString())
+          : 0,
+        DescuentoIGSS: detalle.DescuentoIGSS
+          ? parseFloat(detalle.DescuentoIGSS.toString())
+          : 0,
+        DescuentoISR: detalle.DescuentoISR
+          ? parseFloat(detalle.DescuentoISR.toString())
+          : 0,
+        OtrosDescuentos: detalle.OtrosDescuentos
+          ? parseFloat(detalle.OtrosDescuentos.toString())
+          : 0,
+        LiquidoRecibir: detalle.LiquidoRecibir
+          ? parseFloat(detalle.LiquidoRecibir.toString())
+          : 0,
+        DiasLaborados: detalle.DiasLaborados
+          ? parseFloat(detalle.DiasLaborados.toString())
+          : 0,
       })),
     };
   }
@@ -191,7 +255,7 @@ export class NominaService {
   async remove(id: number) {
     // Verificar que la nómina existe
     const nomina = await this.prisma.nominaEncabezado.findUnique({
-      where: { IdNomina: id }
+      where: { IdNomina: id },
     });
 
     if (!nomina) {
@@ -214,11 +278,13 @@ export class NominaService {
   async calcularNomina(idEmpleado: number, salarioBase: number) {
     // Validar que el empleado existe
     const empleado = await this.prisma.empleado.findUnique({
-      where: { IdEmpleado: idEmpleado, Activo: true }
+      where: { IdEmpleado: idEmpleado, Activo: true },
     });
 
     if (!empleado) {
-      throw new NotFoundException(`Empleado con ID ${idEmpleado} no encontrado o inactivo`);
+      throw new NotFoundException(
+        `Empleado con ID ${idEmpleado} no encontrado o inactivo`,
+      );
     }
 
     // Validar salario base
@@ -256,10 +322,22 @@ export class NominaService {
 
     if (salarioAnualizado > isrBaseAnual) {
       const exceso1 = Math.min(salarioAnualizado - isrBaseAnual, 141600);
-      const exceso2 = Math.min(Math.max(salarioAnualizado - isrBaseAnual - 141600, 0), 93400);
-      const exceso3 = Math.min(Math.max(salarioAnualizado - isrBaseAnual - 235000, 0), 141000);
-      const exceso4 = Math.min(Math.max(salarioAnualizado - isrBaseAnual - 376000, 0), 376000);
-      const exceso5 = Math.min(Math.max(salarioAnualizado - isrBaseAnual - 752000, 0), 752000);
+      const exceso2 = Math.min(
+        Math.max(salarioAnualizado - isrBaseAnual - 141600, 0),
+        93400,
+      );
+      const exceso3 = Math.min(
+        Math.max(salarioAnualizado - isrBaseAnual - 235000, 0),
+        141000,
+      );
+      const exceso4 = Math.min(
+        Math.max(salarioAnualizado - isrBaseAnual - 376000, 0),
+        376000,
+      );
+      const exceso5 = Math.min(
+        Math.max(salarioAnualizado - isrBaseAnual - 752000, 0),
+        752000,
+      );
       const exceso6 = Math.max(salarioAnualizado - isrBaseAnual - 1504000, 0);
 
       isr =
@@ -297,14 +375,20 @@ export class NominaService {
     };
   }
 
-  async crearNominaConDetalles(idEmpleado: number, salarioBase: number, usuarioGerenteId?: number) {
+  async crearNominaConDetalles(
+    idEmpleado: number,
+    salarioBase: number,
+    usuarioGerenteId?: number,
+  ) {
     // Validar que el empleado existe
     const empleado = await this.prisma.empleado.findUnique({
-      where: { IdEmpleado: idEmpleado, Activo: true }
+      where: { IdEmpleado: idEmpleado, Activo: true },
     });
 
     if (!empleado) {
-      throw new NotFoundException(`Empleado con ID ${idEmpleado} no encontrado o inactivo`);
+      throw new NotFoundException(
+        `Empleado con ID ${idEmpleado} no encontrado o inactivo`,
+      );
     }
 
     // Validar salario base
@@ -342,13 +426,15 @@ export class NominaService {
             OtrosIngresos: 0,
             DescuentoIGSS: detalles.descuentoIGSS,
             DescuentoISR: detalles.descuentoISR,
-            OtrosDescuentos: detalles.descuentoIRTRA + detalles.descuentoINTECAP,
+            OtrosDescuentos:
+              detalles.descuentoIRTRA + detalles.descuentoINTECAP,
             LiquidoRecibir: detalles.netoAPagar,
             Activo: true,
           },
         },
       },
       include: {
+        EstadoNomina: true,
         NominaDetalle: {
           include: {
             Empleado: {
@@ -367,16 +453,30 @@ export class NominaService {
     // Convertir valores decimales de strings a números
     return {
       ...nomina,
-      NominaDetalle: nomina.NominaDetalle.map(detalle => ({
+      NominaDetalle: nomina.NominaDetalle.map((detalle) => ({
         ...detalle,
         SueldoBase: parseFloat(detalle.SueldoBase.toString()),
-        BonificacionIncentivo: detalle.BonificacionIncentivo ? parseFloat(detalle.BonificacionIncentivo.toString()) : 0,
-        OtrosIngresos: detalle.OtrosIngresos ? parseFloat(detalle.OtrosIngresos.toString()) : 0,
-        DescuentoIGSS: detalle.DescuentoIGSS ? parseFloat(detalle.DescuentoIGSS.toString()) : 0,
-        DescuentoISR: detalle.DescuentoISR ? parseFloat(detalle.DescuentoISR.toString()) : 0,
-        OtrosDescuentos: detalle.OtrosDescuentos ? parseFloat(detalle.OtrosDescuentos.toString()) : 0,
-        LiquidoRecibir: detalle.LiquidoRecibir ? parseFloat(detalle.LiquidoRecibir.toString()) : 0,
-        DiasLaborados: detalle.DiasLaborados ? parseFloat(detalle.DiasLaborados.toString()) : 0,
+        BonificacionIncentivo: detalle.BonificacionIncentivo
+          ? parseFloat(detalle.BonificacionIncentivo.toString())
+          : 0,
+        OtrosIngresos: detalle.OtrosIngresos
+          ? parseFloat(detalle.OtrosIngresos.toString())
+          : 0,
+        DescuentoIGSS: detalle.DescuentoIGSS
+          ? parseFloat(detalle.DescuentoIGSS.toString())
+          : 0,
+        DescuentoISR: detalle.DescuentoISR
+          ? parseFloat(detalle.DescuentoISR.toString())
+          : 0,
+        OtrosDescuentos: detalle.OtrosDescuentos
+          ? parseFloat(detalle.OtrosDescuentos.toString())
+          : 0,
+        LiquidoRecibir: detalle.LiquidoRecibir
+          ? parseFloat(detalle.LiquidoRecibir.toString())
+          : 0,
+        DiasLaborados: detalle.DiasLaborados
+          ? parseFloat(detalle.DiasLaborados.toString())
+          : 0,
       })),
     };
   }
@@ -388,7 +488,11 @@ export class NominaService {
     return estado?.IdEstadoNomina ?? null;
   }
 
-  private async getDiasLaborados(idEmpleado: number, mes: number, anio: number): Promise<number> {
+  private async getDiasLaborados(
+    idEmpleado: number,
+    mes: number,
+    anio: number,
+  ): Promise<number> {
     const inicioMes = new Date(anio, mes - 1, 1);
     const finMes = new Date(anio, mes, 0, 23, 59, 59, 999);
 
@@ -416,13 +520,15 @@ export class NominaService {
     });
 
     if (parametros.length === 0) {
-      throw new BadRequestException('No hay parámetros globales configurados en el sistema');
+      throw new BadRequestException(
+        'No hay parámetros globales configurados en el sistema',
+      );
     }
 
-    return parametros.map(param => ({
+    return parametros.map((param) => ({
       nombre: param.NombreParametro,
       valor: param.Valor,
-      tipo: typeof param.Valor
+      tipo: typeof param.Valor,
     }));
   }
 
@@ -436,12 +542,14 @@ export class NominaService {
       where: {
         Mes: mes,
         Anio: anio,
-        Activo: true
-      }
+        Activo: true,
+      },
     });
 
     if (nominaExistente) {
-      throw new BadRequestException(`Ya existe una nómina generada para ${mes}/${anio}`);
+      throw new BadRequestException(
+        `Ya existe una nómina generada para ${mes}/${anio}`,
+      );
     }
 
     // Obtener empleados activos con sus salarios vigentes
@@ -453,23 +561,31 @@ export class NominaService {
             Activo: true,
             OR: [
               { FechaFinVigencia: null },
-              { FechaFinVigencia: { gte: fechaActual } }
-            ]
+              { FechaFinVigencia: { gte: fechaActual } },
+            ],
           },
           orderBy: { FechaInicioVigencia: 'desc' },
-          take: 1
-        }
-      }
+          take: 1,
+        },
+      },
     });
 
     if (empleados.length === 0) {
-      throw new BadRequestException('No hay empleados activos para generar nómina');
+      throw new BadRequestException(
+        'No hay empleados activos para generar nómina',
+      );
     }
 
-    const empleadosSinSalario = empleados.filter(emp => emp.Salario.length === 0);
+    const empleadosSinSalario = empleados.filter(
+      (emp) => emp.Salario.length === 0,
+    );
     if (empleadosSinSalario.length > 0) {
-      const nombres = empleadosSinSalario.map(emp => `${emp.Nombres} ${emp.Apellidos}`).join(', ');
-      throw new BadRequestException(`Los siguientes empleados no tienen salario configurado: ${nombres}`);
+      const nombres = empleadosSinSalario
+        .map((emp) => `${emp.Nombres} ${emp.Apellidos}`)
+        .join(', ');
+      throw new BadRequestException(
+        `Los siguientes empleados no tienen salario configurado: ${nombres}`,
+      );
     }
 
     // Crear encabezado de nómina
@@ -483,14 +599,23 @@ export class NominaService {
         IdEstadoActual: estadoGeneradaId ?? undefined,
         Activo: true,
         IdUsuarioGerente: usuarioGerenteId ?? undefined,
-      }
+      },
     });
 
     // Generar detalles de nómina para cada empleado
     const detallesPromises = empleados.map(async (empleado) => {
-      const salarioBase = parseFloat(empleado.Salario[0].SalarioBase.toString());
-      const calculo = await this.calcularNomina(empleado.IdEmpleado, salarioBase);
-      const diasLaborados = await this.getDiasLaborados(empleado.IdEmpleado, mes, anio);
+      const salarioBase = parseFloat(
+        empleado.Salario[0].SalarioBase.toString(),
+      );
+      const calculo = await this.calcularNomina(
+        empleado.IdEmpleado,
+        salarioBase,
+      );
+      const diasLaborados = await this.getDiasLaborados(
+        empleado.IdEmpleado,
+        mes,
+        anio,
+      );
 
       return this.prisma.nominaDetalle.create({
         data: {
@@ -498,7 +623,8 @@ export class NominaService {
           IdEmpleado: empleado.IdEmpleado,
           DiasLaborados: diasLaborados,
           SueldoBase: calculo.salarioBase,
-          BonificacionIncentivo: calculo.bono14 + calculo.aguinaldo + calculo.bonoProductividad,
+          BonificacionIncentivo:
+            calculo.bono14 + calculo.aguinaldo + calculo.bonoProductividad,
           OtrosIngresos: 0,
           DescuentoIGSS: calculo.descuentoIGSS,
           DescuentoISR: calculo.descuentoISR,
@@ -527,11 +653,11 @@ export class NominaService {
       anio: anio,
       fechaGeneracion: nominaEncabezado.FechaGeneracion,
       totalEmpleados: empleados.length,
-      detalles: detalles.map(detalle => ({
+      detalles: detalles.map((detalle) => ({
         idEmpleado: detalle.IdEmpleado,
         empleado: `${detalle.Empleado.Nombres} ${detalle.Empleado.Apellidos}`,
-        liquidoRecibir: parseFloat(detalle.LiquidoRecibir!.toString())
-      }))
+        liquidoRecibir: parseFloat(detalle.LiquidoRecibir!.toString()),
+      })),
     };
   }
 }

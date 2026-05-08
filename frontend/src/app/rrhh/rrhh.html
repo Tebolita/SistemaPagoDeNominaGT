@@ -44,7 +44,7 @@
     </div>
 
     <div class="cards-grid w-full">
-      @for (mod of subModules; track mod.route) {
+      @for (mod of modules; track mod.route) {
         <div class="module-card card-{{ mod.color }}" [class.coming-soon]="mod.status === 'coming'" (click)="navigate(mod.route)">
           
           <div class="card-glow"></div>

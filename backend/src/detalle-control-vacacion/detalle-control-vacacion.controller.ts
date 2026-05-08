@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { DetalleControlVacacionService } from './detalle-control-vacacion.service';
 import { CreateDetalleControlVacacionDto } from './dto/create-detalle-control-vacacion.dto';
 import { UpdateDetalleControlVacacionDto } from './dto/update-detalle-control-vacacion.dto';
@@ -9,11 +18,17 @@ import { ApiBearerAuth } from '@nestjs/swagger';
 @UseGuards(AuthGuard)
 @Controller('detalle-control-vacacion')
 export class DetalleControlVacacionController {
-  constructor(private readonly detalleControlVacacionService: DetalleControlVacacionService) {}
+  constructor(
+    private readonly detalleControlVacacionService: DetalleControlVacacionService,
+  ) {}
 
   @Post('CrearDetalleControlVacacion')
-  create(@Body() createDetalleControlVacacionDto: CreateDetalleControlVacacionDto) {
-    return this.detalleControlVacacionService.create(createDetalleControlVacacionDto);
+  create(
+    @Body() createDetalleControlVacacionDto: CreateDetalleControlVacacionDto,
+  ) {
+    return this.detalleControlVacacionService.create(
+      createDetalleControlVacacionDto,
+    );
   }
 
   @Get()
@@ -39,8 +54,14 @@ export class DetalleControlVacacionController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateDetalleControlVacacionDto: UpdateDetalleControlVacacionDto) {
-    return this.detalleControlVacacionService.update(+id, updateDetalleControlVacacionDto);
+  update(
+    @Param('id') id: string,
+    @Body() updateDetalleControlVacacionDto: UpdateDetalleControlVacacionDto,
+  ) {
+    return this.detalleControlVacacionService.update(
+      +id,
+      updateDetalleControlVacacionDto,
+    );
   }
 
   @Delete(':id')

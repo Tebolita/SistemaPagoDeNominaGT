@@ -46,57 +46,45 @@
     </div>
 
     <div class="cards-grid">
-      @for (mod of modules; track mod.route) {
-        <div class="module-card card-{{ mod.color }}" [class.coming-soon]="mod.status === 'coming'" (click)="navigate(mod.route)">
-          
-          <div class="card-glow"></div>
+      <div *ngFor="let mod of modules" class="module-card card-{{ mod.color }}" [class.coming-soon]="mod.status === 'coming'" (click)="navigate(mod.route)">
+        <div class="card-glow"></div>
 
-          <!-- STATUS BADGE -->
-          @if (mod.status === 'coming') {
-            <div class="status-badge coming">
-              <i class="pi pi-clock"></i> Próximamente
-            </div>
-          } @else {
-            <div class="status-badge active">
-              <i class="pi pi-check-circle"></i> Disponible
-            </div>
-          }
-
-          <!-- ICON -->
-          <div class="card-icon-wrapper">
-            <div class="card-icon">
-              <i [class]="mod.icon"></i>
-            </div>
-            <div class="icon-ring"></div>
-          </div>
-
-          <!-- CONTENT -->
-          <div class="card-content">
-            <h3 class="card-title">{{ mod.title }}</h3>
-            <p class="card-description">{{ mod.description }}</p>
-
-            <!-- FEATURES -->
-            <ul class="features-list">
-              @for (feat of mod.features; track feat) {
-                <li class="feature-item">
-                  <i class="pi pi-check"></i>
-                  {{ feat }}
-                </li>
-              }
-            </ul>
-          </div>
-
-          <!-- HOVER BUTTON -->
-          <div class="card-button-wrapper">
-            <button pButton type="button" 
-              [label]="mod.status === 'coming' ? 'Próximamente' : 'Acceder'" 
-              class="p-button-rounded p-button-text button-nav"
-              [disabled]="mod.status === 'coming'">
-              <i [class]="mod.status === 'coming' ? 'pi pi-clock' : 'pi pi-arrow-right'"></i>
-            </button>
-          </div>
+        <div *ngIf="mod.status === 'coming'; else activeStatus" class="status-badge coming">
+          <i class="pi pi-clock"></i> Próximamente
         </div>
-      }
+        <ng-template #activeStatus>
+          <div class="status-badge active">
+            <i class="pi pi-check-circle"></i> Disponible
+          </div>
+        </ng-template>
+
+        <div class="card-icon-wrapper">
+          <div class="card-icon">
+            <i [class]="mod.icon"></i>
+          </div>
+          <div class="icon-ring"></div>
+        </div>
+
+        <div class="card-content">
+          <h3 class="card-title">{{ mod.title }}</h3>
+          <p class="card-description">{{ mod.description }}</p>
+          <ul class="features-list">
+            <li *ngFor="let feat of mod.features" class="feature-item">
+              <i class="pi pi-check"></i>
+              {{ feat }}
+            </li>
+          </ul>
+        </div>
+
+        <div class="card-button-wrapper">
+          <button pButton type="button"
+            class="p-button-rounded p-button-text button-nav"
+            [disabled]="mod.status === 'coming'">
+            {{ mod.status === 'coming' ? 'Próximamente' : 'Acceder' }}
+            <i [class]="mod.status === 'coming' ? 'pi pi-clock' : 'pi pi-arrow-right'"></i>
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 

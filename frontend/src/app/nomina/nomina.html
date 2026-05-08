@@ -65,6 +65,7 @@
             [rounded]="true"
             [text]="true"
             (onClick)="cambiarEstado(nomina)"
+            [disabled]="!isCambioEstadoPermisible(nomina)"
             severity="warn"
             pTooltip="Cambiar Estado"
             tooltipPosition="top"
@@ -247,7 +248,7 @@
     <div>
       <label class="block text-sm font-medium mb-2">Nuevo Estado *</label>
       <p-select
-        [options]="estados()"
+        [options]="estadosDisponibles()"
         [(ngModel)]="cambioEstadoForm.IdEstadoNuevo"
         optionLabel="NombreEstado"
         optionValue="IdEstadoNomina"

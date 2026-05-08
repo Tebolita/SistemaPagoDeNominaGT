@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { IncidenciaService } from './incidencia.service';
 import { CreateIncidenciaDto } from './dto/create-incidencia.dto';
 import { UpdateIncidenciaDto } from './dto/update-incidencia.dto';
@@ -33,7 +42,10 @@ export class IncidenciaController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateIncidenciaDto: UpdateIncidenciaDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateIncidenciaDto: UpdateIncidenciaDto,
+  ) {
     return this.incidenciaService.update(+id, updateIncidenciaDto);
   }
 

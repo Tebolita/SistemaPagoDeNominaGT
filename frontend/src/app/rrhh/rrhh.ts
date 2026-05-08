@@ -1,21 +1,38 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { RouterModule } from '@angular/router';
+import { ButtonModule } from 'primeng/button';
+import { CardModule } from 'primeng/card';
+import { BadgeModule } from 'primeng/badge';
+import { RippleModule } from 'primeng/ripple';
+import { CommonModule } from '@angular/common';
+
+interface ModuleCard {
+  title: string;
+  description: string;
+  icon: string;
+  route: string;
+  status: 'active' | 'coming';
+  color: string;
+  features: string[];
+}
 
 @Component({
   selector: 'app-rrhh',
   standalone: true,
+  imports: [RouterModule, ButtonModule, CardModule, BadgeModule, RippleModule, CommonModule],
   templateUrl: './rrhh.html',
-  styleUrls: ['./rrhh.css']
+  styleUrl: './rrhh.css'
 })
 export class RecursosHumanos {
   private router = inject(Router);
 
-  subModules = [
+  modules: ModuleCard[] = [
     {
       title: 'Expedientes de Empleados',
       description: 'Gestión completa de los datos personales, contratos y asignación bancaria.',
       icon: 'pi pi-id-card',
-      color: 'blue', 
+      color: 'blue',
       route: '/recursoshumanos/empleados',
       status: 'active',
       features: [
@@ -36,7 +53,7 @@ export class RecursosHumanos {
         'Descuento por medios días',
         'Control anual por empleado'
       ]
-    },    
+    },
     {
       title: 'Asistencia e Incidencias',
       description: 'Control de ingresos, horas extra, permisos y suspensiones del IGSS.',
@@ -49,26 +66,10 @@ export class RecursosHumanos {
         'Cálculo de Horas Extra',
         'Justificación de Faltas'
       ]
-    },
-    {
-      title: 'Estructura Organizativa',
-      description: 'Mantenimiento de los catálogos de departamentos, puestos y jornadas.',
-      icon: 'pi pi-sitemap',
-      color: 'violet',
-      route: '/recursoshumanos/estructura',
-      status: 'coming',
-      features: [
-        'Creación de Departamentos',
-        'Definición de Puestos',
-        'Configuración de Jornadas'
-      ]
-    },
+    }
   ];
 
   navigate(route: string) {
-    const modulo = this.subModules.find(m => m.route === route);
-    if (modulo && modulo.status === 'active') {
-      this.router.navigate([route]);
-    }
+    this.router.navigate([route]);
   }
 }

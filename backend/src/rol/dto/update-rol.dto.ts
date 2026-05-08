@@ -4,9 +4,10 @@ import { IsOptional, IsBoolean } from 'class-validator';
 
 export class UpdateRolDto extends PartialType(CreateRolDto) {
   @ApiPropertyOptional({
-    description: 'Estado del rol. Determina si el rol puede ser asignado a nuevos usuarios.',
+    description:
+      'Estado del rol. Determina si el rol puede ser asignado a nuevos usuarios.',
     example: true,
-    default: true
+    default: true,
   })
   @IsOptional()
   @IsBoolean()

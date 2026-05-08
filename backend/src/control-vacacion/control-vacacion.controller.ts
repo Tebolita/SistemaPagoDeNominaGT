@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { ControlVacacionService } from './control-vacacion.service';
 import { CreateControlVacacionDto } from './dto/create-control-vacacion.dto';
 import { UpdateControlVacacionDto } from './dto/update-control-vacacion.dto';
@@ -9,7 +18,9 @@ import { ApiBearerAuth } from '@nestjs/swagger';
 @UseGuards(AuthGuard)
 @Controller('control-vacacion')
 export class ControlVacacionController {
-  constructor(private readonly controlVacacionService: ControlVacacionService) {}
+  constructor(
+    private readonly controlVacacionService: ControlVacacionService,
+  ) {}
 
   @Post('CrearControlVacacion')
   create(@Body() createControlVacacionDto: CreateControlVacacionDto) {
@@ -33,7 +44,10 @@ export class ControlVacacionController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateControlVacacionDto: UpdateControlVacacionDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateControlVacacionDto: UpdateControlVacacionDto,
+  ) {
     return this.controlVacacionService.update(+id, updateControlVacacionDto);
   }
 

@@ -141,6 +141,46 @@ export class MenuPrincipal implements OnInit {
                 ]
             },
             {
+                label: 'Ventas',
+                items: [
+                    {
+                        label: 'Inicio',
+                        icon: 'pi pi-home',
+                        routerLink: '/ventas/inicio'
+                    },
+                    {
+                        label: 'Clientes',
+                        icon: 'pi pi-users',
+                        routerLink: '/ventas/clientes'
+                    },
+                    {
+                        label: 'Productos/Servicios',
+                        icon: 'pi pi-box',
+                        routerLink: '/ventas/productos'
+                    },
+                ]
+            },
+            {
+                label: 'Finanzas',
+                items: [
+                    {
+                        label: 'Inicio',
+                        icon: 'pi pi-home',
+                        routerLink: '/finanzas/inicio'
+                    },
+                    {
+                        label: 'Cuentas Bancarias',
+                        icon: 'pi pi-building',
+                        routerLink: '/finanzas/cuentas'
+                    },
+                    {
+                        label: 'Movimientos',
+                        icon: 'pi pi-arrow-right-arrow-left',
+                        routerLink: '/finanzas/movimientos'
+                    },
+                ]
+            },
+            {
                 label: 'Nómina',
                 items: [
                     {
@@ -177,10 +217,12 @@ export class MenuPrincipal implements OnInit {
     onSalir(): void {
         this.authService.logout().subscribe({
         next: (res) => {
-        // Destruir el token
-        localStorage.removeItem('access_token'); 
-        // Redirigir al login
-        this.router.navigate(['/login']);
+          // Destruir el token y datos de sesión
+          localStorage.removeItem('access_token');
+          localStorage.removeItem('user_role');
+          localStorage.removeItem('username');
+          // Redirigir al login
+          this.router.navigate(['/login']);
         }
     });
   }

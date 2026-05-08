@@ -9,7 +9,9 @@ describe('DetallecontrolvacacionService', () => {
       providers: [DetallecontrolvacacionService],
     }).compile();
 
-    service = module.get<DetallecontrolvacacionService>(DetallecontrolvacacionService);
+    service = module.get<DetallecontrolvacacionService>(
+      DetallecontrolvacacionService,
+    );
   });
 
   it('should be defined', () => {

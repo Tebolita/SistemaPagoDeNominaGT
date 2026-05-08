@@ -23,24 +23,26 @@ export class AsistenciaService {
     const asistencia = await this.prisma.asistencia.findUnique({
       where: { IdAsistencia: id },
     });
-    if (!asistencia) throw new NotFoundException(`Asistencia #${id} no encontrada`);
+    if (!asistencia)
+      throw new NotFoundException(`Asistencia #${id} no encontrada`);
     return asistencia;
   }
 
   async update(id: number, updateAsistenciaDto: UpdateAsistenciaDto) {
-      // Verificamos que exista
-      await this.findOne(id);
+    // Verificamos que exista
+    await this.findOne(id);
 
-      // Extraemos el IdAsistencia para que no entre en el "data"
-      const { IdAsistencia, Empleado, ...dataToUpdate } = updateAsistenciaDto as any;
+    // Extraemos el IdAsistencia para que no entre en el "data"
+    const { IdAsistencia, Empleado, ...dataToUpdate } =
+      updateAsistenciaDto as any;
 
-      // Actualizamos
-      return await this.prisma.asistencia.update({
-          where: {
-              IdAsistencia: id
-          },
-          data: dataToUpdate 
-      });
+    // Actualizamos
+    return await this.prisma.asistencia.update({
+      where: {
+        IdAsistencia: id,
+      },
+      data: dataToUpdate,
+    });
   }
 
   async remove(id: number) {
@@ -49,8 +51,8 @@ export class AsistenciaService {
       where: { IdAsistencia: id },
       data: {
         Activo: !asistenciaActual.Activo,
-        FechaEliminacion: new Date()
-      }
+        FechaEliminacion: new Date(),
+      },
     });
   }
 }

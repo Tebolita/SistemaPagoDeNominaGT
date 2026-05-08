@@ -1,4 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe,UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  ParseIntPipe,
+  UseGuards,
+} from '@nestjs/common';
 import { SalarioService } from './salario.service';
 import { CreateSalarioDto } from './dto/create-salario.dto';
 import { UpdateSalarioDto } from './dto/update-salario.dto';
@@ -35,7 +45,10 @@ export class SalarioController {
   }
 
   @Patch(':id')
-  update(@Param('id', ParseIntPipe) id: number, @Body() updateSalarioDto: UpdateSalarioDto) {
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateSalarioDto: UpdateSalarioDto,
+  ) {
     return this.salarioService.update(id, updateSalarioDto);
   }
 
