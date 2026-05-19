@@ -291,44 +291,83 @@ export class ReporteriaService {
   // ========== RESUMEN EJECUTIVO ==========
 
   async getResumenEjecutivo() {
-    // Ejecutamos promesas en paralelo para mayor velocidad
     const [
       totalEmpleados,
       empleadosConSalario,
       ultimaNomina,
       totalVacaciones,
-      departamentos,
-      puestos,
+      totalDepartamentos,
+      totalPuestos,
+      deptData,
+      nominasTendencia,
     ] = await Promise.all([
       this.prisma.empleado.count({ where: { Activo: true } }),
       this.prisma.salario.count({ where: { Activo: true } }),
       this.prisma.nominaEncabezado.findFirst({
         orderBy: { FechaGeneracion: 'desc' },
-        include: { NominaDetalle: true },
+        include: { NominaDetalle: true, EstadoNomina: true },
       }),
       this.prisma.controlVacacion.count({ where: { Activo: true } }),
       this.prisma.departamento.count({ where: { Activo: true } }),
       this.prisma.puesto.count({ where: { Activo: true } }),
+      // Distribución de empleados y masa salarial por departamento
+      this.prisma.departamento.findMany({
+        where: { Activo: true },
+        include: {
+          Puesto: {
+            where: { Activo: true },
+            include: {
+              Empleado: {
+                where: { Activo: true },
+                include: {
+                  Salario: { where: { Activo: true }, take: 1, orderBy: { FechaInicioVigencia: 'desc' } },
+                },
+              },
+            },
+          },
+        },
+      }),
+      // Últimas 6 nóminas para tendencia
+      this.prisma.nominaEncabezado.findMany({
+        where: { Activo: true },
+        orderBy: [{ Anio: 'desc' }, { Mes: 'desc' }],
+        take: 6,
+        include: { NominaDetalle: true },
+      }),
     ]);
+
+    const empleadosPorDepartamento = deptData.map((d) => {
+      let empCount = 0;
+      let masa = 0;
+      d.Puesto.forEach((p) => {
+        empCount += p.Empleado.length;
+        p.Empleado.forEach((e) => { masa += Number(e.Salario[0]?.SalarioBase || 0); });
+      });
+      return { departamento: d.NombreDepartamento, cantidad: empCount, masaSalarial: parseFloat(masa.toFixed(2)) };
+    }).filter(d => d.cantidad > 0);
+
+    const tendencia = [...nominasTendencia].reverse().map((n) => ({
+      label: `${n.Mes}/${n.Anio}`,
+      totalLiquido: parseFloat(n.NominaDetalle.reduce((a, d) => a + Number(d.LiquidoRecibir || 0), 0).toFixed(2)),
+      totalSueldos: parseFloat(n.NominaDetalle.reduce((a, d) => a + Number(d.SueldoBase || 0), 0).toFixed(2)),
+    }));
 
     return {
       totalEmpleados,
       empleadosConSalario,
-      ultimaNomina: ultimaNomina
-        ? {
-            IdNomina: ultimaNomina.IdNomina,
-            Mes: ultimaNomina.Mes,
-            Anio: ultimaNomina.Anio,
-            TotalEmpleados: ultimaNomina.NominaDetalle.length,
-            TotalLiquido: ultimaNomina.NominaDetalle.reduce(
-              (acc, d) => acc + Number(d.LiquidoRecibir || 0),
-              0,
-            ),
-          }
-        : null,
       totalVacaciones,
-      totalDepartamentos: departamentos,
-      totalPuestos: puestos,
+      totalDepartamentos,
+      totalPuestos,
+      ultimaNomina: ultimaNomina ? {
+        IdNomina: ultimaNomina.IdNomina,
+        Mes: ultimaNomina.Mes,
+        Anio: ultimaNomina.Anio,
+        Estado: ultimaNomina.EstadoNomina?.NombreEstado,
+        TotalEmpleados: ultimaNomina.NominaDetalle.length,
+        TotalLiquido: parseFloat(ultimaNomina.NominaDetalle.reduce((a, d) => a + Number(d.LiquidoRecibir || 0), 0).toFixed(2)),
+      } : null,
+      empleadosPorDepartamento,
+      tendenciaNomina: tendencia,
     };
   }
 }

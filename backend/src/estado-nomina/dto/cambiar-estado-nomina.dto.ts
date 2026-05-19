@@ -11,6 +11,11 @@ export class CambiarEstadoNominaDto {
 
   @IsOptional()
   @IsString()
+  @MaxLength(100)
+  NumeroBoleta?: string;
+
+  @IsOptional()
+  @IsString()
   @MaxLength(500)
   Comentarios?: string;
 }

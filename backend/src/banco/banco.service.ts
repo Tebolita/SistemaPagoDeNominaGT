@@ -15,7 +15,8 @@ export class BancoService {
 
   findAll() {
     return this.prismaService.banco.findMany({
-      where: { Activo: true },
+      where: { OR: [{ Activo: true }, { Activo: null }] },
+      orderBy: { NombreBanco: 'asc' },
     });
   }
 

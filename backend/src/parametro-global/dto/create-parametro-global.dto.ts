@@ -35,4 +35,22 @@ export class CreateParametroGlobalDto {
   @IsOptional()
   @MaxLength(255)
   Descripcion?: string;
+
+  @ApiPropertyOptional({
+    description: 'Tipo: INGRESO, DESCUENTO o REFERENCIA',
+    example: 'DESCUENTO',
+  })
+  @IsString()
+  @IsOptional()
+  @MaxLength(20)
+  Tipo?: string;
+
+  @ApiPropertyOptional({
+    description: 'Unidad del valor: % o Q',
+    example: '%',
+  })
+  @IsString()
+  @IsOptional()
+  @MaxLength(5)
+  Unidad?: string;
 }

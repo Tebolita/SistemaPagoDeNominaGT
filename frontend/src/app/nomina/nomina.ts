@@ -79,7 +79,7 @@ export class NominaComponent implements OnInit {
   };
 
   firmaForm = { TipoFirmante: '', Comentarios: '' };
-  cambioEstadoForm = { IdEstadoNuevo: 0, Comentarios: '' };
+  cambioEstadoForm = { IdEstadoNuevo: 0, NumeroBoleta: '', Comentarios: '' };
   calculoPreview: NominaCalculo | null = null;
   nominaSeleccionada: Nomina | null = null;
 
@@ -211,11 +211,11 @@ export class NominaComponent implements OnInit {
 
   getEstadoSeverity(nomina: Nomina): 'success' | 'info' | 'warn' | 'danger' {
     switch (nomina.EstadoNomina?.NombreEstado) {
-      case 'GENERADA': return 'info';
+      case 'BORRADOR': return 'info';
       case 'PENDIENTE_APROBACION': return 'warn';
-      case 'APROBADA': return 'success';
-      case 'RECHAZADA': return 'danger';
-      case 'PROCESADA': return 'success';
+      case 'APROBADO': return 'success';
+      case 'PAGADO': return 'success';
+      case 'CANCELADO': return 'danger';
       default: return 'info';
     }
   }
@@ -226,12 +226,13 @@ export class NominaComponent implements OnInit {
     return (nomina.FirmaNomina ?? []).filter((f) => f.Activo).length;
   }
 
-  firmaPresente(nomina: Nomina, tipo: string): boolean {
-    return (nomina.FirmaNomina ?? []).some((f) => f.TipoFirmante === tipo && f.Activo);
+  firmaPresente(nomina: Nomina | null | undefined, tipo: string): boolean {
+    return (nomina?.FirmaNomina ?? []).some((f) => f.TipoFirmante === tipo && f.Activo);
   }
 
   puedesFirmar(nomina: Nomina): boolean {
-    if (nomina.EstadoNomina?.NombreEstado !== 'PENDIENTE_APROBACION') return false;
+    const estado = nomina.EstadoNomina?.NombreEstado;
+    if (estado !== 'PENDIENTE_APROBACION' && estado !== 'BORRADOR') return false;
     if (!this.isApprovalRole(this.userRole())) return false;
     return this.getFirmaCount(nomina) < 2;
   }
@@ -415,6 +416,34 @@ export class NominaComponent implements OnInit {
     });
   }
 
+  descargarReporte(nomina: Nomina, tipo: 'general' | 'igss' | 'isr') {
+    const labels: Record<string, string> = {
+      general: 'Planilla-General',
+      igss: 'Planilla-IGSS',
+      isr: 'Planilla-ISR',
+    };
+    const mesLabel = this.getMesLabel(nomina.Mes);
+    const filename = `${labels[tipo]}-${mesLabel}-${nomina.Anio}.xlsx`;
+
+    this.nominaService.descargarExcel(nomina.IdNomina, tipo).subscribe({
+      next: (blob) => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        a.click();
+        URL.revokeObjectURL(url);
+      },
+      error: (err) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error al descargar',
+          detail: err?.message ?? 'No se pudo generar el reporte',
+        });
+      },
+    });
+  }
+
   deleteNomina(id: number) {
     this.confirmationService.confirm({
       message: '¿Estás seguro de eliminar esta nómina?',
@@ -446,7 +475,7 @@ export class NominaComponent implements OnInit {
 
   cambiarEstado(nomina: Nomina) {
     this.nominaSeleccionada = nomina;
-    this.cambioEstadoForm = { IdEstadoNuevo: 0, Comentarios: '' };
+    this.cambioEstadoForm = { IdEstadoNuevo: 0, NumeroBoleta: '', Comentarios: '' };
     this.estadoNominaService.getEstadosDisponibles(nomina.IdNomina).subscribe({
       next: (data) => {
         this.estadosDisponibles.set(data);
@@ -470,6 +499,13 @@ export class NominaComponent implements OnInit {
     });
   }
 
+  esPagadoSeleccionado(): boolean {
+    const estado = this.estadosDisponibles().find(
+      (e) => e.IdEstadoNomina === this.cambioEstadoForm.IdEstadoNuevo,
+    );
+    return estado?.NombreEstado === 'PAGADO';
+  }
+
   confirmarCambioEstado() {
     if (!this.nominaSeleccionada || !this.cambioEstadoForm.IdEstadoNuevo) {
       this.messageService.add({
@@ -480,9 +516,19 @@ export class NominaComponent implements OnInit {
       return;
     }
 
+    if (this.esPagadoSeleccionado() && !this.cambioEstadoForm.NumeroBoleta.trim()) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Validación',
+        detail: 'El número de boleta o transacción es requerido para registrar el pago',
+      });
+      return;
+    }
+
     const cambioData: CambiarEstadoNominaDto = {
       IdNomina: this.nominaSeleccionada.IdNomina,
       IdEstadoNuevo: this.cambioEstadoForm.IdEstadoNuevo,
+      NumeroBoleta: this.cambioEstadoForm.NumeroBoleta.trim() || undefined,
       Comentarios: this.cambioEstadoForm.Comentarios,
     };
 
@@ -526,7 +572,7 @@ export class NominaComponent implements OnInit {
   isCambioEstadoPermisible(nomina: Nomina): boolean {
     const nombre = nomina.EstadoNomina?.NombreEstado;
     if (!nombre) return true;
-    if (nombre === 'PROCESADA') return false;
+    if (nombre === 'PAGADO' || nombre === 'CANCELADO') return false;
     if (nombre === 'PENDIENTE_APROBACION') return this.isApprovalRole(this.userRole());
     return true;
   }

@@ -74,4 +74,10 @@ export class NominaService {
       .get<FirmaNomina[]>(`${this.apiUrl}/${idNomina}/firmas`)
       .pipe(catchError(this.errorService.handleError));
   }
+
+  descargarExcel(idNomina: number, tipo: 'general' | 'igss' | 'isr'): Observable<Blob> {
+    return this.http
+      .get(`${this.apiUrl}/${idNomina}/export/${tipo}`, { responseType: 'blob' })
+      .pipe(catchError(this.errorService.handleError));
+  }
 }

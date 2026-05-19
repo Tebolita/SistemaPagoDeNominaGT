@@ -1,6 +1,155 @@
-/* Nomina component styles */
+/* ── Base ──────────────────────────────────────────────────────────── */
+:host {
+  display: block;
+  min-height: 100%;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 60%, #0f172a 100%);
+}
 
-/* Media queries para diálogos responsivos */
+/* ── Tabla ─────────────────────────────────────────────────────────── */
+:host ::ng-deep .p-datatable {
+  background: #1e293b;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  border: 1px solid #334155;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-thead > tr > th {
+  background: #0f172a !important;
+  color: #94a3b8 !important;
+  border-color: #334155 !important;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr {
+  background: #1e293b !important;
+  color: #e2e8f0 !important;
+  border-color: #334155 !important;
+  transition: background 0.15s;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr:hover {
+  background: #253347 !important;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr > td {
+  border-color: #334155 !important;
+  color: #e2e8f0 !important;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-emptymessage > td {
+  background: #1e293b !important;
+  color: #64748b !important;
+}
+
+/* ── Diálogos ──────────────────────────────────────────────────────── */
+:host ::ng-deep .p-dialog {
+  background: #1e293b !important;
+  border: 1px solid #334155 !important;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6) !important;
+}
+
+:host ::ng-deep .p-dialog .p-dialog-header {
+  background: #0f172a !important;
+  color: #f1f5f9 !important;
+  border-bottom: 1px solid #334155 !important;
+  padding: 1rem 1.25rem;
+}
+
+:host ::ng-deep .p-dialog .p-dialog-header .p-dialog-title {
+  color: #f1f5f9 !important;
+  font-weight: 600;
+}
+
+:host ::ng-deep .p-dialog .p-dialog-header .p-dialog-header-icon {
+  color: #94a3b8 !important;
+}
+
+:host ::ng-deep .p-dialog .p-dialog-header .p-dialog-header-icon:hover {
+  color: #f1f5f9 !important;
+  background: #334155 !important;
+}
+
+:host ::ng-deep .p-dialog .p-dialog-content {
+  background: #1e293b !important;
+  color: #e2e8f0 !important;
+  padding: 1.25rem;
+}
+
+:host ::ng-deep .p-dialog .p-dialog-footer {
+  background: #0f172a !important;
+  border-top: 1px solid #334155 !important;
+  padding: 0.75rem 1.25rem;
+}
+
+/* ── Inputs y Textarea ─────────────────────────────────────────────── */
+:host ::ng-deep .p-inputtext,
+:host ::ng-deep textarea.p-inputtextarea,
+:host ::ng-deep textarea[pInputTextarea] {
+  background: #0f172a !important;
+  border-color: #334155 !important;
+  color: #e2e8f0 !important;
+}
+
+:host ::ng-deep .p-inputtext:focus,
+:host ::ng-deep textarea.p-inputtextarea:focus,
+:host ::ng-deep textarea[pInputTextarea]:focus {
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 2px rgba(59,130,246,0.25) !important;
+}
+
+:host ::ng-deep .p-inputtext::placeholder,
+:host ::ng-deep textarea::placeholder {
+  color: #475569 !important;
+}
+
+/* ── Select / Dropdown ─────────────────────────────────────────────── */
+:host ::ng-deep .p-select,
+:host ::ng-deep .p-select-label {
+  background: #0f172a !important;
+  border-color: #334155 !important;
+  color: #e2e8f0 !important;
+  width: 100%;
+  overflow: visible;
+}
+
+:host ::ng-deep .p-select-dropdown {
+  color: #94a3b8 !important;
+}
+
+:host ::ng-deep .p-select-overlay {
+  background: #1e293b !important;
+  border-color: #334155 !important;
+}
+
+:host ::ng-deep .p-select-list .p-select-option {
+  color: #e2e8f0 !important;
+}
+
+:host ::ng-deep .p-select-list .p-select-option:hover,
+:host ::ng-deep .p-select-list .p-select-option.p-select-option-selected {
+  background: #253347 !important;
+}
+
+/* ── InputNumber ───────────────────────────────────────────────────── */
+:host ::ng-deep .p-inputnumber input {
+  background: #0f172a !important;
+  border-color: #334155 !important;
+  color: #e2e8f0 !important;
+}
+
+/* ── Confirm Dialog ────────────────────────────────────────────────── */
+:host ::ng-deep .p-confirmdialog .p-dialog-content {
+  background: #1e293b !important;
+  color: #e2e8f0 !important;
+}
+
+:host ::ng-deep .p-confirmdialog .p-confirm-dialog-message {
+  color: #e2e8f0 !important;
+}
+
+/* ── Media queries ─────────────────────────────────────────────────── */
 @media (max-width: 768px) {
   :host ::ng-deep .p-dialog {
     width: 95vw !important;
@@ -19,16 +168,7 @@
   }
 }
 
-/* Asegurar que el dropdown se muestre correctamente */
-:host ::ng-deep .p-select-label {
-  overflow: visible;
-}
-
-:host ::ng-deep .p-select {
-  width: 100%;
-}
-
-/* Scroll para diálogos en pantallas pequeñas */
+/* ── Scroll diálogos ───────────────────────────────────────────────── */
 :host ::ng-deep .p-dialog-content {
   max-height: 70vh;
   overflow-y: auto;

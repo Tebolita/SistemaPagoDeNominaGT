@@ -15,7 +15,8 @@ export class JornadaLaboralService {
 
   findAll() {
     return this.prismaService.jornadaLaboral.findMany({
-      where: { Activo: true },
+      where: { OR: [{ Activo: true }, { Activo: null }] },
+      orderBy: { NombreJornada: 'asc' },
     });
   }
 

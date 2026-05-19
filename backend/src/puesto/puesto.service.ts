@@ -15,10 +15,11 @@ export class PuestoService {
 
   findAll() {
     return this.prismaService.puesto.findMany({
-      where: { Activo: true },
+      where: { OR: [{ Activo: true }, { Activo: null }] },
       include: {
         Departamento: true,
       },
+      orderBy: { NombrePuesto: 'asc' },
     });
   }
 

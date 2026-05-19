@@ -159,7 +159,7 @@ model FirmaNomina {
   IdUsuario        Int
   FechaFirma       DateTime         @db.DateTime
   Comentarios      String?          @db.VarChar(500)
-  Activo           Boolean?         @default(true)
+  Activo           Boolean
   FechaEliminacion DateTime?        @db.DateTime
   NominaEncabezado NominaEncabezado @relation(fields: [IdNomina], references: [IdNomina], onUpdate: NoAction, map: "FK_FirmaNomina_Nomina")
   Usuario          Usuario          @relation(fields: [IdUsuario], references: [IdUsuario], onUpdate: NoAction, map: "FK_FirmaNomina_Usuario")
@@ -327,6 +327,7 @@ model NominaEncabezado {
   Activo                Boolean?
   FechaEliminacion      DateTime?               @db.DateTime
   IdEstadoActual        Int?
+  NumeroBoleta          String?                 @db.VarChar(100)
   FirmaNomina           FirmaNomina[]
   HistorialEstadoNomina HistorialEstadoNomina[]
   MovimientoFinanciero  MovimientoFinanciero[]
@@ -342,6 +343,8 @@ model ParametroGlobal {
   Descripcion      String?   @db.VarChar(255)
   Activo           Boolean?
   FechaEliminacion DateTime? @db.DateTime
+  Tipo             String?   @db.VarChar(20)
+  Unidad           String?   @db.VarChar(5)
 }
 
 model PresupuestoAnual {

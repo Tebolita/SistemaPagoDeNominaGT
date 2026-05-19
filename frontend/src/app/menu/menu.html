@@ -1,60 +1,71 @@
- <div class="menu-card">
-    <p-menu [model]="items" class="flex justify-center" styleClass="w-full md:w-60 h-[auto]">
-        <ng-template #start>
-            <span class="menu-logo inline-flex items-center gap-1 px-2 py-2">
-                <img width="60" height="60" class="block mx-auto" src="https://upload.wikimedia.org/wikipedia/commons/1/15/Escudo_de_la_universidad_Mariano_G%C3%A1lvez_Guatemala.svg" />
-                <span class="text-xl font-semibold">Nomina<span class="text-primary"> GT</span></span>
-            </span>
-             <p-divider />
-            <div class="relative">
-                <p-menu 
-                    #avatarMenu 
-                    [model]="avatarItems" 
-                    [popup]="true"
-                    appendTo="body"
-                    styleClass="mb-2" />
-                <button pRipple
-                    (click)="avatarMenu.toggle($event)"
-                    class="avatar-button relative overflow-hidden w-full border-0 bg-transparent cursor-pointer transition-colors duration-200 hover:bg-surface-100 dark:hover:bg-surface-800"
-                    style="padding: 12px 14px;">
-                    
-                    <div class="flex items-center gap-3 w-full">
-                        <!-- Avatar con indicador online -->
-                        <div class="relative flex-shrink-0">
-                            <p-avatar 
-                                image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" 
-                                shape="circle"
-                                size="normal"
-                                styleClass="border-2 border-surface-300" />
-                            <span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-white dark:border-surface-900"></span>
-                        </div>
+<div class="menu-card" #menuCard>
+  <p-menu [model]="items" class="flex justify-center" styleClass="w-full md:w-60 h-[auto]">
 
-                        <!-- Info del usuario -->
-                        <div class="flex flex-col items-start flex-1 min-w-0 text-left">
-                            <span class="font-medium text-sm truncate w-full">Kevin Alejandro</span>
-                            <span class="text-xs text-surface-500 truncate w-full">Reyes Revolorio</span>
-                            <p-badge value="Administrador" severity="info" styleClass="mt-1 text-xs" />
-                        </div>
-                        <!-- Icono opciones -->
-                        <i class="pi pi-ellipsis-v text-surface-400 flex-shrink-0 text-xs"></i>
-                    </div>
-                </button>
+    <!-- ── Logo ──────────────────────────────────────────────────── -->
+    <ng-template #start>
+      <span class="menu-logo inline-flex items-center gap-2 px-3 py-3">
+        <img width="48" height="48" class="block"
+          src="https://upload.wikimedia.org/wikipedia/commons/1/15/Escudo_de_la_universidad_Mariano_G%C3%A1lvez_Guatemala.svg" />
+        <span class="text-xl font-semibold text-white">
+          Nomina<span class="text-sky-400"> GT</span>
+        </span>
+      </span>
+      <p-divider />
+
+      <!-- ── Avatar ─────────────────────────────────────────────── -->
+      <div class="relative">
+        <p-menu #avatarMenu [model]="avatarItems" [popup]="true" appendTo="body" />
+        <button pRipple
+          (click)="avatarMenu.toggle($event)"
+          class="avatar-button w-full border-0 bg-transparent cursor-pointer"
+          style="padding: 10px 14px;">
+          <div class="flex items-center gap-3 w-full">
+
+            <!-- Círculo con iniciales -->
+            <div class="relative flex-shrink-0">
+              <div class="initials-avatar">
+                {{ initials() }}
+              </div>
+              <span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-400 rounded-full border-2 border-slate-900"></span>
             </div>
-        </ng-template>
-        <ng-template #submenuheader let-item>
-            <span class="text-primary font-bold">{{ item.label }}</span>
-        </ng-template>
-        <ng-template #item let-item>
-            <a pRipple class="menu-link flex items-center px-3 py-2 cursor-pointer" [class]="item.linkClass" [routerLink]="item.routerLink" >
-                <span [class]="item.icon"></span>
-                <span class="ms-2">{{ item.label }}</span>
-                @if (item.badge) {
-                    <p-badge class="ms-auto" [value]="item.badge" />
-                }
-            </a>
-        </ng-template>
-        <ng-template #end>
 
-        </ng-template>
-    </p-menu>
+            <!-- Info dinámica -->
+            <div class="flex flex-col items-start flex-1 min-w-0 text-left">
+              <span class="font-semibold text-sm text-slate-100 truncate w-full">
+                {{ username() }}
+              </span>
+              <p-badge
+                [value]="role() || 'Sin rol'"
+                [severity]="getRoleSeverity()"
+                styleClass="mt-1 text-xs"
+              />
+            </div>
+
+            <i class="pi pi-ellipsis-v text-slate-500 flex-shrink-0 text-xs"></i>
+          </div>
+        </button>
+      </div>
+    </ng-template>
+
+    <!-- ── Cabeceras de sección ───────────────────────────────────── -->
+    <ng-template #submenuheader let-item>
+      <span class="section-header">{{ item.label }}</span>
+    </ng-template>
+
+    <!-- ── Ítem de menú con ruta activa ──────────────────────────── -->
+    <ng-template #item let-item>
+      <a pRipple
+        class="menu-link flex items-center px-3 py-2 cursor-pointer"
+        [ngClass]="{ 'menu-link--active': item.routerLink && isActive(item.routerLink) }"
+        [routerLink]="item.routerLink">
+        <span [class]="item.icon + ' menu-icon'"></span>
+        <span class="ms-2 menu-label">{{ item.label }}</span>
+        @if (item.badge) {
+          <p-badge class="ms-auto" [value]="item.badge" />
+        }
+      </a>
+    </ng-template>
+
+    <ng-template #end></ng-template>
+  </p-menu>
 </div>

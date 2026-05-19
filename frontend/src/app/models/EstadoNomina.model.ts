@@ -32,5 +32,6 @@ export interface HistorialEstadoNomina {
 export interface CambiarEstadoNominaDto {
   IdNomina: number;
   IdEstadoNuevo: number;
+  NumeroBoleta?: string;
   Comentarios?: string;
 }

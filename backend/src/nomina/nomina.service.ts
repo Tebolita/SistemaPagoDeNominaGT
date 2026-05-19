@@ -306,7 +306,7 @@ export class NominaService {
     }
 
     const detalles = await this.calcularNomina(idEmpleado, salarioBase);
-    const estadoGeneradaId = await this.getEstadoGeneradoId();
+    const estadoGeneradaId = await this.getEstadoBorradorId();
     const diasLaborados = await this.getDiasLaborados(idEmpleado, mesFinal, anioFinal);
 
     const nomina = await this.prisma.nominaEncabezado.create({
@@ -314,7 +314,7 @@ export class NominaService {
         Mes: mesFinal,
         Anio: anioFinal,
         FechaGeneracion: ahora,
-        Estado: 'GENERADA',
+        Estado: 'BORRADOR',
         IdEstadoActual: estadoGeneradaId ?? undefined,
         IdUsuarioGerente: usuarioGerenteId ?? undefined,
         Activo: true,
@@ -391,13 +391,13 @@ export class NominaService {
       );
     }
 
-    const estadoGeneradaId = await this.getEstadoGeneradoId();
+    const estadoGeneradaId = await this.getEstadoBorradorId();
     const nominaEncabezado = await this.prisma.nominaEncabezado.create({
       data: {
         Mes: mesFinal,
         Anio: anioFinal,
         FechaGeneracion: ahora,
-        Estado: 'GENERADA',
+        Estado: 'BORRADOR',
         IdEstadoActual: estadoGeneradaId ?? undefined,
         Activo: true,
         IdUsuarioGerente: usuarioGerenteId ?? undefined,
@@ -479,9 +479,9 @@ export class NominaService {
     }
 
     const estadoActual = nomina.EstadoNomina?.NombreEstado;
-    if (estadoActual !== 'PENDIENTE_APROBACION') {
+    if (estadoActual !== 'PENDIENTE_APROBACION' && estadoActual !== 'BORRADOR') {
       throw new BadRequestException(
-        `La nómina debe estar en estado PENDIENTE_APROBACION para ser firmada. Estado actual: ${estadoActual ?? 'sin estado'}`,
+        `La nómina no puede ser firmada en el estado actual: ${estadoActual ?? 'sin estado'}`,
       );
     }
 
@@ -521,7 +521,7 @@ export class NominaService {
 
     if (tieneJefeArea && tieneEncargado) {
       const estadoAprobada = await this.prisma.estadoNomina.findUnique({
-        where: { NombreEstado: 'APROBADA' },
+        where: { NombreEstado: 'APROBADO' },
       });
 
       if (estadoAprobada) {
@@ -529,7 +529,7 @@ export class NominaService {
           where: { IdNomina: idNomina },
           data: {
             IdEstadoActual: estadoAprobada.IdEstadoNomina,
-            Estado: 'APROBADA',
+            Estado: 'APROBADO',
           },
         });
 
@@ -575,9 +575,9 @@ export class NominaService {
 
   // ─── Helpers ──────────────────────────────────────────────────────────────
 
-  private async getEstadoGeneradoId(): Promise<number | null> {
+  private async getEstadoBorradorId(): Promise<number | null> {
     const estado = await this.prisma.estadoNomina.findUnique({
-      where: { NombreEstado: 'GENERADA' },
+      where: { NombreEstado: 'BORRADOR' },
     });
     return estado?.IdEstadoNomina ?? null;
   }

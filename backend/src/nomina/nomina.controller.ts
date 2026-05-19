@@ -9,16 +9,22 @@ import {
   UseGuards,
   ParseIntPipe,
   Request,
+  Res,
 } from '@nestjs/common';
+import type { Response } from 'express';
 import { NominaService } from './nomina.service';
 import { CreateNominaDto } from './dto/create-nomina.dto';
 import { UpdateNominaDto } from './dto/update-nomina.dto';
 import { AuthGuard } from '../login/login.guard';
+import { ExportService } from '../export/export.service';
 
 @Controller('nomina')
 @UseGuards(AuthGuard)
 export class NominaController {
-  constructor(private readonly nominaService: NominaService) {}
+  constructor(
+    private readonly nominaService: NominaService,
+    private readonly exportService: ExportService,
+  ) {}
 
   @Post()
   create(@Request() req: any, @Body() createNominaDto: CreateNominaDto) {
@@ -97,5 +103,34 @@ export class NominaController {
   @Delete(':id')
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.nominaService.remove(id);
+  }
+
+  // ─── Exportaciones Excel por institución ─────────────────────────
+
+  @Get(':id/export/general')
+  async exportGeneral(
+    @Param('id', ParseIntPipe) id: number,
+    @Res() res: Response,
+  ) {
+    const nomina = await this.nominaService.findOne(id);
+    return this.exportService.exportNominaGeneral(nomina, res);
+  }
+
+  @Get(':id/export/igss')
+  async exportIGSS(
+    @Param('id', ParseIntPipe) id: number,
+    @Res() res: Response,
+  ) {
+    const nomina = await this.nominaService.findOne(id);
+    return this.exportService.exportNominaIGSS(nomina, res);
+  }
+
+  @Get(':id/export/isr')
+  async exportISR(
+    @Param('id', ParseIntPipe) id: number,
+    @Res() res: Response,
+  ) {
+    const nomina = await this.nominaService.findOne(id);
+    return this.exportService.exportNominaISR(nomina, res);
   }
 }

@@ -16,13 +16,17 @@ export class EstadoNominaService {
   // CRUD básico para estados
   async create(createEstadoNominaDto: CreateEstadoNominaDto) {
     return this.prisma.estadoNomina.create({
-      data: createEstadoNominaDto,
+      data: {
+        ...createEstadoNominaDto,
+        Activo: createEstadoNominaDto.Activo ?? true,
+        RequiereAprobacion: createEstadoNominaDto.RequiereAprobacion ?? false,
+      },
     });
   }
 
   async findAll() {
     return this.prisma.estadoNomina.findMany({
-      where: { Activo: true },
+      where: { OR: [{ Activo: true }, { Activo: null }] },
       orderBy: { Orden: 'asc' },
     });
   }
@@ -61,7 +65,7 @@ export class EstadoNominaService {
     idUsuario: number,
     userRole?: string,
   ) {
-    const { IdNomina, IdEstadoNuevo, Comentarios } = cambiarEstadoDto;
+    const { IdNomina, IdEstadoNuevo, Comentarios, NumeroBoleta } = cambiarEstadoDto;
 
     // Verificar que la nómina existe
     const nomina = await this.prisma.nominaEncabezado.findUnique({
@@ -83,12 +87,17 @@ export class EstadoNominaService {
       );
     }
 
-    // Verificar si la transición es válida (lógica básica)
-    if (
-      nomina.IdEstadoActual &&
-      !this.esTransicionValida(nomina.IdEstadoActual, IdEstadoNuevo)
-    ) {
+    // Verificar si la transición es válida
+    const estadoActualNombre = nomina.EstadoNomina?.NombreEstado;
+    if (estadoActualNombre && !this.esTransicionValida(estadoActualNombre, estadoNuevo.NombreEstado)) {
       throw new BadRequestException('Transición de estado no permitida');
+    }
+
+    // Al marcar como PAGADO, el número de boleta/transacción es obligatorio
+    if (estadoNuevo.NombreEstado === 'PAGADO' && !NumeroBoleta?.trim()) {
+      throw new BadRequestException(
+        'El número de boleta o transacción es requerido para registrar el pago',
+      );
     }
 
     // Crear historial del cambio de estado
@@ -103,13 +112,18 @@ export class EstadoNominaService {
       },
     });
 
-    // Actualizar el estado de la nómina
+    // Actualizar el estado de la nómina (y boleta si aplica)
+    const updateData: any = {
+      IdEstadoActual: IdEstadoNuevo,
+      Estado: estadoNuevo.NombreEstado,
+    };
+    if (NumeroBoleta?.trim()) {
+      updateData.NumeroBoleta = NumeroBoleta.trim();
+    }
+
     return this.prisma.nominaEncabezado.update({
       where: { IdNomina },
-      data: {
-        IdEstadoActual: IdEstadoNuevo,
-        Estado: estadoNuevo.NombreEstado,
-      },
+      data: updateData,
       include: {
         EstadoNomina: true,
       },
@@ -139,33 +153,25 @@ export class EstadoNominaService {
   async getEstadosDisponibles(IdNomina: number, userRole?: string) {
     const nomina = await this.prisma.nominaEncabezado.findUnique({
       where: { IdNomina },
-      select: { IdEstadoActual: true },
+      include: { EstadoNomina: true },
     });
 
     if (!nomina) {
       throw new NotFoundException(`Nómina con ID ${IdNomina} no encontrada`);
     }
 
-    if (!nomina.IdEstadoActual) {
+    const estadoActual = nomina.EstadoNomina?.NombreEstado;
+
+    if (!estadoActual) {
       const estados = await this.findAll();
       return estados.filter((estado) => this.puedeCambiarAEstado(estado, userRole));
     }
 
-    const transicionesPermitidas: Record<number, number[]> = {
-      1: [2], // GENERADA -> PENDIENTE_APROBACION
-      2: [3, 4], // PENDIENTE_APROBACION -> APROBADA, RECHAZADA
-      3: [5], // APROBADA -> PROCESADA
-      4: [1], // RECHAZADA -> GENERADA
-      5: [], // PROCESADA -> ningún cambio permitido
-    };
-
-    const idsDisponibles = transicionesPermitidas[nomina.IdEstadoActual] ?? [];
-    if (idsDisponibles.length === 0) {
-      return [];
-    }
+    const nombresDisponibles = this.transicionesDesde(estadoActual);
+    if (nombresDisponibles.length === 0) return [];
 
     const estados = await this.prisma.estadoNomina.findMany({
-      where: { Activo: true, IdEstadoNomina: { in: idsDisponibles } },
+      where: { Activo: true, NombreEstado: { in: nombresDisponibles } },
       orderBy: { Orden: 'asc' },
     });
 
@@ -197,23 +203,18 @@ export class EstadoNominaService {
     return rolesPermitidos.includes(normalizedRole);
   }
 
-  // Método privado para validar transiciones de estado
-  private esTransicionValida(
-    idEstadoActual: number,
-    idEstadoNuevo: number,
-  ): boolean {
-    // Lógica básica de validación de transiciones
-    // En producción, esto podría ser más complejo con un grafo de estados
-    const transicionesPermitidas: Record<number, number[]> = {
-      1: [2], // GENERADA -> PENDIENTE_APROBACION
-      2: [3, 4], // PENDIENTE_APROBACION -> APROBADA, RECHAZADA
-      3: [5], // APROBADA -> PROCESADA
-      4: [1], // RECHAZADA -> GENERADA (para corregir)
-      5: [], // PROCESADA -> ningún cambio permitido
+  private transicionesDesde(nombreEstado: string): string[] {
+    const mapa: Record<string, string[]> = {
+      BORRADOR: ['PENDIENTE_APROBACION'],
+      PENDIENTE_APROBACION: ['APROBADO', 'CANCELADO'],
+      APROBADO: ['PAGADO'],
+      PAGADO: [],
+      CANCELADO: [],
     };
+    return mapa[nombreEstado] ?? [];
+  }
 
-    return (
-      transicionesPermitidas[idEstadoActual]?.includes(idEstadoNuevo) ?? false
-    );
+  private esTransicionValida(nombreActual: string, nombreNuevo: string): boolean {
+    return this.transicionesDesde(nombreActual).includes(nombreNuevo);
   }
 }

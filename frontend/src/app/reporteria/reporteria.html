@@ -1,424 +1,501 @@
-<div class="p-4">
-  <div class="flex flex-col gap-4">
-    <!-- Header -->
-    <div class="flex justify-between items-center">
-      <h1 class="text-2xl font-bold text-surface-800">Reportería</h1>
+<p-toast></p-toast>
+
+<div class="flex flex-col gap-5 p-4 min-h-screen">
+
+  <!-- ── Encabezado ───────────────────────────────────────────────── -->
+  <div class="flex justify-between items-start">
+    <div>
+      <h1 class="text-2xl font-bold text-white">Reportería</h1>
+      <p class="text-sm text-slate-400 mt-1">Consulta y exporta reportes del sistema de nómina</p>
     </div>
-
-    <!-- Selector de Reporte -->
-    <div class="card">
-      <div class="flex flex-wrap gap-4 items-end">
-        <div class="flex flex-col gap-2">
-          <label class="text-sm font-medium text-surface-600">Tipo de Reporte</label>
-          <p-select 
-            [options]="reportes" 
-            [(ngModel)]="selectedReporte" 
-            optionLabel="label" 
-            optionValue="value"
-            (onChange)="onReporteChange()"
-            placeholder="Seleccionar Reporte"
-            class="w-full md:w-64" />
-        </div>
-
-        <!-- Filtros para Empleados -->
-        @if (selectedReporte() === 'empleados') {
-          <div class="flex flex-col gap-2">
-            <label class="text-sm font-medium text-surface-600">Fecha Inicio</label>
-            <p-datepicker 
-              [(ngModel)]="fechaInicio" 
-              dateFormat="dd/mm/yy"
-              placeholder="Seleccionar fecha"
-              class="w-full" />
-          </div>
-          <div class="flex flex-col gap-2">
-            <label class="text-sm font-medium text-surface-600">Fecha Fin</label>
-            <p-datepicker 
-              [(ngModel)]="fechaFin" 
-              dateFormat="dd/mm/yy"
-              placeholder="Seleccionar fecha"
-              class="w-full" />
-          </div>
-          <p-button label="Generar" icon="pi pi-search" (onClick)="loadReporte()" [loading]="loading()" />
-          <p-button label="Excel" icon="pi pi-file-excel" severity="success" (onClick)="exportToExcel()" />
-          <p-button label="PDF" icon="pi pi-file-pdf" severity="danger" (onClick)="exportToPDF()" />
-        }
-
-        <!-- Filtros para Nómina -->
-        @if (selectedReporte() === 'nomina') {
-          <div class="flex flex-col gap-2">
-            <label class="text-sm font-medium text-surface-600">Mes</label>
-            <p-select 
-              [options]="meses" 
-              [(ngModel)]="mes" 
-              optionLabel="label" 
-              optionValue="value"
-              placeholder="Seleccionar mes"
-              class="w-full" />
-          </div>
-          <div class="flex flex-col gap-2">
-            <label class="text-sm font-medium text-surface-600">Año</label>
-            <p-select 
-              [options]="anios" 
-              [(ngModel)]="anio" 
-              optionLabel="label" 
-              optionValue="value"
-              placeholder="Seleccionar año"
-              class="w-full" />
-          </div>
-          <p-button label="Generar" icon="pi pi-search" (onClick)="loadReporte()" [loading]="loading()" />
-          <p-button label="Excel" icon="pi pi-file-excel" severity="success" (onClick)="exportToExcel()" />
-          <p-button label="PDF" icon="pi pi-file-pdf" severity="danger" (onClick)="exportToPDF()" />
-        }
-
-        <!-- Filtros para Asistencias -->
-        @if (selectedReporte() === 'asistencias') {
-          <div class="flex flex-col gap-2">
-            <label class="text-sm font-medium text-surface-600">Fecha Inicio</label>
-            <p-datepicker 
-              [(ngModel)]="fechaInicio" 
-              dateFormat="dd/mm/yy"
-              placeholder="Seleccionar fecha"
-              class="w-full" />
-          </div>
-          <div class="flex flex-col gap-2">
-            <label class="text-sm font-medium text-surface-600">Fecha Fin</label>
-            <p-datepicker 
-              [(ngModel)]="fechaFin" 
-              dateFormat="dd/mm/yy"
-              placeholder="Seleccionar fecha"
-              class="w-full" />
-          </div>
-          <p-button label="Generar" icon="pi pi-search" (onClick)="loadReporte()" [loading]="loading()" />
-          <p-button label="Excel" icon="pi pi-file-excel" severity="success" (onClick)="exportToExcel()" />
-          <p-button label="PDF" icon="pi pi-file-pdf" severity="danger" (onClick)="exportToPDF()" />
-        }
-
-        <!-- Filtros para Vacaciones -->
-        @if (selectedReporte() === 'vacaciones') {
-          <div class="flex flex-col gap-2">
-            <label class="text-sm font-medium text-surface-600">Año</label>
-            <p-select 
-              [options]="anios" 
-              [(ngModel)]="anioVacaciones" 
-              optionLabel="label" 
-              optionValue="value"
-              placeholder="Seleccionar año"
-              class="w-full" />
-          </div>
-          <p-button label="Generar" icon="pi pi-search" (onClick)="loadReporte()" [loading]="loading()" />
-          <p-button label="Excel" icon="pi pi-file-excel" severity="success" (onClick)="exportToExcel()" />
-          <p-button label="PDF" icon="pi pi-file-pdf" severity="danger" (onClick)="exportToPDF()" />
-        }
-      </div>
-    </div>
-
-    <!-- RESUMEN EJECUTIVO -->
-    @if (selectedReporte() === 'resumen') {
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div class="card p-4 border-round-xl surface-card shadow-2">
-          <div class="flex align-items-center gap-3">
-            <div class="surface-100 border-round-xl p-3">
-              <i class="pi pi-users text-2xl text-primary"></i>
-            </div>
-            <div>
-              <span class="block text-500 font-medium">Total Empleados</span>
-              <span class="text-900 font-medium text-xl">{{ resumen()?.totalEmpleados || 0 }}</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="card p-4 border-round-xl surface-card shadow-2">
-          <div class="flex align-items-center gap-3">
-            <div class="surface-100 border-round-xl p-3">
-              <i class="pi pi-dollar text-2xl text-green-500"></i>
-            </div>
-            <div>
-              <span class="block text-500 font-medium">Con Salario</span>
-              <span class="text-900 font-medium text-xl">{{ resumen()?.empleadosConSalario || 0 }}</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="card p-4 border-round-xl surface-card shadow-2">
-          <div class="flex align-items-center gap-3">
-            <div class="surface-100 border-round-xl p-3">
-              <i class="pi pi-calendar text-2xl text-orange-500"></i>
-            </div>
-            <div>
-              <span class="block text-500 font-medium">Departamentos</span>
-              <span class="text-900 font-medium text-xl">{{ resumen()?.totalDepartamentos || 0 }}</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="card p-4 border-round-xl surface-card shadow-2">
-          <div class="flex align-items-center gap-3">
-            <div class="surface-100 border-round-xl p-3">
-              <i class="pi pi-briefcase text-2xl text-purple-500"></i>
-            </div>
-            <div>
-              <span class="block text-500 font-medium">Puestos</span>
-              <span class="text-900 font-medium text-xl">{{ resumen()?.totalPuestos || 0 }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      @if (resumen()?.ultimaNomina) {
-        <div class="card mt-4">
-          <h3 class="text-lg font-semibold mb-3">Última Nómina Generada</h3>
-          <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div class="flex flex-col gap-1">
-              <label class="text-xs text-surface-500">Período</label>
-              <span class="font-medium">{{ resumen()?.ultimaNomina?.Mes }}/{{ resumen()?.ultimaNomina?.Anio }}</span>
-            </div>
-            <div class="flex flex-col gap-1">
-              <label class="text-xs text-surface-500">Empleados</label>
-              <span class="font-medium">{{ resumen()?.ultimaNomina?.TotalEmpleados }}</span>
-            </div>
-            <div class="flex flex-col gap-1">
-              <label class="text-xs text-surface-500">Total Líquido</label>
-              <span class="font-medium text-green-600">Q{{ resumen()?.ultimaNomina?.TotalLiquido | number:'1.2-2' }}</span>
-            </div>
-          </div>
-        </div>
-      }
-    }
-
-    <!-- REPORTE DE EMPLEADOS -->
-    @if (selectedReporte() === 'empleados') {
-      <div class="card">
-        <p-table [value]="empleados()" [loading]="loading()" [paginator]="true" [rows]="10"
-          [rowHover]="true" emptyMessage="No hay empleados registrados.">
-          <ng-template pTemplate="header">
-            <tr>
-              <th>ID</th>
-              <th>Nombre Completo</th>
-              <th>DPI</th>
-              <th>Correo</th>
-              <th>Teléfono</th>
-              <th>Fecha Ingreso</th>
-              <th>Puesto</th>
-              <th>Departamento</th>
-              <th>Salario</th>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-emp>
-            <tr>
-              <td>{{ emp.IdEmpleado }}</td>
-              <td>{{ emp.Nombres }} {{ emp.Apellidos }}</td>
-              <td>{{ emp.DPI }}</td>
-              <td>{{ emp.CorreoPersonal }}</td>
-              <td>{{ emp.Telefono }}</td>
-              <td>{{ emp.FechaIngresa | date:'dd/MM/yyyy' }}</td>
-              <td>{{ emp.Puesto }}</td>
-              <td>{{ emp.Departamento }}</td>
-              <td class="font-medium text-green-600">Q{{ emp.SalarioActual | number:'1.2-2' }}</td>
-            </tr>
-          </ng-template>
-        </p-table>
-      </div>
-    }
-
-    <!-- REPORTE DE SALARIOS -->
-    @if (selectedReporte() === 'salarios') {
-      <div class="flex justify-end gap-2 mb-4">
-        <p-button label="Exportar Excel" icon="pi pi-file-excel" severity="success" (onClick)="exportToExcel()" />
-        <p-button label="Exportar PDF" icon="pi pi-file-pdf" severity="danger" (onClick)="exportToPDF()" />
-      </div>
-      <div class="card">
-        <p-table [value]="salarios()" [loading]="loading()" [paginator]="true" [rows]="10"
-          [rowHover]="true" emptyMessage="No hay salarios registrados.">
-          <ng-template pTemplate="header">
-            <tr>
-              <th>Empleado</th>
-              <th>DPI</th>
-              <th>Puesto</th>
-              <th>Departamento</th>
-              <th>Salario Base</th>
-              <th>Inicio Vigencia</th>
-              <th>Fin Vigencia</th>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-sal>
-            <tr>
-              <td>{{ sal.NombreEmpleado }}</td>
-              <td>{{ sal.DPI }}</td>
-              <td>{{ sal.Puesto }}</td>
-              <td>{{ sal.Departamento }}</td>
-              <td class="font-medium text-green-600">Q{{ sal.SalarioBase | number:'1.2-2' }}</td>
-              <td>{{ sal.FechaInicioVigencia | date:'dd/MM/yyyy' }}</td>
-              <td>{{ sal.FechaFinVigencia ? (sal.FechaFinVigencia | date:'dd/MM/yyyy') : 'Actual' }}</td>
-            </tr>
-          </ng-template>
-        </p-table>
-      </div>
-    }
-
-    <!-- REPORTE DE DEPARTAMENTOS -->
-    @if (selectedReporte() === 'departamentos') {
-      <div class="flex justify-end gap-2 mb-4">
-        <p-button label="Exportar Excel" icon="pi pi-file-excel" severity="success" (onClick)="exportToExcel()" />
-        <p-button label="Exportar PDF" icon="pi pi-file-pdf" severity="danger" (onClick)="exportToPDF()" />
-      </div>
-      <div class="card">
-        <p-table [value]="departamentos()" [loading]="loading()" [rowHover]="true"
-          emptyMessage="No hay departamentos registrados.">
-          <ng-template pTemplate="header">
-            <tr>
-              <th>Departamento</th>
-              <th>Cant. Puestos</th>
-              <th>Cant. Empleados</th>
-              <th>Masa Salarial</th>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-dept>
-            <tr>
-              <td class="font-medium">{{ dept.NombreDepartamento }}</td>
-              <td>{{ dept.CantidadPuestos }}</td>
-              <td>{{ dept.CantidadEmpleados }}</td>
-              <td class="font-medium text-green-600">Q{{ dept.MasaSalarial | number:'1.2-2' }}</td>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="footer">
-            <tr>
-              <td class="font-bold">TOTAL</td>
-              <td class="font-bold">{{ departamentos().reduce((acc, d) => acc + d.CantidadPuestos, 0) }}</td>
-              <td class="font-bold">{{ departamentos().reduce((acc, d) => acc + d.CantidadEmpleados, 0) }}</td>
-              <td class="font-bold text-green-600">Q{{ departamentos().reduce((acc, d) => acc + d.MasaSalarial, 0) | number:'1.2-2' }}</td>
-            </tr>
-          </ng-template>
-        </p-table>
-      </div>
-    }
-
-    <!-- REPORTE DE NÓMINA -->
-    @if (selectedReporte() === 'nomina') {
-      <div class="card">
-        @for (nomina of nominas(); track nomina.IdNomina) {
-          <div class="mb-4 p-4 border-round-xl surface-50">
-            <div class="flex justify-between items-center mb-3">
-              <h3 class="text-lg font-semibold">Nómina {{ nomina.Mes }}/{{ nomina.Anio }} - {{ nomina.Estado }}</h3>
-              <p-tag severity="info" [value]="nomina.TotalEmpleados + ' empleados'" />
-            </div>
-            <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-3">
-              <div class="flex flex-col gap-1">
-                <label class="text-xs text-surface-500">Total Sueldos</label>
-                <span class="font-medium">Q{{ nomina.TotalSueldos | number:'1.2-2' }}</span>
-              </div>
-              <div class="flex flex-col gap-1">
-                <label class="text-xs text-surface-500">Bonificaciones</label>
-                <span class="font-medium text-green-600">Q{{ nomina.TotalBonificaciones | number:'1.2-2' }}</span>
-              </div>
-              <div class="flex flex-col gap-1">
-                <label class="text-xs text-surface-500">Descuentos</label>
-                <span class="font-medium text-red-600">Q{{ nomina.TotalDescuentos | number:'1.2-2' }}</span>
-              </div>
-              <div class="flex flex-col gap-1">
-                <label class="text-xs text-surface-500">Total Líquido</label>
-                <span class="font-bold text-green-600">Q{{ nomina.TotalLiquido | number:'1.2-2' }}</span>
-              </div>
-            </div>
-            <p-table [value]="nomina.Detalle" [rows]="5" [paginator]="true">
-              <ng-template pTemplate="header">
-                <tr>
-                  <th>Empleado</th>
-                  <th>Puesto</th>
-                  <th>Días</th>
-                  <th>Sueldo</th>
-                  <th>Bonif.</th>
-                  <th>IGSS</th>
-                  <th>ISR</th>
-                  <th>Líquido</th>
-                </tr>
-              </ng-template>
-              <ng-template pTemplate="body" let-det>
-                <tr>
-                  <td>{{ det.NombreEmpleado }}</td>
-                  <td>{{ det.Puesto }}</td>
-                  <td>{{ det.DiasLaborados }}</td>
-                  <td>Q{{ det.SueldoBase | number:'1.2-2' }}</td>
-                  <td class="text-green-600">Q{{ det.BonificacionIncentivo || 0 | number:'1.2-2' }}</td>
-                  <td class="text-red-600">Q{{ det.DescuentoIGSS || 0 | number:'1.2-2' }}</td>
-                  <td class="text-red-600">Q{{ det.DescuentoISR || 0 | number:'1.2-2' }}</td>
-                  <td class="font-bold text-green-600">Q{{ det.LiquidoRecibir | number:'1.2-2' }}</td>
-                </tr>
-              </ng-template>
-            </p-table>
-          </div>
-        }
-        @if (nominas().length === 0 && !loading()) {
-          <div class="text-center p-4 text-surface-500">No hay nóminas generadas.</div>
-        }
-      </div>
-    }
-
-    <!-- REPORTE DE ASISTENCIAS -->
-    @if (selectedReporte() === 'asistencias') {
-      <div class="card">
-        <p-table [value]="asistencias()" [loading]="loading()" [paginator]="true" [rows]="10"
-          [rowHover]="true" emptyMessage="No hay registros de asistencia.">
-          <ng-template pTemplate="header">
-            <tr>
-              <th>Empleado</th>
-              <th>Puesto</th>
-              <th>Departamento</th>
-              <th>Total Asistencias</th>
-              <th>Días con Entrada</th>
-              <th>Días con Salida</th>
-              <th>Horas Extra</th>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-asist>
-            <tr>
-              <td>{{ asist.NombreEmpleado }}</td>
-              <td>{{ asist.Puesto }}</td>
-              <td>{{ asist.Departamento }}</td>
-              <td>{{ asist.TotalAsistencias }}</td>
-              <td>{{ asist.DiasConEntrada }}</td>
-              <td>{{ asist.DiasConSalida }}</td>
-              <td class="text-orange-600">{{ asist.TotalHorasExtra | number:'1.2-2' }} hrs</td>
-            </tr>
-          </ng-template>
-        </p-table>
-      </div>
-    }
-
-    <!-- REPORTE DE VACACIONES -->
-    @if (selectedReporte() === 'vacaciones') {
-      <div class="card">
-        <p-table [value]="vacaciones()" [loading]="loading()" [paginator]="true" [rows]="10"
-          [rowHover]="true" emptyMessage="No hay registros de vacaciones.">
-          <ng-template pTemplate="header">
-            <tr>
-              <th>Empleado</th>
-              <th>Puesto</th>
-              <th>Departamento</th>
-              <th>Año</th>
-              <th>Días Ganados</th>
-              <th>Días Gozados</th>
-              <th>Días Pendientes</th>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-vac>
-            <tr>
-              <td>{{ vac.NombreEmpleado }}</td>
-              <td>{{ vac.Puesto }}</td>
-              <td>{{ vac.Departamento }}</td>
-              <td>{{ vac.Anio }}</td>
-              <td>{{ vac.DiasGanados }}</td>
-              <td>{{ vac.DiasGozados }}</td>
-              <td>
-                @if (vac.DiasPendientes > 0) {
-                  <p-tag severity="warn" [value]="vac.DiasPendientes + ' días'" />
-                } @else {
-                  <p-tag severity="success" value="Completado" />
-                }
-              </td>
-            </tr>
-          </ng-template>
-        </p-table>
-      </div>
-    }
   </div>
+
+  <!-- ── Barra de filtros ─────────────────────────────────────────── -->
+  <div class="filter-bar flex flex-wrap gap-4 items-end">
+
+    <!-- Selector de reporte -->
+    <div class="flex flex-col gap-1.5 min-w-[200px]">
+      <label class="text-xs font-semibold uppercase tracking-wide text-slate-400">Tipo de Reporte</label>
+      <p-select
+        [options]="reportes"
+        [(ngModel)]="selectedReporte"
+        optionLabel="label"
+        optionValue="value"
+        (onChange)="onReporteChange()"
+        placeholder="Seleccionar"
+        class="w-full"
+        appendTo="body"
+      ></p-select>
+    </div>
+
+    <!-- Info del reporte seleccionado -->
+    <div class="flex items-center gap-2 px-3 py-2 bg-slate-800 rounded-lg border border-slate-600">
+      <i [class]="getReporteConfig().icon + ' text-sky-400'"></i>
+      <span class="text-xs text-slate-300">{{ getReporteConfig().desc }}</span>
+    </div>
+
+    <!-- Filtros por reporte -->
+    @if (selectedReporte() === 'empleados') {
+      <div class="flex flex-col gap-1.5">
+        <label class="text-xs font-semibold uppercase tracking-wide text-slate-400">Desde</label>
+        <p-datepicker [(ngModel)]="fechaInicio" dateFormat="dd/mm/yy" placeholder="Fecha inicio" class="w-40" />
+      </div>
+      <div class="flex flex-col gap-1.5">
+        <label class="text-xs font-semibold uppercase tracking-wide text-slate-400">Hasta</label>
+        <p-datepicker [(ngModel)]="fechaFin" dateFormat="dd/mm/yy" placeholder="Fecha fin" class="w-40" />
+      </div>
+    }
+
+    @if (selectedReporte() === 'nomina') {
+      <div class="flex flex-col gap-1.5">
+        <label class="text-xs font-semibold uppercase tracking-wide text-slate-400">Mes</label>
+        <p-select [options]="meses" [(ngModel)]="mes" optionLabel="label" optionValue="value"
+          placeholder="Todos" class="w-36" appendTo="body" />
+      </div>
+      <div class="flex flex-col gap-1.5">
+        <label class="text-xs font-semibold uppercase tracking-wide text-slate-400">Año</label>
+        <p-select [options]="anios" [(ngModel)]="anio" optionLabel="label" optionValue="value"
+          placeholder="Todos" class="w-32" appendTo="body" />
+      </div>
+    }
+
+    @if (selectedReporte() === 'asistencias') {
+      <div class="flex flex-col gap-1.5">
+        <label class="text-xs font-semibold uppercase tracking-wide text-slate-400">Desde</label>
+        <p-datepicker [(ngModel)]="fechaInicio" dateFormat="dd/mm/yy" placeholder="Fecha inicio" class="w-40" />
+      </div>
+      <div class="flex flex-col gap-1.5">
+        <label class="text-xs font-semibold uppercase tracking-wide text-slate-400">Hasta</label>
+        <p-datepicker [(ngModel)]="fechaFin" dateFormat="dd/mm/yy" placeholder="Fecha fin" class="w-40" />
+      </div>
+    }
+
+    @if (selectedReporte() === 'vacaciones') {
+      <div class="flex flex-col gap-1.5">
+        <label class="text-xs font-semibold uppercase tracking-wide text-slate-400">Año</label>
+        <p-select [options]="anios" [(ngModel)]="anioVacaciones" optionLabel="label" optionValue="value"
+          placeholder="Todos" class="w-32" appendTo="body" />
+      </div>
+    }
+
+    <!-- Botones de acción -->
+    <div class="flex gap-2 ml-auto items-end">
+      <p-button
+        label="Generar"
+        icon="pi pi-search"
+        [loading]="loading()"
+        (onClick)="loadReporte()"
+        pTooltip="Actualizar datos"
+      ></p-button>
+
+      @if (selectedReporte() !== 'resumen') {
+        <p-button
+          icon="pi pi-file-excel"
+          label="Excel"
+          severity="success"
+          [outlined]="true"
+          (onClick)="exportToExcel()"
+          pTooltip="Descargar Excel"
+        ></p-button>
+        <p-button
+          icon="pi pi-file-pdf"
+          label="PDF"
+          severity="danger"
+          [outlined]="true"
+          (onClick)="exportToPDF()"
+          pTooltip="Descargar PDF"
+        ></p-button>
+      }
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════ -->
+  <!-- RESUMEN EJECUTIVO                                              -->
+  <!-- ══════════════════════════════════════════════════════════════ -->
+  @if (selectedReporte() === 'resumen') {
+
+    <!-- KPI Cards -->
+    <div class="grid grid-cols-2 lg:grid-cols-5 gap-3">
+      <div class="stat-card flex items-center gap-3">
+        <div class="stat-icon bg-blue-900"><i class="pi pi-users text-blue-400"></i></div>
+        <div>
+          <div class="text-2xl font-bold text-white">{{ resumen()?.totalEmpleados ?? 0 }}</div>
+          <div class="text-xs text-slate-400 mt-0.5">Empleados</div>
+        </div>
+      </div>
+      <div class="stat-card flex items-center gap-3">
+        <div class="stat-icon bg-green-900"><i class="pi pi-dollar text-green-400"></i></div>
+        <div>
+          <div class="text-2xl font-bold text-white">{{ resumen()?.empleadosConSalario ?? 0 }}</div>
+          <div class="text-xs text-slate-400 mt-0.5">Con Salario</div>
+        </div>
+      </div>
+      <div class="stat-card flex items-center gap-3">
+        <div class="stat-icon bg-orange-900"><i class="pi pi-building text-orange-400"></i></div>
+        <div>
+          <div class="text-2xl font-bold text-white">{{ resumen()?.totalDepartamentos ?? 0 }}</div>
+          <div class="text-xs text-slate-400 mt-0.5">Departamentos</div>
+        </div>
+      </div>
+      <div class="stat-card flex items-center gap-3">
+        <div class="stat-icon bg-purple-900"><i class="pi pi-briefcase text-purple-400"></i></div>
+        <div>
+          <div class="text-2xl font-bold text-white">{{ resumen()?.totalPuestos ?? 0 }}</div>
+          <div class="text-xs text-slate-400 mt-0.5">Puestos</div>
+        </div>
+      </div>
+      <div class="stat-card flex items-center gap-3">
+        <div class="stat-icon bg-teal-900"><i class="pi pi-sun text-teal-400"></i></div>
+        <div>
+          <div class="text-2xl font-bold text-white">{{ resumen()?.totalVacaciones ?? 0 }}</div>
+          <div class="text-xs text-slate-400 mt-0.5">Vacaciones</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gráficas fila 1: Empleados por depto + Distribución salarial -->
+    @if (chartEmpleados && chartSalarios) {
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+
+        <div class="content-card p-4">
+          <div class="flex items-center gap-2 mb-3">
+            <i class="pi pi-chart-bar text-blue-400"></i>
+            <span class="text-sm font-semibold text-slate-200">Empleados por Departamento</span>
+          </div>
+          <div style="height: 220px;">
+            <p-chart type="bar" [data]="chartEmpleados" [options]="chartOptions" height="220"></p-chart>
+          </div>
+        </div>
+
+        <div class="content-card p-4">
+          <div class="flex items-center gap-2 mb-3">
+            <i class="pi pi-chart-pie text-green-400"></i>
+            <span class="text-sm font-semibold text-slate-200">Distribución Salarial por Departamento</span>
+          </div>
+          <div style="height: 220px;">
+            <p-chart type="doughnut" [data]="chartSalarios" [options]="chartOptionsDoughnut" height="220"></p-chart>
+          </div>
+        </div>
+
+      </div>
+    }
+
+    <!-- Gráfica fila 2: Tendencia de nómina -->
+    @if (chartTendencia && chartTendencia.labels?.length > 0) {
+      <div class="content-card p-4">
+        <div class="flex items-center gap-2 mb-3">
+          <i class="pi pi-chart-line text-sky-400"></i>
+          <span class="text-sm font-semibold text-slate-200">Tendencia de Nómina — Últimos Períodos</span>
+        </div>
+        <div style="height: 200px;">
+          <p-chart type="line" [data]="chartTendencia" [options]="chartOptions" height="200"></p-chart>
+        </div>
+      </div>
+    }
+
+    <!-- Última nómina -->
+    @if (resumen()?.ultimaNomina) {
+      <div class="last-nomina-card">
+        <div class="flex items-center gap-2 mb-3">
+          <i class="pi pi-calculator text-sky-400"></i>
+          <span class="font-semibold text-slate-200 text-sm">Última Nómina Generada</span>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div>
+            <div class="text-xs text-slate-500 mb-1">Período</div>
+            <div class="font-semibold text-white">
+              {{ resumen()?.ultimaNomina?.Mes }}/{{ resumen()?.ultimaNomina?.Anio }}
+            </div>
+          </div>
+          <div>
+            <div class="text-xs text-slate-500 mb-1">Empleados</div>
+            <div class="font-semibold text-white">{{ resumen()?.ultimaNomina?.TotalEmpleados }}</div>
+          </div>
+          <div>
+            <div class="text-xs text-slate-500 mb-1">Total Líquido</div>
+            <div class="font-semibold text-green-400">
+              Q {{ resumen()?.ultimaNomina?.TotalLiquido | number:'1.2-2' }}
+            </div>
+          </div>
+          <div>
+            <div class="text-xs text-slate-500 mb-1">Estado</div>
+            <p-tag [value]="resumen()?.ultimaNomina?.Estado ?? '—'" severity="info"></p-tag>
+          </div>
+        </div>
+      </div>
+    }
+
+    @if (!resumen() && !loading()) {
+      <div class="text-center text-slate-500 py-8">
+        <i class="pi pi-chart-pie text-3xl mb-2 block"></i>
+        Cargando resumen...
+      </div>
+    }
+  }
+
+  <!-- ══════════════════════════════════════════════════════════════ -->
+  <!-- EMPLEADOS                                                      -->
+  <!-- ══════════════════════════════════════════════════════════════ -->
+  @if (selectedReporte() === 'empleados') {
+    <div class="content-card">
+      <p-table [value]="empleados()" [loading]="loading()" [paginator]="true" [rows]="10"
+        [rowHover]="true" emptyMessage="No hay empleados registrados.">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>#</th>
+            <th pSortableColumn="Nombres">Nombre <p-sortIcon field="Nombres"></p-sortIcon></th>
+            <th>DPI</th>
+            <th>Correo</th>
+            <th>Teléfono</th>
+            <th>Ingreso</th>
+            <th>Puesto</th>
+            <th>Departamento</th>
+            <th>Salario</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-emp>
+          <tr>
+            <td class="text-slate-500 text-xs">{{ emp.IdEmpleado }}</td>
+            <td class="font-medium text-slate-100">{{ emp.Nombres }} {{ emp.Apellidos }}</td>
+            <td class="font-mono text-xs">{{ emp.DPI }}</td>
+            <td class="text-slate-400 text-xs">{{ emp.CorreoPersonal }}</td>
+            <td class="text-slate-400 text-xs">{{ emp.Telefono }}</td>
+            <td class="text-slate-400 text-xs">{{ emp.FechaIngresa | date:'dd/MM/yyyy' }}</td>
+            <td>{{ emp.Puesto }}</td>
+            <td>{{ emp.Departamento }}</td>
+            <td class="font-semibold text-green-400">Q {{ emp.SalarioActual | number:'1.2-2' }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  }
+
+  <!-- ══════════════════════════════════════════════════════════════ -->
+  <!-- SALARIOS                                                       -->
+  <!-- ══════════════════════════════════════════════════════════════ -->
+  @if (selectedReporte() === 'salarios') {
+    <div class="content-card">
+      <p-table [value]="salarios()" [loading]="loading()" [paginator]="true" [rows]="10"
+        [rowHover]="true" emptyMessage="No hay salarios registrados.">
+        <ng-template pTemplate="header">
+          <tr>
+            <th pSortableColumn="NombreEmpleado">Empleado <p-sortIcon field="NombreEmpleado"></p-sortIcon></th>
+            <th>DPI</th>
+            <th>Puesto</th>
+            <th>Departamento</th>
+            <th pSortableColumn="SalarioBase">Salario Base <p-sortIcon field="SalarioBase"></p-sortIcon></th>
+            <th>Inicio Vigencia</th>
+            <th>Fin Vigencia</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-sal>
+          <tr>
+            <td class="font-medium text-slate-100">{{ sal.NombreEmpleado }}</td>
+            <td class="font-mono text-xs">{{ sal.DPI }}</td>
+            <td>{{ sal.Puesto }}</td>
+            <td>{{ sal.Departamento }}</td>
+            <td class="font-semibold text-green-400">Q {{ sal.SalarioBase | number:'1.2-2' }}</td>
+            <td class="text-slate-400 text-xs">{{ sal.FechaInicioVigencia | date:'dd/MM/yyyy' }}</td>
+            <td>
+              @if (sal.FechaFinVigencia) {
+                <span class="text-slate-400 text-xs">{{ sal.FechaFinVigencia | date:'dd/MM/yyyy' }}</span>
+              } @else {
+                <p-tag value="Vigente" severity="success"></p-tag>
+              }
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  }
+
+  <!-- ══════════════════════════════════════════════════════════════ -->
+  <!-- DEPARTAMENTOS                                                  -->
+  <!-- ══════════════════════════════════════════════════════════════ -->
+  @if (selectedReporte() === 'departamentos') {
+    <div class="content-card">
+      <p-table [value]="departamentos()" [loading]="loading()"
+        [rowHover]="true" emptyMessage="No hay departamentos registrados.">
+        <ng-template pTemplate="header">
+          <tr>
+            <th pSortableColumn="NombreDepartamento">Departamento <p-sortIcon field="NombreDepartamento"></p-sortIcon></th>
+            <th class="text-right">Puestos</th>
+            <th class="text-right">Empleados</th>
+            <th class="text-right">Masa Salarial</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-dept>
+          <tr>
+            <td class="font-semibold text-slate-100">{{ dept.NombreDepartamento }}</td>
+            <td class="text-right">{{ dept.CantidadPuestos }}</td>
+            <td class="text-right">{{ dept.CantidadEmpleados }}</td>
+            <td class="text-right font-semibold text-green-400">Q {{ dept.MasaSalarial | number:'1.2-2' }}</td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="footer">
+          <tr>
+            <td class="font-bold text-slate-200">TOTAL</td>
+            <td class="text-right font-bold text-slate-200">{{ sumDept('CantidadPuestos') }}</td>
+            <td class="text-right font-bold text-slate-200">{{ sumDept('CantidadEmpleados') }}</td>
+            <td class="text-right font-bold text-green-400">Q {{ sumDept('MasaSalarial') | number:'1.2-2' }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  }
+
+  <!-- ══════════════════════════════════════════════════════════════ -->
+  <!-- NÓMINA                                                         -->
+  <!-- ══════════════════════════════════════════════════════════════ -->
+  @if (selectedReporte() === 'nomina') {
+    @if (nominas().length === 0 && !loading()) {
+      <div class="content-card p-8 text-center text-slate-500">
+        <i class="pi pi-calculator text-3xl mb-2 block"></i>
+        No hay nóminas para el período seleccionado.
+      </div>
+    }
+
+    @for (nomina of nominas(); track nomina.IdNomina) {
+      <div class="nomina-card">
+        <!-- Cabecera de la nómina -->
+        <div class="flex flex-wrap justify-between items-start gap-3 mb-4">
+          <div>
+            <div class="flex items-center gap-2">
+              <i class="pi pi-calculator text-sky-400"></i>
+              <span class="font-bold text-white text-base">
+                Nómina {{ nomina.Mes }}/{{ nomina.Anio }}
+              </span>
+              <p-tag [value]="nomina.Estado" severity="info"></p-tag>
+            </div>
+            <div class="text-xs text-slate-500 mt-1">
+              {{ nomina.TotalEmpleados }} empleado{{ nomina.TotalEmpleados !== 1 ? 's' : '' }}
+            </div>
+          </div>
+
+          <!-- Totales de la nómina -->
+          <div class="flex flex-wrap gap-4 text-sm">
+            <div class="text-center">
+              <div class="text-xs text-slate-500">Sueldos</div>
+              <div class="font-semibold text-white">Q {{ nomina.TotalSueldos | number:'1.2-2' }}</div>
+            </div>
+            <div class="text-center">
+              <div class="text-xs text-slate-500">Bonificaciones</div>
+              <div class="font-semibold text-green-400">Q {{ nomina.TotalBonificaciones | number:'1.2-2' }}</div>
+            </div>
+            <div class="text-center">
+              <div class="text-xs text-slate-500">Descuentos</div>
+              <div class="font-semibold text-red-400">Q {{ nomina.TotalDescuentos | number:'1.2-2' }}</div>
+            </div>
+            <div class="text-center border-l border-slate-600 pl-4">
+              <div class="text-xs text-slate-500">Líquido Total</div>
+              <div class="font-bold text-green-400 text-base">Q {{ nomina.TotalLiquido | number:'1.2-2' }}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Detalle de empleados -->
+        <p-table [value]="nomina.Detalle" [rows]="5" [paginator]="nomina.Detalle?.length > 5">
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Empleado</th>
+              <th>Puesto</th>
+              <th class="text-right">Días</th>
+              <th class="text-right">Sueldo</th>
+              <th class="text-right">Bonif.</th>
+              <th class="text-right">IGSS</th>
+              <th class="text-right">ISR</th>
+              <th class="text-right">Líquido</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-det>
+            <tr>
+              <td class="font-medium text-slate-100">{{ det.NombreEmpleado }}</td>
+              <td class="text-slate-400 text-xs">{{ det.Puesto }}</td>
+              <td class="text-right">{{ det.DiasLaborados }}</td>
+              <td class="text-right">Q {{ det.SueldoBase | number:'1.2-2' }}</td>
+              <td class="text-right text-green-400">Q {{ det.BonificacionIncentivo || 0 | number:'1.2-2' }}</td>
+              <td class="text-right text-red-400">Q {{ det.DescuentoIGSS || 0 | number:'1.2-2' }}</td>
+              <td class="text-right text-red-400">Q {{ det.DescuentoISR || 0 | number:'1.2-2' }}</td>
+              <td class="text-right font-bold text-green-400">Q {{ det.LiquidoRecibir | number:'1.2-2' }}</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    }
+  }
+
+  <!-- ══════════════════════════════════════════════════════════════ -->
+  <!-- ASISTENCIAS                                                    -->
+  <!-- ══════════════════════════════════════════════════════════════ -->
+  @if (selectedReporte() === 'asistencias') {
+    <div class="content-card">
+      <p-table [value]="asistencias()" [loading]="loading()" [paginator]="true" [rows]="10"
+        [rowHover]="true" emptyMessage="No hay registros de asistencia.">
+        <ng-template pTemplate="header">
+          <tr>
+            <th pSortableColumn="NombreEmpleado">Empleado <p-sortIcon field="NombreEmpleado"></p-sortIcon></th>
+            <th>Puesto</th>
+            <th>Departamento</th>
+            <th class="text-right">Asistencias</th>
+            <th class="text-right">Con Entrada</th>
+            <th class="text-right">Con Salida</th>
+            <th class="text-right">Horas Extra</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-asist>
+          <tr>
+            <td class="font-medium text-slate-100">{{ asist.NombreEmpleado }}</td>
+            <td>{{ asist.Puesto }}</td>
+            <td>{{ asist.Departamento }}</td>
+            <td class="text-right">{{ asist.TotalAsistencias }}</td>
+            <td class="text-right">{{ asist.DiasConEntrada }}</td>
+            <td class="text-right">{{ asist.DiasConSalida }}</td>
+            <td class="text-right text-orange-400 font-medium">
+              {{ asist.TotalHorasExtra | number:'1.2-2' }} hrs
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  }
+
+  <!-- ══════════════════════════════════════════════════════════════ -->
+  <!-- VACACIONES                                                     -->
+  <!-- ══════════════════════════════════════════════════════════════ -->
+  @if (selectedReporte() === 'vacaciones') {
+    <div class="content-card">
+      <p-table [value]="vacaciones()" [loading]="loading()" [paginator]="true" [rows]="10"
+        [rowHover]="true" emptyMessage="No hay registros de vacaciones.">
+        <ng-template pTemplate="header">
+          <tr>
+            <th pSortableColumn="NombreEmpleado">Empleado <p-sortIcon field="NombreEmpleado"></p-sortIcon></th>
+            <th>Puesto</th>
+            <th>Departamento</th>
+            <th class="text-right">Año</th>
+            <th class="text-right">Ganados</th>
+            <th class="text-right">Gozados</th>
+            <th class="text-right">Pendientes</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-vac>
+          <tr>
+            <td class="font-medium text-slate-100">{{ vac.NombreEmpleado }}</td>
+            <td>{{ vac.Puesto }}</td>
+            <td>{{ vac.Departamento }}</td>
+            <td class="text-right">{{ vac.Anio }}</td>
+            <td class="text-right">{{ vac.DiasGanados }}</td>
+            <td class="text-right">{{ vac.DiasGozados }}</td>
+            <td class="text-right">
+              @if (vac.DiasPendientes > 0) {
+                <p-tag severity="warn" [value]="vac.DiasPendientes + ' días'"></p-tag>
+              } @else {
+                <p-tag severity="success" value="Al día"></p-tag>
+              }
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  }
+
 </div>

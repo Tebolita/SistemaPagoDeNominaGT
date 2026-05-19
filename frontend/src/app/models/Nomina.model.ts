@@ -18,6 +18,7 @@ export interface Nomina {
   Estado?: string;
   IdUsuarioGerente?: number;
   IdEstadoActual?: number;
+  NumeroBoleta?: string;
   EstadoNomina?: { NombreEstado: string };
   FirmaNomina?: FirmaNomina[];
   Activo?: boolean;

@@ -1,235 +1,166 @@
-/* Reporteria Component Styles */
-.card {
-  background: var(--surface-card);
-  padding: 1.5rem;
-  border-radius: 10px;
-  box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12);
+/* ── Base ──────────────────────────────────────────────────────────── */
+:host {
+  display: block;
+  min-height: 100%;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 60%, #0f172a 100%);
 }
 
-.surface-card {
-  background: #283A5E;
+/* ── Tarjetas de stats ─────────────────────────────────────────────── */
+.stat-card {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  transition: transform 0.15s, box-shadow 0.15s;
 }
 
-.surface-50 {
-  background: #283A5E;
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
 }
 
-.surface-100 {
-  background: #283A5E;
+.stat-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.35rem;
+  flex-shrink: 0;
 }
 
-.border-round-xl {
-  border-radius: 12px;  
+/* ── Panel de filtros ──────────────────────────────────────────────── */
+.filter-bar {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 0.75rem;
+  padding: 1rem 1.25rem;
 }
 
-.shadow-2 {
-  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12);
+/* ── Card de contenido (tablas, nómina) ────────────────────────────── */
+.content-card {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 0.75rem;
+  overflow: hidden;
 }
 
-.text-primary {
-  color: var(--primary-color);
+/* ── Card de nómina individual ─────────────────────────────────────── */
+.nomina-card {
+  background: #253347;
+  border: 1px solid #334155;
+  border-radius: 0.75rem;
+  padding: 1.25rem;
 }
 
-.text-green-500 {
-  color: #22c55e;
-}
-
-.text-green-600 {
-  color: #16a34a;
-}
-
-.text-orange-500 {
-  color: #f97316;
-}
-
-.text-orange-600 {
-  color: #ea580c;
-}
-
-.text-purple-500 {
-  color: #a855f7;
-}
-
-.text-red-600 {
-  color: #dc2626;
-}
-
-.text-500 {
-  color: #6b7280;
-}
-
-.text-900 {
-  color: #111827;
-}
-
-.font-medium {
-  font-weight: 500;
-}
-
-.font-bold {
-  font-weight: 700;
-}
-
-.text-xl {
-  font-size: 1.25rem;
-}
-
-.text-2xl {
-  font-size: 1.5rem;
-}
-
-.text-lg {
-  font-size: 1.125rem;
-}
-
-.text-xs {
-  font-size: 0.75rem;
-}
-
-.text-sm {
-  font-size: 0.875rem;
-}
-
-.p-3 {
-  padding: 0.75rem;
-}
-
-.p-4 {
-  padding: 1rem;
-}
-
-.mb-3 {
-  margin-bottom: 0.75rem;
-}
-
-.mb-4 {
-  margin-bottom: 1rem;
-}
-
-.mt-4 {
+.nomina-card + .nomina-card {
   margin-top: 1rem;
 }
 
-.gap-1 {
-  gap: 0.25rem;
+/* ── Última nómina ─────────────────────────────────────────────────── */
+.last-nomina-card {
+  background: #253347;
+  border: 1px solid #334155;
+  border-radius: 0.75rem;
+  padding: 1rem 1.25rem;
 }
 
-.gap-2 {
-  gap: 0.5rem;
+/* ── Tabla ─────────────────────────────────────────────────────────── */
+:host ::ng-deep .p-datatable {
+  background: #1e293b;
 }
 
-.gap-3 {
-  gap: 0.75rem;
+:host ::ng-deep .p-datatable .p-datatable-thead > tr > th {
+  background: #0f172a !important;
+  color: #94a3b8 !important;
+  border-color: #334155 !important;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
 }
 
-.gap-4 {
-  gap: 1rem;
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr {
+  background: #1e293b !important;
+  color: #e2e8f0 !important;
+  border-color: #334155 !important;
+  transition: background 0.12s;
 }
 
-.flex {
-  display: flex;
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr:hover {
+  background: #253347 !important;
 }
 
-.flex-col {
-  flex-direction: column;
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr > td {
+  border-color: #334155 !important;
+  color: #e2e8f0 !important;
 }
 
-.flex-wrap {
-  flex-wrap: wrap;
+:host ::ng-deep .p-datatable tfoot > tr > td {
+  background: #0f172a !important;
+  color: #e2e8f0 !important;
+  border-color: #334155 !important;
+  font-weight: 700;
 }
 
-.items-center {
-  align-items: center;
+:host ::ng-deep .p-datatable .p-datatable-emptymessage > td {
+  background: #1e293b !important;
+  color: #64748b !important;
 }
 
-.items-end {
-  align-items: flex-end;
+/* ── Paginador ──────────────────────────────────────────────────────── */
+:host ::ng-deep .p-paginator {
+  background: #0f172a !important;
+  border-color: #334155 !important;
+  color: #94a3b8 !important;
 }
 
-.justify-between {
-  justify-content: space-between;
+:host ::ng-deep .p-paginator .p-paginator-page,
+:host ::ng-deep .p-paginator .p-paginator-next,
+:host ::ng-deep .p-paginator .p-paginator-prev {
+  color: #94a3b8 !important;
 }
 
-.justify-end {
-  justify-content: flex-end;
+:host ::ng-deep .p-paginator .p-paginator-page.p-highlight {
+  background: #3b82f6 !important;
+  color: #fff !important;
 }
 
-.align-items-center {
-  align-items: center;
+/* ── Select / DatePicker ───────────────────────────────────────────── */
+:host ::ng-deep .p-select,
+:host ::ng-deep .p-select-label {
+  background: #0f172a !important;
+  border-color: #334155 !important;
+  color: #e2e8f0 !important;
 }
 
-.grid {
-  display: grid;
+:host ::ng-deep .p-select-overlay {
+  background: #1e293b !important;
+  border-color: #334155 !important;
 }
 
-.grid-cols-1 {
-  grid-template-columns: repeat(1, minmax(0, 1fr));
+:host ::ng-deep .p-select-list .p-select-option {
+  color: #e2e8f0 !important;
 }
 
-.grid-cols-2 {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+:host ::ng-deep .p-select-list .p-select-option:hover,
+:host ::ng-deep .p-select-list .p-select-option.p-select-option-selected {
+  background: #253347 !important;
 }
 
-.grid-cols-4 {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+:host ::ng-deep .p-datepicker-input {
+  background: #0f172a !important;
+  border-color: #334155 !important;
+  color: #e2e8f0 !important;
 }
 
-@media (min-width: 768px) {
-  .md\:grid-cols-2 {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  
-  .md\:grid-cols-4 {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-
-  .md\:w-64 {
-    width: 16rem;
-  }
+/* ── Loading spinner ───────────────────────────────────────────────── */
+:host ::ng-deep .p-datatable-loading-overlay {
+  background: rgba(15, 23, 42, 0.7) !important;
 }
 
-@media (min-width: 1024px) {
-  .lg\:grid-cols-4 {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-}
-
-.w-full {
-  width: 100%;
-}
-
-.block {
-  display: block;
-}
-
-.text-center {
-  text-align: center;
-}
-
-.mr-2 {
-  margin-right: 0.5rem;
-}
-
-.ml-2 {
-  margin-left: 0.5rem;
-}
-
-
-@media (min-width: 768px) {
-  .md\:grid-cols-2 {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  
-  .md\:grid-cols-4 {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-
-  /* NUEVA CLASE PARA ARREGLAR LA NÓMINA */
-  .md\:grid-cols-5 {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-  }
-
-  .md\:w-64 {
-    width: 16rem;
-  }
+/* ── Responsivo ─────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .filter-bar { flex-direction: column; }
+  .stat-card { padding: 1rem; }
 }
