@@ -33,18 +33,23 @@ export class NominaController {
   @Post('generar')
   generarNomina(
     @Request() req: any,
-    @Body() body: { idEmpleado: number; salarioBase: number },
+    @Body() body: { idEmpleado: number; salarioBase: number; mes?: number; anio?: number },
   ) {
     return this.nominaService.crearNominaConDetalles(
       body.idEmpleado,
       body.salarioBase,
       req.user?.sub,
+      body.mes,
+      body.anio,
     );
   }
 
   @Post('generar-masiva')
-  generarNominaMasiva(@Request() req: any) {
-    return this.nominaService.generarNominaMasiva(req.user?.sub);
+  generarNominaMasiva(
+    @Request() req: any,
+    @Body() body: { mes?: number; anio?: number },
+  ) {
+    return this.nominaService.generarNominaMasiva(req.user?.sub, body.mes, body.anio);
   }
 
   @Get('parametros')
@@ -60,6 +65,25 @@ export class NominaController {
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.nominaService.findOne(id);
+  }
+
+  @Get(':id/firmas')
+  getFirmas(@Param('id', ParseIntPipe) id: number) {
+    return this.nominaService.getFirmas(id);
+  }
+
+  @Post(':id/firmar')
+  firmarNomina(
+    @Request() req: any,
+    @Param('id', ParseIntPipe) id: number,
+    @Body() body: { tipoFirmante: string; comentarios?: string },
+  ) {
+    return this.nominaService.firmarNomina(
+      id,
+      body.tipoFirmante,
+      req.user?.sub,
+      body.comentarios,
+    );
   }
 
   @Patch(':id')

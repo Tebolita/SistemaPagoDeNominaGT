@@ -152,6 +152,22 @@ model Empresa {
   CapitalActual      Decimal?  @db.Decimal(18, 2)
 }
 
+model FirmaNomina {
+  IdFirma          Int              @id(map: "PK_FirmaNomina") @default(autoincrement())
+  IdNomina         Int
+  TipoFirmante     String           @db.VarChar(20)
+  IdUsuario        Int
+  FechaFirma       DateTime         @db.DateTime
+  Comentarios      String?          @db.VarChar(500)
+  Activo           Boolean?         @default(true)
+  FechaEliminacion DateTime?        @db.DateTime
+  NominaEncabezado NominaEncabezado @relation(fields: [IdNomina], references: [IdNomina], onUpdate: NoAction, map: "FK_FirmaNomina_Nomina")
+  Usuario          Usuario          @relation(fields: [IdUsuario], references: [IdUsuario], onUpdate: NoAction, map: "FK_FirmaNomina_Usuario")
+
+  @@unique([IdNomina, TipoFirmante], map: "UQ_FirmaNomina_TipoNomina")
+  @@index([IdNomina], map: "IX_FirmaNomina_IdNomina")
+}
+
 model EstadisticaMensual {
   IdEstadistica       Int                 @id(map: "PK__Estadist__2A9CC48CBE65EA6F") @default(autoincrement())
   Anio                Int
@@ -311,6 +327,7 @@ model NominaEncabezado {
   Activo                Boolean?
   FechaEliminacion      DateTime?               @db.DateTime
   IdEstadoActual        Int?
+  FirmaNomina           FirmaNomina[]
   HistorialEstadoNomina HistorialEstadoNomina[]
   MovimientoFinanciero  MovimientoFinanciero[]
   NominaDetalle         NominaDetalle[]
@@ -440,6 +457,7 @@ model Usuario {
   Activo                Boolean?
   FechaEliminacion      DateTime?               @db.DateTime
   EstadisticaMensual    EstadisticaMensual[]
+  FirmaNomina           FirmaNomina[]
   HistorialEstadoNomina HistorialEstadoNomina[]
   Incidencia            Incidencia[]
   MovimientoEmpleado    MovimientoEmpleado[]

@@ -7,6 +7,61 @@ import { PrismaService } from '../prisma/prisma.service';
 import { CreateNominaDto } from './dto/create-nomina.dto';
 import { UpdateNominaDto } from './dto/update-nomina.dto';
 
+const FIRMA_INCLUDE = {
+  where: { Activo: true },
+  include: {
+    Usuario: { select: { Username: true } },
+  },
+};
+
+const NOMINA_INCLUDE = {
+  EstadoNomina: true,
+  FirmaNomina: FIRMA_INCLUDE,
+  NominaDetalle: {
+    include: {
+      Empleado: {
+        select: {
+          Nombres: true,
+          Apellidos: true,
+          DPI: true,
+          NIT: true,
+        },
+      },
+    },
+  },
+};
+
+function mapDetalles(nomina: any) {
+  return {
+    ...nomina,
+    NominaDetalle: (nomina.NominaDetalle ?? []).map((detalle: any) => ({
+      ...detalle,
+      SueldoBase: parseFloat(detalle.SueldoBase.toString()),
+      BonificacionIncentivo: detalle.BonificacionIncentivo
+        ? parseFloat(detalle.BonificacionIncentivo.toString())
+        : 0,
+      OtrosIngresos: detalle.OtrosIngresos
+        ? parseFloat(detalle.OtrosIngresos.toString())
+        : 0,
+      DescuentoIGSS: detalle.DescuentoIGSS
+        ? parseFloat(detalle.DescuentoIGSS.toString())
+        : 0,
+      DescuentoISR: detalle.DescuentoISR
+        ? parseFloat(detalle.DescuentoISR.toString())
+        : 0,
+      OtrosDescuentos: detalle.OtrosDescuentos
+        ? parseFloat(detalle.OtrosDescuentos.toString())
+        : 0,
+      LiquidoRecibir: detalle.LiquidoRecibir
+        ? parseFloat(detalle.LiquidoRecibir.toString())
+        : 0,
+      DiasLaborados: detalle.DiasLaborados
+        ? parseFloat(detalle.DiasLaborados.toString())
+        : 0,
+    })),
+  };
+}
+
 @Injectable()
 export class NominaService {
   constructor(private prisma: PrismaService) {}
@@ -29,163 +84,36 @@ export class NominaService {
 
     const nomina = await this.prisma.nominaEncabezado.create({
       data,
-      include: {
-        EstadoNomina: true,
-        NominaDetalle: {
-          include: {
-            Empleado: {
-              select: {
-                Nombres: true,
-                Apellidos: true,
-                DPI: true,
-                NIT: true,
-              },
-            },
-          },
-        },
-      },
+      include: NOMINA_INCLUDE,
     });
 
-    // Convertir valores decimales de strings a números
-    return {
-      ...nomina,
-      NominaDetalle: nomina.NominaDetalle.map((detalle) => ({
-        ...detalle,
-        SueldoBase: parseFloat(detalle.SueldoBase.toString()),
-        BonificacionIncentivo: detalle.BonificacionIncentivo
-          ? parseFloat(detalle.BonificacionIncentivo.toString())
-          : 0,
-        OtrosIngresos: detalle.OtrosIngresos
-          ? parseFloat(detalle.OtrosIngresos.toString())
-          : 0,
-        DescuentoIGSS: detalle.DescuentoIGSS
-          ? parseFloat(detalle.DescuentoIGSS.toString())
-          : 0,
-        DescuentoISR: detalle.DescuentoISR
-          ? parseFloat(detalle.DescuentoISR.toString())
-          : 0,
-        OtrosDescuentos: detalle.OtrosDescuentos
-          ? parseFloat(detalle.OtrosDescuentos.toString())
-          : 0,
-        LiquidoRecibir: detalle.LiquidoRecibir
-          ? parseFloat(detalle.LiquidoRecibir.toString())
-          : 0,
-        DiasLaborados: detalle.DiasLaborados
-          ? parseFloat(detalle.DiasLaborados.toString())
-          : 0,
-      })),
-    };
+    return mapDetalles(nomina);
   }
 
   async findAll() {
     const nominas = await this.prisma.nominaEncabezado.findMany({
       where: { Activo: true },
-      include: {
-        EstadoNomina: true,
-        NominaDetalle: {
-          include: {
-            Empleado: {
-              select: {
-                Nombres: true,
-                Apellidos: true,
-                DPI: true,
-                NIT: true,
-              },
-            },
-          },
-        },
-      },
-      orderBy: { FechaGeneracion: 'desc' },
+      include: NOMINA_INCLUDE,
+      orderBy: [{ Anio: 'desc' }, { Mes: 'desc' }, { FechaGeneracion: 'desc' }],
     });
 
-    // Convertir valores decimales de strings a números
-    return nominas.map((nomina) => ({
-      ...nomina,
-      NominaDetalle: nomina.NominaDetalle.map((detalle) => ({
-        ...detalle,
-        SueldoBase: parseFloat(detalle.SueldoBase.toString()),
-        BonificacionIncentivo: detalle.BonificacionIncentivo
-          ? parseFloat(detalle.BonificacionIncentivo.toString())
-          : 0,
-        OtrosIngresos: detalle.OtrosIngresos
-          ? parseFloat(detalle.OtrosIngresos.toString())
-          : 0,
-        DescuentoIGSS: detalle.DescuentoIGSS
-          ? parseFloat(detalle.DescuentoIGSS.toString())
-          : 0,
-        DescuentoISR: detalle.DescuentoISR
-          ? parseFloat(detalle.DescuentoISR.toString())
-          : 0,
-        OtrosDescuentos: detalle.OtrosDescuentos
-          ? parseFloat(detalle.OtrosDescuentos.toString())
-          : 0,
-        LiquidoRecibir: detalle.LiquidoRecibir
-          ? parseFloat(detalle.LiquidoRecibir.toString())
-          : 0,
-        DiasLaborados: detalle.DiasLaborados
-          ? parseFloat(detalle.DiasLaborados.toString())
-          : 0,
-      })),
-    }));
+    return nominas.map(mapDetalles);
   }
 
   async findOne(id: number) {
     const nomina = await this.prisma.nominaEncabezado.findUnique({
       where: { IdNomina: id },
-      include: {
-        EstadoNomina: true,
-        NominaDetalle: {
-          include: {
-            Empleado: {
-              select: {
-                Nombres: true,
-                Apellidos: true,
-                DPI: true,
-                NIT: true,
-              },
-            },
-          },
-        },
-      },
+      include: NOMINA_INCLUDE,
     });
 
     if (!nomina) {
       throw new NotFoundException(`Nómina con ID ${id} no encontrada`);
     }
 
-    // Convertir valores decimales de strings a números
-    return {
-      ...nomina,
-      NominaDetalle: nomina.NominaDetalle.map((detalle) => ({
-        ...detalle,
-        SueldoBase: parseFloat(detalle.SueldoBase.toString()),
-        BonificacionIncentivo: detalle.BonificacionIncentivo
-          ? parseFloat(detalle.BonificacionIncentivo.toString())
-          : 0,
-        OtrosIngresos: detalle.OtrosIngresos
-          ? parseFloat(detalle.OtrosIngresos.toString())
-          : 0,
-        DescuentoIGSS: detalle.DescuentoIGSS
-          ? parseFloat(detalle.DescuentoIGSS.toString())
-          : 0,
-        DescuentoISR: detalle.DescuentoISR
-          ? parseFloat(detalle.DescuentoISR.toString())
-          : 0,
-        OtrosDescuentos: detalle.OtrosDescuentos
-          ? parseFloat(detalle.OtrosDescuentos.toString())
-          : 0,
-        LiquidoRecibir: detalle.LiquidoRecibir
-          ? parseFloat(detalle.LiquidoRecibir.toString())
-          : 0,
-        DiasLaborados: detalle.DiasLaborados
-          ? parseFloat(detalle.DiasLaborados.toString())
-          : 0,
-      })),
-    };
+    return mapDetalles(nomina);
   }
 
   async update(id: number, updateNominaDto: UpdateNominaDto) {
-    // Verificar que la nómina existe
     const nominaExistente = await this.prisma.nominaEncabezado.findUnique({
       where: { IdNomina: id },
     });
@@ -211,49 +139,13 @@ export class NominaService {
     const nomina = await this.prisma.nominaEncabezado.update({
       where: { IdNomina: id },
       data,
-      include: {
-        EstadoNomina: true,
-        NominaDetalle: {
-          include: {
-            Empleado: true,
-          },
-        },
-      },
+      include: NOMINA_INCLUDE,
     });
 
-    // Convertir valores decimales de strings a números
-    return {
-      ...nomina,
-      NominaDetalle: nomina.NominaDetalle.map((detalle) => ({
-        ...detalle,
-        SueldoBase: parseFloat(detalle.SueldoBase.toString()),
-        BonificacionIncentivo: detalle.BonificacionIncentivo
-          ? parseFloat(detalle.BonificacionIncentivo.toString())
-          : 0,
-        OtrosIngresos: detalle.OtrosIngresos
-          ? parseFloat(detalle.OtrosIngresos.toString())
-          : 0,
-        DescuentoIGSS: detalle.DescuentoIGSS
-          ? parseFloat(detalle.DescuentoIGSS.toString())
-          : 0,
-        DescuentoISR: detalle.DescuentoISR
-          ? parseFloat(detalle.DescuentoISR.toString())
-          : 0,
-        OtrosDescuentos: detalle.OtrosDescuentos
-          ? parseFloat(detalle.OtrosDescuentos.toString())
-          : 0,
-        LiquidoRecibir: detalle.LiquidoRecibir
-          ? parseFloat(detalle.LiquidoRecibir.toString())
-          : 0,
-        DiasLaborados: detalle.DiasLaborados
-          ? parseFloat(detalle.DiasLaborados.toString())
-          : 0,
-      })),
-    };
+    return mapDetalles(nomina);
   }
 
   async remove(id: number) {
-    // Verificar que la nómina existe
     const nomina = await this.prisma.nominaEncabezado.findUnique({
       where: { IdNomina: id },
     });
@@ -276,7 +168,6 @@ export class NominaService {
   }
 
   async calcularNomina(idEmpleado: number, salarioBase: number) {
-    // Validar que el empleado existe
     const empleado = await this.prisma.empleado.findUnique({
       where: { IdEmpleado: idEmpleado, Activo: true },
     });
@@ -287,7 +178,6 @@ export class NominaService {
       );
     }
 
-    // Validar salario base
     if (salarioBase <= 0) {
       throw new BadRequestException('El salario base debe ser mayor a cero');
     }
@@ -379,8 +269,9 @@ export class NominaService {
     idEmpleado: number,
     salarioBase: number,
     usuarioGerenteId?: number,
+    mes?: number,
+    anio?: number,
   ) {
-    // Validar que el empleado existe
     const empleado = await this.prisma.empleado.findUnique({
       where: { IdEmpleado: idEmpleado, Activo: true },
     });
@@ -391,27 +282,38 @@ export class NominaService {
       );
     }
 
-    // Validar salario base
     if (salarioBase <= 0) {
       throw new BadRequestException('El salario base debe ser mayor a cero');
     }
 
-    const detalles = await this.calcularNomina(idEmpleado, salarioBase);
-    const fechaGeneracion = new Date();
     const ahora = new Date();
+    const mesFinal = mes ?? ahora.getMonth() + 1;
+    const anioFinal = anio ?? ahora.getFullYear();
 
+    const nominaExistente = await this.prisma.nominaEncabezado.findFirst({
+      where: {
+        Mes: mesFinal,
+        Anio: anioFinal,
+        Activo: true,
+        NominaDetalle: { some: { IdEmpleado: idEmpleado, Activo: true } },
+      },
+    });
+
+    if (nominaExistente) {
+      throw new BadRequestException(
+        `Ya existe una nómina para el empleado en ${mesFinal}/${anioFinal}`,
+      );
+    }
+
+    const detalles = await this.calcularNomina(idEmpleado, salarioBase);
     const estadoGeneradaId = await this.getEstadoGeneradoId();
-    const diasLaborados = await this.getDiasLaborados(
-      idEmpleado,
-      fechaGeneracion.getMonth() + 1,
-      fechaGeneracion.getFullYear(),
-    );
+    const diasLaborados = await this.getDiasLaborados(idEmpleado, mesFinal, anioFinal);
 
     const nomina = await this.prisma.nominaEncabezado.create({
       data: {
-        Mes: ahora.getMonth() + 1,
-        Anio: ahora.getFullYear(),
-        FechaGeneracion: fechaGeneracion,
+        Mes: mesFinal,
+        Anio: anioFinal,
+        FechaGeneracion: ahora,
         Estado: 'GENERADA',
         IdEstadoActual: estadoGeneradaId ?? undefined,
         IdUsuarioGerente: usuarioGerenteId ?? undefined,
@@ -433,126 +335,27 @@ export class NominaService {
           },
         },
       },
-      include: {
-        EstadoNomina: true,
-        NominaDetalle: {
-          include: {
-            Empleado: {
-              select: {
-                Nombres: true,
-                Apellidos: true,
-                DPI: true,
-                NIT: true,
-              },
-            },
-          },
-        },
-      },
+      include: NOMINA_INCLUDE,
     });
 
-    // Convertir valores decimales de strings a números
-    return {
-      ...nomina,
-      NominaDetalle: nomina.NominaDetalle.map((detalle) => ({
-        ...detalle,
-        SueldoBase: parseFloat(detalle.SueldoBase.toString()),
-        BonificacionIncentivo: detalle.BonificacionIncentivo
-          ? parseFloat(detalle.BonificacionIncentivo.toString())
-          : 0,
-        OtrosIngresos: detalle.OtrosIngresos
-          ? parseFloat(detalle.OtrosIngresos.toString())
-          : 0,
-        DescuentoIGSS: detalle.DescuentoIGSS
-          ? parseFloat(detalle.DescuentoIGSS.toString())
-          : 0,
-        DescuentoISR: detalle.DescuentoISR
-          ? parseFloat(detalle.DescuentoISR.toString())
-          : 0,
-        OtrosDescuentos: detalle.OtrosDescuentos
-          ? parseFloat(detalle.OtrosDescuentos.toString())
-          : 0,
-        LiquidoRecibir: detalle.LiquidoRecibir
-          ? parseFloat(detalle.LiquidoRecibir.toString())
-          : 0,
-        DiasLaborados: detalle.DiasLaborados
-          ? parseFloat(detalle.DiasLaborados.toString())
-          : 0,
-      })),
-    };
+    return mapDetalles(nomina);
   }
 
-  private async getEstadoGeneradoId(): Promise<number | null> {
-    const estado = await this.prisma.estadoNomina.findUnique({
-      where: { NombreEstado: 'GENERADA' },
-    });
-    return estado?.IdEstadoNomina ?? null;
-  }
+  async generarNominaMasiva(usuarioGerenteId?: number, mes?: number, anio?: number) {
+    const ahora = new Date();
+    const mesFinal = mes ?? ahora.getMonth() + 1;
+    const anioFinal = anio ?? ahora.getFullYear();
 
-  private async getDiasLaborados(
-    idEmpleado: number,
-    mes: number,
-    anio: number,
-  ): Promise<number> {
-    const inicioMes = new Date(anio, mes - 1, 1);
-    const finMes = new Date(anio, mes, 0, 23, 59, 59, 999);
-
-    const asistencias = await this.prisma.asistencia.findMany({
-      where: {
-        IdEmpleado: idEmpleado,
-        Activo: true,
-        Fecha: {
-          gte: inicioMes,
-          lte: finMes,
-        },
-      },
-    });
-
-    const diasUnicos = new Set(
-      asistencias.map((a) => a.Fecha.toISOString().slice(0, 10)),
-    );
-
-    return diasUnicos.size;
-  }
-
-  async getParametros() {
-    const parametros = await this.prisma.parametroGlobal.findMany({
-      where: { Activo: true },
-    });
-
-    if (parametros.length === 0) {
-      throw new BadRequestException(
-        'No hay parámetros globales configurados en el sistema',
-      );
-    }
-
-    return parametros.map((param) => ({
-      nombre: param.NombreParametro,
-      valor: param.Valor,
-      tipo: typeof param.Valor,
-    }));
-  }
-
-  async generarNominaMasiva(usuarioGerenteId?: number) {
-    const fechaActual = new Date();
-    const mes = fechaActual.getMonth() + 1;
-    const anio = fechaActual.getFullYear();
-
-    // Verificar si ya existe una nómina para este mes/año
     const nominaExistente = await this.prisma.nominaEncabezado.findFirst({
-      where: {
-        Mes: mes,
-        Anio: anio,
-        Activo: true,
-      },
+      where: { Mes: mesFinal, Anio: anioFinal, Activo: true },
     });
 
     if (nominaExistente) {
       throw new BadRequestException(
-        `Ya existe una nómina generada para ${mes}/${anio}`,
+        `Ya existe una nómina generada para ${mesFinal}/${anioFinal}`,
       );
     }
 
-    // Obtener empleados activos con sus salarios vigentes
     const empleados = await this.prisma.empleado.findMany({
       where: { Activo: true },
       include: {
@@ -561,7 +364,7 @@ export class NominaService {
             Activo: true,
             OR: [
               { FechaFinVigencia: null },
-              { FechaFinVigencia: { gte: fechaActual } },
+              { FechaFinVigencia: { gte: ahora } },
             ],
           },
           orderBy: { FechaInicioVigencia: 'desc' },
@@ -588,13 +391,12 @@ export class NominaService {
       );
     }
 
-    // Crear encabezado de nómina
     const estadoGeneradaId = await this.getEstadoGeneradoId();
     const nominaEncabezado = await this.prisma.nominaEncabezado.create({
       data: {
-        Mes: mes,
-        Anio: anio,
-        FechaGeneracion: fechaActual,
+        Mes: mesFinal,
+        Anio: anioFinal,
+        FechaGeneracion: ahora,
         Estado: 'GENERADA',
         IdEstadoActual: estadoGeneradaId ?? undefined,
         Activo: true,
@@ -602,19 +404,15 @@ export class NominaService {
       },
     });
 
-    // Generar detalles de nómina para cada empleado
     const detallesPromises = empleados.map(async (empleado) => {
       const salarioBase = parseFloat(
         empleado.Salario[0].SalarioBase.toString(),
       );
-      const calculo = await this.calcularNomina(
-        empleado.IdEmpleado,
-        salarioBase,
-      );
+      const calculo = await this.calcularNomina(empleado.IdEmpleado, salarioBase);
       const diasLaborados = await this.getDiasLaborados(
         empleado.IdEmpleado,
-        mes,
-        anio,
+        mesFinal,
+        anioFinal,
       );
 
       return this.prisma.nominaDetalle.create({
@@ -634,12 +432,7 @@ export class NominaService {
         },
         include: {
           Empleado: {
-            select: {
-              Nombres: true,
-              Apellidos: true,
-              DPI: true,
-              NIT: true,
-            },
+            select: { Nombres: true, Apellidos: true, DPI: true, NIT: true },
           },
         },
       });
@@ -649,8 +442,8 @@ export class NominaService {
 
     return {
       idNomina: nominaEncabezado.IdNomina,
-      mes: mes,
-      anio: anio,
+      mes: mesFinal,
+      anio: anioFinal,
       fechaGeneracion: nominaEncabezado.FechaGeneracion,
       totalEmpleados: empleados.length,
       detalles: detalles.map((detalle) => ({
@@ -659,5 +452,174 @@ export class NominaService {
         liquidoRecibir: parseFloat(detalle.LiquidoRecibir!.toString()),
       })),
     };
+  }
+
+  // ─── Sistema de doble firma ───────────────────────────────────────────────
+
+  async firmarNomina(
+    idNomina: number,
+    tipoFirmante: string,
+    idUsuario: number,
+    comentarios?: string,
+  ) {
+    const tiposValidos = ['JEFE_AREA', 'ENCARGADO'];
+    if (!tiposValidos.includes(tipoFirmante)) {
+      throw new BadRequestException(
+        `Tipo de firmante inválido. Debe ser: ${tiposValidos.join(' o ')}`,
+      );
+    }
+
+    const nomina = await this.prisma.nominaEncabezado.findUnique({
+      where: { IdNomina: idNomina, Activo: true },
+      include: { EstadoNomina: true },
+    });
+
+    if (!nomina) {
+      throw new NotFoundException(`Nómina con ID ${idNomina} no encontrada`);
+    }
+
+    const estadoActual = nomina.EstadoNomina?.NombreEstado;
+    if (estadoActual !== 'PENDIENTE_APROBACION') {
+      throw new BadRequestException(
+        `La nómina debe estar en estado PENDIENTE_APROBACION para ser firmada. Estado actual: ${estadoActual ?? 'sin estado'}`,
+      );
+    }
+
+    const firmaExistente = await this.prisma.firmaNomina.findFirst({
+      where: { IdNomina: idNomina, TipoFirmante: tipoFirmante, Activo: true },
+    });
+
+    if (firmaExistente) {
+      throw new BadRequestException(
+        `Ya existe una firma de tipo ${tipoFirmante === 'JEFE_AREA' ? 'Jefe de Área' : 'Encargado'} para esta nómina`,
+      );
+    }
+
+    const firma = await this.prisma.firmaNomina.create({
+      data: {
+        IdNomina: idNomina,
+        TipoFirmante: tipoFirmante,
+        IdUsuario: idUsuario,
+        FechaFirma: new Date(),
+        Comentarios: comentarios,
+        Activo: true,
+      },
+      include: {
+        Usuario: { select: { Username: true } },
+      },
+    });
+
+    // Verificar si ya están ambas firmas → aprobar automáticamente
+    const todasFirmas = await this.prisma.firmaNomina.findMany({
+      where: { IdNomina: idNomina, Activo: true },
+    });
+
+    const tieneJefeArea = todasFirmas.some((f) => f.TipoFirmante === 'JEFE_AREA');
+    const tieneEncargado = todasFirmas.some((f) => f.TipoFirmante === 'ENCARGADO');
+
+    let autoAprobada = false;
+
+    if (tieneJefeArea && tieneEncargado) {
+      const estadoAprobada = await this.prisma.estadoNomina.findUnique({
+        where: { NombreEstado: 'APROBADA' },
+      });
+
+      if (estadoAprobada) {
+        await this.prisma.nominaEncabezado.update({
+          where: { IdNomina: idNomina },
+          data: {
+            IdEstadoActual: estadoAprobada.IdEstadoNomina,
+            Estado: 'APROBADA',
+          },
+        });
+
+        if (nomina.IdEstadoActual) {
+          await this.prisma.historialEstadoNomina.create({
+            data: {
+              IdNomina: idNomina,
+              IdEstadoAnterior: nomina.IdEstadoActual,
+              IdEstadoNuevo: estadoAprobada.IdEstadoNomina,
+              IdUsuarioCambio: idUsuario,
+              FechaCambio: new Date(),
+              Comentarios:
+                'Nómina aprobada automáticamente — ambas firmas requeridas completadas',
+              Activo: true,
+            },
+          });
+        }
+
+        autoAprobada = true;
+      }
+    }
+
+    return { firma, autoAprobada, firmasRegistradas: todasFirmas.length };
+  }
+
+  async getFirmas(idNomina: number) {
+    const nomina = await this.prisma.nominaEncabezado.findUnique({
+      where: { IdNomina: idNomina },
+    });
+
+    if (!nomina) {
+      throw new NotFoundException(`Nómina con ID ${idNomina} no encontrada`);
+    }
+
+    return this.prisma.firmaNomina.findMany({
+      where: { IdNomina: idNomina, Activo: true },
+      include: {
+        Usuario: { select: { Username: true } },
+      },
+      orderBy: { FechaFirma: 'asc' },
+    });
+  }
+
+  // ─── Helpers ──────────────────────────────────────────────────────────────
+
+  private async getEstadoGeneradoId(): Promise<number | null> {
+    const estado = await this.prisma.estadoNomina.findUnique({
+      where: { NombreEstado: 'GENERADA' },
+    });
+    return estado?.IdEstadoNomina ?? null;
+  }
+
+  private async getDiasLaborados(
+    idEmpleado: number,
+    mes: number,
+    anio: number,
+  ): Promise<number> {
+    const inicioMes = new Date(anio, mes - 1, 1);
+    const finMes = new Date(anio, mes, 0, 23, 59, 59, 999);
+
+    const asistencias = await this.prisma.asistencia.findMany({
+      where: {
+        IdEmpleado: idEmpleado,
+        Activo: true,
+        Fecha: { gte: inicioMes, lte: finMes },
+      },
+    });
+
+    const diasUnicos = new Set(
+      asistencias.map((a) => a.Fecha.toISOString().slice(0, 10)),
+    );
+
+    return diasUnicos.size;
+  }
+
+  async getParametros() {
+    const parametros = await this.prisma.parametroGlobal.findMany({
+      where: { Activo: true },
+    });
+
+    if (parametros.length === 0) {
+      throw new BadRequestException(
+        'No hay parámetros globales configurados en el sistema',
+      );
+    }
+
+    return parametros.map((param) => ({
+      nombre: param.NombreParametro,
+      valor: param.Valor,
+      tipo: typeof param.Valor,
+    }));
   }
 }

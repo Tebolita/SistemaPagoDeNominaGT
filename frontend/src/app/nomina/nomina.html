@@ -13,9 +13,9 @@
         size="small"
       ></p-button>
       <p-button
-        label="Generar Nómina Masiva"
+        label="Generar Masiva"
         icon="pi pi-users"
-        (onClick)="generarNominaMasiva()"
+        (onClick)="abrirDialogoMasiva()"
         severity="warn"
       ></p-button>
       <p-button
@@ -30,10 +30,11 @@
   <p-table [value]="nominas()" [tableStyle]="{ 'min-width': '50rem' }">
     <ng-template pTemplate="header">
       <tr>
-        <th>Empleado</th>
-        <th>Fecha Generación</th>
+        <th>Empleado(s)</th>
+        <th>Período</th>
         <th>Salario Base</th>
         <th>Líquido a Recibir</th>
+        <th>Firmas</th>
         <th>Estado</th>
         <th>Acciones</th>
       </tr>
@@ -41,9 +42,26 @@
     <ng-template pTemplate="body" let-nomina>
       <tr>
         <td>{{ getEmpleadoLabel(nomina) }}</td>
-        <td>{{ nomina.FechaGeneracion | date: 'short' }}</td>
+        <td>{{ getMesLabel(nomina.Mes) }} {{ nomina.Anio }}</td>
         <td>Q {{ getSalarioTotal(nomina) | number: '1.2-2' }}</td>
         <td>Q {{ getLiquidoTotal(nomina) | number: '1.2-2' }}</td>
+        <td>
+          <div class="flex items-center gap-2">
+            <span
+              class="inline-flex items-center justify-center w-6 h-6 rounded-full text-xs font-bold border"
+              [ngClass]="firmaPresente(nomina, 'JEFE_AREA') ? 'bg-green-100 border-green-500 text-green-700' : 'bg-gray-100 border-gray-300 text-gray-400'"
+              pTooltip="Jefe de Área"
+              tooltipPosition="top"
+            >J</span>
+            <span
+              class="inline-flex items-center justify-center w-6 h-6 rounded-full text-xs font-bold border"
+              [ngClass]="firmaPresente(nomina, 'ENCARGADO') ? 'bg-green-100 border-green-500 text-green-700' : 'bg-gray-100 border-gray-300 text-gray-400'"
+              pTooltip="Encargado"
+              tooltipPosition="top"
+            >E</span>
+            <span class="text-xs text-gray-500">{{ getFirmaCount(nomina) }}/2</span>
+          </div>
+        </td>
         <td>
           <p-tag
             [value]="getEstadoNombre(nomina)"
@@ -58,6 +76,16 @@
             (onClick)="verDetalles(nomina)"
             severity="info"
             pTooltip="Ver Detalles"
+            tooltipPosition="top"
+          ></p-button>
+          <p-button
+            icon="pi pi-verified"
+            [rounded]="true"
+            [text]="true"
+            (onClick)="abrirDialogoFirma(nomina)"
+            [disabled]="!puedesFirmar(nomina)"
+            severity="success"
+            pTooltip="Firmar Nómina"
             tooltipPosition="top"
           ></p-button>
           <p-button
@@ -91,20 +119,52 @@
         </td>
       </tr>
     </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="7" class="text-center text-gray-500 py-6">No hay nóminas registradas</td>
+      </tr>
+    </ng-template>
   </p-table>
 </div>
 
+<!-- ─── Diálogo: Generar Nómina Individual ─────────────────────────────── -->
 <p-dialog
   [visible]="displayDialog()"
   (visibleChange)="displayDialog.set($event)"
   header="Generar Nueva Nómina"
   [modal]="true"
-  [style]="{ width: '50vw', maxWidth: '90vw', height: 'auto', maxHeight: '90vh' }"
+  [style]="{ width: '50vw', maxWidth: '90vw' }"
   [resizable]="false"
 >
   <div class="flex flex-col gap-4 max-h-[70vh] overflow-y-auto">
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <label class="block text-sm font-medium mb-2">Mes *</label>
+        <p-select
+          [options]="meses"
+          [(ngModel)]="form.Mes"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Seleccionar mes"
+          class="w-full"
+          appendTo="body"
+        ></p-select>
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-2">Año *</label>
+        <p-select
+          [options]="anios"
+          [(ngModel)]="form.Anio"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Seleccionar año"
+          class="w-full"
+          appendTo="body"
+        ></p-select>
+      </div>
+    </div>
     <div>
-      <label class="block text-sm font-medium mb-2">Empleado</label>
+      <label class="block text-sm font-medium mb-2">Empleado *</label>
       <p-select
         [options]="empleados()"
         [(ngModel)]="form.IdEmpleado"
@@ -116,60 +176,200 @@
       ></p-select>
     </div>
     <div>
-      <label class="block text-sm font-medium mb-2">Salario Base (Q)</label>
-      <p-inputNumber
-        [(ngModel)]="form.SalarioBase"
-        [minFractionDigits]="2"
-        [maxFractionDigits]="2"
-        class="w-full"
-      ></p-inputNumber>
+      <label class="block text-sm font-medium mb-2">Salario Base (Q) *</label>
+      <div class="flex gap-2">
+        <p-inputNumber
+          [(ngModel)]="form.SalarioBase"
+          [minFractionDigits]="2"
+          [maxFractionDigits]="2"
+          class="flex-1"
+        ></p-inputNumber>
+        <p-button
+          label="Calcular"
+          icon="pi pi-calculator"
+          severity="info"
+          [outlined]="true"
+          (onClick)="calcularPreview()"
+        ></p-button>
+      </div>
     </div>
-    <div *ngIf="calculoPreview" class="bg-gray-50 p-4 rounded">
-      <h3 class="font-bold mb-2">Previsualización de Cálculo:</h3>
+    <div *ngIf="calculoPreview" class="bg-gray-50 p-4 rounded border">
+      <h3 class="font-bold mb-2 text-sm">Previsualización de Cálculo</h3>
       <div class="grid grid-cols-2 gap-2 text-sm">
-        <div>Salario Base: Q {{ calculoPreview.salarioBase | number: '1.2-2' }}</div>
-        <div>Bono 14: Q {{ calculoPreview.bono14 | number: '1.2-2' }}</div>
-        <div>Aguinaldo: Q {{ calculoPreview.aguinaldo | number: '1.2-2' }}</div>
-        <div>Bono Productividad: Q {{ calculoPreview.bonoProductividad | number: '1.2-2' }}</div>
-        <div class="font-bold">Total Ingresos: Q {{ calculoPreview.totalIngresos | number: '1.2-2' }}</div>
-        <div>Desc. IGSS: Q {{ calculoPreview.descuentoIGSS | number: '1.2-2' }}</div>
-        <div>Desc. ISR: Q {{ calculoPreview.descuentoISR | number: '1.2-2' }}</div>
-        <div>Desc. IRTRA: Q {{ calculoPreview.descuentoIRTRA | number: '1.2-2' }}</div>
-        <div>Desc. INTECAP: Q {{ calculoPreview.descuentoINTECAP | number: '1.2-2' }}</div>
-        <div class="font-bold">Total Descuentos: Q {{ calculoPreview.totalDescuentos | number: '1.2-2' }}</div>
-        <div class="font-bold col-span-2 text-green-600">Neto a Pagar: Q {{ calculoPreview.netoAPagar | number: '1.2-2' }}</div>
+        <div>Salario Base: <strong>Q {{ calculoPreview.salarioBase | number: '1.2-2' }}</strong></div>
+        <div>Bono 14: <strong>Q {{ calculoPreview.bono14 | number: '1.2-2' }}</strong></div>
+        <div>Aguinaldo: <strong>Q {{ calculoPreview.aguinaldo | number: '1.2-2' }}</strong></div>
+        <div>Bono Productividad: <strong>Q {{ calculoPreview.bonoProductividad | number: '1.2-2' }}</strong></div>
+        <div class="font-bold text-blue-700">Total Ingresos: Q {{ calculoPreview.totalIngresos | number: '1.2-2' }}</div>
+        <div>Desc. IGSS: <strong>Q {{ calculoPreview.descuentoIGSS | number: '1.2-2' }}</strong></div>
+        <div>Desc. ISR: <strong>Q {{ calculoPreview.descuentoISR | number: '1.2-2' }}</strong></div>
+        <div>Desc. IRTRA: <strong>Q {{ calculoPreview.descuentoIRTRA | number: '1.2-2' }}</strong></div>
+        <div>Desc. INTECAP: <strong>Q {{ calculoPreview.descuentoINTECAP | number: '1.2-2' }}</strong></div>
+        <div class="font-bold text-red-600">Total Descuentos: Q {{ calculoPreview.totalDescuentos | number: '1.2-2' }}</div>
+        <div class="font-bold col-span-2 text-green-600 text-base">Neto a Pagar: Q {{ calculoPreview.netoAPagar | number: '1.2-2' }}</div>
       </div>
     </div>
   </div>
   <ng-template pTemplate="footer">
+    <p-button label="Cancelar" icon="pi pi-times" (onClick)="displayDialog.set(false)" [text]="true"></p-button>
+    <p-button label="Generar" icon="pi pi-check" (onClick)="generarNomina()" severity="success"></p-button>
+  </ng-template>
+</p-dialog>
+
+<!-- ─── Diálogo: Generar Nómina Masiva ────────────────────────────────── -->
+<p-dialog
+  [visible]="displayMasiva()"
+  (visibleChange)="displayMasiva.set($event)"
+  header="Generar Nómina Masiva"
+  [modal]="true"
+  [style]="{ width: '40vw', maxWidth: '90vw' }"
+  [resizable]="false"
+>
+  <div class="flex flex-col gap-4">
+    <p class="text-sm text-gray-600">
+      Selecciona el período para el cual deseas generar la nómina de todos los empleados activos.
+    </p>
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <label class="block text-sm font-medium mb-2">Mes *</label>
+        <p-select
+          [options]="meses"
+          [(ngModel)]="formMasiva.Mes"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Seleccionar mes"
+          class="w-full"
+          appendTo="body"
+        ></p-select>
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-2">Año *</label>
+        <p-select
+          [options]="anios"
+          [(ngModel)]="formMasiva.Anio"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Seleccionar año"
+          class="w-full"
+          appendTo="body"
+        ></p-select>
+      </div>
+    </div>
+  </div>
+  <ng-template pTemplate="footer">
+    <p-button label="Cancelar" icon="pi pi-times" (onClick)="displayMasiva.set(false)" [text]="true"></p-button>
+    <p-button label="Continuar" icon="pi pi-arrow-right" (onClick)="confirmarNominaMasiva()" severity="warn"></p-button>
+  </ng-template>
+</p-dialog>
+
+<!-- ─── Diálogo: Firmar Nómina ────────────────────────────────────────── -->
+<p-dialog
+  [visible]="displayFirmar()"
+  (visibleChange)="displayFirmar.set($event)"
+  header="Firmar Nómina"
+  [modal]="true"
+  [style]="{ width: '45vw', maxWidth: '90vw' }"
+  [resizable]="false"
+>
+  <div class="flex flex-col gap-4">
+    <div *ngIf="nominaSeleccionada" class="bg-gray-50 p-3 rounded border">
+      <div class="font-bold">{{ getEmpleadoLabel(nominaSeleccionada) }}</div>
+      <div class="text-sm text-gray-600">{{ getMesLabel(nominaSeleccionada.Mes) }} {{ nominaSeleccionada.Anio }}</div>
+      <div class="text-sm mt-1">Estado:
+        <p-tag
+          [value]="getEstadoNombre(nominaSeleccionada)"
+          [severity]="getEstadoSeverity(nominaSeleccionada)"
+          class="ml-2"
+        ></p-tag>
+      </div>
+    </div>
+
+    <div class="bg-blue-50 p-3 rounded border border-blue-200">
+      <div class="text-sm font-bold text-blue-800 mb-2">Estado de Firmas (se requieren 2 para aprobar)</div>
+      <div class="flex gap-4">
+        <div class="flex items-center gap-2">
+          <span
+            class="inline-flex items-center justify-center w-7 h-7 rounded-full text-sm font-bold border"
+            [ngClass]="firmaPresente(nominaSeleccionada!, 'JEFE_AREA') ? 'bg-green-100 border-green-500 text-green-700' : 'bg-gray-100 border-gray-300 text-gray-400'"
+          >J</span>
+          <span class="text-sm">Jefe de Área</span>
+          <span *ngIf="firmaPresente(nominaSeleccionada!, 'JEFE_AREA')" class="text-xs text-green-600 font-medium">Firmado</span>
+          <span *ngIf="!firmaPresente(nominaSeleccionada!, 'JEFE_AREA')" class="text-xs text-gray-400">Pendiente</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span
+            class="inline-flex items-center justify-center w-7 h-7 rounded-full text-sm font-bold border"
+            [ngClass]="firmaPresente(nominaSeleccionada!, 'ENCARGADO') ? 'bg-green-100 border-green-500 text-green-700' : 'bg-gray-100 border-gray-300 text-gray-400'"
+          >E</span>
+          <span class="text-sm">Encargado</span>
+          <span *ngIf="firmaPresente(nominaSeleccionada!, 'ENCARGADO')" class="text-xs text-green-600 font-medium">Firmado</span>
+          <span *ngIf="!firmaPresente(nominaSeleccionada!, 'ENCARGADO')" class="text-xs text-gray-400">Pendiente</span>
+        </div>
+      </div>
+      <div *ngIf="firmasNomina().length > 0" class="mt-2 border-t pt-2">
+        <div *ngFor="let f of firmasNomina()" class="text-xs text-gray-600">
+          <span class="font-medium">{{ f.TipoFirmante === 'JEFE_AREA' ? 'Jefe de Área' : 'Encargado' }}</span>
+          — {{ f.Usuario?.Username }} — {{ f.FechaFirma | date: 'dd/MM/yyyy HH:mm' }}
+          <span *ngIf="f.Comentarios"> — "{{ f.Comentarios }}"</span>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="getTiposFirmanteDisponibles().length > 0">
+      <div>
+        <label class="block text-sm font-medium mb-2">Tu firma como *</label>
+        <p-select
+          [options]="getTiposFirmanteDisponibles()"
+          [(ngModel)]="firmaForm.TipoFirmante"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Seleccionar tipo de firma"
+          class="w-full"
+          appendTo="body"
+        ></p-select>
+      </div>
+      <div class="mt-3">
+        <label class="block text-sm font-medium mb-2">Comentarios (opcional)</label>
+        <textarea
+          pInputTextarea
+          [(ngModel)]="firmaForm.Comentarios"
+          placeholder="Observaciones sobre la firma"
+          class="w-full"
+          rows="3"
+          maxlength="500"
+        ></textarea>
+      </div>
+    </div>
+    <div *ngIf="getTiposFirmanteDisponibles().length === 0" class="text-center text-gray-500 py-2">
+      Esta nómina ya tiene todas las firmas registradas.
+    </div>
+  </div>
+  <ng-template pTemplate="footer">
+    <p-button label="Cancelar" icon="pi pi-times" (onClick)="displayFirmar.set(false)" severity="secondary"></p-button>
     <p-button
-      label="Cancelar"
-      icon="pi pi-times"
-      (onClick)="displayDialog.set(false)"
-      [text]="true"
-    ></p-button>
-    <p-button
-      label="Generar"
-      icon="pi pi-check"
-      (onClick)="generarNomina()"
+      *ngIf="getTiposFirmanteDisponibles().length > 0"
+      label="Registrar Firma"
+      icon="pi pi-verified"
+      (onClick)="confirmarFirma()"
       severity="success"
     ></p-button>
   </ng-template>
 </p-dialog>
 
+<!-- ─── Diálogo: Detalles de Nómina ──────────────────────────────────── -->
 <p-dialog
   [visible]="displayDetalles()"
   (visibleChange)="displayDetalles.set($event)"
-  [header]="'Detalles de Nómina - ' + (nominaSeleccionada ? getEmpleadoLabel(nominaSeleccionada) : 'N/A')"
+  [header]="'Detalles — ' + getMesLabel(nominaSeleccionada?.Mes ?? 1) + ' ' + (nominaSeleccionada?.Anio ?? '')"
   [modal]="true"
-  [style]="{ width: '80vw', maxWidth: '95vw', height: 'auto', maxHeight: '90vh' }"
+  [style]="{ width: '80vw', maxWidth: '95vw' }"
   [resizable]="false"
 >
   <div *ngIf="nominaSeleccionada?.NominaDetalle?.length" class="space-y-4 max-h-[70vh] overflow-y-auto">
     <div class="grid grid-cols-2 gap-4">
       <div class="border-b pb-2">
-        <div class="text-sm text-gray-600">Mes/Año</div>
-        <div class="font-bold">{{ nominaSeleccionada?.Mes }}/{{ nominaSeleccionada?.Anio }}</div>
+        <div class="text-sm text-gray-600">Período</div>
+        <div class="font-bold">{{ getMesLabel(nominaSeleccionada?.Mes ?? 1) }} {{ nominaSeleccionada?.Anio }}</div>
       </div>
       <div class="border-b pb-2">
         <div class="text-sm text-gray-600">Empleado(s)</div>
@@ -177,7 +377,10 @@
       </div>
       <div class="border-b pb-2">
         <div class="text-sm text-gray-600">Estado</div>
-        <div class="font-bold">{{ nominaSeleccionada?.Estado || nominaSeleccionada?.EstadoNomina?.NombreEstado || 'N/A' }}</div>
+        <p-tag
+          [value]="getEstadoNombre(nominaSeleccionada!)"
+          [severity]="getEstadoSeverity(nominaSeleccionada!)"
+        ></p-tag>
       </div>
       <div class="border-b pb-2">
         <div class="text-sm text-gray-600">Total Líquido</div>
@@ -195,7 +398,7 @@
           <th>Otros Ingresos</th>
           <th>Desc. IGSS</th>
           <th>Desc. ISR</th>
-          <th>Otros Descuentos</th>
+          <th>Otros Desc.</th>
           <th>Líquido</th>
         </tr>
       </ng-template>
@@ -214,12 +417,12 @@
       </ng-template>
     </p-table>
   </div>
-  <div *ngIf="!nominaSeleccionada?.NominaDetalle?.length" class="text-center text-gray-500">
+  <div *ngIf="!nominaSeleccionada?.NominaDetalle?.length" class="text-center text-gray-500 py-6">
     No hay detalles disponibles
   </div>
 </p-dialog>
 
-<!-- Diálogo para cambiar estado -->
+<!-- ─── Diálogo: Cambiar Estado ───────────────────────────────────────── -->
 <p-dialog
   [visible]="displayCambiarEstado()"
   (visibleChange)="displayCambiarEstado.set($event)"
@@ -227,24 +430,18 @@
   [modal]="true"
   [style]="{ width: '50vw', maxWidth: '90vw' }"
   [resizable]="false"
-
 >
   <div class="flex flex-col gap-4">
-    <div *ngIf="nominaSeleccionada">
-      <div class="bg-black-50 p-3 rounded">
-        <div class="text-xl font-bold">Nómina actual</div>
-        <br>
-        <div class="font-bold">{{ getEmpleadoLabel(nominaSeleccionada) }}</div>
-        <div class="text-sm">Estado actual:
-          <p-tag
-            [value]="getEstadoNombre(nominaSeleccionada)"
-            [severity]="getEstadoSeverity(nominaSeleccionada)"
-            class="ml-2"
-          ></p-tag>
-        </div>
+    <div *ngIf="nominaSeleccionada" class="bg-gray-50 p-3 rounded">
+      <div class="font-bold">{{ getEmpleadoLabel(nominaSeleccionada) }}</div>
+      <div class="text-sm mt-1">Estado actual:
+        <p-tag
+          [value]="getEstadoNombre(nominaSeleccionada)"
+          [severity]="getEstadoSeverity(nominaSeleccionada)"
+          class="ml-2"
+        ></p-tag>
       </div>
     </div>
-
     <div>
       <label class="block text-sm font-medium mb-2">Nuevo Estado *</label>
       <p-select
@@ -257,43 +454,31 @@
         appendTo="body"
       ></p-select>
     </div>
-
     <div>
       <label class="block text-sm font-medium mb-2">Comentarios</label>
       <textarea
         pInputTextarea
         [(ngModel)]="cambioEstadoForm.Comentarios"
-        placeholder="Comentarios opcionales sobre el cambio"
+        placeholder="Comentarios opcionales"
         class="w-full"
         rows="3"
         maxlength="500"
       ></textarea>
     </div>
   </div>
-
   <ng-template pTemplate="footer">
-    <p-button
-      label="Cancelar"
-      icon="pi pi-times"
-      (onClick)="displayCambiarEstado.set(false)"
-      severity="secondary"
-    ></p-button>
-    <p-button
-      label="Cambiar Estado"
-      icon="pi pi-check"
-      (onClick)="confirmarCambioEstado()"
-      severity="success"
-    ></p-button>
+    <p-button label="Cancelar" icon="pi pi-times" (onClick)="displayCambiarEstado.set(false)" severity="secondary"></p-button>
+    <p-button label="Cambiar Estado" icon="pi pi-check" (onClick)="confirmarCambioEstado()" severity="success"></p-button>
   </ng-template>
 </p-dialog>
 
-<!-- Diálogo para ver historial de estados -->
+<!-- ─── Diálogo: Historial de Estados ────────────────────────────────── -->
 <p-dialog
   [visible]="displayHistorial()"
   (visibleChange)="displayHistorial.set($event)"
-  [header]="'Historial de Estados - ' + (nominaSeleccionada ? getEmpleadoLabel(nominaSeleccionada) : 'N/A')"
+  [header]="'Historial — ' + getEmpleadoLabel(nominaSeleccionada)"
   [modal]="true"
-  [style]="{ width: '70vw', maxWidth: '95vw', height: 'auto', maxHeight: '80vh' }"
+  [style]="{ width: '70vw', maxWidth: '95vw' }"
   [resizable]="false"
 >
   <p-table
@@ -304,7 +489,7 @@
   >
     <ng-template pTemplate="header">
       <tr>
-        <th>Fecha Cambio</th>
+        <th>Fecha</th>
         <th>Estado Anterior</th>
         <th>Estado Nuevo</th>
         <th>Usuario</th>
@@ -313,14 +498,14 @@
     </ng-template>
     <ng-template pTemplate="body" let-historial>
       <tr>
-        <td>{{ historial.FechaCambio | date: 'short' }}</td>
+        <td>{{ historial.FechaCambio | date: 'dd/MM/yyyy HH:mm' }}</td>
         <td>
           <p-tag
             *ngIf="historial.EstadoNomina_HistorialEstadoNomina_IdEstadoAnteriorToEstadoNomina?.NombreEstado"
             [value]="historial.EstadoNomina_HistorialEstadoNomina_IdEstadoAnteriorToEstadoNomina?.NombreEstado"
             severity="secondary"
           ></p-tag>
-          <span *ngIf="!historial.EstadoNomina_HistorialEstadoNomina_IdEstadoAnteriorToEstadoNomina?.NombreEstado">-</span>
+          <span *ngIf="!historial.EstadoNomina_HistorialEstadoNomina_IdEstadoAnteriorToEstadoNomina?.NombreEstado">—</span>
         </td>
         <td>
           <p-tag
@@ -329,14 +514,12 @@
           ></p-tag>
         </td>
         <td>{{ historial.Usuario?.Username }}</td>
-        <td>{{ historial.Comentarios || '-' }}</td>
+        <td>{{ historial.Comentarios || '—' }}</td>
       </tr>
     </ng-template>
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="5" class="text-center text-gray-500">
-          No hay historial de cambios de estado
-        </td>
+        <td colspan="5" class="text-center text-gray-500">No hay historial de cambios</td>
       </tr>
     </ng-template>
   </p-table>

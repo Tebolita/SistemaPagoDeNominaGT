@@ -1,3 +1,14 @@
+export interface FirmaNomina {
+  IdFirma: number;
+  IdNomina: number;
+  TipoFirmante: 'JEFE_AREA' | 'ENCARGADO';
+  IdUsuario: number;
+  FechaFirma: Date;
+  Comentarios?: string;
+  Activo?: boolean;
+  Usuario?: { Username: string };
+}
+
 export interface Nomina {
   IdNomina: number;
   Mes: number;
@@ -7,9 +18,8 @@ export interface Nomina {
   Estado?: string;
   IdUsuarioGerente?: number;
   IdEstadoActual?: number;
-  EstadoNomina?: {
-    NombreEstado: string;
-  };
+  EstadoNomina?: { NombreEstado: string };
+  FirmaNomina?: FirmaNomina[];
   Activo?: boolean;
   FechaEliminacion?: Date;
   NominaDetalle?: NominaDetalle[];
