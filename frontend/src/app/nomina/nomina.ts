@@ -17,7 +17,7 @@ import { NominaService } from '../services/nomina.service';
 import { EmpleadoService } from '../services/empleado.service';
 import { EstadoNominaService } from '../services/estado-nomina.service';
 import { LoginService } from '../services/login.service';
-import { Nomina, NominaCalculo, NominaMasivaResultado } from '../models/Nomina.model';
+import { FirmaNomina, Nomina, NominaCalculo, NominaMasivaResultado } from '../models/Nomina.model';
 import { EmpleadoResponse } from '../models/Empleado.model';
 import { EstadoNomina, HistorialEstadoNomina, CambiarEstadoNominaDto } from '../models/EstadoNomina.model';
 
@@ -56,82 +56,96 @@ export class NominaComponent implements OnInit {
   estados = signal<EstadoNomina[]>([]);
   estadosDisponibles = signal<EstadoNomina[]>([]);
   historialEstados = signal<HistorialEstadoNomina[]>([]);
+  firmasNomina = signal<FirmaNomina[]>([]);
   userRole = signal<string>('');
 
   displayDialog = signal(false);
   displayDetalles = signal(false);
   displayCambiarEstado = signal(false);
   displayHistorial = signal(false);
-  form = { IdEmpleado: 0, SalarioBase: 0 };
+  displayFirmar = signal(false);
+  displayMasiva = signal(false);
+
+  form = {
+    IdEmpleado: 0,
+    SalarioBase: 0,
+    Mes: new Date().getMonth() + 1,
+    Anio: new Date().getFullYear(),
+  };
+
+  formMasiva = {
+    Mes: new Date().getMonth() + 1,
+    Anio: new Date().getFullYear(),
+  };
+
+  firmaForm = { TipoFirmante: '', Comentarios: '' };
   cambioEstadoForm = { IdEstadoNuevo: 0, Comentarios: '' };
   calculoPreview: NominaCalculo | null = null;
   nominaSeleccionada: Nomina | null = null;
+
+  meses = [
+    { label: 'Enero', value: 1 },
+    { label: 'Febrero', value: 2 },
+    { label: 'Marzo', value: 3 },
+    { label: 'Abril', value: 4 },
+    { label: 'Mayo', value: 5 },
+    { label: 'Junio', value: 6 },
+    { label: 'Julio', value: 7 },
+    { label: 'Agosto', value: 8 },
+    { label: 'Septiembre', value: 9 },
+    { label: 'Octubre', value: 10 },
+    { label: 'Noviembre', value: 11 },
+    { label: 'Diciembre', value: 12 },
+  ];
+
+  anios: { label: string; value: number }[] = [];
+
+  tiposFirmante = [
+    { label: 'Jefe de Área', value: 'JEFE_AREA' },
+    { label: 'Encargado', value: 'ENCARGADO' },
+  ];
 
   ngOnInit() {
     this.loadUserProfile();
     this.loadNominas();
     this.loadEmpleados();
     this.loadEstados();
+
+    const currentYear = new Date().getFullYear();
+    this.anios = Array.from({ length: currentYear - 2019 }, (_, i) => ({
+      label: String(currentYear - i),
+      value: currentYear - i,
+    }));
   }
 
-  private handleError(error: any, defaultMessage: string = 'Ha ocurrido un error inesperado'): string {
+  private handleError(error: any, defaultMessage = 'Ha ocurrido un error inesperado'): string {
     console.error('Error en nómina:', error);
-
-    // El error ya viene procesado por error.service.ts
-    if (error?.message) {
-      return error.message;
-    }
-
-    // Mensaje por defecto
-    return defaultMessage;
+    return error?.message ?? defaultMessage;
   }
+
+  // ─── Carga de datos ───────────────────────────────────────────────────────
 
   loadNominas() {
     this.nominaService.getAll().subscribe({
       next: (data) => this.nominas.set(data),
       error: (err) => {
-        const errorMessage = this.handleError(err, 'No se pudieron cargar las nóminas');
         this.messageService.add({
           severity: 'error',
           summary: 'Error al cargar nóminas',
-          detail: errorMessage,
+          detail: this.handleError(err, 'No se pudieron cargar las nóminas'),
         });
       },
     });
   }
 
-  getSalarioTotal(nomina: Nomina | null | undefined): number {
-    return nomina?.NominaDetalle?.reduce((sum, detalle) => sum + (detalle.SueldoBase || 0), 0) ?? 0;
-  }
-
-  getLiquidoTotal(nomina: Nomina | null | undefined): number {
-    return nomina?.NominaDetalle?.reduce((sum, detalle) => sum + (detalle.LiquidoRecibir || 0), 0) ?? 0;
-  }
-
-  getEmpleadoLabel(nomina: Nomina | undefined | null): string {
-    if (!nomina?.NominaDetalle || nomina.NominaDetalle.length === 0) {
-      return 'N/A';
-    }
-    if (nomina.NominaDetalle.length === 1) {
-      const empleado = nomina.NominaDetalle[0]?.Empleado;
-      return `${empleado?.Nombres || ''} ${empleado?.Apellidos || ''}`.trim() || 'N/A';
-    }
-    return `${nomina.NominaDetalle.length} empleados`;
-  }
-
   loadEmpleados() {
     this.empleadoService.ObtenerEmplados().subscribe({
-      next: (data: EmpleadoResponse[]) => {
-        console.log('Empleados cargados:', data);
-        this.empleados.set(data);
-      },
+      next: (data: EmpleadoResponse[]) => this.empleados.set(data),
       error: (err) => {
-        console.error('Error cargando empleados:', err);
-        const errorMessage = this.handleError(err, 'No se pudieron cargar los empleados');
         this.messageService.add({
           severity: 'error',
           summary: 'Error al cargar empleados',
-          detail: errorMessage
+          detail: this.handleError(err, 'No se pudieron cargar los empleados'),
         });
       },
     });
@@ -141,156 +155,10 @@ export class NominaComponent implements OnInit {
     this.estadoNominaService.getAll().subscribe({
       next: (data) => this.estados.set(data),
       error: (err) => {
-        const errorMessage = this.handleError(err, 'No se pudieron cargar los estados de nómina');
         this.messageService.add({
           severity: 'error',
           summary: 'Error al cargar estados',
-          detail: errorMessage,
-        });
-      },
-    });
-  }
-
-  showDialog() {
-    this.displayDialog.set(true);
-    this.form = { IdEmpleado: 0, SalarioBase: 0 };
-    this.calculoPreview = null;
-  }
-
-  generarNomina() {
-    if (!this.form.IdEmpleado || !this.form.SalarioBase) {
-      this.messageService.add({
-        severity: 'warn',
-        summary: 'Validación',
-        detail: 'Completa todos los campos',
-      });
-      return;
-    }
-
-    this.nominaService
-      .generar(this.form.IdEmpleado, this.form.SalarioBase)
-      .subscribe({
-        next: () => {
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Generada',
-            detail: 'Nómina generada exitosamente',
-          });
-          this.displayDialog.set(false);
-          this.loadNominas();
-        },
-        error: (err) => {
-          const errorMessage = this.handleError(err, 'No se pudo generar la nómina');
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error al generar nómina',
-            detail: errorMessage,
-          });
-        },
-      });
-  }
-
-  calcularPreview() {
-    if (this.form.IdEmpleado && this.form.SalarioBase > 0) {
-      this.nominaService
-        .calcular(this.form.IdEmpleado, this.form.SalarioBase)
-        .subscribe({
-          next: (data) => (this.calculoPreview = data),
-          error: (err) => {
-            this.calculoPreview = null;
-            const errorMessage = this.handleError(err, 'No se pudo calcular la nómina');
-            this.messageService.add({
-              severity: 'error',
-              summary: 'Error en cálculo',
-              detail: errorMessage,
-            });
-          },
-        });
-    }
-  }
-
-  verDetalles(nomina: Nomina) {
-    this.nominaSeleccionada = nomina;
-    this.displayDetalles.set(true);
-  }
-
-  verParametros() {
-    this.nominaService.getParametros().subscribe({
-      next: (parametros) => {
-        console.log('Parámetros del sistema:', parametros);
-        const mensaje = parametros.map(p => `${p.nombre}: ${p.valor} (${p.tipo})`).join('\n');
-        this.messageService.add({
-          severity: 'info',
-          summary: 'Parámetros del Sistema',
-          detail: mensaje,
-          life: 10000
-        });
-      },
-      error: (err) => {
-        console.error('Error obteniendo parámetros:', err);
-        const errorMessage = this.handleError(err, 'No se pudieron obtener los parámetros del sistema');
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error al obtener parámetros',
-          detail: errorMessage
-        });
-      }
-    });
-  }
-
-  generarNominaMasiva() {
-    this.confirmationService.confirm({
-      message: '¿Estás seguro de generar la nómina masiva para todos los empleados activos?',
-      header: 'Confirmar Generación Masiva',
-      icon: 'pi pi-exclamation-triangle',
-      accept: () => {
-        this.nominaService.generarMasiva().subscribe({
-          next: (resultado: NominaMasivaResultado) => {
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Nómina Masiva Generada',
-              detail: `Se generó nómina para ${resultado.totalEmpleados} empleados del mes ${resultado.mes}/${resultado.anio}`,
-              life: 10000
-            });
-            this.loadNominas();
-          },
-          error: (err) => {
-            console.error('Error generando nómina masiva:', err);
-            const errorMessage = this.handleError(err, 'No se pudo generar la nómina masiva');
-            this.messageService.add({
-              severity: 'error',
-              summary: 'Error en generación masiva',
-              detail: errorMessage
-            });
-          }
-        });
-      },
-    });
-  }
-
-  deleteNomina(id: number) {
-    this.confirmationService.confirm({
-      message: '¿Estás seguro?',
-      header: 'Confirmar',
-      icon: 'pi pi-exclamation-triangle',
-      accept: () => {
-        this.nominaService.delete(id).subscribe({
-          next: () => {
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Eliminada',
-              detail: 'Nómina eliminada',
-            });
-            this.loadNominas();
-          },
-          error: (err) => {
-            const errorMessage = this.handleError(err, 'No se pudo eliminar la nómina');
-            this.messageService.add({
-              severity: 'error',
-              summary: 'Error al eliminar',
-              detail: errorMessage,
-            });
-          },
+          detail: this.handleError(err, 'No se pudieron cargar los estados de nómina'),
         });
       },
     });
@@ -310,13 +178,272 @@ export class NominaComponent implements OnInit {
           localStorage.setItem('username', profile.username);
         }
       },
-      error: (err) => {
-        console.warn('No se pudo cargar el perfil de usuario:', err);
+      error: (err) => console.warn('No se pudo cargar el perfil de usuario:', err),
+    });
+  }
+
+  // ─── Helpers de visualización ─────────────────────────────────────────────
+
+  getSalarioTotal(nomina: Nomina | null | undefined): number {
+    return nomina?.NominaDetalle?.reduce((sum, d) => sum + (d.SueldoBase || 0), 0) ?? 0;
+  }
+
+  getLiquidoTotal(nomina: Nomina | null | undefined): number {
+    return nomina?.NominaDetalle?.reduce((sum, d) => sum + (d.LiquidoRecibir || 0), 0) ?? 0;
+  }
+
+  getEmpleadoLabel(nomina: Nomina | undefined | null): string {
+    if (!nomina?.NominaDetalle?.length) return 'N/A';
+    if (nomina.NominaDetalle.length === 1) {
+      const emp = nomina.NominaDetalle[0]?.Empleado;
+      return `${emp?.Nombres || ''} ${emp?.Apellidos || ''}`.trim() || 'N/A';
+    }
+    return `${nomina.NominaDetalle.length} empleados`;
+  }
+
+  getMesLabel(mes: number): string {
+    return this.meses.find((m) => m.value === mes)?.label ?? String(mes);
+  }
+
+  getEstadoNombre(nomina: Nomina): string {
+    return nomina.EstadoNomina?.NombreEstado || 'Sin estado';
+  }
+
+  getEstadoSeverity(nomina: Nomina): 'success' | 'info' | 'warn' | 'danger' {
+    switch (nomina.EstadoNomina?.NombreEstado) {
+      case 'GENERADA': return 'info';
+      case 'PENDIENTE_APROBACION': return 'warn';
+      case 'APROBADA': return 'success';
+      case 'RECHAZADA': return 'danger';
+      case 'PROCESADA': return 'success';
+      default: return 'info';
+    }
+  }
+
+  // ─── Sistema de firmas ────────────────────────────────────────────────────
+
+  getFirmaCount(nomina: Nomina): number {
+    return (nomina.FirmaNomina ?? []).filter((f) => f.Activo).length;
+  }
+
+  firmaPresente(nomina: Nomina, tipo: string): boolean {
+    return (nomina.FirmaNomina ?? []).some((f) => f.TipoFirmante === tipo && f.Activo);
+  }
+
+  puedesFirmar(nomina: Nomina): boolean {
+    if (nomina.EstadoNomina?.NombreEstado !== 'PENDIENTE_APROBACION') return false;
+    if (!this.isApprovalRole(this.userRole())) return false;
+    return this.getFirmaCount(nomina) < 2;
+  }
+
+  getTiposFirmanteDisponibles(): { label: string; value: string }[] {
+    const firmadas = this.firmasNomina().map((f) => f.TipoFirmante);
+    return this.tiposFirmante.filter((t) => !firmadas.includes(t.value as any));
+  }
+
+  abrirDialogoFirma(nomina: Nomina) {
+    this.nominaSeleccionada = nomina;
+    this.firmaForm = { TipoFirmante: '', Comentarios: '' };
+    this.firmasNomina.set(nomina.FirmaNomina ?? []);
+    this.displayFirmar.set(true);
+  }
+
+  confirmarFirma() {
+    if (!this.nominaSeleccionada || !this.firmaForm.TipoFirmante) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Validación',
+        detail: 'Selecciona el tipo de firma',
+      });
+      return;
+    }
+
+    this.nominaService
+      .firmar(this.nominaSeleccionada.IdNomina, this.firmaForm.TipoFirmante, this.firmaForm.Comentarios)
+      .subscribe({
+        next: (result) => {
+          if (result.autoAprobada) {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Nómina Aprobada',
+              detail: 'Ambas firmas completadas. La nómina fue aprobada automáticamente.',
+              life: 8000,
+            });
+          } else {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Firma Registrada',
+              detail: `Firma de ${this.firmaForm.TipoFirmante === 'JEFE_AREA' ? 'Jefe de Área' : 'Encargado'} registrada. Falta ${result.firmasRegistradas === 1 ? '1 firma' : '0 firmas'}.`,
+            });
+          }
+          this.displayFirmar.set(false);
+          this.loadNominas();
+        },
+        error: (err) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error al firmar',
+            detail: this.handleError(err, 'No se pudo registrar la firma'),
+          });
+        },
+      });
+  }
+
+  // ─── Generación de nómina ─────────────────────────────────────────────────
+
+  showDialog() {
+    this.form = {
+      IdEmpleado: 0,
+      SalarioBase: 0,
+      Mes: new Date().getMonth() + 1,
+      Anio: new Date().getFullYear(),
+    };
+    this.calculoPreview = null;
+    this.displayDialog.set(true);
+  }
+
+  generarNomina() {
+    if (!this.form.IdEmpleado || !this.form.SalarioBase) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Validación',
+        detail: 'Completa todos los campos requeridos',
+      });
+      return;
+    }
+
+    this.nominaService
+      .generar(this.form.IdEmpleado, this.form.SalarioBase, this.form.Mes, this.form.Anio)
+      .subscribe({
+        next: () => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Nómina Generada',
+            detail: `Nómina de ${this.getMesLabel(this.form.Mes)}/${this.form.Anio} generada exitosamente`,
+          });
+          this.displayDialog.set(false);
+          this.loadNominas();
+        },
+        error: (err) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error al generar nómina',
+            detail: this.handleError(err, 'No se pudo generar la nómina'),
+          });
+        },
+      });
+  }
+
+  calcularPreview() {
+    if (this.form.IdEmpleado && this.form.SalarioBase > 0) {
+      this.nominaService.calcular(this.form.IdEmpleado, this.form.SalarioBase).subscribe({
+        next: (data) => (this.calculoPreview = data),
+        error: (err) => {
+          this.calculoPreview = null;
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error en cálculo',
+            detail: this.handleError(err, 'No se pudo calcular la nómina'),
+          });
+        },
+      });
+    }
+  }
+
+  abrirDialogoMasiva() {
+    this.formMasiva = {
+      Mes: new Date().getMonth() + 1,
+      Anio: new Date().getFullYear(),
+    };
+    this.displayMasiva.set(true);
+  }
+
+  confirmarNominaMasiva() {
+    this.confirmationService.confirm({
+      message: `¿Generar nómina masiva para <b>${this.getMesLabel(this.formMasiva.Mes)} ${this.formMasiva.Anio}</b> con todos los empleados activos?`,
+      header: 'Confirmar Generación Masiva',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.displayMasiva.set(false);
+        this.nominaService.generarMasiva(this.formMasiva.Mes, this.formMasiva.Anio).subscribe({
+          next: (resultado: NominaMasivaResultado) => {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Nómina Masiva Generada',
+              detail: `Se generó nómina para ${resultado.totalEmpleados} empleados — ${this.getMesLabel(resultado.mes)} ${resultado.anio}`,
+              life: 10000,
+            });
+            this.loadNominas();
+          },
+          error: (err) => {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error en generación masiva',
+              detail: this.handleError(err, 'No se pudo generar la nómina masiva'),
+            });
+          },
+        });
       },
     });
   }
 
-  // Métodos para gestión de estados
+  // ─── Detalle y eliminación ────────────────────────────────────────────────
+
+  verDetalles(nomina: Nomina) {
+    this.nominaSeleccionada = nomina;
+    this.displayDetalles.set(true);
+  }
+
+  verParametros() {
+    this.nominaService.getParametros().subscribe({
+      next: (parametros) => {
+        const mensaje = parametros.map((p) => `${p.nombre}: ${p.valor}`).join('\n');
+        this.messageService.add({
+          severity: 'info',
+          summary: 'Parámetros del Sistema',
+          detail: mensaje,
+          life: 10000,
+        });
+      },
+      error: (err) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error al obtener parámetros',
+          detail: this.handleError(err, 'No se pudieron obtener los parámetros del sistema'),
+        });
+      },
+    });
+  }
+
+  deleteNomina(id: number) {
+    this.confirmationService.confirm({
+      message: '¿Estás seguro de eliminar esta nómina?',
+      header: 'Confirmar',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.nominaService.delete(id).subscribe({
+          next: () => {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Eliminada',
+              detail: 'Nómina eliminada',
+            });
+            this.loadNominas();
+          },
+          error: (err) => {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error al eliminar',
+              detail: this.handleError(err, 'No se pudo eliminar la nómina'),
+            });
+          },
+        });
+      },
+    });
+  }
+
+  // ─── Gestión de estados ───────────────────────────────────────────────────
+
   cambiarEstado(nomina: Nomina) {
     this.nominaSeleccionada = nomina;
     this.cambioEstadoForm = { IdEstadoNuevo: 0, Comentarios: '' };
@@ -334,11 +461,10 @@ export class NominaComponent implements OnInit {
         this.displayCambiarEstado.set(true);
       },
       error: (err) => {
-        const errorMessage = this.handleError(err, 'No se pudieron cargar los estados disponibles');
         this.messageService.add({
           severity: 'error',
           summary: 'Error al cargar estados',
-          detail: errorMessage,
+          detail: this.handleError(err, 'No se pudieron cargar los estados disponibles'),
         });
       },
     });
@@ -371,11 +497,10 @@ export class NominaComponent implements OnInit {
         this.loadNominas();
       },
       error: (err) => {
-        const errorMessage = this.handleError(err, 'No se pudo cambiar el estado de la nómina');
         this.messageService.add({
           severity: 'error',
           summary: 'Error al cambiar estado',
-          detail: errorMessage,
+          detail: this.handleError(err, 'No se pudo cambiar el estado de la nómina'),
         });
       },
     });
@@ -389,64 +514,26 @@ export class NominaComponent implements OnInit {
         this.displayHistorial.set(true);
       },
       error: (err) => {
-        const errorMessage = this.handleError(err, 'No se pudo cargar el historial de estados');
         this.messageService.add({
           severity: 'error',
           summary: 'Error al cargar historial',
-          detail: errorMessage,
+          detail: this.handleError(err, 'No se pudo cargar el historial de estados'),
         });
       },
     });
   }
 
-  getEstadoNombre(nomina: Nomina): string {
-    return nomina.EstadoNomina?.NombreEstado || 'Sin estado';
-  }
-
   isCambioEstadoPermisible(nomina: Nomina): boolean {
     const nombre = nomina.EstadoNomina?.NombreEstado;
-    if (!nombre) {
-      return true;
-    }
-
-    if (nombre === 'PROCESADA') {
-      return false;
-    }
-
-    if (nombre === 'PENDIENTE_APROBACION') {
-      return this.isApprovalRole(this.userRole());
-    }
-
+    if (!nombre) return true;
+    if (nombre === 'PROCESADA') return false;
+    if (nombre === 'PENDIENTE_APROBACION') return this.isApprovalRole(this.userRole());
     return true;
   }
 
   private isApprovalRole(role: string | null): boolean {
-    if (!role) {
-      return false;
-    }
-
-    const normalizedRole = role.trim().toUpperCase().replace(/\s+/g, '_');
-    const rolesPermitidos = [
-      'ADMINISTRADOR',
-      'ADMIN',
-      'GERENTE',
-      'RRHH',
-      'RECURSOS_HUMANOS',
-      'RECURSOS HUMANOS',
-    ];
-
-    return rolesPermitidos.includes(normalizedRole);
-  }
-
-  getEstadoSeverity(nomina: Nomina): 'success' | 'info' | 'warn' | 'danger' {
-    const estado = nomina.EstadoNomina?.NombreEstado;
-    switch (estado) {
-      case 'GENERADA': return 'info';
-      case 'PENDIENTE_APROBACION': return 'warn';
-      case 'APROBADA': return 'success';
-      case 'RECHAZADA': return 'danger';
-      case 'PROCESADA': return 'success';
-      default: return 'info';
-    }
+    if (!role) return false;
+    const r = role.trim().toUpperCase().replace(/\s+/g, '_');
+    return ['ADMINISTRADOR', 'ADMIN', 'GERENTE', 'RRHH', 'RECURSOS_HUMANOS', 'RECURSOS HUMANOS'].includes(r);
   }
 }
