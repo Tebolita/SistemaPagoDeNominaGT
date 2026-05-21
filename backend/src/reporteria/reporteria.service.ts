@@ -291,6 +291,10 @@ export class ReporteriaService {
   // ========== RESUMEN EJECUTIVO ==========
 
   async getResumenEjecutivo() {
+    const ahora = new Date();
+    const inicioMes = new Date(ahora.getFullYear(), ahora.getMonth(), 1);
+    const finMes    = new Date(ahora.getFullYear(), ahora.getMonth() + 1, 0, 23, 59, 59);
+
     const [
       totalEmpleados,
       empleadosConSalario,
@@ -298,8 +302,15 @@ export class ReporteriaService {
       totalVacaciones,
       totalDepartamentos,
       totalPuestos,
+      totalClientes,
+      totalProductos,
+      totalServicios,
       deptData,
       nominasTendencia,
+      asistenciasMes,
+      vacacionesPendientes,
+      nominasPorEstado,
+      salariosTodos,
     ] = await Promise.all([
       this.prisma.empleado.count({ where: { Activo: true } }),
       this.prisma.salario.count({ where: { Activo: true } }),
@@ -309,36 +320,55 @@ export class ReporteriaService {
       }),
       this.prisma.controlVacacion.count({ where: { Activo: true } }),
       this.prisma.departamento.count({ where: { Activo: true } }),
-      this.prisma.puesto.count({ where: { Activo: true } }),
-      // Distribución de empleados y masa salarial por departamento
+      this.prisma.puesto.count({ where: { OR: [{ Activo: true }, { Activo: null }] } }),
+      this.prisma.cliente.count({ where: { NOT: { Activo: false } } }),
+      this.prisma.productoServicio.count({ where: { TipoProducto: 'PRODUCTO', NOT: { Activo: false } } }),
+      this.prisma.productoServicio.count({ where: { TipoProducto: 'SERVICIO', NOT: { Activo: false } } }),
       this.prisma.departamento.findMany({
         where: { Activo: true },
         include: {
           Puesto: {
-            where: { Activo: true },
+            where: { OR: [{ Activo: true }, { Activo: null }] },
             include: {
               Empleado: {
                 where: { Activo: true },
-                include: {
-                  Salario: { where: { Activo: true }, take: 1, orderBy: { FechaInicioVigencia: 'desc' } },
-                },
+                include: { Salario: { where: { Activo: true }, take: 1, orderBy: { FechaInicioVigencia: 'desc' } } },
               },
             },
           },
         },
       }),
-      // Últimas 6 nóminas para tendencia
       this.prisma.nominaEncabezado.findMany({
         where: { Activo: true },
         orderBy: [{ Anio: 'desc' }, { Mes: 'desc' }],
-        take: 6,
-        include: { NominaDetalle: true },
+        take: 8,
+        include: { NominaDetalle: true, EstadoNomina: true },
+      }),
+      // Asistencias del mes actual
+      this.prisma.asistencia.count({
+        where: { Activo: true, Fecha: { gte: inicioMes, lte: finMes } },
+      }),
+      // Vacaciones activas (incidencias)
+      this.prisma.incidencia.count({
+        where: { TipoIncidencia: 'Vacaciones', Activo: true },
+      }),
+      // Nóminas por estado
+      this.prisma.nominaEncabezado.groupBy({
+        by: ['Estado'],
+        where: { Activo: true },
+        _count: { Estado: true },
+      }),
+      // Salarios para calcular promedio y rango
+      this.prisma.salario.findMany({
+        where: { Activo: true },
+        select: { SalarioBase: true },
+        orderBy: { FechaInicioVigencia: 'desc' },
       }),
     ]);
 
+    // ── Empleados por departamento ────────────────────────────────────
     const empleadosPorDepartamento = deptData.map((d) => {
-      let empCount = 0;
-      let masa = 0;
+      let empCount = 0, masa = 0;
       d.Puesto.forEach((p) => {
         empCount += p.Empleado.length;
         p.Empleado.forEach((e) => { masa += Number(e.Salario[0]?.SalarioBase || 0); });
@@ -346,10 +376,41 @@ export class ReporteriaService {
       return { departamento: d.NombreDepartamento, cantidad: empCount, masaSalarial: parseFloat(masa.toFixed(2)) };
     }).filter(d => d.cantidad > 0);
 
-    const tendencia = [...nominasTendencia].reverse().map((n) => ({
+    // ── Tendencia de nómina ───────────────────────────────────────────
+    const tendenciaNomina = [...nominasTendencia].reverse().map((n) => ({
       label: `${n.Mes}/${n.Anio}`,
+      estado: n.EstadoNomina?.NombreEstado ?? n.Estado ?? '',
       totalLiquido: parseFloat(n.NominaDetalle.reduce((a, d) => a + Number(d.LiquidoRecibir || 0), 0).toFixed(2)),
       totalSueldos: parseFloat(n.NominaDetalle.reduce((a, d) => a + Number(d.SueldoBase || 0), 0).toFixed(2)),
+      totalDescuentos: parseFloat(n.NominaDetalle.reduce((a, d) =>
+        a + Number(d.DescuentoIGSS || 0) + Number(d.DescuentoISR || 0) + Number(d.OtrosDescuentos || 0), 0).toFixed(2)),
+      totalEmpleados: n.NominaDetalle.length,
+    }));
+
+    // ── Nóminas por estado ────────────────────────────────────────────
+    const nominasEstado = nominasPorEstado.map(e => ({
+      estado: e.Estado ?? 'SIN ESTADO',
+      cantidad: e._count.Estado,
+    }));
+
+    // ── Estadísticas salariales ───────────────────────────────────────
+    const salarioValues = salariosTodos.map(s => Number(s.SalarioBase));
+    const salarioPromedio = salarioValues.length
+      ? parseFloat((salarioValues.reduce((a, b) => a + b, 0) / salarioValues.length).toFixed(2))
+      : 0;
+    const salarioMax = salarioValues.length ? Math.max(...salarioValues) : 0;
+    const salarioMin = salarioValues.length ? Math.min(...salarioValues) : 0;
+
+    // ── Distribución salarial en rangos ───────────────────────────────
+    const rangos = [
+      { label: 'Q0–3,000',    min: 0,    max: 3000 },
+      { label: 'Q3,000–6,000', min: 3000, max: 6000 },
+      { label: 'Q6,000–10,000',min: 6000, max: 10000 },
+      { label: 'Q10,000+',    min: 10000, max: Infinity },
+    ];
+    const distribucionSalarial = rangos.map(r => ({
+      label: r.label,
+      cantidad: salarioValues.filter(v => v >= r.min && v < r.max).length,
     }));
 
     return {
@@ -358,16 +419,28 @@ export class ReporteriaService {
       totalVacaciones,
       totalDepartamentos,
       totalPuestos,
+      totalClientes,
+      totalProductos,
+      totalServicios,
+      asistenciasMes,
+      vacacionesPendientes,
+      salarioPromedio,
+      salarioMax,
+      salarioMin,
       ultimaNomina: ultimaNomina ? {
         IdNomina: ultimaNomina.IdNomina,
         Mes: ultimaNomina.Mes,
         Anio: ultimaNomina.Anio,
-        Estado: ultimaNomina.EstadoNomina?.NombreEstado,
+        Estado: ultimaNomina.EstadoNomina?.NombreEstado ?? ultimaNomina.Estado,
         TotalEmpleados: ultimaNomina.NominaDetalle.length,
         TotalLiquido: parseFloat(ultimaNomina.NominaDetalle.reduce((a, d) => a + Number(d.LiquidoRecibir || 0), 0).toFixed(2)),
+        TotalDescuentos: parseFloat(ultimaNomina.NominaDetalle.reduce((a, d) =>
+          a + Number(d.DescuentoIGSS || 0) + Number(d.DescuentoISR || 0) + Number(d.OtrosDescuentos || 0), 0).toFixed(2)),
       } : null,
       empleadosPorDepartamento,
-      tendenciaNomina: tendencia,
+      tendenciaNomina,
+      nominasEstado,
+      distribucionSalarial,
     };
   }
 }

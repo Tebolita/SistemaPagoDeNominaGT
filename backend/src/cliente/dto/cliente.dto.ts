@@ -7,7 +7,7 @@ export class CreateClienteDto {
 
   @IsOptional()
   @IsString()
-  @IsIn(['INDIVIDUAL', 'EMPRESARIAL'])
+  @IsIn(['INDIVIDUAL', 'EMPRESA'])
   TipoCliente?: string;
 
   @IsOptional()
@@ -48,7 +48,7 @@ export class UpdateClienteDto {
 
   @IsOptional()
   @IsString()
-  @IsIn(['INDIVIDUAL', 'EMPRESARIAL'])
+  @IsIn(['INDIVIDUAL', 'EMPRESA'])
   TipoCliente?: string;
 
   @IsOptional()

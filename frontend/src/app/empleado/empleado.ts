@@ -12,15 +12,13 @@ import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { SelectModule } from 'primeng/select';
 import { DividerModule } from 'primeng/divider';
-import { MenubarModule } from 'primeng/menubar';
 import { TagModule } from 'primeng/tag';
-import { ContextMenuModule } from 'primeng/contextmenu';
-import { FieldsetModule } from 'primeng/fieldset';
 import { AvatarModule } from 'primeng/avatar';
-import { DatePickerModule } from 'primeng/datepicker'; // O CalendarModule dependiendo de tu versión exacta
+import { DatePickerModule } from 'primeng/datepicker';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { CheckboxModule } from 'primeng/checkbox';
 import { TooltipModule } from 'primeng/tooltip';
+import { TabsModule } from 'primeng/tabs';
 import { MessageService, ConfirmationService, MenuItem } from 'primeng/api';
 
 // --- Servicios y Modelos ---
@@ -60,12 +58,10 @@ import { SalarioResponse } from '../models/Salario.model';
     ConfirmDialogModule,
     SelectModule,
     DividerModule,
-    MenubarModule,
     TagModule,
-    ContextMenuModule,
-    FieldsetModule,
     AvatarModule,
-    DatePickerModule
+    DatePickerModule,
+    TabsModule,
   ],
   providers: [MessageService, ConfirmationService],
   templateUrl: './empleado.html',
@@ -91,6 +87,8 @@ export class Empleado implements OnInit {
   loading = signal<boolean>(false);
   error = signal<string>('');
   messageResponsive = signal<string>('');
+  busqueda = signal<string>('');
+  activeTab = 'info';
 
   vacacionesEmpleado = signal<any[]>([]);
   asistenciasEmpleado = signal<any[]>([]);
@@ -125,8 +123,16 @@ export class Empleado implements OnInit {
     { IdJornada: 1, NombreJornada: 'Diurna' }
   ]);
 
+  get empleadosFiltrados(): EmpleadoResponse[] {
+    const q = this.busqueda().toLowerCase().trim();
+    if (!q) return this.users();
+    return this.users().filter(u =>
+      `${u.Nombres} ${u.Apellidos}`.toLowerCase().includes(q) ||
+      u.DPI?.toLowerCase().includes(q)
+    );
+  }
+
   ngOnInit() {
-    this.configurarMenus();
     this.cargarDatosBase();
   }
 
@@ -378,6 +384,7 @@ export class Empleado implements OnInit {
       Telefono: userToUpdate.Telefono.toString(),
       Direccion: userToUpdate.Direccion,
       EstadoCivil: userToUpdate.EstadoCivil,
+      Genero: userToUpdate.Genero,
       IdJornada: userToUpdate.IdJornada ?? userToUpdate.JornadaLaboral?.IdJornada,
       IdBanco: userToUpdate.IdBanco ?? userToUpdate.Banco?.IdBanco,
       CuentaBancaria: userToUpdate.CuentaBancaria

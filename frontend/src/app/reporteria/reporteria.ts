@@ -59,24 +59,78 @@ export class Reporteria implements OnInit {
   vacaciones    = signal<any[]>([]);
 
   // Charts
-  chartEmpleados: any = null;
-  chartSalarios:  any = null;
-  chartTendencia: any = null;
-  chartOptions   = {
+  chartEmpleados:        any = null;
+  chartSalarios:         any = null;
+  chartTendencia:        any = null;
+  chartDistribucion:     any = null;
+  chartEstados:          any = null;
+  chartDescuentos:       any = null;
+
+  private readonly BASE_OPTS = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { labels: { color: '#94a3b8', font: { size: 11 } } } },
+    scales: {
+      x: { ticks: { color: '#64748b', font: { size: 10 } }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { ticks: { color: '#64748b', font: { size: 10 } }, grid: { color: 'rgba(255,255,255,0.05)' } },
+    },
+  };
+
+  chartOptions        = { ...this.BASE_OPTS };
+  chartOptionsNoLeg   = { ...this.BASE_OPTS, plugins: { legend: { display: false } } };
+
+  // Barras apiladas — requiere stacked:true en ambos ejes para que Chart.js apile correctamente
+  chartOptionsStacked = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
       legend: { labels: { color: '#94a3b8', font: { size: 11 } } },
+      tooltip: {
+        callbacks: {
+          footer: (items: any[]) => {
+            const total = items.reduce((s: number, i: any) => s + i.parsed.y, 0);
+            return `Total bruto: Q ${total.toLocaleString('es-GT', { minimumFractionDigits: 2 })}`;
+          },
+        },
+      },
     },
     scales: {
-      x: { ticks: { color: '#64748b' }, grid: { color: 'rgba(255,255,255,0.06)' } },
-      y: { ticks: { color: '#64748b' }, grid: { color: 'rgba(255,255,255,0.06)' } },
+      x: {
+        stacked: true,
+        ticks: { color: '#64748b', font: { size: 10 } },
+        grid: { color: 'rgba(255,255,255,0.05)' },
+      },
+      y: {
+        stacked: true,
+        ticks: { color: '#64748b', font: { size: 10 } },
+        grid: { color: 'rgba(255,255,255,0.05)' },
+      },
     },
   };
+  // Leyenda abajo — para donuts en columnas estrechas (1/3 del grid)
   chartOptionsDoughnut = {
     responsive: true,
     maintainAspectRatio: false,
-    plugins: { legend: { position: 'right', labels: { color: '#94a3b8', font: { size: 10 }, boxWidth: 12 } } },
+    plugins: {
+      legend: {
+        position: 'bottom' as const,
+        labels: { color: '#94a3b8', font: { size: 10 }, boxWidth: 10, padding: 10 },
+      },
+    },
+    layout: { padding: { top: 8, bottom: 4 } },
+  };
+
+  // Leyenda derecha — para donuts en columna amplia (2/3 del grid o standalone)
+  chartOptionsDoughnutWide = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'right' as const,
+        labels: { color: '#94a3b8', font: { size: 10 }, boxWidth: 12, padding: 12 },
+      },
+    },
+    layout: { padding: 8 },
   };
 
   fechaInicio      = signal<Date | null>(null);
@@ -153,12 +207,12 @@ export class Reporteria implements OnInit {
 
   private buildCharts(d: any) {
     const depts: any[] = d.empleadosPorDepartamento ?? [];
-    const labels = depts.map((x: any) => x.departamento);
-    const colors = depts.map((_: any, i: number) => this.PALETTE[i % this.PALETTE.length]);
+    const deptLabels = depts.map((x: any) => x.departamento);
+    const colors     = depts.map((_: any, i: number) => this.PALETTE[i % this.PALETTE.length]);
 
-    // Empleados por departamento — barras
+    // 1. Empleados por departamento — barras horizontales
     this.chartEmpleados = {
-      labels,
+      labels: deptLabels,
       datasets: [{
         label: 'Empleados',
         data: depts.map((x: any) => x.cantidad),
@@ -167,9 +221,9 @@ export class Reporteria implements OnInit {
       }],
     };
 
-    // Masa salarial por departamento — doughnut
+    // 2. Masa salarial por departamento — doughnut
     this.chartSalarios = {
-      labels,
+      labels: deptLabels,
       datasets: [{
         data: depts.map((x: any) => x.masaSalarial),
         backgroundColor: colors,
@@ -178,7 +232,7 @@ export class Reporteria implements OnInit {
       }],
     };
 
-    // Tendencia de nómina — línea
+    // 3. Tendencia de nómina — línea multi-serie
     const tend: any[] = d.tendenciaNomina ?? [];
     this.chartTendencia = {
       labels: tend.map((t: any) => t.label),
@@ -187,20 +241,73 @@ export class Reporteria implements OnInit {
           label: 'Líquido a Pagar (Q)',
           data: tend.map((t: any) => t.totalLiquido),
           borderColor: '#22c55e',
-          backgroundColor: 'rgba(34,197,94,0.15)',
-          fill: true,
-          tension: 0.4,
-          pointBackgroundColor: '#22c55e',
+          backgroundColor: 'rgba(34,197,94,0.12)',
+          fill: true, tension: 0.4, pointBackgroundColor: '#22c55e', pointRadius: 4,
         },
         {
           label: 'Total Sueldos (Q)',
           data: tend.map((t: any) => t.totalSueldos),
           borderColor: '#3b82f6',
-          backgroundColor: 'rgba(59,130,246,0.1)',
-          fill: false,
-          tension: 0.4,
-          pointBackgroundColor: '#3b82f6',
-          borderDash: [4, 4],
+          backgroundColor: 'rgba(59,130,246,0.08)',
+          fill: false, tension: 0.4, pointBackgroundColor: '#3b82f6', borderDash: [4, 4],
+        },
+        {
+          label: 'Descuentos (Q)',
+          data: tend.map((t: any) => t.totalDescuentos),
+          borderColor: '#ef4444',
+          backgroundColor: 'rgba(239,68,68,0.08)',
+          fill: false, tension: 0.4, pointBackgroundColor: '#ef4444', borderDash: [2, 2],
+        },
+      ],
+    };
+
+    // 4. Distribución salarial — barras
+    const dist: any[] = d.distribucionSalarial ?? [];
+    this.chartDistribucion = {
+      labels: dist.map((r: any) => r.label),
+      datasets: [{
+        label: 'Empleados',
+        data: dist.map((r: any) => r.cantidad),
+        backgroundColor: ['#3b82f6','#22c55e','#f59e0b','#8b5cf6'],
+        borderRadius: 4,
+      }],
+    };
+
+    // 5. Nóminas por estado — doughnut
+    const estados: any[] = d.nominasEstado ?? [];
+    const estadoColors: Record<string, string> = {
+      BORRADOR: '#64748b', PENDIENTE_APROBACION: '#f59e0b',
+      APROBADO: '#22c55e', PAGADO: '#3b82f6', CANCELADO: '#ef4444',
+    };
+    this.chartEstados = {
+      labels: estados.map((e: any) => e.estado),
+      datasets: [{
+        data: estados.map((e: any) => e.cantidad),
+        backgroundColor: estados.map((e: any) => estadoColors[e.estado] ?? '#94a3b8'),
+        borderWidth: 2, borderColor: '#1e293b',
+      }],
+    };
+
+    // 6. Composición de nómina — apilado: Líquido (base) + Descuentos (encima)
+    // La barra total = sueldo bruto. El verde (fondo) siempre es mayor que el rojo (encima).
+    this.chartDescuentos = {
+      labels: tend.map((t: any) => t.label),
+      datasets: [
+        {
+          label: 'Líquido a pagar (Q)',
+          data: tend.map((t: any) => t.totalLiquido),
+          backgroundColor: 'rgba(34,197,94,0.75)',
+          borderColor: 'rgba(34,197,94,0.9)',
+          borderWidth: 1,
+          stack: 'salario',
+        },
+        {
+          label: 'Total descuentos (Q)',
+          data: tend.map((t: any) => t.totalDescuentos),
+          backgroundColor: 'rgba(239,68,68,0.65)',
+          borderColor: 'rgba(239,68,68,0.85)',
+          borderWidth: 1,
+          stack: 'salario',
         },
       ],
     };

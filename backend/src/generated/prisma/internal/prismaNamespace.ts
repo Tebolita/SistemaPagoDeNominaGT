@@ -2837,7 +2837,10 @@ export const EstadoNominaScalarFieldEnum = {
   Orden: 'Orden',
   RequiereAprobacion: 'RequiereAprobacion',
   Activo: 'Activo',
-  FechaEliminacion: 'FechaEliminacion'
+  FechaEliminacion: 'FechaEliminacion',
+  Color: 'Color',
+  EsFinal: 'EsFinal',
+  EsCancelacion: 'EsCancelacion'
 } as const
 
 export type EstadoNominaScalarFieldEnum = (typeof EstadoNominaScalarFieldEnum)[keyof typeof EstadoNominaScalarFieldEnum]
@@ -2966,7 +2969,9 @@ export const NominaEncabezadoScalarFieldEnum = {
   Activo: 'Activo',
   FechaEliminacion: 'FechaEliminacion',
   IdEstadoActual: 'IdEstadoActual',
-  NumeroBoleta: 'NumeroBoleta'
+  NumeroBoleta: 'NumeroBoleta',
+  IdCuenta: 'IdCuenta',
+  TipoNomina: 'TipoNomina'
 } as const
 
 export type NominaEncabezadoScalarFieldEnum = (typeof NominaEncabezadoScalarFieldEnum)[keyof typeof NominaEncabezadoScalarFieldEnum]
@@ -2980,7 +2985,11 @@ export const ParametroGlobalScalarFieldEnum = {
   Activo: 'Activo',
   FechaEliminacion: 'FechaEliminacion',
   Tipo: 'Tipo',
-  Unidad: 'Unidad'
+  Unidad: 'Unidad',
+  FiltroGenero: 'FiltroGenero',
+  FiltroIdDepartamento: 'FiltroIdDepartamento',
+  FiltroIdPuesto: 'FiltroIdPuesto',
+  FiltroIdJornada: 'FiltroIdJornada'
 } as const
 
 export type ParametroGlobalScalarFieldEnum = (typeof ParametroGlobalScalarFieldEnum)[keyof typeof ParametroGlobalScalarFieldEnum]
@@ -3132,7 +3141,8 @@ export const VentaScalarFieldEnum = {
   IdUsuarioRegistra: 'IdUsuarioRegistra',
   Notas: 'Notas',
   Activo: 'Activo',
-  FechaEliminacion: 'FechaEliminacion'
+  FechaEliminacion: 'FechaEliminacion',
+  IdCuenta: 'IdCuenta'
 } as const
 
 export type VentaScalarFieldEnum = (typeof VentaScalarFieldEnum)[keyof typeof VentaScalarFieldEnum]

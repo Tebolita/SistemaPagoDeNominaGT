@@ -8,21 +8,23 @@ export class MovimientoFinancieroService {
   constructor(private prisma: PrismaService) {}
 
   async create(createMovimientoDto: CreateMovimientoFinancieroDto) {
-    return this.prisma.movimientoFinanciero.create({
+    const movimiento = await this.prisma.movimientoFinanciero.create({
       data: {
         ...createMovimientoDto,
         FechaMovimiento: createMovimientoDto.FechaMovimiento ? new Date(createMovimientoDto.FechaMovimiento) : new Date(),
         Activo: createMovimientoDto.Activo ?? true,
       },
       include: {
-        CuentaBancariaEmpresa: {
-          include: { Banco: true },
-        },
+        CuentaBancariaEmpresa: { include: { Banco: true } },
         Usuario: true,
         Venta: true,
         NominaEncabezado: true,
       },
     });
+
+    await this.aplicarSaldo(createMovimientoDto.IdCuenta, createMovimientoDto.TipoMovimiento, createMovimientoDto.Monto);
+
+    return movimiento;
   }
 
   async findAll(
@@ -32,7 +34,9 @@ export class MovimientoFinancieroService {
     fechaFin?: string,
     activo?: boolean,
   ) {
-    const where: Prisma.MovimientoFinancieroWhereInput = {};
+    const where: Prisma.MovimientoFinancieroWhereInput = {
+      Activo: activo ?? true,  // Por defecto solo registros activos
+    };
 
     if (idCuenta) {
       where.IdCuenta = idCuenta;
@@ -47,10 +51,6 @@ export class MovimientoFinancieroService {
         gte: new Date(fechaInicio),
         lte: new Date(fechaFin),
       };
-    }
-
-    if (activo !== undefined) {
-      where.Activo = activo;
     }
 
     return this.prisma.movimientoFinanciero.findMany({
@@ -88,38 +88,78 @@ export class MovimientoFinancieroService {
   }
 
   async update(id: number, updateMovimientoDto: UpdateMovimientoFinancieroDto) {
-    // Verificar que el movimiento existe
-    await this.findOne(id);
+    const original = await this.findOne(id);
 
-    return this.prisma.movimientoFinanciero.update({
+    // Revertir efecto original en la cuenta (solo si estaba activo)
+    if (original.Activo) {
+      await this.revertirSaldo(original.IdCuenta, original.TipoMovimiento ?? '', Number(original.Monto));
+    }
+
+    const movimiento = await this.prisma.movimientoFinanciero.update({
       where: { IdMovimiento: id },
       data: {
         ...updateMovimientoDto,
         FechaMovimiento: updateMovimientoDto.FechaMovimiento ? new Date(updateMovimientoDto.FechaMovimiento) : undefined,
       },
       include: {
-        CuentaBancariaEmpresa: {
-          include: { Banco: true },
-        },
+        CuentaBancariaEmpresa: { include: { Banco: true } },
         Usuario: true,
         Venta: true,
         NominaEncabezado: true,
       },
     });
+
+    // Aplicar nuevo efecto (solo si sigue activo)
+    if (movimiento.Activo) {
+      const idCuentaNueva = updateMovimientoDto.IdCuenta ?? original.IdCuenta;
+      const tipoNuevo = updateMovimientoDto.TipoMovimiento ?? original.TipoMovimiento ?? '';
+      const montoNuevo = updateMovimientoDto.Monto ?? Number(original.Monto);
+      await this.aplicarSaldo(idCuentaNueva, tipoNuevo, montoNuevo);
+    }
+
+    return movimiento;
   }
 
   async remove(id: number) {
-    // Verificar que el movimiento existe
-    await this.findOne(id);
+    const original = await this.findOne(id);
 
-    // Soft delete
+    // Revertir efecto en la cuenta antes de desactivar
+    if (original.Activo) {
+      await this.revertirSaldo(original.IdCuenta, original.TipoMovimiento ?? '', Number(original.Monto));
+    }
+
     return this.prisma.movimientoFinanciero.update({
       where: { IdMovimiento: id },
-      data: {
-        Activo: false,
-        FechaEliminacion: new Date(),
-      },
+      data: { Activo: false, FechaEliminacion: new Date() },
     });
+  }
+
+  private async aplicarSaldo(idCuenta: number, tipo: string, monto: number) {
+    if (tipo === 'INGRESO') {
+      await this.prisma.cuentaBancariaEmpresa.update({
+        where: { IdCuenta: idCuenta },
+        data: { SaldoActual: { increment: monto } },
+      });
+    } else if (tipo === 'EGRESO') {
+      await this.prisma.cuentaBancariaEmpresa.update({
+        where: { IdCuenta: idCuenta },
+        data: { SaldoActual: { decrement: monto } },
+      });
+    }
+  }
+
+  private async revertirSaldo(idCuenta: number, tipo: string, monto: number) {
+    if (tipo === 'INGRESO') {
+      await this.prisma.cuentaBancariaEmpresa.update({
+        where: { IdCuenta: idCuenta },
+        data: { SaldoActual: { decrement: monto } },
+      });
+    } else if (tipo === 'EGRESO') {
+      await this.prisma.cuentaBancariaEmpresa.update({
+        where: { IdCuenta: idCuenta },
+        data: { SaldoActual: { increment: monto } },
+      });
+    }
   }
 
   async getBalancePorCuenta(idCuenta: number): Promise<{ saldo: number; ingresos: number; egresos: number }> {

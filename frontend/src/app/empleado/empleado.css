@@ -1,24 +1,346 @@
-.inicio-layout {
+/* ── Base ──────────────────────────────────────────────────────────── */
+:host {
+  display: block;
+  min-height: 100%;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 60%, #0f172a 100%);
+}
+
+/* ── Barra de empleados ─────────────────────────────────────────────── */
+.emp-strip-wrapper {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 0.75rem;
+  padding: 0.75rem;
   display: flex;
-  height: 100%;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.emp-strip-search {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
+}
+
+.emp-strip {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: thin;
+  scrollbar-color: #334155 transparent;
+}
+.emp-strip::-webkit-scrollbar { height: 4px; }
+.emp-strip::-webkit-scrollbar-thumb { background: #334155; border-radius: 99px; }
+
+/* ── Chip de empleado ───────────────────────────────────────────────── */
+.emp-chip {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 0.6rem;
+  padding: 0.5rem 0.85rem 0.5rem 0.5rem;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: border-color 0.15s, background 0.15s, transform 0.1s;
+  white-space: nowrap;
+  min-width: 160px;
+}
+
+.emp-chip:hover {
+  border-color: #3b82f6;
+  background: #1e293b;
+}
+
+.emp-chip--active {
+  border-color: #3b82f6 !important;
+  background: rgba(59,130,246,0.12) !important;
+  transform: translateY(-1px);
+}
+
+.emp-chip-avatar {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+}
+
+.emp-chip-initials {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3b82f6, #6366f1);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.emp-chip-dot {
+  position: absolute;
+  bottom: 1px;
+  right: 1px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #64748b;
+  border: 2px solid #1e293b;
+}
+.emp-chip-dot--active { background: #22c55e; }
+
+.emp-chip-info {
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
 }
 
-.sidebarUser {
-  width: 15%;
-  height: 100%;
-  overflow-y: auto;
+.emp-chip-name {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #e2e8f0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 120px;
 }
 
-.content-area {
+.emp-chip-role {
+  font-size: 0.65rem;
+  color: #64748b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 120px;
+}
+
+/* ── Panel de detalle ───────────────────────────────────────────────── */
+.detail-panel {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+}
+
+.detail-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.detail-avatar-wrap {
+  flex-shrink: 0;
+}
+
+.detail-avatar-img {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #334155;
+}
+
+.detail-avatar-placeholder {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3b82f6, #6366f1);
+  color: #fff;
+  font-size: 1.25rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid #334155;
+}
+
+/* ── Estado vacío ───────────────────────────────────────────────────── */
+.empty-state {
   flex: 1;
-  height: 100%;
-  overflow-y: auto;
-  background: var(--p-white-50);
-  margin-left: 30px;
-  margin-right: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  background: #1e293b;
+  border: 1px dashed #334155;
+  border-radius: 0.75rem;
+  text-align: center;
 }
 
-.cardUser:hover{
-  background-color: rgba(44, 97, 232, 0.4);
+/* ── Campos del formulario ──────────────────────────────────────────── */
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.field-group label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* ── Tabs de PrimeNG ────────────────────────────────────────────────── */
+:host ::ng-deep .p-tabs .p-tablist {
+  background: #0f172a !important;
+  border-color: #334155 !important;
+}
+
+:host ::ng-deep .p-tabs .p-tab {
+  color: #64748b !important;
+  border-color: transparent !important;
+}
+
+:host ::ng-deep .p-tabs .p-tab:hover {
+  color: #94a3b8 !important;
+  background: #1e293b !important;
+}
+
+:host ::ng-deep .p-tabs .p-tab-active {
+  color: #93c5fd !important;
+  border-bottom-color: #3b82f6 !important;
+  background: transparent !important;
+}
+
+:host ::ng-deep .p-tabpanels {
+  background: #1e293b !important;
+  padding: 0.75rem 0 !important;
+}
+
+/* ── Tabla dentro de tabs ───────────────────────────────────────────── */
+:host ::ng-deep .p-datatable {
+  background: #1e293b;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  border: 1px solid #334155;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-thead > tr > th {
+  background: #0f172a !important;
+  color: #94a3b8 !important;
+  border-color: #334155 !important;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr {
+  background: #1e293b !important;
+  color: #e2e8f0 !important;
+  border-color: #334155 !important;
+  transition: background 0.12s;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr:hover {
+  background: #253347 !important;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr > td {
+  border-color: #334155 !important;
+  color: #e2e8f0 !important;
+}
+
+:host ::ng-deep .p-paginator {
+  background: #0f172a !important;
+  border-color: #334155 !important;
+  color: #94a3b8 !important;
+}
+
+:host ::ng-deep .p-paginator .p-paginator-page.p-highlight {
+  background: #3b82f6 !important;
+  color: #fff !important;
+}
+
+/* ── Inputs ─────────────────────────────────────────────────────────── */
+:host ::ng-deep .p-inputtext,
+:host ::ng-deep textarea.p-inputtextarea {
+  background: #0f172a !important;
+  border-color: #334155 !important;
+  color: #e2e8f0 !important;
+}
+
+:host ::ng-deep .p-inputtext:focus { border-color: #3b82f6 !important; }
+
+:host ::ng-deep .p-select,
+:host ::ng-deep .p-select-label {
+  background: #0f172a !important;
+  border-color: #334155 !important;
+  color: #e2e8f0 !important;
+}
+
+:host ::ng-deep .p-select-overlay {
+  background: #1e293b !important;
+  border-color: #334155 !important;
+}
+
+:host ::ng-deep .p-select-list .p-select-option {
+  color: #e2e8f0 !important;
+}
+
+:host ::ng-deep .p-select-list .p-select-option:hover,
+:host ::ng-deep .p-select-list .p-select-option.p-select-option-selected {
+  background: #253347 !important;
+}
+
+:host ::ng-deep .p-inputnumber input {
+  background: #0f172a !important;
+  border-color: #334155 !important;
+  color: #e2e8f0 !important;
+}
+
+:host ::ng-deep .p-datepicker-input {
+  background: #0f172a !important;
+  border-color: #334155 !important;
+  color: #e2e8f0 !important;
+}
+
+/* ── Dialogs ────────────────────────────────────────────────────────── */
+:host ::ng-deep .p-dialog {
+  background: #1e293b !important;
+  border: 1px solid #334155 !important;
+}
+
+:host ::ng-deep .p-dialog .p-dialog-header {
+  background: #0f172a !important;
+  color: #f1f5f9 !important;
+  border-bottom: 1px solid #334155 !important;
+}
+
+:host ::ng-deep .p-dialog .p-dialog-header .p-dialog-title { color: #f1f5f9 !important; }
+
+:host ::ng-deep .p-dialog .p-dialog-content {
+  background: #1e293b !important;
+  color: #e2e8f0 !important;
+}
+
+:host ::ng-deep .p-dialog .p-dialog-footer {
+  background: #0f172a !important;
+  border-top: 1px solid #334155 !important;
+}
+
+/* ── Labels del diálogo ─────────────────────────────────────────────── */
+:host ::ng-deep .p-dialog label,
+.field-group label {
+  color: #94a3b8;
+}
+
+/* ── Checkbox ───────────────────────────────────────────────────────── */
+:host ::ng-deep .p-checkbox .p-checkbox-box {
+  background: #0f172a !important;
+  border-color: #475569 !important;
+}
+:host ::ng-deep .p-checkbox.p-highlight .p-checkbox-box {
+  background: #3b82f6 !important;
+  border-color: #3b82f6 !important;
 }

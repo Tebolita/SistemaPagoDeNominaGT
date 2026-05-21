@@ -221,6 +221,7 @@ export type PuestoWhereInput = {
   Activo?: Prisma.BoolNullableFilter<"Puesto"> | boolean | null
   FechaEliminacion?: Prisma.DateTimeNullableFilter<"Puesto"> | Date | string | null
   Empleado?: Prisma.EmpleadoListRelationFilter
+  ParametroGlobal?: Prisma.ParametroGlobalListRelationFilter
   Departamento?: Prisma.XOR<Prisma.DepartamentoScalarRelationFilter, Prisma.DepartamentoWhereInput>
 }
 
@@ -231,6 +232,7 @@ export type PuestoOrderByWithRelationInput = {
   Activo?: Prisma.SortOrderInput | Prisma.SortOrder
   FechaEliminacion?: Prisma.SortOrderInput | Prisma.SortOrder
   Empleado?: Prisma.EmpleadoOrderByRelationAggregateInput
+  ParametroGlobal?: Prisma.ParametroGlobalOrderByRelationAggregateInput
   Departamento?: Prisma.DepartamentoOrderByWithRelationInput
 }
 
@@ -244,6 +246,7 @@ export type PuestoWhereUniqueInput = Prisma.AtLeast<{
   Activo?: Prisma.BoolNullableFilter<"Puesto"> | boolean | null
   FechaEliminacion?: Prisma.DateTimeNullableFilter<"Puesto"> | Date | string | null
   Empleado?: Prisma.EmpleadoListRelationFilter
+  ParametroGlobal?: Prisma.ParametroGlobalListRelationFilter
   Departamento?: Prisma.XOR<Prisma.DepartamentoScalarRelationFilter, Prisma.DepartamentoWhereInput>
 }, "IdPuesto">
 
@@ -276,6 +279,7 @@ export type PuestoCreateInput = {
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
   Empleado?: Prisma.EmpleadoCreateNestedManyWithoutPuestoInput
+  ParametroGlobal?: Prisma.ParametroGlobalCreateNestedManyWithoutPuestoInput
   Departamento: Prisma.DepartamentoCreateNestedOneWithoutPuestoInput
 }
 
@@ -286,6 +290,7 @@ export type PuestoUncheckedCreateInput = {
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
   Empleado?: Prisma.EmpleadoUncheckedCreateNestedManyWithoutPuestoInput
+  ParametroGlobal?: Prisma.ParametroGlobalUncheckedCreateNestedManyWithoutPuestoInput
 }
 
 export type PuestoUpdateInput = {
@@ -293,6 +298,7 @@ export type PuestoUpdateInput = {
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Empleado?: Prisma.EmpleadoUpdateManyWithoutPuestoNestedInput
+  ParametroGlobal?: Prisma.ParametroGlobalUpdateManyWithoutPuestoNestedInput
   Departamento?: Prisma.DepartamentoUpdateOneRequiredWithoutPuestoNestedInput
 }
 
@@ -303,6 +309,7 @@ export type PuestoUncheckedUpdateInput = {
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Empleado?: Prisma.EmpleadoUncheckedUpdateManyWithoutPuestoNestedInput
+  ParametroGlobal?: Prisma.ParametroGlobalUncheckedUpdateManyWithoutPuestoNestedInput
 }
 
 export type PuestoCreateManyInput = {
@@ -339,6 +346,11 @@ export type PuestoOrderByRelationAggregateInput = {
 export type PuestoScalarRelationFilter = {
   is?: Prisma.PuestoWhereInput
   isNot?: Prisma.PuestoWhereInput
+}
+
+export type PuestoNullableScalarRelationFilter = {
+  is?: Prisma.PuestoWhereInput | null
+  isNot?: Prisma.PuestoWhereInput | null
 }
 
 export type PuestoCountOrderByAggregateInput = {
@@ -431,11 +443,28 @@ export type PuestoUpdateOneRequiredWithoutEmpleadoNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.PuestoUpdateToOneWithWhereWithoutEmpleadoInput, Prisma.PuestoUpdateWithoutEmpleadoInput>, Prisma.PuestoUncheckedUpdateWithoutEmpleadoInput>
 }
 
+export type PuestoCreateNestedOneWithoutParametroGlobalInput = {
+  create?: Prisma.XOR<Prisma.PuestoCreateWithoutParametroGlobalInput, Prisma.PuestoUncheckedCreateWithoutParametroGlobalInput>
+  connectOrCreate?: Prisma.PuestoCreateOrConnectWithoutParametroGlobalInput
+  connect?: Prisma.PuestoWhereUniqueInput
+}
+
+export type PuestoUpdateOneWithoutParametroGlobalNestedInput = {
+  create?: Prisma.XOR<Prisma.PuestoCreateWithoutParametroGlobalInput, Prisma.PuestoUncheckedCreateWithoutParametroGlobalInput>
+  connectOrCreate?: Prisma.PuestoCreateOrConnectWithoutParametroGlobalInput
+  upsert?: Prisma.PuestoUpsertWithoutParametroGlobalInput
+  disconnect?: Prisma.PuestoWhereInput | boolean
+  delete?: Prisma.PuestoWhereInput | boolean
+  connect?: Prisma.PuestoWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PuestoUpdateToOneWithWhereWithoutParametroGlobalInput, Prisma.PuestoUpdateWithoutParametroGlobalInput>, Prisma.PuestoUncheckedUpdateWithoutParametroGlobalInput>
+}
+
 export type PuestoCreateWithoutDepartamentoInput = {
   NombrePuesto: string
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
   Empleado?: Prisma.EmpleadoCreateNestedManyWithoutPuestoInput
+  ParametroGlobal?: Prisma.ParametroGlobalCreateNestedManyWithoutPuestoInput
 }
 
 export type PuestoUncheckedCreateWithoutDepartamentoInput = {
@@ -444,6 +473,7 @@ export type PuestoUncheckedCreateWithoutDepartamentoInput = {
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
   Empleado?: Prisma.EmpleadoUncheckedCreateNestedManyWithoutPuestoInput
+  ParametroGlobal?: Prisma.ParametroGlobalUncheckedCreateNestedManyWithoutPuestoInput
 }
 
 export type PuestoCreateOrConnectWithoutDepartamentoInput = {
@@ -486,6 +516,7 @@ export type PuestoCreateWithoutEmpleadoInput = {
   NombrePuesto: string
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  ParametroGlobal?: Prisma.ParametroGlobalCreateNestedManyWithoutPuestoInput
   Departamento: Prisma.DepartamentoCreateNestedOneWithoutPuestoInput
 }
 
@@ -495,6 +526,7 @@ export type PuestoUncheckedCreateWithoutEmpleadoInput = {
   IdDepartamento: number
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  ParametroGlobal?: Prisma.ParametroGlobalUncheckedCreateNestedManyWithoutPuestoInput
 }
 
 export type PuestoCreateOrConnectWithoutEmpleadoInput = {
@@ -517,6 +549,7 @@ export type PuestoUpdateWithoutEmpleadoInput = {
   NombrePuesto?: Prisma.StringFieldUpdateOperationsInput | string
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ParametroGlobal?: Prisma.ParametroGlobalUpdateManyWithoutPuestoNestedInput
   Departamento?: Prisma.DepartamentoUpdateOneRequiredWithoutPuestoNestedInput
 }
 
@@ -526,6 +559,57 @@ export type PuestoUncheckedUpdateWithoutEmpleadoInput = {
   IdDepartamento?: Prisma.IntFieldUpdateOperationsInput | number
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ParametroGlobal?: Prisma.ParametroGlobalUncheckedUpdateManyWithoutPuestoNestedInput
+}
+
+export type PuestoCreateWithoutParametroGlobalInput = {
+  NombrePuesto: string
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
+  Empleado?: Prisma.EmpleadoCreateNestedManyWithoutPuestoInput
+  Departamento: Prisma.DepartamentoCreateNestedOneWithoutPuestoInput
+}
+
+export type PuestoUncheckedCreateWithoutParametroGlobalInput = {
+  IdPuesto?: number
+  NombrePuesto: string
+  IdDepartamento: number
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
+  Empleado?: Prisma.EmpleadoUncheckedCreateNestedManyWithoutPuestoInput
+}
+
+export type PuestoCreateOrConnectWithoutParametroGlobalInput = {
+  where: Prisma.PuestoWhereUniqueInput
+  create: Prisma.XOR<Prisma.PuestoCreateWithoutParametroGlobalInput, Prisma.PuestoUncheckedCreateWithoutParametroGlobalInput>
+}
+
+export type PuestoUpsertWithoutParametroGlobalInput = {
+  update: Prisma.XOR<Prisma.PuestoUpdateWithoutParametroGlobalInput, Prisma.PuestoUncheckedUpdateWithoutParametroGlobalInput>
+  create: Prisma.XOR<Prisma.PuestoCreateWithoutParametroGlobalInput, Prisma.PuestoUncheckedCreateWithoutParametroGlobalInput>
+  where?: Prisma.PuestoWhereInput
+}
+
+export type PuestoUpdateToOneWithWhereWithoutParametroGlobalInput = {
+  where?: Prisma.PuestoWhereInput
+  data: Prisma.XOR<Prisma.PuestoUpdateWithoutParametroGlobalInput, Prisma.PuestoUncheckedUpdateWithoutParametroGlobalInput>
+}
+
+export type PuestoUpdateWithoutParametroGlobalInput = {
+  NombrePuesto?: Prisma.StringFieldUpdateOperationsInput | string
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Empleado?: Prisma.EmpleadoUpdateManyWithoutPuestoNestedInput
+  Departamento?: Prisma.DepartamentoUpdateOneRequiredWithoutPuestoNestedInput
+}
+
+export type PuestoUncheckedUpdateWithoutParametroGlobalInput = {
+  IdPuesto?: Prisma.IntFieldUpdateOperationsInput | number
+  NombrePuesto?: Prisma.StringFieldUpdateOperationsInput | string
+  IdDepartamento?: Prisma.IntFieldUpdateOperationsInput | number
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Empleado?: Prisma.EmpleadoUncheckedUpdateManyWithoutPuestoNestedInput
 }
 
 export type PuestoCreateManyDepartamentoInput = {
@@ -539,6 +623,7 @@ export type PuestoUpdateWithoutDepartamentoInput = {
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Empleado?: Prisma.EmpleadoUpdateManyWithoutPuestoNestedInput
+  ParametroGlobal?: Prisma.ParametroGlobalUpdateManyWithoutPuestoNestedInput
 }
 
 export type PuestoUncheckedUpdateWithoutDepartamentoInput = {
@@ -547,6 +632,7 @@ export type PuestoUncheckedUpdateWithoutDepartamentoInput = {
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Empleado?: Prisma.EmpleadoUncheckedUpdateManyWithoutPuestoNestedInput
+  ParametroGlobal?: Prisma.ParametroGlobalUncheckedUpdateManyWithoutPuestoNestedInput
 }
 
 export type PuestoUncheckedUpdateManyWithoutDepartamentoInput = {
@@ -563,10 +649,12 @@ export type PuestoUncheckedUpdateManyWithoutDepartamentoInput = {
 
 export type PuestoCountOutputType = {
   Empleado: number
+  ParametroGlobal: number
 }
 
 export type PuestoCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   Empleado?: boolean | PuestoCountOutputTypeCountEmpleadoArgs
+  ParametroGlobal?: boolean | PuestoCountOutputTypeCountParametroGlobalArgs
 }
 
 /**
@@ -586,6 +674,13 @@ export type PuestoCountOutputTypeCountEmpleadoArgs<ExtArgs extends runtime.Types
   where?: Prisma.EmpleadoWhereInput
 }
 
+/**
+ * PuestoCountOutputType without action
+ */
+export type PuestoCountOutputTypeCountParametroGlobalArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ParametroGlobalWhereInput
+}
+
 
 export type PuestoSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   IdPuesto?: boolean
@@ -594,6 +689,7 @@ export type PuestoSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   Activo?: boolean
   FechaEliminacion?: boolean
   Empleado?: boolean | Prisma.Puesto$EmpleadoArgs<ExtArgs>
+  ParametroGlobal?: boolean | Prisma.Puesto$ParametroGlobalArgs<ExtArgs>
   Departamento?: boolean | Prisma.DepartamentoDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.PuestoCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["puesto"]>
@@ -611,6 +707,7 @@ export type PuestoSelectScalar = {
 export type PuestoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"IdPuesto" | "NombrePuesto" | "IdDepartamento" | "Activo" | "FechaEliminacion", ExtArgs["result"]["puesto"]>
 export type PuestoInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   Empleado?: boolean | Prisma.Puesto$EmpleadoArgs<ExtArgs>
+  ParametroGlobal?: boolean | Prisma.Puesto$ParametroGlobalArgs<ExtArgs>
   Departamento?: boolean | Prisma.DepartamentoDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.PuestoCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -619,6 +716,7 @@ export type $PuestoPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
   name: "Puesto"
   objects: {
     Empleado: Prisma.$EmpleadoPayload<ExtArgs>[]
+    ParametroGlobal: Prisma.$ParametroGlobalPayload<ExtArgs>[]
     Departamento: Prisma.$DepartamentoPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -968,6 +1066,7 @@ readonly fields: PuestoFieldRefs;
 export interface Prisma__PuestoClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   Empleado<T extends Prisma.Puesto$EmpleadoArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Puesto$EmpleadoArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EmpleadoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  ParametroGlobal<T extends Prisma.Puesto$ParametroGlobalArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Puesto$ParametroGlobalArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ParametroGlobalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   Departamento<T extends Prisma.DepartamentoDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DepartamentoDefaultArgs<ExtArgs>>): Prisma.Prisma__DepartamentoClient<runtime.Types.Result.GetResult<Prisma.$DepartamentoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1371,6 +1470,30 @@ export type Puesto$EmpleadoArgs<ExtArgs extends runtime.Types.Extensions.Interna
   take?: number
   skip?: number
   distinct?: Prisma.EmpleadoScalarFieldEnum | Prisma.EmpleadoScalarFieldEnum[]
+}
+
+/**
+ * Puesto.ParametroGlobal
+ */
+export type Puesto$ParametroGlobalArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ParametroGlobal
+   */
+  select?: Prisma.ParametroGlobalSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ParametroGlobal
+   */
+  omit?: Prisma.ParametroGlobalOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ParametroGlobalInclude<ExtArgs> | null
+  where?: Prisma.ParametroGlobalWhereInput
+  orderBy?: Prisma.ParametroGlobalOrderByWithRelationInput | Prisma.ParametroGlobalOrderByWithRelationInput[]
+  cursor?: Prisma.ParametroGlobalWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ParametroGlobalScalarFieldEnum | Prisma.ParametroGlobalScalarFieldEnum[]
 }
 
 /**

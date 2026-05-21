@@ -1,556 +1,446 @@
-<div class="inicio-layout">
-  <aside class="sidebarUser">
-    <h1 class="text-xl">Empleados</h1>
-    <p-divider>
-        <b>Opciones</b>
-    </p-divider>
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
 
-    <div class="card w-[98%]">
-        <p-menubar [model]="items()">
-            <ng-template #item let-item>
-                <p-button 
-                    class="flex items-center px-3 py-2 cursor-pointer" 
-                    [severity]="item.severity"
-                    (click)="onCreateUser()">
-                    <span [class]="item.icon"></span>
-                </p-button>
-            </ng-template>
-        </p-menubar>
+<div class="flex flex-col min-h-screen p-4 gap-4">
+
+  <!-- ── Cabecera ──────────────────────────────────────────────────── -->
+  <div class="flex justify-between items-center">
+    <div>
+      <h1 class="text-2xl font-bold text-white">Empleados</h1>
+      <p class="text-sm text-slate-400 mt-1">{{ users().length }} empleado{{ users().length !== 1 ? 's' : '' }} registrados</p>
     </div>
-    
-    <p-divider>
-        <b>Usuarios</b>
-    </p-divider>
-    
-    <p *ngIf="error()" class="text-red-300 text-xs text-center">{{ error() }}</p>
-    
-    <div class="card flex sm:justify-center">
-        <p-toast />
-        <ul class="m-0 p-2 list-none flex flex-col gap-1 w-full">
-            @for (user of users(); track user.IdEmpleado) {
-                <li
-                    class="flex items-center gap-3 px-3 py-2 rounded-lg border cursor-pointer transition-all duration-150 cardUser"
-                    [class.border-transparent]="selectedUser()?.IdEmpleado !== user.IdEmpleado"
-                    [class.bg-transparent]="selectedUser()?.IdEmpleado !== user.IdEmpleado"
-                    [class.hover:bg-surface-100]="selectedUser()?.IdEmpleado !== user.IdEmpleado"
-                    [class.border-primary]="selectedUser()?.IdEmpleado === user.IdEmpleado"
-                    [class.bg-primary-50]="selectedUser()?.IdEmpleado === user.IdEmpleado"
-                    [class.dark:bg-primary-900-20]="selectedUser()?.IdEmpleado === user.IdEmpleado"
-                    (click)="onSelectUser(user)"  
-                    (contextmenu)="onContextMenu($event, user)"
-                >
-                
-                <img
-                    class="w-9 h-9 rounded-full flex-shrink-0 border border-surface-200 dark:border-surface-700 object-cover"
-                    [src]="user.Fotografia"
-                    [alt]="user.Nombres"
-                />
+    <p-button
+      label="Nuevo Empleado"
+      icon="pi pi-user-plus"
+      severity="success"
+      (onClick)="onCreateUser()"
+    ></p-button>
+  </div>
 
-                <span 
-                    class="flex-1 text-sm font-medium truncate"
-                    [class.text-primary]="selectedUser()?.IdEmpleado === user.IdEmpleado">
-                    {{ user.Nombres }} {{ user.Apellidos }}
-                </span>
+  <!-- ── Barra de empleados (scroll horizontal) ────────────────────── -->
+  <div class="emp-strip-wrapper">
+    <div class="emp-strip-search">
+      <i class="pi pi-search text-slate-500"></i>
+      <input
+        type="text"
+        [value]="busqueda()"
+        (input)="busqueda.set($any($event.target).value)"
+        placeholder="Buscar empleado..."
+        class="bg-transparent text-slate-300 outline-none text-sm w-full placeholder:text-slate-600"
+      />
+    </div>
 
-                <p-tag 
-                    [value]="user.Usuario[0]?.RolUsuario?.NombreRol || 'Sin rol'"
-                    styleClass="text-sm" />
-                </li>
+    <div class="emp-strip">
+      @if (empleadosFiltrados.length === 0) {
+        <span class="text-slate-500 text-sm self-center px-4">Sin resultados</span>
+      }
+      @for (user of empleadosFiltrados; track user.IdEmpleado) {
+        <button
+          class="emp-chip"
+          [class.emp-chip--active]="selectedUser()?.IdEmpleado === user.IdEmpleado"
+          (click)="onSelectUser(user)"
+        >
+          <div class="emp-chip-avatar">
+            @if (user.Fotografia) {
+              <img [src]="user.Fotografia" [alt]="user.Nombres" class="w-full h-full object-cover rounded-full" />
+            } @else {
+              <span class="emp-chip-initials">{{ user.Nombres[0] }}{{ user.Apellidos[0] }}</span>
             }
-        </ul>
-
-        <p-contextmenu #cm [model]="usuarios()"/>
+            <span class="emp-chip-dot" [class.emp-chip-dot--active]="user.Activo"></span>
+          </div>
+          <div class="emp-chip-info">
+            <span class="emp-chip-name">{{ user.Nombres }} {{ user.Apellidos }}</span>
+            <span class="emp-chip-role">{{ user.Usuario[0]?.RolUsuario?.NombreRol || 'Sin rol' }}</span>
+          </div>
+        </button>
+      }
     </div>
-  </aside>
+  </div>
 
-  <main class="content-area">
-    @if (selectedUser(); as selected) {
-        <div class="card">
-            <p-fieldset class="w-full" legend="Información General">
-                <div class="flex gap-2">
+  <!-- ── Panel de detalle ──────────────────────────────────────────── -->
+  @if (selectedUser(); as emp) {
+    <div class="detail-panel flex flex-col gap-4">
 
-                    <div class="flex flex-col items-center gap-3 w-[300px] flex-shrink-0">
-                        <p-avatar 
-                            shape="circle"
-                            [image]="selected.Fotografia"
-                            [style]="{ width: '120px', height: '120px' }" />
-                        <span class="font-semibold text-lg text-center">
-                            {{ selected.Nombres }} {{ selected.Apellidos }}
-                        </span>
-                        <div class="flex justify-center flex-wrap gap-4">
-                        <p-tag 
-                            [value]="selected.Usuario[0]?.RolUsuario?.NombreRol ?? 'Sin rol'"
-                            severity="info" />
-                        <p-tag 
-                            [value]="selected.Puesto.NombrePuesto ? selected.Puesto.NombrePuesto : 'Puesto no asignado'"
-                            severity="warn" />                            
-                        </div>
-
-                        <div class="flex justify-center flex-wrap gap-4">
-                            <p-tag 
-                                [value]="selected.Activo ? 'Activo' : 'Inactivo'" 
-                                [severity]="selected.Activo ? 'success' : 'danger'" />
-                            <p-tag 
-                                [value]="selected.Genero ? 'Femenino' : 'Masculino'" 
-                                [severity]="selected.Genero ? 'success' : 'danger'" />    
-                        </div>
-
-                        <p *ngIf="messageResponsive()" class="text-green-300 text-xs text-center">{{ messageResponsive() }}</p>
-
-                        <p-divider />
-                        <div class="flex justify-center flex-wrap gap-4">
-                            <p-button 
-                                icon="pi pi-save" 
-                                severity="success" 
-                                (click)="onUpdateUser()"
-                                [disabled]="loading()"
-                                [loading]="loading()" />
-                            <p-button 
-                                [icon]="selected.Activo ? 'pi pi-times' : 'pi pi-check'" 
-                                [severity]="selected.Activo ? 'danger' : 'success'"  
-                                (click)="onDeleteUser()"
-                                [disabled]="loading()"
-                                [loading]="loading()" />
-                        </div>                     
-                    </div>
-
-                    <p-divider layout="vertical" />
-
-                    <div class="flex flex-col gap-4 flex-1">
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div class="flex flex-col gap-1">
-                                <label class="text-xs text-surface-500">Nombres</label>
-                                <input pInputText [(ngModel)]="selected.Nombres" [readonly]="!editarUsuario()" />
-                            </div>
-                            <div class="flex flex-col gap-1">
-                                <label class="text-xs text-surface-500">Apellidos</label>
-                                <input pInputText [(ngModel)]="selected.Apellidos" [readonly]="!editarUsuario()" />
-                            </div>
-                            <div class="flex flex-col gap-1">
-                                <label class="text-xs text-surface-500">DPI</label>
-                                <input pInputText [(ngModel)]="selected.DPI" [readonly]="!editarUsuario()" />
-                            </div>
-                            <div class="flex flex-col gap-1">
-                                <label class="text-xs text-surface-500">NIT</label>
-                                <input pInputText [(ngModel)]="selected.NIT" [readonly]="!editarUsuario()" />
-                            </div>
-                            <div class="flex flex-col gap-1">
-                                <label class="text-xs text-surface-500">Correo</label>
-                                <input pInputText [(ngModel)]="selected.CorreoPersonal" [readonly]="!editarUsuario()" />
-                            </div>
-                            <div class="flex flex-col gap-1">
-                                <label class="text-xs text-surface-500">Teléfono</label>
-                                <input pInputText [(ngModel)]="selected.Telefono" [readonly]="!editarUsuario()" />
-                            </div>
-                            <div class="flex flex-col gap-1">
-                                <label class="text-xs text-surface-500">Dirección</label>
-                                <input pInputText [(ngModel)]="selected.Direccion" [readonly]="!editarUsuario()" />
-                            </div>
-                            <div class="flex flex-col gap-1">
-                                <label class="text-xs text-surface-500">Estado civil</label>
-                                <input pInputText [(ngModel)]="selected.EstadoCivil" [readonly]="!editarUsuario()" />
-                            </div>
-                            <div class="flex flex-col gap-1">
-                                <label class="text-xs text-surface-500">Fecha de ingreso</label>
-                                <input pInputText [value]="selected.FechaIngresa | date:'dd/MM/yyyy'" readonly />
-                            </div>
-                            <div class="flex flex-col gap-1">
-                                <label class="text-xs text-surface-500">Fecha de eliminación</label>
-                                <input pInputText [value]="selected.FechaEliminacion | date:'dd/MM/yyyy'" readonly />
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </p-fieldset>
+      <!-- Header del empleado -->
+      <div class="detail-header">
+        <div class="detail-avatar-wrap">
+          @if (emp.Fotografia) {
+            <img [src]="emp.Fotografia" [alt]="emp.Nombres" class="detail-avatar-img" />
+          } @else {
+            <div class="detail-avatar-placeholder">{{ emp.Nombres[0] }}{{ emp.Apellidos[0] }}</div>
+          }
         </div>
-        
-        <div class="card mt-4">
-            <p-fieldset class="w-full" legend="Configuraciones">
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                    <div class="flex flex-col gap-1">
-                        <label class="text-xs text-surface-500">Rol de usuario</label>
-                        <p-select 
-                            [options]="roles()" 
-                            [(ngModel)]="selected.Usuario[0].IdRol" 
-                            optionLabel="NombreRol" 
-                            optionValue="IdRol"
-                            placeholder="Seleccionar Rol" 
-                            [disabled]="!editarUsuario()"
-                            class="w-full md:w-56" />
-                    </div>
-                    <div class="flex flex-col gap-1">
-                        <label class="text-xs text-surface-500">Puesto</label>
-                        <p-select 
-                            [options]="puestos()" 
-                            [(ngModel)]="selected.IdPuesto" 
-                            optionLabel="NombrePuesto" 
-                            optionValue="IdPuesto"
-                            placeholder="Seleccionar Puesto" 
-                            [disabled]="!editarUsuario()"
-                            class="w-full md:w-56" />
-                    </div>
-                    <div class="flex flex-col gap-1">
-                        <label class="text-xs text-surface-500">Jornada Laboral</label>
-                        <p-select 
-                            [options]="jornadas()" 
-                            [(ngModel)]="selected.IdJornada" 
-                            optionLabel="NombreJornada" 
-                            optionValue="IdJornada"
-                            placeholder="Seleccionar Jornada" 
-                            [disabled]="!editarUsuario()"
-                            class="w-full md:w-56" />
-                    </div>
-                    <div class="flex flex-col gap-1">
-                        <label class="text-xs text-surface-500">Banco</label>
-                        <p-select 
-                            [options]="bancos()" 
-                            [(ngModel)]="selected.IdBanco" 
-                            optionLabel="NombreBanco" 
-                            optionValue="IdBanco"
-                            placeholder="Seleccionar Banco" 
-                            [disabled]="!editarUsuario()"
-                            class="w-full md:w-56" />
-                    </div>
-                    <div class="flex flex-col gap-1 col-span-2">
-                        <label class="text-xs text-surface-500">Cuenta Bancaria</label>
-                        <input pInputText [(ngModel)]="selected.CuentaBancaria" [readonly]="!editarUsuario()" placeholder="No. de cuenta" />
-                    </div>
-                </div>
-            </p-fieldset>
+        <div class="flex-1 min-w-0">
+          <div class="text-xl font-bold text-white truncate">{{ emp.Nombres }} {{ emp.Apellidos }}</div>
+          <div class="flex flex-wrap gap-2 mt-2">
+            <p-tag [value]="emp.Puesto.NombrePuesto || 'Sin puesto'" severity="warn"></p-tag>
+            <p-tag [value]="(emp.Usuario[0]?.RolUsuario?.NombreRol) || 'Sin rol'" severity="info"></p-tag>
+            <p-tag [value]="emp.Activo ? 'Activo' : 'Inactivo'" [severity]="emp.Activo ? 'success' : 'danger'"></p-tag>
+            <p-tag [value]="emp.Genero ? 'Femenino' : 'Masculino'" severity="secondary"></p-tag>
+          </div>
         </div>
-
-        <div class="card mt-4">
-            <p-fieldset class="w-full" legend="Historial de Salarios">
-                <div class="flex justify-end mb-3">
-                    <p-button 
-                        icon="pi pi-plus" 
-                        label="Agregar Salario" 
-                        severity="success"
-                        (click)="onAddSalario()"
-                        [disabled]="!selectedUser()" />
-                </div>
-                <p-table [value]="historialSalario()" [rows]="5" [paginator]="true" [rowHover]="true"
-                    emptyMessage="Este empleado no tiene historial de salarios.">
-                    <ng-template pTemplate="header">
-                        <tr>
-                            <th>Salario Base</th>
-                            <th>Inicio Vigencia</th>
-                            <th>Fin Vigencia</th>
-                            <th>Estado</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </ng-template>
-                    <ng-template pTemplate="body" let-salario>
-                        <tr>
-                            <td class="font-medium text-green-600">Q{{ salario.SalarioBase | number:'1.2-2' }}</td>
-                            <td><i class="pi pi-calendar mr-2 text-surface-500"></i>{{ salario.FechaInicioVigencia | date:'dd/MM/yyyy' }}</td>
-                            <td>
-                                @if (salario.FechaFinVigencia) {
-                                    <i class="pi pi-calendar-times mr-2 text-surface-500"></i>{{ salario.FechaFinVigencia | date:'dd/MM/yyyy' }}
-                                } @else {
-                                    <span class="text-500">Actual</span>
-                                }
-                            </td>
-                            <td>
-                                @if (salario.Activo) {
-                                    <p-tag severity="success" value="Activo" icon="pi pi-check"></p-tag>
-                                } @else {
-                                    <p-tag severity="secondary" value="Inactivo" icon="pi pi-times"></p-tag>
-                                }
-                            </td>
-                            <td>
-                                <p-button 
-                                    [icon]="salario.Activo ? 'pi pi-times' : 'pi pi-check'" 
-                                    [severity]="salario.Activo ? 'danger' : 'success'"
-                                    [rounded]="true"
-                                    [text]="true"
-                                    pTooltip="{{ salario.Activo ? 'Desactivar' : 'Activar' }}"
-                                    (onClick)="toggleSalario(salario)"
-                                    [disabled]="loading()" />
-                            </td>
-                        </tr>
-                    </ng-template>
-                </p-table>
-            </p-fieldset>
-        </div>        
-
-        <div class="card mt-4">
-            <p-fieldset class="w-full" legend="Vacaciones">
-                <p-table [value]="vacacionesEmpleado()" [rows]="5" [paginator]="true" [rowHover]="true" 
-                    emptyMessage="Este empleado no tiene registros de vacaciones.">
-                    <ng-template pTemplate="header">
-                        <tr>
-                            <th>Fecha Inicio</th>
-                            <th>Fecha Fin</th>
-                            <th>Goce de Sueldo</th>
-                        </tr>
-                    </ng-template>
-                    <ng-template pTemplate="body" let-vacacion>
-                        <tr>
-                            <td><i class="pi pi-calendar mr-2 text-surface-500"></i>{{ vacacion.FechaInicio | date:'dd/MM/yyyy' }}</td>
-                            <td><i class="pi pi-calendar-times mr-2 text-surface-500"></i>{{ vacacion.FechaFin | date:'dd/MM/yyyy' }}</td>
-                            <td>
-                                @if (vacacion.ConGoceSueldo) {
-                                    <p-tag severity="success" value="Sí" icon="pi pi-check"></p-tag>
-                                } @else {
-                                    <p-tag severity="danger" value="No" icon="pi pi-times"></p-tag>
-                                }
-                            </td>
-                        </tr>
-                    </ng-template>
-                </p-table>
-            </p-fieldset>
+        <div class="flex gap-2 flex-shrink-0">
+          <p-button
+            icon="pi pi-save"
+            label="Guardar"
+            severity="success"
+            [loading]="loading()"
+            (onClick)="onUpdateUser()"
+            pTooltip="Guardar cambios"
+          ></p-button>
+          <p-button
+            [icon]="emp.Activo ? 'pi pi-user-minus' : 'pi pi-user-plus'"
+            [severity]="emp.Activo ? 'danger' : 'success'"
+            [outlined]="true"
+            [loading]="loading()"
+            (onClick)="onDeleteUser()"
+            [pTooltip]="emp.Activo ? 'Dar de baja' : 'Reactivar'"
+          ></p-button>
         </div>
+      </div>
 
-        <div class="card mt-4">
-            <p-fieldset class="w-full" legend="Asistencias">
-                <p-table [value]="asistenciasEmpleado()" [rows]="5" [paginator]="true" [rowHover]="true"
-                    emptyMessage="Este empleado no tiene registros de asistencia.">
-                    <ng-template pTemplate="header">
-                        <tr>
-                            <th>Fecha</th>
-                            <th>Entrada</th>
-                            <th>Salida</th>
-                            <th>Horas Extra</th>
-                        </tr>
-                    </ng-template>
-                    <ng-template pTemplate="body" let-asistencia>
-                        <tr>
-                            <td class="font-medium">{{ asistencia.Fecha | date:'dd/MM/yyyy' }}</td>
-                            <td>
-                                <span class="text-green-600 font-medium"><i class="pi pi-sign-in mr-1"></i>{{ asistencia.HoraEntrada | date:'shortTime' }}</span>
-                            </td>
-                            <td>
-                                @if (asistencia.HoraSalida) {
-                                    <span class="text-red-600 font-medium"><i class="pi pi-sign-out mr-1"></i>{{ asistencia.HoraSalida | date:'shortTime' }}</span>
-                                } @else {
-                                    <p-tag severity="warn" value="Sin marcar"></p-tag>  
-                                }
-                            </td>
-                            <td>
-                                @if (asistencia.HorasExtra > 0) {
-                                    <p-tag severity="info" value="+{{ asistencia.HorasExtra }} hrs" icon="pi pi-star-fill"></p-tag>
-                                } @else {
-                                    <span class="text-500">0</span>
-                                }
-                            </td>
-                        </tr>
-                    </ng-template>
-                </p-table>
-            </p-fieldset>
+      <!-- Mensaje de éxito -->
+      @if (messageResponsive()) {
+        <div class="bg-green-900 border border-green-700 text-green-300 text-sm px-4 py-2 rounded-lg">
+          <i class="pi pi-check-circle mr-2"></i>{{ messageResponsive() }}
         </div>
+      }
 
-    }
-  </main>
+      <!-- Tabs -->
+      <p-tabs [(value)]="activeTab">
+        <p-tablist>
+          <p-tab value="info"><i class="pi pi-user mr-2"></i>Información</p-tab>
+          <p-tab value="config"><i class="pi pi-cog mr-2"></i>Configuración</p-tab>
+          <p-tab value="salarios"><i class="pi pi-dollar mr-2"></i>Salarios</p-tab>
+          <p-tab value="vacaciones"><i class="pi pi-sun mr-2"></i>Vacaciones</p-tab>
+          <p-tab value="asistencias"><i class="pi pi-clock mr-2"></i>Asistencias</p-tab>
+        </p-tablist>
+
+        <!-- Tab: Información General -->
+        <p-tabpanels>
+          <p-tabpanel value="info">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-2">
+              <div class="field-group">
+                <label>Nombres</label>
+                <input pInputText [(ngModel)]="emp.Nombres" class="w-full" />
+              </div>
+              <div class="field-group">
+                <label>Apellidos</label>
+                <input pInputText [(ngModel)]="emp.Apellidos" class="w-full" />
+              </div>
+              <div class="field-group">
+                <label>DPI</label>
+                <input pInputText [(ngModel)]="emp.DPI" class="w-full font-mono" />
+              </div>
+              <div class="field-group">
+                <label>NIT</label>
+                <input pInputText [(ngModel)]="emp.NIT" class="w-full font-mono" />
+              </div>
+              <div class="field-group">
+                <label>Correo</label>
+                <input pInputText [(ngModel)]="emp.CorreoPersonal" class="w-full" type="email" />
+              </div>
+              <div class="field-group">
+                <label>Teléfono</label>
+                <input pInputText [(ngModel)]="emp.Telefono" class="w-full" />
+              </div>
+              <div class="field-group sm:col-span-2">
+                <label>Dirección</label>
+                <input pInputText [(ngModel)]="emp.Direccion" class="w-full" />
+              </div>
+              <div class="field-group">
+                <label>Estado Civil</label>
+                <input pInputText [(ngModel)]="emp.EstadoCivil" class="w-full" />
+              </div>
+              <div class="field-group">
+                <label>Fecha de Ingreso</label>
+                <input pInputText [value]="emp.FechaIngresa | date:'dd/MM/yyyy'" readonly class="w-full" />
+              </div>
+              <div class="field-group">
+                <label>Género</label>
+                <p-select
+                  [options]="generos()"
+                  [(ngModel)]="emp.Genero"
+                  optionLabel="label"
+                  optionValue="value"
+                  class="w-full"
+                  appendTo="body"
+                ></p-select>
+              </div>
+            </div>
+          </p-tabpanel>
+
+          <!-- Tab: Configuración -->
+          <p-tabpanel value="config">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-2">
+              <div class="field-group">
+                <label>Rol de Usuario</label>
+                @if (emp.Usuario.length > 0) {
+                  <p-select
+                    [options]="roles()"
+                    [(ngModel)]="emp.Usuario[0].IdRol"
+                    optionLabel="NombreRol"
+                    optionValue="IdRol"
+                    placeholder="Seleccionar Rol"
+                    class="w-full"
+                    appendTo="body"
+                  ></p-select>
+                } @else {
+                  <div class="bg-slate-800 border border-slate-600 rounded px-3 py-2 text-slate-400 text-sm">
+                    Sin usuario asignado
+                  </div>
+                }
+              </div>
+              <div class="field-group">
+                <label>Puesto</label>
+                <p-select
+                  [options]="puestos()"
+                  [(ngModel)]="emp.IdPuesto"
+                  optionLabel="NombrePuesto"
+                  optionValue="IdPuesto"
+                  placeholder="Seleccionar Puesto"
+                  class="w-full"
+                  appendTo="body"
+                ></p-select>
+              </div>
+              <div class="field-group">
+                <label>Jornada Laboral</label>
+                <p-select
+                  [options]="jornadas()"
+                  [(ngModel)]="emp.IdJornada"
+                  optionLabel="NombreJornada"
+                  optionValue="IdJornada"
+                  placeholder="Seleccionar Jornada"
+                  class="w-full"
+                  appendTo="body"
+                ></p-select>
+              </div>
+              <div class="field-group">
+                <label>Banco</label>
+                <p-select
+                  [options]="bancos()"
+                  [(ngModel)]="emp.IdBanco"
+                  optionLabel="NombreBanco"
+                  optionValue="IdBanco"
+                  placeholder="Seleccionar Banco"
+                  class="w-full"
+                  appendTo="body"
+                ></p-select>
+              </div>
+              <div class="field-group sm:col-span-2">
+                <label>Número de Cuenta Bancaria</label>
+                <input pInputText [(ngModel)]="emp.CuentaBancaria" placeholder="No. de cuenta" class="w-full font-mono" />
+              </div>
+            </div>
+          </p-tabpanel>
+
+          <!-- Tab: Salarios -->
+          <p-tabpanel value="salarios">
+            <div class="flex justify-end mb-3 px-2">
+              <p-button icon="pi pi-plus" label="Agregar Salario" severity="success" (onClick)="onAddSalario()"></p-button>
+            </div>
+            <p-table [value]="historialSalario()" [rows]="5" [paginator]="true" [rowHover]="true"
+              emptyMessage="Sin historial de salarios.">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>Salario Base</th>
+                  <th>Inicio Vigencia</th>
+                  <th>Fin Vigencia</th>
+                  <th>Estado</th>
+                  <th>Acciones</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-sal>
+                <tr>
+                  <td class="font-semibold text-green-400">Q {{ sal.SalarioBase | number:'1.2-2' }}</td>
+                  <td>{{ sal.FechaInicioVigencia | date:'dd/MM/yyyy' }}</td>
+                  <td>{{ sal.FechaFinVigencia ? (sal.FechaFinVigencia | date:'dd/MM/yyyy') : 'Actual' }}</td>
+                  <td><p-tag [value]="sal.Activo ? 'Activo' : 'Inactivo'" [severity]="sal.Activo ? 'success' : 'secondary'"></p-tag></td>
+                  <td>
+                    <p-button [icon]="sal.Activo ? 'pi pi-times' : 'pi pi-check'"
+                      [severity]="sal.Activo ? 'danger' : 'success'" [rounded]="true" [text]="true"
+                      (onClick)="toggleSalario(sal)" [disabled]="loading()"></p-button>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </p-tabpanel>
+
+          <!-- Tab: Vacaciones -->
+          <p-tabpanel value="vacaciones">
+            <p-table [value]="vacacionesEmpleado()" [rows]="5" [paginator]="true" [rowHover]="true"
+              emptyMessage="Sin registros de vacaciones.">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>Fecha Inicio</th>
+                  <th>Fecha Fin</th>
+                  <th>Duración</th>
+                  <th>Goce de Sueldo</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-v>
+                <tr>
+                  <td class="text-sm">
+                    <i class="pi pi-calendar mr-1 text-slate-500"></i>
+                    {{ v.FechaInicio | date:'dd/MM/yyyy' }}
+                  </td>
+                  <td class="text-sm">
+                    <i class="pi pi-calendar mr-1 text-slate-500"></i>
+                    {{ v.FechaFin | date:'dd/MM/yyyy' }}
+                  </td>
+                  <td>
+                    <span class="text-sm font-mono text-slate-300">
+                      {{ (( $any(v.FechaFin) - $any(v.FechaInicio)) / 86400000 + 1) | number:'1.0-0' }} días
+                    </span>
+                  </td>
+                  <td>
+                    <p-tag
+                      [value]="v.ConGoceSueldo ? 'Con goce' : 'Sin goce'"
+                      [severity]="v.ConGoceSueldo ? 'success' : 'danger'"
+                    ></p-tag>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </p-tabpanel>
+
+          <!-- Tab: Asistencias -->
+          <p-tabpanel value="asistencias">
+            <p-table [value]="asistenciasEmpleado()" [rows]="5" [paginator]="true" [rowHover]="true"
+              emptyMessage="Sin registros de asistencia.">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>Fecha</th>
+                  <th>Entrada</th>
+                  <th>Salida</th>
+                  <th>Horas Extra</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-a>
+                <tr>
+                  <td class="font-medium">{{ a.Fecha | date:'dd/MM/yyyy' }}</td>
+                  <td class="text-green-400">{{ a.HoraEntrada | date:'HH:mm' }}</td>
+                  <td>
+                    @if (a.HoraSalida) { <span class="text-red-400">{{ a.HoraSalida | date:'HH:mm' }}</span> }
+                    @else { <p-tag severity="warn" value="Sin marcar"></p-tag> }
+                  </td>
+                  <td>
+                    @if (a.HorasExtra > 0) { <p-tag severity="info" [value]="'+' + a.HorasExtra + ' hrs'"></p-tag> }
+                    @else { <span class="text-slate-500">0</span> }
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </p-tabpanel>
+        </p-tabpanels>
+      </p-tabs>
+
+    </div>
+  } @else {
+    <div class="empty-state">
+      <i class="pi pi-users text-4xl text-slate-600 mb-3"></i>
+      <p class="text-slate-400">Selecciona un empleado para ver sus detalles</p>
+    </div>
+  }
 </div>
 
-<p-dialog 
-  header="Nuevo empleado" 
-  [visible]="dialogVisible()" 
+<!-- ── Diálogo: Nuevo Empleado ───────────────────────────────────── -->
+<p-dialog
+  header="Nuevo Empleado"
+  [visible]="dialogVisible()"
   (visibleChange)="dialogVisible.set($event)"
-  [modal]="true" 
+  [modal]="true"
   [style]="{ width: '100%', maxWidth: '700px' }"
   [breakpoints]="{ '768px': '95vw' }"
   [draggable]="false"
-  [resizable]="false">
-
-  <div class="flex flex-col gap-6 pt-4">
-
+  [resizable]="false"
+>
+  <div class="flex flex-col gap-4 pt-2">
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-
-      <div class="flex flex-col gap-2">
-        <label class="text-sm font-medium text-surface-600">Nombres</label>
-        <input pInputText class="w-full" [(ngModel)]="nuevoEmpleado().Nombres" placeholder="Juan Carlos" />
+      <div class="field-group"><label>Nombres *</label><input pInputText class="w-full" [(ngModel)]="nuevoEmpleado().Nombres" /></div>
+      <div class="field-group"><label>Apellidos *</label><input pInputText class="w-full" [(ngModel)]="nuevoEmpleado().Apellidos" /></div>
+      <div class="field-group"><label>DPI *</label><input pInputText class="w-full font-mono" [(ngModel)]="nuevoEmpleado().DPI" placeholder="13 dígitos" /></div>
+      <div class="field-group"><label>NIT</label><input pInputText class="w-full font-mono" [(ngModel)]="nuevoEmpleado().NIT" /></div>
+      <div class="field-group"><label>Correo</label><input pInputText class="w-full" [(ngModel)]="nuevoEmpleado().CorreoPersonal" type="email" /></div>
+      <div class="field-group"><label>Teléfono</label><input pInputText class="w-full" [(ngModel)]="nuevoEmpleado().Telefono" /></div>
+      <div class="field-group sm:col-span-2"><label>Dirección</label><input pInputText class="w-full" [(ngModel)]="nuevoEmpleado().Direccion" /></div>
+      <div class="field-group"><label>Estado Civil</label><input pInputText class="w-full" [(ngModel)]="nuevoEmpleado().EstadoCivil" /></div>
+      <div class="field-group">
+        <label>Fecha de Ingreso</label>
+        <p-datepicker [(ngModel)]="nuevoEmpleado().FechaIngresa" dateFormat="dd/mm/yy" [showIcon]="true" class="w-full" appendTo="body" />
       </div>
-
-      <div class="flex flex-col gap-2">
-        <label class="text-sm font-medium text-surface-600">Apellidos</label>
-        <input pInputText class="w-full" [(ngModel)]="nuevoEmpleado().Apellidos" placeholder="López Pérez" />
+      <div class="field-group">
+        <label>Género</label>
+        <p-select [options]="generos()" [(ngModel)]="nuevoEmpleado().Genero" optionLabel="label" optionValue="value" class="w-full" appendTo="body" />
       </div>
-
-      <div class="flex flex-col gap-2">
-        <label class="text-sm font-medium text-surface-600">DPI</label>
-        <input pInputText class="w-full" [(ngModel)]="nuevoEmpleado().DPI" placeholder="1234567890101" />
+      <div class="field-group">
+        <label>Puesto *</label>
+        <p-select [options]="puestos()" [(ngModel)]="nuevoEmpleado().IdPuesto" optionLabel="NombrePuesto" optionValue="IdPuesto" placeholder="Seleccionar" class="w-full" appendTo="body" />
       </div>
-
-      <div class="flex flex-col gap-2">
-        <label class="text-sm font-medium text-surface-600">NIT</label>
-        <input pInputText class="w-full" [(ngModel)]="nuevoEmpleado().NIT" placeholder="12345678-9" />
+      <div class="field-group">
+        <label>Jornada *</label>
+        <p-select [options]="jornadas()" [(ngModel)]="nuevoEmpleado().IdJornada" optionLabel="NombreJornada" optionValue="IdJornada" placeholder="Seleccionar" class="w-full" appendTo="body" />
       </div>
-
-      <div class="flex flex-col gap-2">
-        <label class="text-sm font-medium text-surface-600">Correo personal</label>
-        <input pInputText class="w-full" [(ngModel)]="nuevoEmpleado().CorreoPersonal" placeholder="correo@ejemplo.com" />
+      <div class="field-group">
+        <label>Banco</label>
+        <p-select [options]="bancos()" [(ngModel)]="nuevoEmpleado().IdBanco" optionLabel="NombreBanco" optionValue="IdBanco" placeholder="Seleccionar" class="w-full" appendTo="body" />
       </div>
-
-      <div class="flex flex-col gap-2">
-        <label class="text-sm font-medium text-surface-600">Teléfono</label>
-        <input pInputText class="w-full" [(ngModel)]="nuevoEmpleado().Telefono" placeholder="55551234" type="text" />
+      <div class="field-group">
+        <label>Cuenta Bancaria</label>
+        <input pInputText class="w-full font-mono" [(ngModel)]="nuevoEmpleado().CuentaBancaria" />
       </div>
-
-      <div class="flex flex-col gap-2">
-        <label class="text-sm font-medium text-surface-600">Dirección</label>
-        <input pInputText class="w-full" [(ngModel)]="nuevoEmpleado().Direccion" placeholder="Zona 10, Guatemala" />
-      </div>
-
-      <div class="flex flex-col gap-2">
-        <label class="text-sm font-medium text-surface-600">Estado civil</label>
-        <input pInputText class="w-full" [(ngModel)]="nuevoEmpleado().EstadoCivil" placeholder="Soltero" />
-      </div>
-
-      <div class="flex flex-col gap-2">
-        <label class="text-sm font-medium text-surface-600">Fecha de ingreso</label>
-        <p-datepicker 
-          [(ngModel)]="nuevoEmpleado().FechaIngresa" 
-          dateFormat="dd/mm/yy" 
-          [showIcon]="true"
-          class="w-full"
-          styleClass="w-full" />
-      </div>
-
-      <div class="flex flex-col gap-2">
-        <label class="text-sm font-medium text-surface-600">Fotografía (URL)</label>
+      <div class="field-group sm:col-span-2">
+        <label>Fotografía (URL)</label>
         <input pInputText class="w-full" [(ngModel)]="nuevoEmpleado().Fotografia" placeholder="https://..." />
       </div>
-
-      <div class="flex flex-col gap-2">
-        <label class="text-sm font-medium text-surface-600">Género</label>
-        <p-select 
-          [options]="generos()" 
-          [(ngModel)]="nuevoEmpleado().Genero" 
-          optionLabel="label" 
-          optionValue="value" 
-          placeholder="Seleccionar" 
-          class="w-full" />
-      </div>
-
-      <div class="flex flex-col gap-2">
-        <label class="text-sm font-medium text-surface-600">Puesto</label>
-        <p-select 
-          [options]="puestos()" 
-          [(ngModel)]="nuevoEmpleado().IdPuesto" 
-          optionLabel="NombrePuesto" 
-          optionValue="IdPuesto" 
-          placeholder="Seleccionar puesto" 
-          class="w-full" />
-      </div>
-
-      <div class="flex flex-col gap-2">
-        <label class="text-sm font-medium text-surface-600">Jornada</label>
-        <p-select 
-          [options]="jornadas()" 
-          [(ngModel)]="nuevoEmpleado().IdJornada" 
-          optionLabel="NombreJornada" 
-          optionValue="IdJornada" 
-          placeholder="Seleccionar Jornada" 
-          class="w-full" />
-      </div>
-
-      <div class="flex flex-col gap-2">
-        <label class="text-sm font-medium text-surface-600">Banco</label>
-        <p-select
-          [options]="bancos()"
-          [(ngModel)]="nuevoEmpleado().IdBanco"
-          optionLabel="NombreBanco"
-          optionValue="IdBanco"
-          placeholder="Seleccionar banco"
-          class="w-full" />
-      </div>
-
-      <div class="flex flex-col gap-2">
-        <label class="text-sm font-medium text-surface-600">Cuenta bancaria</label>
-        <input pInputText class="w-full" [(ngModel)]="nuevoEmpleado().CuentaBancaria" placeholder="Número de cuenta" />
-      </div>
-
     </div>
-
-    <p *ngIf="errorDialog()" class="text-red-500 text-sm text-center font-medium mt-2">
-      {{ errorDialog() }}
-    </p>
-
+    @if (errorDialog()) {
+      <div class="bg-red-900 border border-red-700 text-red-300 text-sm px-4 py-2 rounded-lg">
+        <i class="pi pi-exclamation-triangle mr-2"></i>{{ errorDialog() }}
+      </div>
+    }
   </div>
-
   <ng-template #footer>
-    <div class="flex justify-end gap-2 mt-4">
-      <p-button label="Cancelar" severity="secondary" [outlined]="true" (click)="onCancelDialog()" />
-      <p-button 
-        label="Guardar" 
-        severity="success" 
-        icon="pi pi-save" 
-        [loading]="loading()" 
-        [disabled]="loading()"
-        (click)="onSaveUser()" />
+    <div class="flex justify-end gap-2">
+      <p-button label="Cancelar" severity="secondary" [outlined]="true" (onClick)="onCancelDialog()"></p-button>
+      <p-button label="Guardar" severity="success" icon="pi pi-save" [loading]="loading()" (onClick)="onSaveUser()"></p-button>
     </div>
   </ng-template>
-
 </p-dialog>
 
-<p-dialog 
-  header="Agregar Salario" 
-  [visible]="salarioDialogVisible()" 
+<!-- ── Diálogo: Agregar Salario ──────────────────────────────────── -->
+<p-dialog
+  header="Agregar Salario"
+  [visible]="salarioDialogVisible()"
   (visibleChange)="salarioDialogVisible.set($event)"
-  [modal]="true" 
+  [modal]="true"
   [style]="{ width: '100%', maxWidth: '450px' }"
   [breakpoints]="{ '768px': '95vw' }"
   [draggable]="false"
-  [resizable]="false">
-
-  <div class="flex flex-col gap-6 pt-4">
-    <div class="flex flex-col gap-2">
-      <label class="text-sm font-medium text-surface-600">Salario Base (Q)</label>
-      <p-inputNumber 
-        [(ngModel)]="nuevoSalario().SalarioBase" 
-        [minFractionDigits]="2" 
-        [maxFractionDigits]="2"
-        mode="decimal"
-        locale="es-GT"
-        class="w-full" 
-        placeholder="0.00" />
+  [resizable]="false"
+>
+  <div class="flex flex-col gap-4 pt-2">
+    <div class="field-group">
+      <label>Salario Base (Q) *</label>
+      <p-inputNumber [(ngModel)]="nuevoSalario().SalarioBase" [minFractionDigits]="2" mode="decimal" class="w-full" />
     </div>
-
-    <div class="flex flex-col gap-2">
-      <label class="text-sm font-medium text-surface-600">Fecha Inicio de Vigencia</label>
-      <p-datePicker 
-        [(ngModel)]="nuevoSalario().FechaInicioVigencia" 
-        dateFormat="dd/mm/yy"
-        [showIcon]="true"
-        appendTo="body"
-        class="w-full" />
+    <div class="field-group">
+      <label>Inicio de Vigencia *</label>
+      <p-datepicker [(ngModel)]="nuevoSalario().FechaInicioVigencia" dateFormat="dd/mm/yy" [showIcon]="true" appendTo="body" class="w-full" />
     </div>
-
-    <div class="flex flex-col gap-2">
-      <label class="text-sm font-medium text-surface-600">Fecha Fin de Vigencia (Opcional)</label>
-      <p-datePicker 
-        [(ngModel)]="nuevoSalario().FechaFinVigencia" 
-        dateFormat="dd/mm/yy"
-        [showIcon]="true"
-        appendTo="body"
-        [showClear]="true"
-        class="w-full" />
+    <div class="field-group">
+      <label>Fin de Vigencia (opcional)</label>
+      <p-datepicker [(ngModel)]="nuevoSalario().FechaFinVigencia" dateFormat="dd/mm/yy" [showIcon]="true" [showClear]="true" appendTo="body" class="w-full" />
     </div>
-
-    <div class="flex align-items-center gap-2">
-      <p-checkbox 
-        [(ngModel)]="nuevoSalario().Activo" 
-        [binary]="true" 
-        inputId="activoSalario" />
-      <label for="activoSalario" class="text-sm text-surface-700">Salario activo</label>
-    </div>
-
-    <div class="flex justify-end gap-2">
-      <p-button 
-        label="Cancelar" 
-        severity="secondary" 
-        (click)="salarioDialogVisible.set(false)" />
-      <p-button 
-        label="Guardar" 
-        severity="success"
-        icon="pi pi-check"
-        [disabled]="loading()"
-        (click)="onSaveSalario()" />
+    <div class="flex items-center gap-2">
+      <p-checkbox [(ngModel)]="nuevoSalario().Activo" [binary]="true" inputId="activoSalario"></p-checkbox>
+      <label for="activoSalario" class="text-sm text-slate-300 cursor-pointer">Salario activo</label>
     </div>
   </div>
-
+  <ng-template #footer>
+    <div class="flex justify-end gap-2">
+      <p-button label="Cancelar" severity="secondary" (onClick)="salarioDialogVisible.set(false)"></p-button>
+      <p-button label="Guardar" severity="success" icon="pi pi-check" [loading]="loading()" (onClick)="onSaveSalario()"></p-button>
+    </div>
+  </ng-template>
 </p-dialog>
-<p-confirmDialog></p-confirmDialog>

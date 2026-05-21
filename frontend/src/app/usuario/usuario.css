@@ -1,0 +1,46 @@
+:host {
+  display: block;
+  min-height: 100%;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 60%, #0f172a 100%);
+}
+
+:host ::ng-deep .p-datatable {
+  background: #1e293b;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  border: 1px solid #334155;
+}
+:host ::ng-deep .p-datatable .p-datatable-thead > tr > th {
+  background: #0f172a !important;
+  color: #94a3b8 !important;
+  border-color: #334155 !important;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr {
+  background: #1e293b !important;
+  color: #e2e8f0 !important;
+  border-color: #334155 !important;
+  transition: background 0.12s;
+}
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr:hover { background: #253347 !important; }
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr > td { border-color: #334155 !important; color: #e2e8f0 !important; }
+:host ::ng-deep .p-datatable .p-datatable-emptymessage > td { background: #1e293b !important; color: #64748b !important; }
+:host ::ng-deep .p-paginator { background: #0f172a !important; border-color: #334155 !important; color: #94a3b8 !important; }
+:host ::ng-deep .p-paginator .p-paginator-page.p-highlight { background: #3b82f6 !important; color: #fff !important; }
+
+:host ::ng-deep .p-dialog { background: #1e293b !important; border: 1px solid #334155 !important; }
+:host ::ng-deep .p-dialog .p-dialog-header { background: #0f172a !important; color: #f1f5f9 !important; border-bottom: 1px solid #334155 !important; }
+:host ::ng-deep .p-dialog .p-dialog-header .p-dialog-title { color: #f1f5f9 !important; }
+:host ::ng-deep .p-dialog .p-dialog-header .p-dialog-header-icon { color: #94a3b8 !important; }
+:host ::ng-deep .p-dialog .p-dialog-content { background: #1e293b !important; color: #e2e8f0 !important; }
+:host ::ng-deep .p-dialog .p-dialog-footer { background: #0f172a !important; border-top: 1px solid #334155 !important; }
+:host ::ng-deep .p-dialog label { color: #94a3b8 !important; }
+:host ::ng-deep .p-inputtext { background: #0f172a !important; border-color: #334155 !important; color: #e2e8f0 !important; }
+:host ::ng-deep .p-inputtext:focus { border-color: #3b82f6 !important; }
+:host ::ng-deep .p-password input { background: #0f172a !important; border-color: #334155 !important; color: #e2e8f0 !important; }
+:host ::ng-deep .p-select, :host ::ng-deep .p-select-label { background: #0f172a !important; border-color: #334155 !important; color: #e2e8f0 !important; }
+:host ::ng-deep .p-select-overlay { background: #1e293b !important; border-color: #334155 !important; }
+:host ::ng-deep .p-select-list .p-select-option { color: #e2e8f0 !important; }
+:host ::ng-deep .p-select-list .p-select-option:hover, :host ::ng-deep .p-select-list .p-select-option.p-select-option-selected { background: #253347 !important; }

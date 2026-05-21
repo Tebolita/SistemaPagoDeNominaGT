@@ -6,6 +6,9 @@ export interface EstadoNomina {
   RequiereAprobacion?: boolean;
   Activo?: boolean;
   FechaEliminacion?: Date;
+  Color?: string;
+  EsFinal: boolean;
+  EsCancelacion: boolean;
 }
 
 export interface HistorialEstadoNomina {
@@ -34,4 +37,5 @@ export interface CambiarEstadoNominaDto {
   IdEstadoNuevo: number;
   NumeroBoleta?: string;
   Comentarios?: string;
+  IdCuenta?: number;
 }

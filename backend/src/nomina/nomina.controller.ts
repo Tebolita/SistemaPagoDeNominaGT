@@ -32,14 +32,14 @@ export class NominaController {
   }
 
   @Post('calcular')
-  calcular(@Body() body: { idEmpleado: number; salarioBase: number }) {
-    return this.nominaService.calcularNomina(body.idEmpleado, body.salarioBase);
+  calcular(@Body() body: { idEmpleado: number; salarioBase: number; mes?: number; anio?: number }) {
+    return this.nominaService.calcularNomina(body.idEmpleado, body.salarioBase, body.mes, body.anio);
   }
 
   @Post('generar')
   generarNomina(
     @Request() req: any,
-    @Body() body: { idEmpleado: number; salarioBase: number; mes?: number; anio?: number },
+    @Body() body: { idEmpleado: number; salarioBase: number; mes?: number; anio?: number; idCuenta?: number },
   ) {
     return this.nominaService.crearNominaConDetalles(
       body.idEmpleado,
@@ -47,15 +47,39 @@ export class NominaController {
       req.user?.sub,
       body.mes,
       body.anio,
+      body.idCuenta,
+    );
+  }
+
+  @Post('generar-personalizada')
+  generarPersonalizada(
+    @Request() req: any,
+    @Body() body: {
+      idEmpleados: number[];
+      idParametros: number[];
+      mes?: number;
+      anio?: number;
+      idCuenta?: number;
+      incluirSalarioBase?: boolean;
+    },
+  ) {
+    return this.nominaService.crearNominaPersonalizada(
+      body.idEmpleados,
+      body.idParametros,
+      req.user?.sub,
+      body.mes,
+      body.anio,
+      body.idCuenta,
+      body.incluirSalarioBase ?? true,
     );
   }
 
   @Post('generar-masiva')
   generarNominaMasiva(
     @Request() req: any,
-    @Body() body: { mes?: number; anio?: number },
+    @Body() body: { mes?: number; anio?: number; idCuenta?: number },
   ) {
-    return this.nominaService.generarNominaMasiva(req.user?.sub, body.mes, body.anio);
+    return this.nominaService.generarNominaMasiva(req.user?.sub, body.mes, body.anio, body.idCuenta);
   }
 
   @Get('parametros')
@@ -66,6 +90,16 @@ export class NominaController {
   @Get()
   findAll() {
     return this.nominaService.findAll();
+  }
+
+  @Get('eliminadas')
+  findEliminadas() {
+    return this.nominaService.findEliminadas();
+  }
+
+  @Patch(':id/restaurar')
+  restaurar(@Param('id', ParseIntPipe) id: number) {
+    return this.nominaService.restaurar(id);
   }
 
   @Get(':id')

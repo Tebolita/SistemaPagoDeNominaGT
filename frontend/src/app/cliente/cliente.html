@@ -1,81 +1,142 @@
-<div class="cliente-page">
-  <div class="cliente-header">
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
+
+<div class="flex flex-col gap-5 p-4 min-h-screen">
+
+  <!-- ── Cabecera ──────────────────────────────────────────────────── -->
+  <div class="flex justify-between items-center flex-wrap gap-3">
     <div>
-      <h2>Clientes</h2>
-      <p>Administra clientes y mantiene el historial de contactos.</p>
+      <h1 class="text-2xl font-bold text-white">Clientes</h1>
+      <p class="text-sm text-slate-400 mt-1">Administra clientes y mantén el historial de contactos</p>
     </div>
-    <button pButton type="button" label="Nuevo Cliente" icon="pi pi-plus" class="p-button-success" (click)="openNew()"></button>
+    <p-button
+      label="Nuevo Cliente"
+      icon="pi pi-plus"
+      severity="success"
+      (onClick)="openNew()"
+    ></p-button>
   </div>
 
-  <p-table [value]="clientes" [loading]="loading" dataKey="IdCliente" responsiveLayout="scroll">
+  <!-- ── Tabla ─────────────────────────────────────────────────────── -->
+  <p-table
+    [value]="clientes"
+    [loading]="loading"
+    [paginator]="true"
+    [rows]="10"
+    [rowHover]="true"
+    dataKey="IdCliente"
+    emptyMessage="No hay clientes registrados."
+  >
     <ng-template pTemplate="header">
       <tr>
-        <th>Nombre</th>
-        <th>Tipo</th>
+        <th pSortableColumn="NombreCliente">Nombre <p-sortIcon field="NombreCliente"></p-sortIcon></th>
+        <th style="width:110px">Tipo</th>
         <th>NIT</th>
         <th>DPI</th>
         <th>Correo</th>
         <th>Teléfono</th>
-        <th>Activo</th>
-        <th>Acciones</th>
+        <th style="width:90px">Estado</th>
+        <th style="width:90px">Acciones</th>
       </tr>
     </ng-template>
-    <ng-template pTemplate="body" let-cliente>
+
+    <ng-template pTemplate="body" let-c>
       <tr>
-        <td>{{ cliente.NombreCliente }}</td>
-        <td>{{ cliente.TipoCliente || 'N/A' }}</td>
-        <td>{{ cliente.NIT || 'N/A' }}</td>
-        <td>{{ cliente.DPI || 'N/A' }}</td>
-        <td>{{ cliente.Correo || 'N/A' }}</td>
-        <td>{{ cliente.Telefono || 'N/A' }}</td>
+        <td class="font-medium text-slate-100">{{ c.NombreCliente }}</td>
         <td>
-          <p-tag [value]="cliente.Activo ? 'Activo' : 'Inactivo'" [severity]="cliente.Activo ? 'success' : 'danger'"></p-tag>
+          <p-tag
+            [value]="c.TipoCliente || 'N/A'"
+            [severity]="c.TipoCliente === 'INDIVIDUAL' ? 'info' : c.TipoCliente === 'EMPRESA' ? 'warn' : 'secondary'"
+          ></p-tag>
+        </td>
+        <td class="font-mono text-sm text-slate-300">{{ c.NIT || '—' }}</td>
+        <td class="font-mono text-sm text-slate-300">{{ c.DPI || '—' }}</td>
+        <td class="text-slate-400 text-sm">{{ c.Correo || '—' }}</td>
+        <td class="text-slate-400 text-sm">{{ c.Telefono || '—' }}</td>
+        <td>
+          <p-tag
+            [value]="c.Activo ? 'Activo' : 'Inactivo'"
+            [severity]="c.Activo ? 'success' : 'danger'"
+          ></p-tag>
         </td>
         <td>
-          <button pButton type="button" icon="pi pi-pencil" class="p-button-rounded p-button-text" (click)="editCliente(cliente)"></button>
-          <button pButton type="button" icon="pi pi-trash" class="p-button-rounded p-button-danger p-button-text" (click)="deleteCliente(cliente)"></button>
+          <p-button icon="pi pi-pencil" [rounded]="true" [text]="true" severity="warn"
+            pTooltip="Editar" tooltipPosition="top" (onClick)="editCliente(c)"></p-button>
+          <p-button icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger"
+            pTooltip="Eliminar" tooltipPosition="top" (onClick)="deleteCliente(c)"></p-button>
         </td>
       </tr>
     </ng-template>
   </p-table>
-
-  <p-dialog header="{{ isEdit ? 'Editar Cliente' : 'Nuevo Cliente' }}" [(visible)]="clienteDialog" [style]="{ width: '600px' }" [modal]="true" [closable]="false">
-    <div class="p-fluid">
-      <div class="form-grid">
-        <div class="p-field">
-          <label for="nombreCliente">Nombre <span class="required">*</span></label>
-          <input pInputText id="nombreCliente" [(ngModel)]="clienteForm.NombreCliente" placeholder="Ingrese el nombre del cliente" />
-        </div>
-        <div class="p-field">
-          <label for="tipoCliente">Tipo de Cliente</label>
-          <p-select id="tipoCliente" [options]="tiposCliente" optionLabel="label" optionValue="value" [(ngModel)]="clienteForm.TipoCliente" placeholder="Seleccionar tipo" appendTo="body"></p-select>
-        </div>
-        <div class="p-field">
-          <label for="nit">NIT</label>
-          <input pInputText id="nit" [(ngModel)]="clienteForm.NIT" placeholder="Ingrese el NIT" />
-        </div>
-        <div class="p-field">
-          <label for="dpi">DPI</label>
-          <input pInputText id="dpi" [(ngModel)]="clienteForm.DPI" placeholder="Ingrese el DPI" />
-        </div>
-        <div class="p-field">
-          <label for="correo">Correo Electrónico</label>
-          <input pInputText id="correo" [(ngModel)]="clienteForm.Correo" type="email" placeholder="cliente@ejemplo.com" />
-        </div>
-        <div class="p-field">
-          <label for="telefono">Teléfono</label>
-          <input pInputText id="telefono" [(ngModel)]="clienteForm.Telefono" placeholder="Ingrese el teléfono" />
-        </div>
-      </div>
-      <div class="p-field">
-        <label for="direccion">Dirección</label>
-        <textarea pInputTextarea id="direccion" rows="3" [(ngModel)]="clienteForm.Direccion" placeholder="Ingrese la dirección completa"></textarea>
-      </div>
-    </div>
-
-    <ng-template pTemplate="footer">
-      <button pButton type="button" label="Cancelar" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
-      <button pButton type="button" label="Guardar" icon="pi pi-check" class="p-button-primary" (click)="saveCliente()"></button>
-    </ng-template>
-  </p-dialog>
 </div>
+
+<!-- ── Diálogo ───────────────────────────────────────────────────── -->
+<p-dialog
+  [visible]="clienteDialog"
+  (visibleChange)="clienteDialog = $event"
+  [header]="isEdit ? 'Editar Cliente' : 'Nuevo Cliente'"
+  [modal]="true"
+  [style]="{ width: '600px', maxWidth: '95vw' }"
+  [resizable]="false"
+>
+  <div class="flex flex-col gap-4 pt-2">
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+      <div class="flex flex-col gap-1 sm:col-span-2">
+        <label>Nombre *</label>
+        <input pInputText [(ngModel)]="clienteForm.NombreCliente"
+          placeholder="Nombre completo o razón social" class="w-full" />
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label>Tipo de Cliente</label>
+        <p-select
+          [options]="tiposCliente"
+          optionLabel="label"
+          optionValue="value"
+          [(ngModel)]="clienteForm.TipoCliente"
+          placeholder="Seleccionar tipo"
+          class="w-full"
+          appendTo="body"
+        ></p-select>
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label>NIT</label>
+        <input pInputText [(ngModel)]="clienteForm.NIT"
+          placeholder="Ej. 12345678-9" class="w-full font-mono" />
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label>DPI</label>
+        <input pInputText [(ngModel)]="clienteForm.DPI"
+          placeholder="13 dígitos" class="w-full font-mono" />
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label>Teléfono</label>
+        <input pInputText [(ngModel)]="clienteForm.Telefono"
+          placeholder="55551234" class="w-full" />
+      </div>
+
+      <div class="flex flex-col gap-1 sm:col-span-2">
+        <label>Correo Electrónico</label>
+        <input pInputText [(ngModel)]="clienteForm.Correo"
+          type="email" placeholder="cliente@ejemplo.com" class="w-full" />
+      </div>
+
+      <div class="flex flex-col gap-1 sm:col-span-2">
+        <label>Dirección</label>
+        <textarea pInputTextarea [(ngModel)]="clienteForm.Direccion"
+          rows="3" placeholder="Dirección completa" class="w-full"></textarea>
+      </div>
+
+    </div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <p-button label="Cancelar" icon="pi pi-times" [text]="true" severity="secondary" (onClick)="hideDialog()"></p-button>
+    <p-button label="Guardar" icon="pi pi-check" severity="success" (onClick)="saveCliente()"></p-button>
+  </ng-template>
+</p-dialog>

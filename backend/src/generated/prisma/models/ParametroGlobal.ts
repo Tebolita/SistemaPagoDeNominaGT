@@ -29,11 +29,17 @@ export type AggregateParametroGlobal = {
 export type ParametroGlobalAvgAggregateOutputType = {
   IdParametro: number | null
   Valor: runtime.Decimal | null
+  FiltroIdDepartamento: number | null
+  FiltroIdPuesto: number | null
+  FiltroIdJornada: number | null
 }
 
 export type ParametroGlobalSumAggregateOutputType = {
   IdParametro: number | null
   Valor: runtime.Decimal | null
+  FiltroIdDepartamento: number | null
+  FiltroIdPuesto: number | null
+  FiltroIdJornada: number | null
 }
 
 export type ParametroGlobalMinAggregateOutputType = {
@@ -45,6 +51,10 @@ export type ParametroGlobalMinAggregateOutputType = {
   FechaEliminacion: Date | null
   Tipo: string | null
   Unidad: string | null
+  FiltroGenero: boolean | null
+  FiltroIdDepartamento: number | null
+  FiltroIdPuesto: number | null
+  FiltroIdJornada: number | null
 }
 
 export type ParametroGlobalMaxAggregateOutputType = {
@@ -56,6 +66,10 @@ export type ParametroGlobalMaxAggregateOutputType = {
   FechaEliminacion: Date | null
   Tipo: string | null
   Unidad: string | null
+  FiltroGenero: boolean | null
+  FiltroIdDepartamento: number | null
+  FiltroIdPuesto: number | null
+  FiltroIdJornada: number | null
 }
 
 export type ParametroGlobalCountAggregateOutputType = {
@@ -67,6 +81,10 @@ export type ParametroGlobalCountAggregateOutputType = {
   FechaEliminacion: number
   Tipo: number
   Unidad: number
+  FiltroGenero: number
+  FiltroIdDepartamento: number
+  FiltroIdPuesto: number
+  FiltroIdJornada: number
   _all: number
 }
 
@@ -74,11 +92,17 @@ export type ParametroGlobalCountAggregateOutputType = {
 export type ParametroGlobalAvgAggregateInputType = {
   IdParametro?: true
   Valor?: true
+  FiltroIdDepartamento?: true
+  FiltroIdPuesto?: true
+  FiltroIdJornada?: true
 }
 
 export type ParametroGlobalSumAggregateInputType = {
   IdParametro?: true
   Valor?: true
+  FiltroIdDepartamento?: true
+  FiltroIdPuesto?: true
+  FiltroIdJornada?: true
 }
 
 export type ParametroGlobalMinAggregateInputType = {
@@ -90,6 +114,10 @@ export type ParametroGlobalMinAggregateInputType = {
   FechaEliminacion?: true
   Tipo?: true
   Unidad?: true
+  FiltroGenero?: true
+  FiltroIdDepartamento?: true
+  FiltroIdPuesto?: true
+  FiltroIdJornada?: true
 }
 
 export type ParametroGlobalMaxAggregateInputType = {
@@ -101,6 +129,10 @@ export type ParametroGlobalMaxAggregateInputType = {
   FechaEliminacion?: true
   Tipo?: true
   Unidad?: true
+  FiltroGenero?: true
+  FiltroIdDepartamento?: true
+  FiltroIdPuesto?: true
+  FiltroIdJornada?: true
 }
 
 export type ParametroGlobalCountAggregateInputType = {
@@ -112,6 +144,10 @@ export type ParametroGlobalCountAggregateInputType = {
   FechaEliminacion?: true
   Tipo?: true
   Unidad?: true
+  FiltroGenero?: true
+  FiltroIdDepartamento?: true
+  FiltroIdPuesto?: true
+  FiltroIdJornada?: true
   _all?: true
 }
 
@@ -210,6 +246,10 @@ export type ParametroGlobalGroupByOutputType = {
   FechaEliminacion: Date | null
   Tipo: string | null
   Unidad: string | null
+  FiltroGenero: boolean | null
+  FiltroIdDepartamento: number | null
+  FiltroIdPuesto: number | null
+  FiltroIdJornada: number | null
   _count: ParametroGlobalCountAggregateOutputType | null
   _avg: ParametroGlobalAvgAggregateOutputType | null
   _sum: ParametroGlobalSumAggregateOutputType | null
@@ -244,6 +284,13 @@ export type ParametroGlobalWhereInput = {
   FechaEliminacion?: Prisma.DateTimeNullableFilter<"ParametroGlobal"> | Date | string | null
   Tipo?: Prisma.StringNullableFilter<"ParametroGlobal"> | string | null
   Unidad?: Prisma.StringNullableFilter<"ParametroGlobal"> | string | null
+  FiltroGenero?: Prisma.BoolNullableFilter<"ParametroGlobal"> | boolean | null
+  FiltroIdDepartamento?: Prisma.IntNullableFilter<"ParametroGlobal"> | number | null
+  FiltroIdPuesto?: Prisma.IntNullableFilter<"ParametroGlobal"> | number | null
+  FiltroIdJornada?: Prisma.IntNullableFilter<"ParametroGlobal"> | number | null
+  Departamento?: Prisma.XOR<Prisma.DepartamentoNullableScalarRelationFilter, Prisma.DepartamentoWhereInput> | null
+  JornadaLaboral?: Prisma.XOR<Prisma.JornadaLaboralNullableScalarRelationFilter, Prisma.JornadaLaboralWhereInput> | null
+  Puesto?: Prisma.XOR<Prisma.PuestoNullableScalarRelationFilter, Prisma.PuestoWhereInput> | null
 }
 
 export type ParametroGlobalOrderByWithRelationInput = {
@@ -255,6 +302,13 @@ export type ParametroGlobalOrderByWithRelationInput = {
   FechaEliminacion?: Prisma.SortOrderInput | Prisma.SortOrder
   Tipo?: Prisma.SortOrderInput | Prisma.SortOrder
   Unidad?: Prisma.SortOrderInput | Prisma.SortOrder
+  FiltroGenero?: Prisma.SortOrderInput | Prisma.SortOrder
+  FiltroIdDepartamento?: Prisma.SortOrderInput | Prisma.SortOrder
+  FiltroIdPuesto?: Prisma.SortOrderInput | Prisma.SortOrder
+  FiltroIdJornada?: Prisma.SortOrderInput | Prisma.SortOrder
+  Departamento?: Prisma.DepartamentoOrderByWithRelationInput
+  JornadaLaboral?: Prisma.JornadaLaboralOrderByWithRelationInput
+  Puesto?: Prisma.PuestoOrderByWithRelationInput
 }
 
 export type ParametroGlobalWhereUniqueInput = Prisma.AtLeast<{
@@ -269,6 +323,13 @@ export type ParametroGlobalWhereUniqueInput = Prisma.AtLeast<{
   FechaEliminacion?: Prisma.DateTimeNullableFilter<"ParametroGlobal"> | Date | string | null
   Tipo?: Prisma.StringNullableFilter<"ParametroGlobal"> | string | null
   Unidad?: Prisma.StringNullableFilter<"ParametroGlobal"> | string | null
+  FiltroGenero?: Prisma.BoolNullableFilter<"ParametroGlobal"> | boolean | null
+  FiltroIdDepartamento?: Prisma.IntNullableFilter<"ParametroGlobal"> | number | null
+  FiltroIdPuesto?: Prisma.IntNullableFilter<"ParametroGlobal"> | number | null
+  FiltroIdJornada?: Prisma.IntNullableFilter<"ParametroGlobal"> | number | null
+  Departamento?: Prisma.XOR<Prisma.DepartamentoNullableScalarRelationFilter, Prisma.DepartamentoWhereInput> | null
+  JornadaLaboral?: Prisma.XOR<Prisma.JornadaLaboralNullableScalarRelationFilter, Prisma.JornadaLaboralWhereInput> | null
+  Puesto?: Prisma.XOR<Prisma.PuestoNullableScalarRelationFilter, Prisma.PuestoWhereInput> | null
 }, "IdParametro">
 
 export type ParametroGlobalOrderByWithAggregationInput = {
@@ -280,6 +341,10 @@ export type ParametroGlobalOrderByWithAggregationInput = {
   FechaEliminacion?: Prisma.SortOrderInput | Prisma.SortOrder
   Tipo?: Prisma.SortOrderInput | Prisma.SortOrder
   Unidad?: Prisma.SortOrderInput | Prisma.SortOrder
+  FiltroGenero?: Prisma.SortOrderInput | Prisma.SortOrder
+  FiltroIdDepartamento?: Prisma.SortOrderInput | Prisma.SortOrder
+  FiltroIdPuesto?: Prisma.SortOrderInput | Prisma.SortOrder
+  FiltroIdJornada?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.ParametroGlobalCountOrderByAggregateInput
   _avg?: Prisma.ParametroGlobalAvgOrderByAggregateInput
   _max?: Prisma.ParametroGlobalMaxOrderByAggregateInput
@@ -299,6 +364,10 @@ export type ParametroGlobalScalarWhereWithAggregatesInput = {
   FechaEliminacion?: Prisma.DateTimeNullableWithAggregatesFilter<"ParametroGlobal"> | Date | string | null
   Tipo?: Prisma.StringNullableWithAggregatesFilter<"ParametroGlobal"> | string | null
   Unidad?: Prisma.StringNullableWithAggregatesFilter<"ParametroGlobal"> | string | null
+  FiltroGenero?: Prisma.BoolNullableWithAggregatesFilter<"ParametroGlobal"> | boolean | null
+  FiltroIdDepartamento?: Prisma.IntNullableWithAggregatesFilter<"ParametroGlobal"> | number | null
+  FiltroIdPuesto?: Prisma.IntNullableWithAggregatesFilter<"ParametroGlobal"> | number | null
+  FiltroIdJornada?: Prisma.IntNullableWithAggregatesFilter<"ParametroGlobal"> | number | null
 }
 
 export type ParametroGlobalCreateInput = {
@@ -309,6 +378,10 @@ export type ParametroGlobalCreateInput = {
   FechaEliminacion?: Date | string | null
   Tipo?: string | null
   Unidad?: string | null
+  FiltroGenero?: boolean | null
+  Departamento?: Prisma.DepartamentoCreateNestedOneWithoutParametroGlobalInput
+  JornadaLaboral?: Prisma.JornadaLaboralCreateNestedOneWithoutParametroGlobalInput
+  Puesto?: Prisma.PuestoCreateNestedOneWithoutParametroGlobalInput
 }
 
 export type ParametroGlobalUncheckedCreateInput = {
@@ -320,6 +393,10 @@ export type ParametroGlobalUncheckedCreateInput = {
   FechaEliminacion?: Date | string | null
   Tipo?: string | null
   Unidad?: string | null
+  FiltroGenero?: boolean | null
+  FiltroIdDepartamento?: number | null
+  FiltroIdPuesto?: number | null
+  FiltroIdJornada?: number | null
 }
 
 export type ParametroGlobalUpdateInput = {
@@ -330,6 +407,10 @@ export type ParametroGlobalUpdateInput = {
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Tipo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Unidad?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  FiltroGenero?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  Departamento?: Prisma.DepartamentoUpdateOneWithoutParametroGlobalNestedInput
+  JornadaLaboral?: Prisma.JornadaLaboralUpdateOneWithoutParametroGlobalNestedInput
+  Puesto?: Prisma.PuestoUpdateOneWithoutParametroGlobalNestedInput
 }
 
 export type ParametroGlobalUncheckedUpdateInput = {
@@ -341,6 +422,10 @@ export type ParametroGlobalUncheckedUpdateInput = {
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Tipo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Unidad?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  FiltroGenero?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FiltroIdDepartamento?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  FiltroIdPuesto?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  FiltroIdJornada?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type ParametroGlobalCreateManyInput = {
@@ -351,6 +436,10 @@ export type ParametroGlobalCreateManyInput = {
   FechaEliminacion?: Date | string | null
   Tipo?: string | null
   Unidad?: string | null
+  FiltroGenero?: boolean | null
+  FiltroIdDepartamento?: number | null
+  FiltroIdPuesto?: number | null
+  FiltroIdJornada?: number | null
 }
 
 export type ParametroGlobalUpdateManyMutationInput = {
@@ -361,6 +450,7 @@ export type ParametroGlobalUpdateManyMutationInput = {
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Tipo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Unidad?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  FiltroGenero?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
 }
 
 export type ParametroGlobalUncheckedUpdateManyInput = {
@@ -372,6 +462,20 @@ export type ParametroGlobalUncheckedUpdateManyInput = {
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Tipo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Unidad?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  FiltroGenero?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FiltroIdDepartamento?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  FiltroIdPuesto?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  FiltroIdJornada?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+}
+
+export type ParametroGlobalListRelationFilter = {
+  every?: Prisma.ParametroGlobalWhereInput
+  some?: Prisma.ParametroGlobalWhereInput
+  none?: Prisma.ParametroGlobalWhereInput
+}
+
+export type ParametroGlobalOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type ParametroGlobalCountOrderByAggregateInput = {
@@ -383,11 +487,18 @@ export type ParametroGlobalCountOrderByAggregateInput = {
   FechaEliminacion?: Prisma.SortOrder
   Tipo?: Prisma.SortOrder
   Unidad?: Prisma.SortOrder
+  FiltroGenero?: Prisma.SortOrder
+  FiltroIdDepartamento?: Prisma.SortOrder
+  FiltroIdPuesto?: Prisma.SortOrder
+  FiltroIdJornada?: Prisma.SortOrder
 }
 
 export type ParametroGlobalAvgOrderByAggregateInput = {
   IdParametro?: Prisma.SortOrder
   Valor?: Prisma.SortOrder
+  FiltroIdDepartamento?: Prisma.SortOrder
+  FiltroIdPuesto?: Prisma.SortOrder
+  FiltroIdJornada?: Prisma.SortOrder
 }
 
 export type ParametroGlobalMaxOrderByAggregateInput = {
@@ -399,6 +510,10 @@ export type ParametroGlobalMaxOrderByAggregateInput = {
   FechaEliminacion?: Prisma.SortOrder
   Tipo?: Prisma.SortOrder
   Unidad?: Prisma.SortOrder
+  FiltroGenero?: Prisma.SortOrder
+  FiltroIdDepartamento?: Prisma.SortOrder
+  FiltroIdPuesto?: Prisma.SortOrder
+  FiltroIdJornada?: Prisma.SortOrder
 }
 
 export type ParametroGlobalMinOrderByAggregateInput = {
@@ -410,11 +525,480 @@ export type ParametroGlobalMinOrderByAggregateInput = {
   FechaEliminacion?: Prisma.SortOrder
   Tipo?: Prisma.SortOrder
   Unidad?: Prisma.SortOrder
+  FiltroGenero?: Prisma.SortOrder
+  FiltroIdDepartamento?: Prisma.SortOrder
+  FiltroIdPuesto?: Prisma.SortOrder
+  FiltroIdJornada?: Prisma.SortOrder
 }
 
 export type ParametroGlobalSumOrderByAggregateInput = {
   IdParametro?: Prisma.SortOrder
   Valor?: Prisma.SortOrder
+  FiltroIdDepartamento?: Prisma.SortOrder
+  FiltroIdPuesto?: Prisma.SortOrder
+  FiltroIdJornada?: Prisma.SortOrder
+}
+
+export type ParametroGlobalCreateNestedManyWithoutDepartamentoInput = {
+  create?: Prisma.XOR<Prisma.ParametroGlobalCreateWithoutDepartamentoInput, Prisma.ParametroGlobalUncheckedCreateWithoutDepartamentoInput> | Prisma.ParametroGlobalCreateWithoutDepartamentoInput[] | Prisma.ParametroGlobalUncheckedCreateWithoutDepartamentoInput[]
+  connectOrCreate?: Prisma.ParametroGlobalCreateOrConnectWithoutDepartamentoInput | Prisma.ParametroGlobalCreateOrConnectWithoutDepartamentoInput[]
+  createMany?: Prisma.ParametroGlobalCreateManyDepartamentoInputEnvelope
+  connect?: Prisma.ParametroGlobalWhereUniqueInput | Prisma.ParametroGlobalWhereUniqueInput[]
+}
+
+export type ParametroGlobalUncheckedCreateNestedManyWithoutDepartamentoInput = {
+  create?: Prisma.XOR<Prisma.ParametroGlobalCreateWithoutDepartamentoInput, Prisma.ParametroGlobalUncheckedCreateWithoutDepartamentoInput> | Prisma.ParametroGlobalCreateWithoutDepartamentoInput[] | Prisma.ParametroGlobalUncheckedCreateWithoutDepartamentoInput[]
+  connectOrCreate?: Prisma.ParametroGlobalCreateOrConnectWithoutDepartamentoInput | Prisma.ParametroGlobalCreateOrConnectWithoutDepartamentoInput[]
+  createMany?: Prisma.ParametroGlobalCreateManyDepartamentoInputEnvelope
+  connect?: Prisma.ParametroGlobalWhereUniqueInput | Prisma.ParametroGlobalWhereUniqueInput[]
+}
+
+export type ParametroGlobalUpdateManyWithoutDepartamentoNestedInput = {
+  create?: Prisma.XOR<Prisma.ParametroGlobalCreateWithoutDepartamentoInput, Prisma.ParametroGlobalUncheckedCreateWithoutDepartamentoInput> | Prisma.ParametroGlobalCreateWithoutDepartamentoInput[] | Prisma.ParametroGlobalUncheckedCreateWithoutDepartamentoInput[]
+  connectOrCreate?: Prisma.ParametroGlobalCreateOrConnectWithoutDepartamentoInput | Prisma.ParametroGlobalCreateOrConnectWithoutDepartamentoInput[]
+  upsert?: Prisma.ParametroGlobalUpsertWithWhereUniqueWithoutDepartamentoInput | Prisma.ParametroGlobalUpsertWithWhereUniqueWithoutDepartamentoInput[]
+  createMany?: Prisma.ParametroGlobalCreateManyDepartamentoInputEnvelope
+  set?: Prisma.ParametroGlobalWhereUniqueInput | Prisma.ParametroGlobalWhereUniqueInput[]
+  disconnect?: Prisma.ParametroGlobalWhereUniqueInput | Prisma.ParametroGlobalWhereUniqueInput[]
+  delete?: Prisma.ParametroGlobalWhereUniqueInput | Prisma.ParametroGlobalWhereUniqueInput[]
+  connect?: Prisma.ParametroGlobalWhereUniqueInput | Prisma.ParametroGlobalWhereUniqueInput[]
+  update?: Prisma.ParametroGlobalUpdateWithWhereUniqueWithoutDepartamentoInput | Prisma.ParametroGlobalUpdateWithWhereUniqueWithoutDepartamentoInput[]
+  updateMany?: Prisma.ParametroGlobalUpdateManyWithWhereWithoutDepartamentoInput | Prisma.ParametroGlobalUpdateManyWithWhereWithoutDepartamentoInput[]
+  deleteMany?: Prisma.ParametroGlobalScalarWhereInput | Prisma.ParametroGlobalScalarWhereInput[]
+}
+
+export type ParametroGlobalUncheckedUpdateManyWithoutDepartamentoNestedInput = {
+  create?: Prisma.XOR<Prisma.ParametroGlobalCreateWithoutDepartamentoInput, Prisma.ParametroGlobalUncheckedCreateWithoutDepartamentoInput> | Prisma.ParametroGlobalCreateWithoutDepartamentoInput[] | Prisma.ParametroGlobalUncheckedCreateWithoutDepartamentoInput[]
+  connectOrCreate?: Prisma.ParametroGlobalCreateOrConnectWithoutDepartamentoInput | Prisma.ParametroGlobalCreateOrConnectWithoutDepartamentoInput[]
+  upsert?: Prisma.ParametroGlobalUpsertWithWhereUniqueWithoutDepartamentoInput | Prisma.ParametroGlobalUpsertWithWhereUniqueWithoutDepartamentoInput[]
+  createMany?: Prisma.ParametroGlobalCreateManyDepartamentoInputEnvelope
+  set?: Prisma.ParametroGlobalWhereUniqueInput | Prisma.ParametroGlobalWhereUniqueInput[]
+  disconnect?: Prisma.ParametroGlobalWhereUniqueInput | Prisma.ParametroGlobalWhereUniqueInput[]
+  delete?: Prisma.ParametroGlobalWhereUniqueInput | Prisma.ParametroGlobalWhereUniqueInput[]
+  connect?: Prisma.ParametroGlobalWhereUniqueInput | Prisma.ParametroGlobalWhereUniqueInput[]
+  update?: Prisma.ParametroGlobalUpdateWithWhereUniqueWithoutDepartamentoInput | Prisma.ParametroGlobalUpdateWithWhereUniqueWithoutDepartamentoInput[]
+  updateMany?: Prisma.ParametroGlobalUpdateManyWithWhereWithoutDepartamentoInput | Prisma.ParametroGlobalUpdateManyWithWhereWithoutDepartamentoInput[]
+  deleteMany?: Prisma.ParametroGlobalScalarWhereInput | Prisma.ParametroGlobalScalarWhereInput[]
+}
+
+export type ParametroGlobalCreateNestedManyWithoutJornadaLaboralInput = {
+  create?: Prisma.XOR<Prisma.ParametroGlobalCreateWithoutJornadaLaboralInput, Prisma.ParametroGlobalUncheckedCreateWithoutJornadaLaboralInput> | Prisma.ParametroGlobalCreateWithoutJornadaLaboralInput[] | Prisma.ParametroGlobalUncheckedCreateWithoutJornadaLaboralInput[]
+  connectOrCreate?: Prisma.ParametroGlobalCreateOrConnectWithoutJornadaLaboralInput | Prisma.ParametroGlobalCreateOrConnectWithoutJornadaLaboralInput[]
+  createMany?: Prisma.ParametroGlobalCreateManyJornadaLaboralInputEnvelope
+  connect?: Prisma.ParametroGlobalWhereUniqueInput | Prisma.ParametroGlobalWhereUniqueInput[]
+}
+
+export type ParametroGlobalUncheckedCreateNestedManyWithoutJornadaLaboralInput = {
+  create?: Prisma.XOR<Prisma.ParametroGlobalCreateWithoutJornadaLaboralInput, Prisma.ParametroGlobalUncheckedCreateWithoutJornadaLaboralInput> | Prisma.ParametroGlobalCreateWithoutJornadaLaboralInput[] | Prisma.ParametroGlobalUncheckedCreateWithoutJornadaLaboralInput[]
+  connectOrCreate?: Prisma.ParametroGlobalCreateOrConnectWithoutJornadaLaboralInput | Prisma.ParametroGlobalCreateOrConnectWithoutJornadaLaboralInput[]
+  createMany?: Prisma.ParametroGlobalCreateManyJornadaLaboralInputEnvelope
+  connect?: Prisma.ParametroGlobalWhereUniqueInput | Prisma.ParametroGlobalWhereUniqueInput[]
+}
+
+export type ParametroGlobalUpdateManyWithoutJornadaLaboralNestedInput = {
+  create?: Prisma.XOR<Prisma.ParametroGlobalCreateWithoutJornadaLaboralInput, Prisma.ParametroGlobalUncheckedCreateWithoutJornadaLaboralInput> | Prisma.ParametroGlobalCreateWithoutJornadaLaboralInput[] | Prisma.ParametroGlobalUncheckedCreateWithoutJornadaLaboralInput[]
+  connectOrCreate?: Prisma.ParametroGlobalCreateOrConnectWithoutJornadaLaboralInput | Prisma.ParametroGlobalCreateOrConnectWithoutJornadaLaboralInput[]
+  upsert?: Prisma.ParametroGlobalUpsertWithWhereUniqueWithoutJornadaLaboralInput | Prisma.ParametroGlobalUpsertWithWhereUniqueWithoutJornadaLaboralInput[]
+  createMany?: Prisma.ParametroGlobalCreateManyJornadaLaboralInputEnvelope
+  set?: Prisma.ParametroGlobalWhereUniqueInput | Prisma.ParametroGlobalWhereUniqueInput[]
+  disconnect?: Prisma.ParametroGlobalWhereUniqueInput | Prisma.ParametroGlobalWhereUniqueInput[]
+  delete?: Prisma.ParametroGlobalWhereUniqueInput | Prisma.ParametroGlobalWhereUniqueInput[]
+  connect?: Prisma.ParametroGlobalWhereUniqueInput | Prisma.ParametroGlobalWhereUniqueInput[]
+  update?: Prisma.ParametroGlobalUpdateWithWhereUniqueWithoutJornadaLaboralInput | Prisma.ParametroGlobalUpdateWithWhereUniqueWithoutJornadaLaboralInput[]
+  updateMany?: Prisma.ParametroGlobalUpdateManyWithWhereWithoutJornadaLaboralInput | Prisma.ParametroGlobalUpdateManyWithWhereWithoutJornadaLaboralInput[]
+  deleteMany?: Prisma.ParametroGlobalScalarWhereInput | Prisma.ParametroGlobalScalarWhereInput[]
+}
+
+export type ParametroGlobalUncheckedUpdateManyWithoutJornadaLaboralNestedInput = {
+  create?: Prisma.XOR<Prisma.ParametroGlobalCreateWithoutJornadaLaboralInput, Prisma.ParametroGlobalUncheckedCreateWithoutJornadaLaboralInput> | Prisma.ParametroGlobalCreateWithoutJornadaLaboralInput[] | Prisma.ParametroGlobalUncheckedCreateWithoutJornadaLaboralInput[]
+  connectOrCreate?: Prisma.ParametroGlobalCreateOrConnectWithoutJornadaLaboralInput | Prisma.ParametroGlobalCreateOrConnectWithoutJornadaLaboralInput[]
+  upsert?: Prisma.ParametroGlobalUpsertWithWhereUniqueWithoutJornadaLaboralInput | Prisma.ParametroGlobalUpsertWithWhereUniqueWithoutJornadaLaboralInput[]
+  createMany?: Prisma.ParametroGlobalCreateManyJornadaLaboralInputEnvelope
+  set?: Prisma.ParametroGlobalWhereUniqueInput | Prisma.ParametroGlobalWhereUniqueInput[]
+  disconnect?: Prisma.ParametroGlobalWhereUniqueInput | Prisma.ParametroGlobalWhereUniqueInput[]
+  delete?: Prisma.ParametroGlobalWhereUniqueInput | Prisma.ParametroGlobalWhereUniqueInput[]
+  connect?: Prisma.ParametroGlobalWhereUniqueInput | Prisma.ParametroGlobalWhereUniqueInput[]
+  update?: Prisma.ParametroGlobalUpdateWithWhereUniqueWithoutJornadaLaboralInput | Prisma.ParametroGlobalUpdateWithWhereUniqueWithoutJornadaLaboralInput[]
+  updateMany?: Prisma.ParametroGlobalUpdateManyWithWhereWithoutJornadaLaboralInput | Prisma.ParametroGlobalUpdateManyWithWhereWithoutJornadaLaboralInput[]
+  deleteMany?: Prisma.ParametroGlobalScalarWhereInput | Prisma.ParametroGlobalScalarWhereInput[]
+}
+
+export type ParametroGlobalCreateNestedManyWithoutPuestoInput = {
+  create?: Prisma.XOR<Prisma.ParametroGlobalCreateWithoutPuestoInput, Prisma.ParametroGlobalUncheckedCreateWithoutPuestoInput> | Prisma.ParametroGlobalCreateWithoutPuestoInput[] | Prisma.ParametroGlobalUncheckedCreateWithoutPuestoInput[]
+  connectOrCreate?: Prisma.ParametroGlobalCreateOrConnectWithoutPuestoInput | Prisma.ParametroGlobalCreateOrConnectWithoutPuestoInput[]
+  createMany?: Prisma.ParametroGlobalCreateManyPuestoInputEnvelope
+  connect?: Prisma.ParametroGlobalWhereUniqueInput | Prisma.ParametroGlobalWhereUniqueInput[]
+}
+
+export type ParametroGlobalUncheckedCreateNestedManyWithoutPuestoInput = {
+  create?: Prisma.XOR<Prisma.ParametroGlobalCreateWithoutPuestoInput, Prisma.ParametroGlobalUncheckedCreateWithoutPuestoInput> | Prisma.ParametroGlobalCreateWithoutPuestoInput[] | Prisma.ParametroGlobalUncheckedCreateWithoutPuestoInput[]
+  connectOrCreate?: Prisma.ParametroGlobalCreateOrConnectWithoutPuestoInput | Prisma.ParametroGlobalCreateOrConnectWithoutPuestoInput[]
+  createMany?: Prisma.ParametroGlobalCreateManyPuestoInputEnvelope
+  connect?: Prisma.ParametroGlobalWhereUniqueInput | Prisma.ParametroGlobalWhereUniqueInput[]
+}
+
+export type ParametroGlobalUpdateManyWithoutPuestoNestedInput = {
+  create?: Prisma.XOR<Prisma.ParametroGlobalCreateWithoutPuestoInput, Prisma.ParametroGlobalUncheckedCreateWithoutPuestoInput> | Prisma.ParametroGlobalCreateWithoutPuestoInput[] | Prisma.ParametroGlobalUncheckedCreateWithoutPuestoInput[]
+  connectOrCreate?: Prisma.ParametroGlobalCreateOrConnectWithoutPuestoInput | Prisma.ParametroGlobalCreateOrConnectWithoutPuestoInput[]
+  upsert?: Prisma.ParametroGlobalUpsertWithWhereUniqueWithoutPuestoInput | Prisma.ParametroGlobalUpsertWithWhereUniqueWithoutPuestoInput[]
+  createMany?: Prisma.ParametroGlobalCreateManyPuestoInputEnvelope
+  set?: Prisma.ParametroGlobalWhereUniqueInput | Prisma.ParametroGlobalWhereUniqueInput[]
+  disconnect?: Prisma.ParametroGlobalWhereUniqueInput | Prisma.ParametroGlobalWhereUniqueInput[]
+  delete?: Prisma.ParametroGlobalWhereUniqueInput | Prisma.ParametroGlobalWhereUniqueInput[]
+  connect?: Prisma.ParametroGlobalWhereUniqueInput | Prisma.ParametroGlobalWhereUniqueInput[]
+  update?: Prisma.ParametroGlobalUpdateWithWhereUniqueWithoutPuestoInput | Prisma.ParametroGlobalUpdateWithWhereUniqueWithoutPuestoInput[]
+  updateMany?: Prisma.ParametroGlobalUpdateManyWithWhereWithoutPuestoInput | Prisma.ParametroGlobalUpdateManyWithWhereWithoutPuestoInput[]
+  deleteMany?: Prisma.ParametroGlobalScalarWhereInput | Prisma.ParametroGlobalScalarWhereInput[]
+}
+
+export type ParametroGlobalUncheckedUpdateManyWithoutPuestoNestedInput = {
+  create?: Prisma.XOR<Prisma.ParametroGlobalCreateWithoutPuestoInput, Prisma.ParametroGlobalUncheckedCreateWithoutPuestoInput> | Prisma.ParametroGlobalCreateWithoutPuestoInput[] | Prisma.ParametroGlobalUncheckedCreateWithoutPuestoInput[]
+  connectOrCreate?: Prisma.ParametroGlobalCreateOrConnectWithoutPuestoInput | Prisma.ParametroGlobalCreateOrConnectWithoutPuestoInput[]
+  upsert?: Prisma.ParametroGlobalUpsertWithWhereUniqueWithoutPuestoInput | Prisma.ParametroGlobalUpsertWithWhereUniqueWithoutPuestoInput[]
+  createMany?: Prisma.ParametroGlobalCreateManyPuestoInputEnvelope
+  set?: Prisma.ParametroGlobalWhereUniqueInput | Prisma.ParametroGlobalWhereUniqueInput[]
+  disconnect?: Prisma.ParametroGlobalWhereUniqueInput | Prisma.ParametroGlobalWhereUniqueInput[]
+  delete?: Prisma.ParametroGlobalWhereUniqueInput | Prisma.ParametroGlobalWhereUniqueInput[]
+  connect?: Prisma.ParametroGlobalWhereUniqueInput | Prisma.ParametroGlobalWhereUniqueInput[]
+  update?: Prisma.ParametroGlobalUpdateWithWhereUniqueWithoutPuestoInput | Prisma.ParametroGlobalUpdateWithWhereUniqueWithoutPuestoInput[]
+  updateMany?: Prisma.ParametroGlobalUpdateManyWithWhereWithoutPuestoInput | Prisma.ParametroGlobalUpdateManyWithWhereWithoutPuestoInput[]
+  deleteMany?: Prisma.ParametroGlobalScalarWhereInput | Prisma.ParametroGlobalScalarWhereInput[]
+}
+
+export type ParametroGlobalCreateWithoutDepartamentoInput = {
+  NombreParametro: string
+  Valor: runtime.Decimal | runtime.DecimalJsLike | number | string
+  Descripcion?: string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
+  Tipo?: string | null
+  Unidad?: string | null
+  FiltroGenero?: boolean | null
+  JornadaLaboral?: Prisma.JornadaLaboralCreateNestedOneWithoutParametroGlobalInput
+  Puesto?: Prisma.PuestoCreateNestedOneWithoutParametroGlobalInput
+}
+
+export type ParametroGlobalUncheckedCreateWithoutDepartamentoInput = {
+  IdParametro?: number
+  NombreParametro: string
+  Valor: runtime.Decimal | runtime.DecimalJsLike | number | string
+  Descripcion?: string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
+  Tipo?: string | null
+  Unidad?: string | null
+  FiltroGenero?: boolean | null
+  FiltroIdPuesto?: number | null
+  FiltroIdJornada?: number | null
+}
+
+export type ParametroGlobalCreateOrConnectWithoutDepartamentoInput = {
+  where: Prisma.ParametroGlobalWhereUniqueInput
+  create: Prisma.XOR<Prisma.ParametroGlobalCreateWithoutDepartamentoInput, Prisma.ParametroGlobalUncheckedCreateWithoutDepartamentoInput>
+}
+
+export type ParametroGlobalCreateManyDepartamentoInputEnvelope = {
+  data: Prisma.ParametroGlobalCreateManyDepartamentoInput | Prisma.ParametroGlobalCreateManyDepartamentoInput[]
+}
+
+export type ParametroGlobalUpsertWithWhereUniqueWithoutDepartamentoInput = {
+  where: Prisma.ParametroGlobalWhereUniqueInput
+  update: Prisma.XOR<Prisma.ParametroGlobalUpdateWithoutDepartamentoInput, Prisma.ParametroGlobalUncheckedUpdateWithoutDepartamentoInput>
+  create: Prisma.XOR<Prisma.ParametroGlobalCreateWithoutDepartamentoInput, Prisma.ParametroGlobalUncheckedCreateWithoutDepartamentoInput>
+}
+
+export type ParametroGlobalUpdateWithWhereUniqueWithoutDepartamentoInput = {
+  where: Prisma.ParametroGlobalWhereUniqueInput
+  data: Prisma.XOR<Prisma.ParametroGlobalUpdateWithoutDepartamentoInput, Prisma.ParametroGlobalUncheckedUpdateWithoutDepartamentoInput>
+}
+
+export type ParametroGlobalUpdateManyWithWhereWithoutDepartamentoInput = {
+  where: Prisma.ParametroGlobalScalarWhereInput
+  data: Prisma.XOR<Prisma.ParametroGlobalUpdateManyMutationInput, Prisma.ParametroGlobalUncheckedUpdateManyWithoutDepartamentoInput>
+}
+
+export type ParametroGlobalScalarWhereInput = {
+  AND?: Prisma.ParametroGlobalScalarWhereInput | Prisma.ParametroGlobalScalarWhereInput[]
+  OR?: Prisma.ParametroGlobalScalarWhereInput[]
+  NOT?: Prisma.ParametroGlobalScalarWhereInput | Prisma.ParametroGlobalScalarWhereInput[]
+  IdParametro?: Prisma.IntFilter<"ParametroGlobal"> | number
+  NombreParametro?: Prisma.StringFilter<"ParametroGlobal"> | string
+  Valor?: Prisma.DecimalFilter<"ParametroGlobal"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  Descripcion?: Prisma.StringNullableFilter<"ParametroGlobal"> | string | null
+  Activo?: Prisma.BoolNullableFilter<"ParametroGlobal"> | boolean | null
+  FechaEliminacion?: Prisma.DateTimeNullableFilter<"ParametroGlobal"> | Date | string | null
+  Tipo?: Prisma.StringNullableFilter<"ParametroGlobal"> | string | null
+  Unidad?: Prisma.StringNullableFilter<"ParametroGlobal"> | string | null
+  FiltroGenero?: Prisma.BoolNullableFilter<"ParametroGlobal"> | boolean | null
+  FiltroIdDepartamento?: Prisma.IntNullableFilter<"ParametroGlobal"> | number | null
+  FiltroIdPuesto?: Prisma.IntNullableFilter<"ParametroGlobal"> | number | null
+  FiltroIdJornada?: Prisma.IntNullableFilter<"ParametroGlobal"> | number | null
+}
+
+export type ParametroGlobalCreateWithoutJornadaLaboralInput = {
+  NombreParametro: string
+  Valor: runtime.Decimal | runtime.DecimalJsLike | number | string
+  Descripcion?: string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
+  Tipo?: string | null
+  Unidad?: string | null
+  FiltroGenero?: boolean | null
+  Departamento?: Prisma.DepartamentoCreateNestedOneWithoutParametroGlobalInput
+  Puesto?: Prisma.PuestoCreateNestedOneWithoutParametroGlobalInput
+}
+
+export type ParametroGlobalUncheckedCreateWithoutJornadaLaboralInput = {
+  IdParametro?: number
+  NombreParametro: string
+  Valor: runtime.Decimal | runtime.DecimalJsLike | number | string
+  Descripcion?: string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
+  Tipo?: string | null
+  Unidad?: string | null
+  FiltroGenero?: boolean | null
+  FiltroIdDepartamento?: number | null
+  FiltroIdPuesto?: number | null
+}
+
+export type ParametroGlobalCreateOrConnectWithoutJornadaLaboralInput = {
+  where: Prisma.ParametroGlobalWhereUniqueInput
+  create: Prisma.XOR<Prisma.ParametroGlobalCreateWithoutJornadaLaboralInput, Prisma.ParametroGlobalUncheckedCreateWithoutJornadaLaboralInput>
+}
+
+export type ParametroGlobalCreateManyJornadaLaboralInputEnvelope = {
+  data: Prisma.ParametroGlobalCreateManyJornadaLaboralInput | Prisma.ParametroGlobalCreateManyJornadaLaboralInput[]
+}
+
+export type ParametroGlobalUpsertWithWhereUniqueWithoutJornadaLaboralInput = {
+  where: Prisma.ParametroGlobalWhereUniqueInput
+  update: Prisma.XOR<Prisma.ParametroGlobalUpdateWithoutJornadaLaboralInput, Prisma.ParametroGlobalUncheckedUpdateWithoutJornadaLaboralInput>
+  create: Prisma.XOR<Prisma.ParametroGlobalCreateWithoutJornadaLaboralInput, Prisma.ParametroGlobalUncheckedCreateWithoutJornadaLaboralInput>
+}
+
+export type ParametroGlobalUpdateWithWhereUniqueWithoutJornadaLaboralInput = {
+  where: Prisma.ParametroGlobalWhereUniqueInput
+  data: Prisma.XOR<Prisma.ParametroGlobalUpdateWithoutJornadaLaboralInput, Prisma.ParametroGlobalUncheckedUpdateWithoutJornadaLaboralInput>
+}
+
+export type ParametroGlobalUpdateManyWithWhereWithoutJornadaLaboralInput = {
+  where: Prisma.ParametroGlobalScalarWhereInput
+  data: Prisma.XOR<Prisma.ParametroGlobalUpdateManyMutationInput, Prisma.ParametroGlobalUncheckedUpdateManyWithoutJornadaLaboralInput>
+}
+
+export type ParametroGlobalCreateWithoutPuestoInput = {
+  NombreParametro: string
+  Valor: runtime.Decimal | runtime.DecimalJsLike | number | string
+  Descripcion?: string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
+  Tipo?: string | null
+  Unidad?: string | null
+  FiltroGenero?: boolean | null
+  Departamento?: Prisma.DepartamentoCreateNestedOneWithoutParametroGlobalInput
+  JornadaLaboral?: Prisma.JornadaLaboralCreateNestedOneWithoutParametroGlobalInput
+}
+
+export type ParametroGlobalUncheckedCreateWithoutPuestoInput = {
+  IdParametro?: number
+  NombreParametro: string
+  Valor: runtime.Decimal | runtime.DecimalJsLike | number | string
+  Descripcion?: string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
+  Tipo?: string | null
+  Unidad?: string | null
+  FiltroGenero?: boolean | null
+  FiltroIdDepartamento?: number | null
+  FiltroIdJornada?: number | null
+}
+
+export type ParametroGlobalCreateOrConnectWithoutPuestoInput = {
+  where: Prisma.ParametroGlobalWhereUniqueInput
+  create: Prisma.XOR<Prisma.ParametroGlobalCreateWithoutPuestoInput, Prisma.ParametroGlobalUncheckedCreateWithoutPuestoInput>
+}
+
+export type ParametroGlobalCreateManyPuestoInputEnvelope = {
+  data: Prisma.ParametroGlobalCreateManyPuestoInput | Prisma.ParametroGlobalCreateManyPuestoInput[]
+}
+
+export type ParametroGlobalUpsertWithWhereUniqueWithoutPuestoInput = {
+  where: Prisma.ParametroGlobalWhereUniqueInput
+  update: Prisma.XOR<Prisma.ParametroGlobalUpdateWithoutPuestoInput, Prisma.ParametroGlobalUncheckedUpdateWithoutPuestoInput>
+  create: Prisma.XOR<Prisma.ParametroGlobalCreateWithoutPuestoInput, Prisma.ParametroGlobalUncheckedCreateWithoutPuestoInput>
+}
+
+export type ParametroGlobalUpdateWithWhereUniqueWithoutPuestoInput = {
+  where: Prisma.ParametroGlobalWhereUniqueInput
+  data: Prisma.XOR<Prisma.ParametroGlobalUpdateWithoutPuestoInput, Prisma.ParametroGlobalUncheckedUpdateWithoutPuestoInput>
+}
+
+export type ParametroGlobalUpdateManyWithWhereWithoutPuestoInput = {
+  where: Prisma.ParametroGlobalScalarWhereInput
+  data: Prisma.XOR<Prisma.ParametroGlobalUpdateManyMutationInput, Prisma.ParametroGlobalUncheckedUpdateManyWithoutPuestoInput>
+}
+
+export type ParametroGlobalCreateManyDepartamentoInput = {
+  NombreParametro: string
+  Valor: runtime.Decimal | runtime.DecimalJsLike | number | string
+  Descripcion?: string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
+  Tipo?: string | null
+  Unidad?: string | null
+  FiltroGenero?: boolean | null
+  FiltroIdPuesto?: number | null
+  FiltroIdJornada?: number | null
+}
+
+export type ParametroGlobalUpdateWithoutDepartamentoInput = {
+  NombreParametro?: Prisma.StringFieldUpdateOperationsInput | string
+  Valor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  Descripcion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Tipo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Unidad?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  FiltroGenero?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  JornadaLaboral?: Prisma.JornadaLaboralUpdateOneWithoutParametroGlobalNestedInput
+  Puesto?: Prisma.PuestoUpdateOneWithoutParametroGlobalNestedInput
+}
+
+export type ParametroGlobalUncheckedUpdateWithoutDepartamentoInput = {
+  IdParametro?: Prisma.IntFieldUpdateOperationsInput | number
+  NombreParametro?: Prisma.StringFieldUpdateOperationsInput | string
+  Valor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  Descripcion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Tipo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Unidad?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  FiltroGenero?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FiltroIdPuesto?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  FiltroIdJornada?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+}
+
+export type ParametroGlobalUncheckedUpdateManyWithoutDepartamentoInput = {
+  IdParametro?: Prisma.IntFieldUpdateOperationsInput | number
+  NombreParametro?: Prisma.StringFieldUpdateOperationsInput | string
+  Valor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  Descripcion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Tipo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Unidad?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  FiltroGenero?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FiltroIdPuesto?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  FiltroIdJornada?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+}
+
+export type ParametroGlobalCreateManyJornadaLaboralInput = {
+  NombreParametro: string
+  Valor: runtime.Decimal | runtime.DecimalJsLike | number | string
+  Descripcion?: string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
+  Tipo?: string | null
+  Unidad?: string | null
+  FiltroGenero?: boolean | null
+  FiltroIdDepartamento?: number | null
+  FiltroIdPuesto?: number | null
+}
+
+export type ParametroGlobalUpdateWithoutJornadaLaboralInput = {
+  NombreParametro?: Prisma.StringFieldUpdateOperationsInput | string
+  Valor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  Descripcion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Tipo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Unidad?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  FiltroGenero?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  Departamento?: Prisma.DepartamentoUpdateOneWithoutParametroGlobalNestedInput
+  Puesto?: Prisma.PuestoUpdateOneWithoutParametroGlobalNestedInput
+}
+
+export type ParametroGlobalUncheckedUpdateWithoutJornadaLaboralInput = {
+  IdParametro?: Prisma.IntFieldUpdateOperationsInput | number
+  NombreParametro?: Prisma.StringFieldUpdateOperationsInput | string
+  Valor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  Descripcion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Tipo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Unidad?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  FiltroGenero?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FiltroIdDepartamento?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  FiltroIdPuesto?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+}
+
+export type ParametroGlobalUncheckedUpdateManyWithoutJornadaLaboralInput = {
+  IdParametro?: Prisma.IntFieldUpdateOperationsInput | number
+  NombreParametro?: Prisma.StringFieldUpdateOperationsInput | string
+  Valor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  Descripcion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Tipo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Unidad?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  FiltroGenero?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FiltroIdDepartamento?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  FiltroIdPuesto?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+}
+
+export type ParametroGlobalCreateManyPuestoInput = {
+  NombreParametro: string
+  Valor: runtime.Decimal | runtime.DecimalJsLike | number | string
+  Descripcion?: string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
+  Tipo?: string | null
+  Unidad?: string | null
+  FiltroGenero?: boolean | null
+  FiltroIdDepartamento?: number | null
+  FiltroIdJornada?: number | null
+}
+
+export type ParametroGlobalUpdateWithoutPuestoInput = {
+  NombreParametro?: Prisma.StringFieldUpdateOperationsInput | string
+  Valor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  Descripcion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Tipo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Unidad?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  FiltroGenero?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  Departamento?: Prisma.DepartamentoUpdateOneWithoutParametroGlobalNestedInput
+  JornadaLaboral?: Prisma.JornadaLaboralUpdateOneWithoutParametroGlobalNestedInput
+}
+
+export type ParametroGlobalUncheckedUpdateWithoutPuestoInput = {
+  IdParametro?: Prisma.IntFieldUpdateOperationsInput | number
+  NombreParametro?: Prisma.StringFieldUpdateOperationsInput | string
+  Valor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  Descripcion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Tipo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Unidad?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  FiltroGenero?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FiltroIdDepartamento?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  FiltroIdJornada?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+}
+
+export type ParametroGlobalUncheckedUpdateManyWithoutPuestoInput = {
+  IdParametro?: Prisma.IntFieldUpdateOperationsInput | number
+  NombreParametro?: Prisma.StringFieldUpdateOperationsInput | string
+  Valor?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  Descripcion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Tipo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Unidad?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  FiltroGenero?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FiltroIdDepartamento?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  FiltroIdJornada?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 
@@ -428,6 +1012,13 @@ export type ParametroGlobalSelect<ExtArgs extends runtime.Types.Extensions.Inter
   FechaEliminacion?: boolean
   Tipo?: boolean
   Unidad?: boolean
+  FiltroGenero?: boolean
+  FiltroIdDepartamento?: boolean
+  FiltroIdPuesto?: boolean
+  FiltroIdJornada?: boolean
+  Departamento?: boolean | Prisma.ParametroGlobal$DepartamentoArgs<ExtArgs>
+  JornadaLaboral?: boolean | Prisma.ParametroGlobal$JornadaLaboralArgs<ExtArgs>
+  Puesto?: boolean | Prisma.ParametroGlobal$PuestoArgs<ExtArgs>
 }, ExtArgs["result"]["parametroGlobal"]>
 
 
@@ -441,13 +1032,26 @@ export type ParametroGlobalSelectScalar = {
   FechaEliminacion?: boolean
   Tipo?: boolean
   Unidad?: boolean
+  FiltroGenero?: boolean
+  FiltroIdDepartamento?: boolean
+  FiltroIdPuesto?: boolean
+  FiltroIdJornada?: boolean
 }
 
-export type ParametroGlobalOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"IdParametro" | "NombreParametro" | "Valor" | "Descripcion" | "Activo" | "FechaEliminacion" | "Tipo" | "Unidad", ExtArgs["result"]["parametroGlobal"]>
+export type ParametroGlobalOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"IdParametro" | "NombreParametro" | "Valor" | "Descripcion" | "Activo" | "FechaEliminacion" | "Tipo" | "Unidad" | "FiltroGenero" | "FiltroIdDepartamento" | "FiltroIdPuesto" | "FiltroIdJornada", ExtArgs["result"]["parametroGlobal"]>
+export type ParametroGlobalInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  Departamento?: boolean | Prisma.ParametroGlobal$DepartamentoArgs<ExtArgs>
+  JornadaLaboral?: boolean | Prisma.ParametroGlobal$JornadaLaboralArgs<ExtArgs>
+  Puesto?: boolean | Prisma.ParametroGlobal$PuestoArgs<ExtArgs>
+}
 
 export type $ParametroGlobalPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "ParametroGlobal"
-  objects: {}
+  objects: {
+    Departamento: Prisma.$DepartamentoPayload<ExtArgs> | null
+    JornadaLaboral: Prisma.$JornadaLaboralPayload<ExtArgs> | null
+    Puesto: Prisma.$PuestoPayload<ExtArgs> | null
+  }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     IdParametro: number
     NombreParametro: string
@@ -457,6 +1061,10 @@ export type $ParametroGlobalPayload<ExtArgs extends runtime.Types.Extensions.Int
     FechaEliminacion: Date | null
     Tipo: string | null
     Unidad: string | null
+    FiltroGenero: boolean | null
+    FiltroIdDepartamento: number | null
+    FiltroIdPuesto: number | null
+    FiltroIdJornada: number | null
   }, ExtArgs["result"]["parametroGlobal"]>
   composites: {}
 }
@@ -797,6 +1405,9 @@ readonly fields: ParametroGlobalFieldRefs;
  */
 export interface Prisma__ParametroGlobalClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  Departamento<T extends Prisma.ParametroGlobal$DepartamentoArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ParametroGlobal$DepartamentoArgs<ExtArgs>>): Prisma.Prisma__DepartamentoClient<runtime.Types.Result.GetResult<Prisma.$DepartamentoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  JornadaLaboral<T extends Prisma.ParametroGlobal$JornadaLaboralArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ParametroGlobal$JornadaLaboralArgs<ExtArgs>>): Prisma.Prisma__JornadaLaboralClient<runtime.Types.Result.GetResult<Prisma.$JornadaLaboralPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  Puesto<T extends Prisma.ParametroGlobal$PuestoArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ParametroGlobal$PuestoArgs<ExtArgs>>): Prisma.Prisma__PuestoClient<runtime.Types.Result.GetResult<Prisma.$PuestoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -834,6 +1445,10 @@ export interface ParametroGlobalFieldRefs {
   readonly FechaEliminacion: Prisma.FieldRef<"ParametroGlobal", 'DateTime'>
   readonly Tipo: Prisma.FieldRef<"ParametroGlobal", 'String'>
   readonly Unidad: Prisma.FieldRef<"ParametroGlobal", 'String'>
+  readonly FiltroGenero: Prisma.FieldRef<"ParametroGlobal", 'Boolean'>
+  readonly FiltroIdDepartamento: Prisma.FieldRef<"ParametroGlobal", 'Int'>
+  readonly FiltroIdPuesto: Prisma.FieldRef<"ParametroGlobal", 'Int'>
+  readonly FiltroIdJornada: Prisma.FieldRef<"ParametroGlobal", 'Int'>
 }
     
 
@@ -850,6 +1465,10 @@ export type ParametroGlobalFindUniqueArgs<ExtArgs extends runtime.Types.Extensio
    * Omit specific fields from the ParametroGlobal
    */
   omit?: Prisma.ParametroGlobalOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ParametroGlobalInclude<ExtArgs> | null
   /**
    * Filter, which ParametroGlobal to fetch.
    */
@@ -869,6 +1488,10 @@ export type ParametroGlobalFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.E
    */
   omit?: Prisma.ParametroGlobalOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ParametroGlobalInclude<ExtArgs> | null
+  /**
    * Filter, which ParametroGlobal to fetch.
    */
   where: Prisma.ParametroGlobalWhereUniqueInput
@@ -886,6 +1509,10 @@ export type ParametroGlobalFindFirstArgs<ExtArgs extends runtime.Types.Extension
    * Omit specific fields from the ParametroGlobal
    */
   omit?: Prisma.ParametroGlobalOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ParametroGlobalInclude<ExtArgs> | null
   /**
    * Filter, which ParametroGlobal to fetch.
    */
@@ -935,6 +1562,10 @@ export type ParametroGlobalFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Ex
    */
   omit?: Prisma.ParametroGlobalOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ParametroGlobalInclude<ExtArgs> | null
+  /**
    * Filter, which ParametroGlobal to fetch.
    */
   where?: Prisma.ParametroGlobalWhereInput
@@ -982,6 +1613,10 @@ export type ParametroGlobalFindManyArgs<ExtArgs extends runtime.Types.Extensions
    * Omit specific fields from the ParametroGlobal
    */
   omit?: Prisma.ParametroGlobalOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ParametroGlobalInclude<ExtArgs> | null
   /**
    * Filter, which ParametroGlobals to fetch.
    */
@@ -1031,6 +1666,10 @@ export type ParametroGlobalCreateArgs<ExtArgs extends runtime.Types.Extensions.I
    */
   omit?: Prisma.ParametroGlobalOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ParametroGlobalInclude<ExtArgs> | null
+  /**
    * The data needed to create a ParametroGlobal.
    */
   data: Prisma.XOR<Prisma.ParametroGlobalCreateInput, Prisma.ParametroGlobalUncheckedCreateInput>
@@ -1058,6 +1697,10 @@ export type ParametroGlobalUpdateArgs<ExtArgs extends runtime.Types.Extensions.I
    * Omit specific fields from the ParametroGlobal
    */
   omit?: Prisma.ParametroGlobalOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ParametroGlobalInclude<ExtArgs> | null
   /**
    * The data needed to update a ParametroGlobal.
    */
@@ -1099,6 +1742,10 @@ export type ParametroGlobalUpsertArgs<ExtArgs extends runtime.Types.Extensions.I
    */
   omit?: Prisma.ParametroGlobalOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ParametroGlobalInclude<ExtArgs> | null
+  /**
    * The filter to search for the ParametroGlobal to update in case it exists.
    */
   where: Prisma.ParametroGlobalWhereUniqueInput
@@ -1125,6 +1772,10 @@ export type ParametroGlobalDeleteArgs<ExtArgs extends runtime.Types.Extensions.I
    */
   omit?: Prisma.ParametroGlobalOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ParametroGlobalInclude<ExtArgs> | null
+  /**
    * Filter which ParametroGlobal to delete.
    */
   where: Prisma.ParametroGlobalWhereUniqueInput
@@ -1145,6 +1796,63 @@ export type ParametroGlobalDeleteManyArgs<ExtArgs extends runtime.Types.Extensio
 }
 
 /**
+ * ParametroGlobal.Departamento
+ */
+export type ParametroGlobal$DepartamentoArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Departamento
+   */
+  select?: Prisma.DepartamentoSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Departamento
+   */
+  omit?: Prisma.DepartamentoOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DepartamentoInclude<ExtArgs> | null
+  where?: Prisma.DepartamentoWhereInput
+}
+
+/**
+ * ParametroGlobal.JornadaLaboral
+ */
+export type ParametroGlobal$JornadaLaboralArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the JornadaLaboral
+   */
+  select?: Prisma.JornadaLaboralSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the JornadaLaboral
+   */
+  omit?: Prisma.JornadaLaboralOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.JornadaLaboralInclude<ExtArgs> | null
+  where?: Prisma.JornadaLaboralWhereInput
+}
+
+/**
+ * ParametroGlobal.Puesto
+ */
+export type ParametroGlobal$PuestoArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Puesto
+   */
+  select?: Prisma.PuestoSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Puesto
+   */
+  omit?: Prisma.PuestoOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PuestoInclude<ExtArgs> | null
+  where?: Prisma.PuestoWhereInput
+}
+
+/**
  * ParametroGlobal without action
  */
 export type ParametroGlobalDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1156,4 +1864,8 @@ export type ParametroGlobalDefaultArgs<ExtArgs extends runtime.Types.Extensions.
    * Omit specific fields from the ParametroGlobal
    */
   omit?: Prisma.ParametroGlobalOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ParametroGlobalInclude<ExtArgs> | null
 }

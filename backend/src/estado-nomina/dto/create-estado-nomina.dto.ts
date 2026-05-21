@@ -1,11 +1,4 @@
-import {
-  IsString,
-  IsOptional,
-  IsBoolean,
-  IsInt,
-  Min,
-  MaxLength,
-} from 'class-validator';
+import { IsString, IsOptional, IsBoolean, IsInt, Min, MaxLength } from 'class-validator';
 
 export class CreateEstadoNominaDto {
   @IsString()
@@ -18,7 +11,7 @@ export class CreateEstadoNominaDto {
   Descripcion?: string;
 
   @IsInt()
-  @Min(1)
+  @Min(0)
   Orden: number;
 
   @IsOptional()
@@ -28,4 +21,17 @@ export class CreateEstadoNominaDto {
   @IsOptional()
   @IsBoolean()
   Activo?: boolean;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(20)
+  Color?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  EsFinal?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  EsCancelacion?: boolean;
 }

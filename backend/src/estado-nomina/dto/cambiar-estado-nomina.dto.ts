@@ -18,4 +18,9 @@ export class CambiarEstadoNominaDto {
   @IsString()
   @MaxLength(500)
   Comentarios?: string;
+
+  @IsOptional()
+  @IsInt()
+  @Min(1)
+  IdCuenta?: number;
 }

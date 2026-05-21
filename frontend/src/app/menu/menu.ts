@@ -93,74 +93,101 @@ export class MenuPrincipal implements OnInit, OnDestroy {
     return 'secondary';
   }
 
+  // Mismo criterio que roleGuard en app.routes.ts
+  private hasRole(allowed: string[]): boolean {
+    const r = this.role().trim().toUpperCase().replace(/\s+/g, '_');
+    return allowed.some(a => a.toUpperCase().replace(/\s+/g, '_') === r);
+  }
+
+  private get isAdmin()    { return this.hasRole(['ADMINISTRADOR', 'ADMIN']); }
+  private get isRRHH()     { return this.hasRole(['ADMINISTRADOR', 'ADMIN', 'RRHH', 'RECURSOS_HUMANOS', 'RECURSOS HUMANOS']); }
+  private get isGerente()  { return this.hasRole(['ADMINISTRADOR', 'ADMIN', 'GERENTE', 'RRHH', 'RECURSOS_HUMANOS', 'RECURSOS HUMANOS']); }
+  private get isFinanzas() { return this.hasRole(['ADMINISTRADOR', 'ADMIN', 'GERENTE']); }
+
   private buildMenu() {
-    this.items = [
+    const menu: MenuItem[] = [
       { separator: true },
-      {
-        items: [{ label: 'Inicio', icon: 'pi pi-home', routerLink: '/home/inicio' }],
-      },
+      { items: [{ label: 'Inicio', icon: 'pi pi-home', routerLink: '/home/inicio' }] },
       { separator: true },
+
+      // Reportería — todos los autenticados
       {
         label: 'Reportería',
         items: [
-          { label: 'Inicio',   icon: 'pi pi-home',      routerLink: '/reporteria/inicio'   },
-          { label: 'Reportes', icon: 'pi pi-chart-bar',  routerLink: '/reporteria/reportes' },
+          { label: 'Inicio',   icon: 'pi pi-home',     routerLink: '/reporteria/inicio'   },
+          { label: 'Reportes', icon: 'pi pi-chart-bar', routerLink: '/reporteria/reportes' },
         ],
       },
-      {
+
+      // Seguridad — solo ADMIN
+      ...(this.isAdmin ? [{
         label: 'Seguridad',
         items: [
           { label: 'Inicio',   icon: 'pi pi-home',  routerLink: '/seguridad/inicio'   },
           { label: 'Usuarios', icon: 'pi pi-user',  routerLink: '/seguridad/usuarios' },
           { label: 'Roles',    icon: 'pi pi-users', routerLink: '/seguridad/roles'    },
         ],
-      },
-      {
+      }] : []),
+
+      // Recursos Humanos — ADMIN + RRHH
+      ...(this.isRRHH ? [{
         label: 'Recursos Humanos',
         items: [
-          { label: 'Inicio',       icon: 'pi pi-home',  routerLink: '/recursoshumanos/inicio'      },
-          { label: 'Empleados',    icon: 'pi pi-user',  routerLink: '/recursoshumanos/empleados'   },
-          { label: 'Vacaciones',   icon: 'pi pi-sun',   routerLink: '/recursoshumanos/vacaciones'  },
-          { label: 'Asistencias',  icon: 'pi pi-clock', routerLink: '/recursoshumanos/asistencias' },
+          { label: 'Inicio',      icon: 'pi pi-home',  routerLink: '/recursoshumanos/inicio'      },
+          { label: 'Empleados',   icon: 'pi pi-user',  routerLink: '/recursoshumanos/empleados'   },
+          { label: 'Vacaciones',  icon: 'pi pi-sun',   routerLink: '/recursoshumanos/vacaciones'  },
+          { label: 'Asistencias', icon: 'pi pi-clock', routerLink: '/recursoshumanos/asistencias' },
         ],
-      },
-      {
+      }] : []),
+
+      // Configuración — ADMIN + RRHH
+      ...(this.isRRHH ? [{
         label: 'Configuración',
         items: [
-          { label: 'Inicio',             icon: 'pi pi-home',       routerLink: '/configuracion/inicio'          },
-          { label: 'Departamentos',      icon: 'pi pi-building',   routerLink: '/configuracion/departamentos'   },
-          { label: 'Puestos',            icon: 'pi pi-briefcase',  routerLink: '/configuracion/puestos'         },
-          { label: 'Jornadas Laborales', icon: 'pi pi-calendar',   routerLink: '/configuracion/jornadas'        },
-          { label: 'Bancos',             icon: 'pi pi-money-bill', routerLink: '/configuracion/bancos'          },
-          { label: 'Parámetros Globales',icon: 'pi pi-sliders-h',  routerLink: '/configuracion/parametros'      },
-          { label: 'Estados de Nómina',  icon: 'pi pi-tags',       routerLink: '/configuracion/estados-nomina'  },
+          { label: 'Inicio',              icon: 'pi pi-home',       routerLink: '/configuracion/inicio'         },
+          { label: 'Departamentos',       icon: 'pi pi-building',   routerLink: '/configuracion/departamentos'  },
+          { label: 'Puestos',             icon: 'pi pi-briefcase',  routerLink: '/configuracion/puestos'        },
+          { label: 'Jornadas Laborales',  icon: 'pi pi-calendar',   routerLink: '/configuracion/jornadas'       },
+          { label: 'Bancos',              icon: 'pi pi-money-bill', routerLink: '/configuracion/bancos'         },
+          { label: 'Parámetros Globales', icon: 'pi pi-sliders-h',  routerLink: '/configuracion/parametros'     },
+          { label: 'Estados de Nómina',   icon: 'pi pi-tags',       routerLink: '/configuracion/estados-nomina' },
         ],
-      },
-      {
-        label: 'Ventas',
-        items: [
-          { label: 'Inicio',              icon: 'pi pi-home',  routerLink: '/ventas/inicio'    },
-          { label: 'Clientes',            icon: 'pi pi-users', routerLink: '/ventas/clientes'  },
-          { label: 'Productos/Servicios', icon: 'pi pi-box',   routerLink: '/ventas/productos' },
-        ],
-      },
-      {
-        label: 'Finanzas',
-        items: [
-          { label: 'Inicio',           icon: 'pi pi-home',                   routerLink: '/finanzas/inicio'      },
-          { label: 'Cuentas Bancarias',icon: 'pi pi-building',               routerLink: '/finanzas/cuentas'     },
-          { label: 'Movimientos',      icon: 'pi pi-arrow-right-arrow-left', routerLink: '/finanzas/movimientos' },
-        ],
-      },
-      {
+      }] : []),
+
+      // Nómina — ADMIN + RRHH + GERENTE
+      ...(this.isGerente ? [{
         label: 'Nómina',
         items: [
           { label: 'Inicio',         icon: 'pi pi-home',       routerLink: '/nomina/inicio'  },
           { label: 'Generar Nómina', icon: 'pi pi-calculator', routerLink: '/nomina/nominas' },
         ],
-      },
+      }] : []),
+
+      // Ventas — ADMIN + GERENTE
+      ...(this.isFinanzas ? [{
+        label: 'Ventas',
+        items: [
+          { label: 'Inicio',              icon: 'pi pi-home',          routerLink: '/ventas/inicio'    },
+          { label: 'Ventas',              icon: 'pi pi-shopping-cart', routerLink: '/ventas/ventas'   },
+          { label: 'Clientes',            icon: 'pi pi-users',         routerLink: '/ventas/clientes'  },
+          { label: 'Productos/Servicios', icon: 'pi pi-box',           routerLink: '/ventas/productos' },
+        ],
+      }] : []),
+
+      // Finanzas — ADMIN + GERENTE
+      ...(this.isFinanzas ? [{
+        label: 'Finanzas',
+        items: [
+          { label: 'Inicio',            icon: 'pi pi-home',                   routerLink: '/finanzas/inicio'      },
+          { label: 'Cuentas Bancarias', icon: 'pi pi-building',               routerLink: '/finanzas/cuentas'     },
+          { label: 'Movimientos',       icon: 'pi pi-arrow-right-arrow-left', routerLink: '/finanzas/movimientos' },
+        ],
+      }] : []),
+
       { separator: true },
     ];
+
+    this.items = menu;
   }
 
   private buildAvatarMenu() {

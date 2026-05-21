@@ -2,11 +2,15 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { CorreoService } from '../correo/correo.service';
 import * as bcryptjs from 'bcryptjs';
 
 @Injectable()
 export class UsuarioService {
-  constructor(private prismaService: PrismaService) {}
+  constructor(
+    private prismaService: PrismaService,
+    private correoService: CorreoService,
+  ) {}
 
   // Usado para el Login
   async findOne(username: string) {
@@ -24,6 +28,8 @@ export class UsuarioService {
   }
 
   async create(createUsuarioDto: CreateUsuarioDto) {
+    const plainPassword = createUsuarioDto.Contrasena;
+
     const nuevoUsuario = await this.prismaService.usuario.create({
       data: {
         ...createUsuarioDto,
@@ -31,6 +37,12 @@ export class UsuarioService {
         Clave: await bcryptjs.hash(createUsuarioDto.Clave, 12),
       },
     });
+
+    // Enviar credenciales por correo (no bloquea la respuesta si falla)
+    this.correoService
+      .enviarCredencialesUsuario(createUsuarioDto.Username, plainPassword, createUsuarioDto.IdEmpleado)
+      .catch(err => console.warn('Correo de credenciales no enviado:', err?.message));
+
     return {
       message: `Se creó el usuario ${nuevoUsuario.Username} correctamente.`,
       id: nuevoUsuario.IdUsuario,

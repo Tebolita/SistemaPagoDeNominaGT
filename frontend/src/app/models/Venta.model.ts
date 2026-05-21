@@ -15,6 +15,7 @@ export interface VentaDetalle {
 export interface Venta {
   IdVenta: number;
   IdCliente?: number;
+  IdCuenta?: number;
   FechaVenta: string;
   TipoVenta: 'CONTADO' | 'CREDITO';
   Subtotal: number;
@@ -27,4 +28,5 @@ export interface Venta {
   Activo: boolean;
   Cliente?: Cliente;
   DetalleVenta: VentaDetalle[];
+  CuentaBancariaEmpresa?: { IdCuenta: number; NombreCuenta: string; NumeroCuenta: string; SaldoActual: number };
 }

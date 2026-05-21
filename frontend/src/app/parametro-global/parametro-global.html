@@ -48,6 +48,7 @@
         </th>
         <th style="width:130px">Valor</th>
         <th>Efecto en la nómina</th>
+        <th>Aplica a</th>
         <th style="width:90px">Estado</th>
         <th style="width:90px">Acciones</th>
       </tr>
@@ -93,6 +94,18 @@
           {{ getMeta(param.NombreParametro, param).descripcion }}
         </td>
 
+        <!-- Aplicar a -->
+        <td>
+          @if (tieneFiltros(param)) {
+            <span class="inline-flex items-center gap-1 text-xs bg-blue-900 text-blue-300 border border-blue-700 px-2 py-0.5 rounded-full">
+              <i class="pi pi-filter text-xs"></i>
+              {{ getFiltrosLabel(param) }}
+            </span>
+          } @else {
+            <span class="text-xs text-slate-500">Todos los empleados</span>
+          }
+        </td>
+
         <!-- Estado -->
         <td>
           <p-tag
@@ -125,11 +138,178 @@
 
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="6" class="text-center text-slate-500 py-6">No hay parámetros configurados</td>
+        <td colspan="7" class="text-center text-slate-500 py-6">No hay parámetros configurados</td>
       </tr>
     </ng-template>
   </p-table>
 </div>
+
+<!-- ── Panel: Simulador de Impacto ─────────────────────────────────── -->
+<div class="sim-panel mx-4 mb-6">
+
+  <!-- Header -->
+  <div class="flex justify-between items-center mb-4 flex-wrap gap-2">
+    <div>
+      <h2 class="text-lg font-bold text-white flex items-center gap-2">
+        <i class="pi pi-filter text-blue-400"></i>
+        Simulador de Impacto por Filtro
+      </h2>
+      <p class="text-xs text-slate-400 mt-0.5">
+        Selecciona un parámetro y aplica filtros para ver qué empleados serán afectados.
+      </p>
+    </div>
+    <p-button label="Limpiar" icon="pi pi-times" severity="secondary" size="small"
+      [outlined]="true" (onClick)="limpiarSimulador()"></p-button>
+  </div>
+
+  <!-- Filtros -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 mb-4">
+    <div class="field-group lg:col-span-2">
+      <label>Parámetro *</label>
+      <p-select [options]="parametros()" [(ngModel)]="simuladorFiltros.IdParametro"
+        optionLabel="NombreParametro" optionValue="IdParametro"
+        placeholder="Seleccionar parámetro" [showClear]="true" class="w-full" appendTo="body">
+        <ng-template pTemplate="item" let-p>
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-bold"
+              [ngClass]="getMeta(p.NombreParametro, p).tipo === 'INGRESO' ? 'text-green-400' :
+                         getMeta(p.NombreParametro, p).tipo === 'DESCUENTO' ? 'text-red-400' : 'text-slate-400'">
+              {{ getMeta(p.NombreParametro, p).tipo === 'INGRESO' ? '▲' : getMeta(p.NombreParametro, p).tipo === 'DESCUENTO' ? '▼' : '◆' }}
+            </span>
+            <span>{{ p.NombreParametro }}</span>
+            <span class="ml-auto text-xs text-slate-500">{{ p.Valor }} {{ getMeta(p.NombreParametro, p).unidad }}</span>
+          </div>
+        </ng-template>
+      </p-select>
+    </div>
+    <div class="field-group">
+      <label>Género</label>
+      <p-select [options]="generosOpciones" [(ngModel)]="simuladorFiltros.Genero"
+        optionLabel="label" optionValue="value"
+        placeholder="Todos" [showClear]="true" class="w-full" appendTo="body"></p-select>
+    </div>
+    <div class="field-group">
+      <label>Departamento</label>
+      <p-select [options]="departamentos()" [(ngModel)]="simuladorFiltros.IdDepartamento"
+        optionLabel="NombreDepartamento" optionValue="IdDepartamento"
+        placeholder="Todos" [showClear]="true" class="w-full" appendTo="body"></p-select>
+    </div>
+    <div class="field-group">
+      <label>Puesto</label>
+      <p-select [options]="puestos()" [(ngModel)]="simuladorFiltros.IdPuesto"
+        optionLabel="NombrePuesto" optionValue="IdPuesto"
+        placeholder="Todos" [showClear]="true" class="w-full" appendTo="body"></p-select>
+    </div>
+  </div>
+
+  <div class="flex items-center gap-3 mb-4">
+    <div class="field-group flex-1 max-w-xs">
+      <label>Jornada</label>
+      <p-select [options]="jornadas()" [(ngModel)]="simuladorFiltros.IdJornada"
+        optionLabel="NombreJornada" optionValue="IdJornada"
+        placeholder="Todas" [showClear]="true" class="w-full" appendTo="body"></p-select>
+    </div>
+    <div class="mt-5">
+      <p-button label="Simular" icon="pi pi-play" severity="info"
+        [loading]="simulandoLoading()" (onClick)="simular()"></p-button>
+    </div>
+  </div>
+
+  <!-- Resultado -->
+  @if (simuladorResultado(); as r) {
+    <!-- Resumen de tarjetas -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
+      <div class="sim-stat-card">
+        <div class="sim-stat-label">Empleados afectados</div>
+        <div class="sim-stat-value text-white">{{ r.resumen.TotalEmpleados }}</div>
+        @if (r.resumen.SinSalario > 0) {
+          <div class="text-xs text-amber-400 mt-1">{{ r.resumen.SinSalario }} sin salario activo</div>
+        }
+      </div>
+      <div class="sim-stat-card">
+        <div class="sim-stat-label">Con salario vigente</div>
+        <div class="sim-stat-value text-cyan-400">{{ r.resumen.ConSalario }}</div>
+      </div>
+      <div class="sim-stat-card">
+        <div class="sim-stat-label">Masa salarial total</div>
+        <div class="sim-stat-value text-slate-200">Q {{ r.resumen.TotalSalarioBase | number:'1.2-2' }}</div>
+      </div>
+      <div class="sim-stat-card"
+        [ngClass]="r.parametro.Tipo === 'INGRESO' ? 'border-green-700' : r.parametro.Tipo === 'DESCUENTO' ? 'border-red-700' : 'border-slate-600'">
+        <div class="sim-stat-label">Impacto total</div>
+        <div class="sim-stat-value"
+          [ngClass]="r.parametro.Tipo === 'INGRESO' ? 'text-green-400' : r.parametro.Tipo === 'DESCUENTO' ? 'text-red-400' : 'text-slate-300'">
+          {{ r.parametro.Tipo === 'DESCUENTO' ? '−' : r.parametro.Tipo === 'INGRESO' ? '+' : '' }}
+          Q {{ r.resumen.TotalImpacto | number:'1.2-2' }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Info del parámetro simulado -->
+    <div class="flex items-center gap-3 mb-3 text-sm">
+      <span class="text-slate-400">Simulando:</span>
+      <span class="font-mono font-bold text-slate-200">{{ r.parametro.NombreParametro }}</span>
+      <p-tag [value]="r.parametro.Tipo" [severity]="getTipoSeverity(r.parametro.Tipo)" styleClass="text-xs"></p-tag>
+      <span class="text-slate-400">
+        {{ r.parametro.Valor }}{{ r.parametro.Unidad === '%' ? '%' : ' Q' }}
+        {{ r.parametro.Unidad === '%' ? 'del salario base' : 'fijo por empleado' }}
+      </span>
+    </div>
+
+    <!-- Tabla de empleados -->
+    <p-table [value]="r.empleados" [rows]="10" [paginator]="true" [rowHover]="true"
+      emptyMessage="Ningún empleado coincide con los filtros aplicados.">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Empleado</th>
+          <th>Género</th>
+          <th>Departamento</th>
+          <th>Puesto</th>
+          <th>Jornada</th>
+          <th>Salario Base</th>
+          <th>Impacto</th>
+          <th>Salario Final</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-emp>
+        <tr [ngClass]="!emp.TieneSalario ? 'opacity-50' : ''">
+          <td class="font-medium text-slate-200">{{ emp.Nombre }}</td>
+          <td>
+            <span class="text-xs px-2 py-0.5 rounded font-medium"
+              [ngClass]="emp.Genero === 'Femenino' ? 'bg-pink-900 text-pink-300' : 'bg-blue-900 text-blue-300'">
+              {{ emp.Genero }}
+            </span>
+          </td>
+          <td class="text-sm text-slate-300">{{ emp.Departamento }}</td>
+          <td class="text-sm text-slate-300">{{ emp.Puesto }}</td>
+          <td class="text-xs text-slate-400">{{ emp.Jornada }}</td>
+          <td class="font-mono text-slate-200">
+            @if (emp.TieneSalario) { Q {{ emp.SalarioBase | number:'1.2-2' }} }
+            @else { <span class="text-amber-400 text-xs">Sin salario</span> }
+          </td>
+          <td class="font-mono font-bold"
+            [ngClass]="r.parametro.Tipo === 'INGRESO' ? 'text-green-400' : r.parametro.Tipo === 'DESCUENTO' ? 'text-red-400' : 'text-slate-400'">
+            @if (r.parametro.Tipo !== 'REFERENCIA' && emp.TieneSalario) {
+              {{ r.parametro.Tipo === 'DESCUENTO' ? '−' : '+' }} Q {{ emp.Impacto | number:'1.2-2' }}
+            } @else { — }
+          </td>
+          <td class="font-mono font-bold text-white">
+            @if (emp.TieneSalario) { Q {{ emp.SalarioFinal | number:'1.2-2' }} }
+            @else { — }
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  }
+
+  @if (simulandoLoading()) {
+    <div class="flex justify-center py-8">
+      <p-progressSpinner strokeWidth="4" styleClass="w-12 h-12"></p-progressSpinner>
+    </div>
+  }
+</div>
+
+<p-divider styleClass="mx-4"></p-divider>
 
 <!-- ── Diálogo: Crear / Editar ──────────────────────────────────────── -->
 <p-dialog
@@ -250,6 +430,57 @@
         <span *ngIf="form.Tipo === 'DESCUENTO'">Este parámetro <strong>resta</strong> del líquido del empleado</span>
         <span *ngIf="form.Tipo === 'REFERENCIA'">Este parámetro define un <strong>umbral o límite</strong> de referencia</span>
       </span>
+    </div>
+
+    <!-- ── Filtros de aplicación selectiva ──────────────────────────── -->
+    <div class="border border-blue-800 bg-blue-950 rounded-lg p-4 flex flex-col gap-3">
+      <div class="flex items-center gap-2">
+        <i class="pi pi-filter text-blue-400 text-sm"></i>
+        <span class="text-sm font-semibold text-blue-300">Aplicar solo a... (opcional)</span>
+        <span class="text-xs text-blue-500 ml-1">— Si se deja vacío, aplica a todos los empleados</span>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block text-xs text-blue-300 uppercase tracking-wide mb-1">Género</label>
+          <p-select
+            [options]="generosOpciones"
+            [(ngModel)]="form.FiltroGenero"
+            optionLabel="label" optionValue="value"
+            placeholder="Todos" [showClear]="true"
+            class="w-full" appendTo="body"
+          ></p-select>
+        </div>
+        <div>
+          <label class="block text-xs text-blue-300 uppercase tracking-wide mb-1">Departamento</label>
+          <p-select
+            [options]="departamentos()"
+            [(ngModel)]="form.FiltroIdDepartamento"
+            optionLabel="NombreDepartamento" optionValue="IdDepartamento"
+            placeholder="Todos" [showClear]="true"
+            class="w-full" appendTo="body"
+          ></p-select>
+        </div>
+        <div>
+          <label class="block text-xs text-blue-300 uppercase tracking-wide mb-1">Puesto</label>
+          <p-select
+            [options]="puestos()"
+            [(ngModel)]="form.FiltroIdPuesto"
+            optionLabel="NombrePuesto" optionValue="IdPuesto"
+            placeholder="Todos" [showClear]="true"
+            class="w-full" appendTo="body"
+          ></p-select>
+        </div>
+        <div>
+          <label class="block text-xs text-blue-300 uppercase tracking-wide mb-1">Jornada</label>
+          <p-select
+            [options]="jornadas()"
+            [(ngModel)]="form.FiltroIdJornada"
+            optionLabel="NombreJornada" optionValue="IdJornada"
+            placeholder="Todas" [showClear]="true"
+            class="w-full" appendTo="body"
+          ></p-select>
+        </div>
+      </div>
     </div>
 
     <div>

@@ -9,7 +9,9 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { ToastModule } from 'primeng/toast';
 import { SelectModule } from 'primeng/select';
 import { TagModule } from 'primeng/tag';
-import { MessageService } from 'primeng/api';
+import { MessageService, ConfirmationService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { TooltipModule } from 'primeng/tooltip';
 import { ProductoServicioService } from '../services/producto-servicio.service';
 import { ProductoServicio } from '../models/ProductoServicio.model';
 
@@ -27,8 +29,10 @@ import { ProductoServicio } from '../models/ProductoServicio.model';
     ToastModule,
     SelectModule,
     TagModule,
+    TooltipModule,
+    ConfirmDialogModule,
   ],
-  providers: [MessageService],
+  providers: [MessageService, ConfirmationService],
   templateUrl: './producto-servicio.html',
   styleUrl: './producto-servicio.css'
 })

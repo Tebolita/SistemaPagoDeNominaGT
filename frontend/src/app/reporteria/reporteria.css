@@ -159,6 +159,17 @@
   background: rgba(15, 23, 42, 0.7) !important;
 }
 
+/* ── Título de chart ────────────────────────────────────────────────── */
+.chart-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #cbd5e1;
+  margin-bottom: 0.75rem;
+}
+
 /* ── Responsivo ─────────────────────────────────────────────────────── */
 @media (max-width: 768px) {
   .filter-bar { flex-direction: column; }

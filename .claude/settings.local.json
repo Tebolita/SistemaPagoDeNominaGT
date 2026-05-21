@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx ng *)",
+      "Bash(node -e ' *)",
+      "Bash(npx tsc *)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" \"http://localhost:4000/api/producto-servicio\")",
+      "Bash(grep -E \"\\\\.html$|\\\\.ts$|\\\\.css$\")",
+      "Bash(grep -A3 'modules\\\\|title.*:.*'\\\\''\\\\|route.*:.*'\\\\''\\\\|color.*:.*'\\\\''' c:/Users/Tebol/Desktop/sistema_pago_de_nomina/frontend/src/app/__TRACKED_VAR__.ts)",
+      "Bash(npx prisma *)",
+      "Bash(npm install *)",
+      "Bash(node -e \"require\\('@getbrevo/brevo'\\); console.log\\('ok'\\)\")",
+      "Bash(node -e \"const b = require\\('@getbrevo/brevo'\\); console.log\\(Object.keys\\(b\\).filter\\(k => k.toLowerCase\\(\\).includes\\('transactional'\\) || k.toLowerCase\\(\\).includes\\('smtp'\\) || k.toLowerCase\\(\\).includes\\('api'\\)\\).slice\\(0,15\\)\\)\")",
+      "Bash(node -e \"const { BrevoClient } = require\\('@getbrevo/brevo'\\); const c = new BrevoClient\\({ apiKey: 'test' }\\); console.log\\(c.transactionalEmails.sendTransacEmail.toString\\(\\).slice\\(0,300\\)\\)\")"
+    ]
+  }
+}

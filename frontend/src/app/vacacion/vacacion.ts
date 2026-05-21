@@ -10,7 +10,9 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { SelectModule } from 'primeng/select';
 import { CheckboxModule } from 'primeng/checkbox';
-import { DatePickerModule } from 'primeng/datepicker'; 
+import { DatePickerModule } from 'primeng/datepicker';
+import { TagModule } from 'primeng/tag';
+import { TooltipModule } from 'primeng/tooltip';
 
 import { VacacionesService } from './vacacion.service';
 import { IncidenciaVacacion } from '../models/Vacacion.model';
@@ -33,7 +35,9 @@ import { Subject, takeUntil } from 'rxjs';
     ConfirmDialogModule,
     SelectModule,
     CheckboxModule,
-    DatePickerModule
+    DatePickerModule,
+    TagModule,
+    TooltipModule,
   ],
   templateUrl: './vacacion.html',
   styleUrl: './vacacion.css',
@@ -159,7 +163,7 @@ export class Vacacion implements OnInit, OnDestroy {
                 });
             }
             this.vacacionesDialog = false;
-            this.vacacion = null as any;
+            this.submitted = false;
         }
     }
 }

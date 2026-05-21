@@ -258,6 +258,8 @@ export type CuentaBancariaEmpresaWhereInput = {
   FechaEliminacion?: Prisma.DateTimeNullableFilter<"CuentaBancariaEmpresa"> | Date | string | null
   Banco?: Prisma.XOR<Prisma.BancoScalarRelationFilter, Prisma.BancoWhereInput>
   MovimientoFinanciero?: Prisma.MovimientoFinancieroListRelationFilter
+  NominaEncabezado?: Prisma.NominaEncabezadoListRelationFilter
+  Venta?: Prisma.VentaListRelationFilter
 }
 
 export type CuentaBancariaEmpresaOrderByWithRelationInput = {
@@ -272,6 +274,8 @@ export type CuentaBancariaEmpresaOrderByWithRelationInput = {
   FechaEliminacion?: Prisma.SortOrderInput | Prisma.SortOrder
   Banco?: Prisma.BancoOrderByWithRelationInput
   MovimientoFinanciero?: Prisma.MovimientoFinancieroOrderByRelationAggregateInput
+  NominaEncabezado?: Prisma.NominaEncabezadoOrderByRelationAggregateInput
+  Venta?: Prisma.VentaOrderByRelationAggregateInput
 }
 
 export type CuentaBancariaEmpresaWhereUniqueInput = Prisma.AtLeast<{
@@ -289,6 +293,8 @@ export type CuentaBancariaEmpresaWhereUniqueInput = Prisma.AtLeast<{
   FechaEliminacion?: Prisma.DateTimeNullableFilter<"CuentaBancariaEmpresa"> | Date | string | null
   Banco?: Prisma.XOR<Prisma.BancoScalarRelationFilter, Prisma.BancoWhereInput>
   MovimientoFinanciero?: Prisma.MovimientoFinancieroListRelationFilter
+  NominaEncabezado?: Prisma.NominaEncabezadoListRelationFilter
+  Venta?: Prisma.VentaListRelationFilter
 }, "IdCuenta" | "NumeroCuenta">
 
 export type CuentaBancariaEmpresaOrderByWithAggregationInput = {
@@ -333,6 +339,8 @@ export type CuentaBancariaEmpresaCreateInput = {
   FechaEliminacion?: Date | string | null
   Banco: Prisma.BancoCreateNestedOneWithoutCuentaBancariaEmpresaInput
   MovimientoFinanciero?: Prisma.MovimientoFinancieroCreateNestedManyWithoutCuentaBancariaEmpresaInput
+  NominaEncabezado?: Prisma.NominaEncabezadoCreateNestedManyWithoutCuentaBancariaEmpresaInput
+  Venta?: Prisma.VentaCreateNestedManyWithoutCuentaBancariaEmpresaInput
 }
 
 export type CuentaBancariaEmpresaUncheckedCreateInput = {
@@ -346,6 +354,8 @@ export type CuentaBancariaEmpresaUncheckedCreateInput = {
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
   MovimientoFinanciero?: Prisma.MovimientoFinancieroUncheckedCreateNestedManyWithoutCuentaBancariaEmpresaInput
+  NominaEncabezado?: Prisma.NominaEncabezadoUncheckedCreateNestedManyWithoutCuentaBancariaEmpresaInput
+  Venta?: Prisma.VentaUncheckedCreateNestedManyWithoutCuentaBancariaEmpresaInput
 }
 
 export type CuentaBancariaEmpresaUpdateInput = {
@@ -358,6 +368,8 @@ export type CuentaBancariaEmpresaUpdateInput = {
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Banco?: Prisma.BancoUpdateOneRequiredWithoutCuentaBancariaEmpresaNestedInput
   MovimientoFinanciero?: Prisma.MovimientoFinancieroUpdateManyWithoutCuentaBancariaEmpresaNestedInput
+  NominaEncabezado?: Prisma.NominaEncabezadoUpdateManyWithoutCuentaBancariaEmpresaNestedInput
+  Venta?: Prisma.VentaUpdateManyWithoutCuentaBancariaEmpresaNestedInput
 }
 
 export type CuentaBancariaEmpresaUncheckedUpdateInput = {
@@ -371,6 +383,8 @@ export type CuentaBancariaEmpresaUncheckedUpdateInput = {
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   MovimientoFinanciero?: Prisma.MovimientoFinancieroUncheckedUpdateManyWithoutCuentaBancariaEmpresaNestedInput
+  NominaEncabezado?: Prisma.NominaEncabezadoUncheckedUpdateManyWithoutCuentaBancariaEmpresaNestedInput
+  Venta?: Prisma.VentaUncheckedUpdateManyWithoutCuentaBancariaEmpresaNestedInput
 }
 
 export type CuentaBancariaEmpresaCreateManyInput = {
@@ -469,6 +483,11 @@ export type CuentaBancariaEmpresaScalarRelationFilter = {
   isNot?: Prisma.CuentaBancariaEmpresaWhereInput
 }
 
+export type CuentaBancariaEmpresaNullableScalarRelationFilter = {
+  is?: Prisma.CuentaBancariaEmpresaWhereInput | null
+  isNot?: Prisma.CuentaBancariaEmpresaWhereInput | null
+}
+
 export type CuentaBancariaEmpresaCreateNestedManyWithoutBancoInput = {
   create?: Prisma.XOR<Prisma.CuentaBancariaEmpresaCreateWithoutBancoInput, Prisma.CuentaBancariaEmpresaUncheckedCreateWithoutBancoInput> | Prisma.CuentaBancariaEmpresaCreateWithoutBancoInput[] | Prisma.CuentaBancariaEmpresaUncheckedCreateWithoutBancoInput[]
   connectOrCreate?: Prisma.CuentaBancariaEmpresaCreateOrConnectWithoutBancoInput | Prisma.CuentaBancariaEmpresaCreateOrConnectWithoutBancoInput[]
@@ -525,6 +544,38 @@ export type CuentaBancariaEmpresaUpdateOneRequiredWithoutMovimientoFinancieroNes
   update?: Prisma.XOR<Prisma.XOR<Prisma.CuentaBancariaEmpresaUpdateToOneWithWhereWithoutMovimientoFinancieroInput, Prisma.CuentaBancariaEmpresaUpdateWithoutMovimientoFinancieroInput>, Prisma.CuentaBancariaEmpresaUncheckedUpdateWithoutMovimientoFinancieroInput>
 }
 
+export type CuentaBancariaEmpresaCreateNestedOneWithoutNominaEncabezadoInput = {
+  create?: Prisma.XOR<Prisma.CuentaBancariaEmpresaCreateWithoutNominaEncabezadoInput, Prisma.CuentaBancariaEmpresaUncheckedCreateWithoutNominaEncabezadoInput>
+  connectOrCreate?: Prisma.CuentaBancariaEmpresaCreateOrConnectWithoutNominaEncabezadoInput
+  connect?: Prisma.CuentaBancariaEmpresaWhereUniqueInput
+}
+
+export type CuentaBancariaEmpresaUpdateOneWithoutNominaEncabezadoNestedInput = {
+  create?: Prisma.XOR<Prisma.CuentaBancariaEmpresaCreateWithoutNominaEncabezadoInput, Prisma.CuentaBancariaEmpresaUncheckedCreateWithoutNominaEncabezadoInput>
+  connectOrCreate?: Prisma.CuentaBancariaEmpresaCreateOrConnectWithoutNominaEncabezadoInput
+  upsert?: Prisma.CuentaBancariaEmpresaUpsertWithoutNominaEncabezadoInput
+  disconnect?: Prisma.CuentaBancariaEmpresaWhereInput | boolean
+  delete?: Prisma.CuentaBancariaEmpresaWhereInput | boolean
+  connect?: Prisma.CuentaBancariaEmpresaWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CuentaBancariaEmpresaUpdateToOneWithWhereWithoutNominaEncabezadoInput, Prisma.CuentaBancariaEmpresaUpdateWithoutNominaEncabezadoInput>, Prisma.CuentaBancariaEmpresaUncheckedUpdateWithoutNominaEncabezadoInput>
+}
+
+export type CuentaBancariaEmpresaCreateNestedOneWithoutVentaInput = {
+  create?: Prisma.XOR<Prisma.CuentaBancariaEmpresaCreateWithoutVentaInput, Prisma.CuentaBancariaEmpresaUncheckedCreateWithoutVentaInput>
+  connectOrCreate?: Prisma.CuentaBancariaEmpresaCreateOrConnectWithoutVentaInput
+  connect?: Prisma.CuentaBancariaEmpresaWhereUniqueInput
+}
+
+export type CuentaBancariaEmpresaUpdateOneWithoutVentaNestedInput = {
+  create?: Prisma.XOR<Prisma.CuentaBancariaEmpresaCreateWithoutVentaInput, Prisma.CuentaBancariaEmpresaUncheckedCreateWithoutVentaInput>
+  connectOrCreate?: Prisma.CuentaBancariaEmpresaCreateOrConnectWithoutVentaInput
+  upsert?: Prisma.CuentaBancariaEmpresaUpsertWithoutVentaInput
+  disconnect?: Prisma.CuentaBancariaEmpresaWhereInput | boolean
+  delete?: Prisma.CuentaBancariaEmpresaWhereInput | boolean
+  connect?: Prisma.CuentaBancariaEmpresaWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CuentaBancariaEmpresaUpdateToOneWithWhereWithoutVentaInput, Prisma.CuentaBancariaEmpresaUpdateWithoutVentaInput>, Prisma.CuentaBancariaEmpresaUncheckedUpdateWithoutVentaInput>
+}
+
 export type CuentaBancariaEmpresaCreateWithoutBancoInput = {
   NumeroCuenta: string
   NombreCuenta: string
@@ -534,6 +585,8 @@ export type CuentaBancariaEmpresaCreateWithoutBancoInput = {
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
   MovimientoFinanciero?: Prisma.MovimientoFinancieroCreateNestedManyWithoutCuentaBancariaEmpresaInput
+  NominaEncabezado?: Prisma.NominaEncabezadoCreateNestedManyWithoutCuentaBancariaEmpresaInput
+  Venta?: Prisma.VentaCreateNestedManyWithoutCuentaBancariaEmpresaInput
 }
 
 export type CuentaBancariaEmpresaUncheckedCreateWithoutBancoInput = {
@@ -546,6 +599,8 @@ export type CuentaBancariaEmpresaUncheckedCreateWithoutBancoInput = {
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
   MovimientoFinanciero?: Prisma.MovimientoFinancieroUncheckedCreateNestedManyWithoutCuentaBancariaEmpresaInput
+  NominaEncabezado?: Prisma.NominaEncabezadoUncheckedCreateNestedManyWithoutCuentaBancariaEmpresaInput
+  Venta?: Prisma.VentaUncheckedCreateNestedManyWithoutCuentaBancariaEmpresaInput
 }
 
 export type CuentaBancariaEmpresaCreateOrConnectWithoutBancoInput = {
@@ -597,6 +652,8 @@ export type CuentaBancariaEmpresaCreateWithoutMovimientoFinancieroInput = {
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
   Banco: Prisma.BancoCreateNestedOneWithoutCuentaBancariaEmpresaInput
+  NominaEncabezado?: Prisma.NominaEncabezadoCreateNestedManyWithoutCuentaBancariaEmpresaInput
+  Venta?: Prisma.VentaCreateNestedManyWithoutCuentaBancariaEmpresaInput
 }
 
 export type CuentaBancariaEmpresaUncheckedCreateWithoutMovimientoFinancieroInput = {
@@ -609,6 +666,8 @@ export type CuentaBancariaEmpresaUncheckedCreateWithoutMovimientoFinancieroInput
   Moneda?: string | null
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  NominaEncabezado?: Prisma.NominaEncabezadoUncheckedCreateNestedManyWithoutCuentaBancariaEmpresaInput
+  Venta?: Prisma.VentaUncheckedCreateNestedManyWithoutCuentaBancariaEmpresaInput
 }
 
 export type CuentaBancariaEmpresaCreateOrConnectWithoutMovimientoFinancieroInput = {
@@ -636,6 +695,8 @@ export type CuentaBancariaEmpresaUpdateWithoutMovimientoFinancieroInput = {
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Banco?: Prisma.BancoUpdateOneRequiredWithoutCuentaBancariaEmpresaNestedInput
+  NominaEncabezado?: Prisma.NominaEncabezadoUpdateManyWithoutCuentaBancariaEmpresaNestedInput
+  Venta?: Prisma.VentaUpdateManyWithoutCuentaBancariaEmpresaNestedInput
 }
 
 export type CuentaBancariaEmpresaUncheckedUpdateWithoutMovimientoFinancieroInput = {
@@ -648,6 +709,148 @@ export type CuentaBancariaEmpresaUncheckedUpdateWithoutMovimientoFinancieroInput
   Moneda?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  NominaEncabezado?: Prisma.NominaEncabezadoUncheckedUpdateManyWithoutCuentaBancariaEmpresaNestedInput
+  Venta?: Prisma.VentaUncheckedUpdateManyWithoutCuentaBancariaEmpresaNestedInput
+}
+
+export type CuentaBancariaEmpresaCreateWithoutNominaEncabezadoInput = {
+  NumeroCuenta: string
+  NombreCuenta: string
+  TipoCuenta?: string | null
+  SaldoActual?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Moneda?: string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
+  Banco: Prisma.BancoCreateNestedOneWithoutCuentaBancariaEmpresaInput
+  MovimientoFinanciero?: Prisma.MovimientoFinancieroCreateNestedManyWithoutCuentaBancariaEmpresaInput
+  Venta?: Prisma.VentaCreateNestedManyWithoutCuentaBancariaEmpresaInput
+}
+
+export type CuentaBancariaEmpresaUncheckedCreateWithoutNominaEncabezadoInput = {
+  IdCuenta?: number
+  IdBanco: number
+  NumeroCuenta: string
+  NombreCuenta: string
+  TipoCuenta?: string | null
+  SaldoActual?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Moneda?: string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
+  MovimientoFinanciero?: Prisma.MovimientoFinancieroUncheckedCreateNestedManyWithoutCuentaBancariaEmpresaInput
+  Venta?: Prisma.VentaUncheckedCreateNestedManyWithoutCuentaBancariaEmpresaInput
+}
+
+export type CuentaBancariaEmpresaCreateOrConnectWithoutNominaEncabezadoInput = {
+  where: Prisma.CuentaBancariaEmpresaWhereUniqueInput
+  create: Prisma.XOR<Prisma.CuentaBancariaEmpresaCreateWithoutNominaEncabezadoInput, Prisma.CuentaBancariaEmpresaUncheckedCreateWithoutNominaEncabezadoInput>
+}
+
+export type CuentaBancariaEmpresaUpsertWithoutNominaEncabezadoInput = {
+  update: Prisma.XOR<Prisma.CuentaBancariaEmpresaUpdateWithoutNominaEncabezadoInput, Prisma.CuentaBancariaEmpresaUncheckedUpdateWithoutNominaEncabezadoInput>
+  create: Prisma.XOR<Prisma.CuentaBancariaEmpresaCreateWithoutNominaEncabezadoInput, Prisma.CuentaBancariaEmpresaUncheckedCreateWithoutNominaEncabezadoInput>
+  where?: Prisma.CuentaBancariaEmpresaWhereInput
+}
+
+export type CuentaBancariaEmpresaUpdateToOneWithWhereWithoutNominaEncabezadoInput = {
+  where?: Prisma.CuentaBancariaEmpresaWhereInput
+  data: Prisma.XOR<Prisma.CuentaBancariaEmpresaUpdateWithoutNominaEncabezadoInput, Prisma.CuentaBancariaEmpresaUncheckedUpdateWithoutNominaEncabezadoInput>
+}
+
+export type CuentaBancariaEmpresaUpdateWithoutNominaEncabezadoInput = {
+  NumeroCuenta?: Prisma.StringFieldUpdateOperationsInput | string
+  NombreCuenta?: Prisma.StringFieldUpdateOperationsInput | string
+  TipoCuenta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  SaldoActual?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Moneda?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Banco?: Prisma.BancoUpdateOneRequiredWithoutCuentaBancariaEmpresaNestedInput
+  MovimientoFinanciero?: Prisma.MovimientoFinancieroUpdateManyWithoutCuentaBancariaEmpresaNestedInput
+  Venta?: Prisma.VentaUpdateManyWithoutCuentaBancariaEmpresaNestedInput
+}
+
+export type CuentaBancariaEmpresaUncheckedUpdateWithoutNominaEncabezadoInput = {
+  IdCuenta?: Prisma.IntFieldUpdateOperationsInput | number
+  IdBanco?: Prisma.IntFieldUpdateOperationsInput | number
+  NumeroCuenta?: Prisma.StringFieldUpdateOperationsInput | string
+  NombreCuenta?: Prisma.StringFieldUpdateOperationsInput | string
+  TipoCuenta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  SaldoActual?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Moneda?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  MovimientoFinanciero?: Prisma.MovimientoFinancieroUncheckedUpdateManyWithoutCuentaBancariaEmpresaNestedInput
+  Venta?: Prisma.VentaUncheckedUpdateManyWithoutCuentaBancariaEmpresaNestedInput
+}
+
+export type CuentaBancariaEmpresaCreateWithoutVentaInput = {
+  NumeroCuenta: string
+  NombreCuenta: string
+  TipoCuenta?: string | null
+  SaldoActual?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Moneda?: string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
+  Banco: Prisma.BancoCreateNestedOneWithoutCuentaBancariaEmpresaInput
+  MovimientoFinanciero?: Prisma.MovimientoFinancieroCreateNestedManyWithoutCuentaBancariaEmpresaInput
+  NominaEncabezado?: Prisma.NominaEncabezadoCreateNestedManyWithoutCuentaBancariaEmpresaInput
+}
+
+export type CuentaBancariaEmpresaUncheckedCreateWithoutVentaInput = {
+  IdCuenta?: number
+  IdBanco: number
+  NumeroCuenta: string
+  NombreCuenta: string
+  TipoCuenta?: string | null
+  SaldoActual?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Moneda?: string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
+  MovimientoFinanciero?: Prisma.MovimientoFinancieroUncheckedCreateNestedManyWithoutCuentaBancariaEmpresaInput
+  NominaEncabezado?: Prisma.NominaEncabezadoUncheckedCreateNestedManyWithoutCuentaBancariaEmpresaInput
+}
+
+export type CuentaBancariaEmpresaCreateOrConnectWithoutVentaInput = {
+  where: Prisma.CuentaBancariaEmpresaWhereUniqueInput
+  create: Prisma.XOR<Prisma.CuentaBancariaEmpresaCreateWithoutVentaInput, Prisma.CuentaBancariaEmpresaUncheckedCreateWithoutVentaInput>
+}
+
+export type CuentaBancariaEmpresaUpsertWithoutVentaInput = {
+  update: Prisma.XOR<Prisma.CuentaBancariaEmpresaUpdateWithoutVentaInput, Prisma.CuentaBancariaEmpresaUncheckedUpdateWithoutVentaInput>
+  create: Prisma.XOR<Prisma.CuentaBancariaEmpresaCreateWithoutVentaInput, Prisma.CuentaBancariaEmpresaUncheckedCreateWithoutVentaInput>
+  where?: Prisma.CuentaBancariaEmpresaWhereInput
+}
+
+export type CuentaBancariaEmpresaUpdateToOneWithWhereWithoutVentaInput = {
+  where?: Prisma.CuentaBancariaEmpresaWhereInput
+  data: Prisma.XOR<Prisma.CuentaBancariaEmpresaUpdateWithoutVentaInput, Prisma.CuentaBancariaEmpresaUncheckedUpdateWithoutVentaInput>
+}
+
+export type CuentaBancariaEmpresaUpdateWithoutVentaInput = {
+  NumeroCuenta?: Prisma.StringFieldUpdateOperationsInput | string
+  NombreCuenta?: Prisma.StringFieldUpdateOperationsInput | string
+  TipoCuenta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  SaldoActual?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Moneda?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Banco?: Prisma.BancoUpdateOneRequiredWithoutCuentaBancariaEmpresaNestedInput
+  MovimientoFinanciero?: Prisma.MovimientoFinancieroUpdateManyWithoutCuentaBancariaEmpresaNestedInput
+  NominaEncabezado?: Prisma.NominaEncabezadoUpdateManyWithoutCuentaBancariaEmpresaNestedInput
+}
+
+export type CuentaBancariaEmpresaUncheckedUpdateWithoutVentaInput = {
+  IdCuenta?: Prisma.IntFieldUpdateOperationsInput | number
+  IdBanco?: Prisma.IntFieldUpdateOperationsInput | number
+  NumeroCuenta?: Prisma.StringFieldUpdateOperationsInput | string
+  NombreCuenta?: Prisma.StringFieldUpdateOperationsInput | string
+  TipoCuenta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  SaldoActual?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  Moneda?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  MovimientoFinanciero?: Prisma.MovimientoFinancieroUncheckedUpdateManyWithoutCuentaBancariaEmpresaNestedInput
+  NominaEncabezado?: Prisma.NominaEncabezadoUncheckedUpdateManyWithoutCuentaBancariaEmpresaNestedInput
 }
 
 export type CuentaBancariaEmpresaCreateManyBancoInput = {
@@ -669,6 +872,8 @@ export type CuentaBancariaEmpresaUpdateWithoutBancoInput = {
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   MovimientoFinanciero?: Prisma.MovimientoFinancieroUpdateManyWithoutCuentaBancariaEmpresaNestedInput
+  NominaEncabezado?: Prisma.NominaEncabezadoUpdateManyWithoutCuentaBancariaEmpresaNestedInput
+  Venta?: Prisma.VentaUpdateManyWithoutCuentaBancariaEmpresaNestedInput
 }
 
 export type CuentaBancariaEmpresaUncheckedUpdateWithoutBancoInput = {
@@ -681,6 +886,8 @@ export type CuentaBancariaEmpresaUncheckedUpdateWithoutBancoInput = {
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   MovimientoFinanciero?: Prisma.MovimientoFinancieroUncheckedUpdateManyWithoutCuentaBancariaEmpresaNestedInput
+  NominaEncabezado?: Prisma.NominaEncabezadoUncheckedUpdateManyWithoutCuentaBancariaEmpresaNestedInput
+  Venta?: Prisma.VentaUncheckedUpdateManyWithoutCuentaBancariaEmpresaNestedInput
 }
 
 export type CuentaBancariaEmpresaUncheckedUpdateManyWithoutBancoInput = {
@@ -701,10 +908,14 @@ export type CuentaBancariaEmpresaUncheckedUpdateManyWithoutBancoInput = {
 
 export type CuentaBancariaEmpresaCountOutputType = {
   MovimientoFinanciero: number
+  NominaEncabezado: number
+  Venta: number
 }
 
 export type CuentaBancariaEmpresaCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   MovimientoFinanciero?: boolean | CuentaBancariaEmpresaCountOutputTypeCountMovimientoFinancieroArgs
+  NominaEncabezado?: boolean | CuentaBancariaEmpresaCountOutputTypeCountNominaEncabezadoArgs
+  Venta?: boolean | CuentaBancariaEmpresaCountOutputTypeCountVentaArgs
 }
 
 /**
@@ -724,6 +935,20 @@ export type CuentaBancariaEmpresaCountOutputTypeCountMovimientoFinancieroArgs<Ex
   where?: Prisma.MovimientoFinancieroWhereInput
 }
 
+/**
+ * CuentaBancariaEmpresaCountOutputType without action
+ */
+export type CuentaBancariaEmpresaCountOutputTypeCountNominaEncabezadoArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NominaEncabezadoWhereInput
+}
+
+/**
+ * CuentaBancariaEmpresaCountOutputType without action
+ */
+export type CuentaBancariaEmpresaCountOutputTypeCountVentaArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.VentaWhereInput
+}
+
 
 export type CuentaBancariaEmpresaSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   IdCuenta?: boolean
@@ -737,6 +962,8 @@ export type CuentaBancariaEmpresaSelect<ExtArgs extends runtime.Types.Extensions
   FechaEliminacion?: boolean
   Banco?: boolean | Prisma.BancoDefaultArgs<ExtArgs>
   MovimientoFinanciero?: boolean | Prisma.CuentaBancariaEmpresa$MovimientoFinancieroArgs<ExtArgs>
+  NominaEncabezado?: boolean | Prisma.CuentaBancariaEmpresa$NominaEncabezadoArgs<ExtArgs>
+  Venta?: boolean | Prisma.CuentaBancariaEmpresa$VentaArgs<ExtArgs>
   _count?: boolean | Prisma.CuentaBancariaEmpresaCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["cuentaBancariaEmpresa"]>
 
@@ -758,6 +985,8 @@ export type CuentaBancariaEmpresaOmit<ExtArgs extends runtime.Types.Extensions.I
 export type CuentaBancariaEmpresaInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   Banco?: boolean | Prisma.BancoDefaultArgs<ExtArgs>
   MovimientoFinanciero?: boolean | Prisma.CuentaBancariaEmpresa$MovimientoFinancieroArgs<ExtArgs>
+  NominaEncabezado?: boolean | Prisma.CuentaBancariaEmpresa$NominaEncabezadoArgs<ExtArgs>
+  Venta?: boolean | Prisma.CuentaBancariaEmpresa$VentaArgs<ExtArgs>
   _count?: boolean | Prisma.CuentaBancariaEmpresaCountOutputTypeDefaultArgs<ExtArgs>
 }
 
@@ -766,6 +995,8 @@ export type $CuentaBancariaEmpresaPayload<ExtArgs extends runtime.Types.Extensio
   objects: {
     Banco: Prisma.$BancoPayload<ExtArgs>
     MovimientoFinanciero: Prisma.$MovimientoFinancieroPayload<ExtArgs>[]
+    NominaEncabezado: Prisma.$NominaEncabezadoPayload<ExtArgs>[]
+    Venta: Prisma.$VentaPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     IdCuenta: number
@@ -1119,6 +1350,8 @@ export interface Prisma__CuentaBancariaEmpresaClient<T, Null = never, ExtArgs ex
   readonly [Symbol.toStringTag]: "PrismaPromise"
   Banco<T extends Prisma.BancoDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BancoDefaultArgs<ExtArgs>>): Prisma.Prisma__BancoClient<runtime.Types.Result.GetResult<Prisma.$BancoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   MovimientoFinanciero<T extends Prisma.CuentaBancariaEmpresa$MovimientoFinancieroArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CuentaBancariaEmpresa$MovimientoFinancieroArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MovimientoFinancieroPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  NominaEncabezado<T extends Prisma.CuentaBancariaEmpresa$NominaEncabezadoArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CuentaBancariaEmpresa$NominaEncabezadoArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NominaEncabezadoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  Venta<T extends Prisma.CuentaBancariaEmpresa$VentaArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CuentaBancariaEmpresa$VentaArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VentaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1525,6 +1758,54 @@ export type CuentaBancariaEmpresa$MovimientoFinancieroArgs<ExtArgs extends runti
   take?: number
   skip?: number
   distinct?: Prisma.MovimientoFinancieroScalarFieldEnum | Prisma.MovimientoFinancieroScalarFieldEnum[]
+}
+
+/**
+ * CuentaBancariaEmpresa.NominaEncabezado
+ */
+export type CuentaBancariaEmpresa$NominaEncabezadoArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the NominaEncabezado
+   */
+  select?: Prisma.NominaEncabezadoSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the NominaEncabezado
+   */
+  omit?: Prisma.NominaEncabezadoOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NominaEncabezadoInclude<ExtArgs> | null
+  where?: Prisma.NominaEncabezadoWhereInput
+  orderBy?: Prisma.NominaEncabezadoOrderByWithRelationInput | Prisma.NominaEncabezadoOrderByWithRelationInput[]
+  cursor?: Prisma.NominaEncabezadoWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NominaEncabezadoScalarFieldEnum | Prisma.NominaEncabezadoScalarFieldEnum[]
+}
+
+/**
+ * CuentaBancariaEmpresa.Venta
+ */
+export type CuentaBancariaEmpresa$VentaArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Venta
+   */
+  select?: Prisma.VentaSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Venta
+   */
+  omit?: Prisma.VentaOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.VentaInclude<ExtArgs> | null
+  where?: Prisma.VentaWhereInput
+  orderBy?: Prisma.VentaOrderByWithRelationInput | Prisma.VentaOrderByWithRelationInput[]
+  cursor?: Prisma.VentaWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.VentaScalarFieldEnum | Prisma.VentaScalarFieldEnum[]
 }
 
 /**

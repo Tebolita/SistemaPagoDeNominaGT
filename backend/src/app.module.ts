@@ -23,6 +23,7 @@ import { ProductoServicioModule } from './producto-servicio/producto-servicio.mo
 import { VentaModule } from './venta/venta.module';
 import { CuentaBancariaEmpresaModule } from './cuenta-bancaria-empresa/cuenta-bancaria-empresa.module';
 import { MovimientoFinancieroModule } from './movimiento-financiero/movimiento-financiero.module';
+import { CorreoModule } from './correo/correo.module';
 
 @Module({
   imports: [
@@ -49,6 +50,7 @@ import { MovimientoFinancieroModule } from './movimiento-financiero/movimiento-f
     VentaModule,
     CuentaBancariaEmpresaModule,
     MovimientoFinancieroModule,
+    CorreoModule,
   ],
   controllers: [],
   providers: [PrismaService],

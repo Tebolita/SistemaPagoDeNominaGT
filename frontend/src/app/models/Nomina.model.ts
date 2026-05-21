@@ -16,11 +16,14 @@ export interface Nomina {
   Quincena?: number;
   FechaGeneracion?: Date;
   Estado?: string;
+  TipoNomina?: 'GENERAL' | 'PERSONALIZADA';
   IdUsuarioGerente?: number;
   IdEstadoActual?: number;
   NumeroBoleta?: string;
+  IdCuenta?: number;
   EstadoNomina?: { NombreEstado: string };
   FirmaNomina?: FirmaNomina[];
+  CuentaBancariaEmpresa?: { IdCuenta: number; NombreCuenta: string; NumeroCuenta: string; SaldoActual: number; Moneda?: string };
   Activo?: boolean;
   FechaEliminacion?: Date;
   NominaDetalle?: NominaDetalle[];
@@ -54,6 +57,9 @@ export interface NominaCalculo {
   bono14: number;
   aguinaldo: number;
   bonoProductividad: number;
+  horasExtras: number;
+  valorHoraExtra: number;
+  pagoHorasExtras: number;
   totalIngresos: number;
   descuentoIGSS: number;
   descuentoISR: number;

@@ -1,91 +1,41 @@
-<div class="dashboard-wrapper">
-
-  <!-- HERO SECTION -->
+<div class="inicio-wrapper">
   <div class="hero-section">
-    <div class="hero-bg-shapes">
-      <div class="shape shape-1"></div>
-      <div class="shape shape-2"></div>
-      <div class="shape shape-3"></div>
-    </div>
-    <div class="hero-content">
-      <div class="hero-badge">
-        <i class="pi pi-verified"></i>
-        Módulo de Configuración
-      </div>
-      <h1 class="hero-title">
-        <span class="highlight">Configuración</span> del Sistema
-      </h1>
-      <p class="hero-subtitle">
-        Personaliza los parámetros, estados y estructuras de tu sistema de nómina.
-        Controla el flujo de trabajo y adapta el sistema a tu empresa.
-      </p>
-      <div class="hero-stats">
-        <div class="stat-item">
-          <i class="pi pi-cog"></i>
-          <span>Parámetros</span>
-        </div>
-        <div class="stat-divider"></div>
-        <div class="stat-item">
-          <i class="pi pi-check-square"></i>
-          <span>Estados</span>
-        </div>
-        <div class="stat-divider"></div>
-        <div class="stat-item">
-          <i class="pi pi-building"></i>
-          <span>Estructura</span>
-        </div>
+    <div class="hero-shapes"><div class="shape s1"></div><div class="shape s2"></div><div class="shape s3"></div></div>
+    <div class="hero-body">
+      <div>
+        <div class="hero-badge"><i class="pi pi-cog"></i> Configuración del Sistema</div>
+        <h1 class="hero-title"><span class="highlight">Configuración</span> General</h1>
+        <p class="hero-sub">Personaliza parámetros, estados y estructuras del sistema de nómina.</p>
       </div>
     </div>
   </div>
-
-  <!-- MODULES SECTION -->
   <div class="modules-section">
     <div class="section-header">
       <h2 class="section-title">Opciones de Configuración</h2>
-      <p class="section-subtitle">Seleccioná un área para configurar</p>
+      <p class="section-sub">Seleccioná un área para configurar</p>
     </div>
-
-    <div class="cards-grid">
-      <div *ngFor="let mod of modules" class="module-card card-{{ mod.color }}" [class.coming-soon]="mod.status === 'coming'" (click)="navigate(mod.route)">
-        <div class="card-glow"></div>
-
-        <div *ngIf="mod.status === 'coming'; else activeStatus" class="status-badge coming">
-          <i class="pi pi-clock"></i> Próximamente
-        </div>
-        <ng-template #activeStatus>
-          <div class="status-badge active">
-            <i class="pi pi-check-circle"></i> Disponible
+    <div class="modules-grid">
+      @for (mod of modules; track mod.route) {
+        <div class="module-card color-{{ mod.color }}" (click)="navigate(mod.route)">
+          <div class="card-glow"></div>
+          <div class="card-top">
+            <div class="card-icon-wrap"><i [class]="mod.icon + ' card-icon-inner'"></i></div>
+            @if (mod.status === 'active') { <span class="card-available"><i class="pi pi-check-circle"></i> Disponible</span> }
+            @else { <span class="card-coming"><i class="pi pi-clock"></i> Próximamente</span> }
           </div>
-        </ng-template>
-
-        <div class="card-icon-wrapper">
-          <div class="card-icon">
-            <i [class]="mod.icon"></i>
+          <div class="card-body">
+            <h3 class="card-title">{{ mod.title }}</h3>
+            <p class="card-desc">{{ mod.description }}</p>
+            <ul class="card-features">@for (f of mod.features; track f) { <li><i class="pi pi-check"></i> {{ f }}</li> }</ul>
           </div>
-          <div class="icon-ring"></div>
+          <div class="card-footer">
+            <button class="card-btn" [class.card-btn-coming]="mod.status !== 'active'" [disabled]="mod.status !== 'active'">
+              {{ mod.status === 'active' ? 'Ir al módulo' : 'En desarrollo' }}
+              <i [class]="mod.status === 'active' ? 'pi pi-arrow-right' : 'pi pi-wrench'"></i>
+            </button>
+          </div>
         </div>
-
-        <div class="card-content">
-          <h3 class="card-title">{{ mod.title }}</h3>
-          <p class="card-description">{{ mod.description }}</p>
-          <ul class="features-list">
-            <li *ngFor="let feat of mod.features" class="feature-item">
-              <i class="pi pi-check"></i>
-              {{ feat }}
-            </li>
-          </ul>
-        </div>
-
-        <div class="card-button-wrapper">
-          <button pButton type="button"
-            class="p-button-rounded p-button-text button-nav"
-            [disabled]="mod.status === 'coming'">
-            {{ mod.status === 'coming' ? 'Próximamente' : 'Acceder' }}
-            <i [class]="mod.status === 'coming' ? 'pi pi-clock' : 'pi pi-arrow-right'"></i>
-          </button>
-        </div>
-      </div>
+      }
     </div>
   </div>
-
 </div>

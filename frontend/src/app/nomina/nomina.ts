@@ -7,6 +7,9 @@ import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { SelectModule } from 'primeng/select';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { DividerModule } from 'primeng/divider';
+import { TabsModule } from 'primeng/tabs';
 import { TagModule } from 'primeng/tag';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
@@ -17,6 +20,11 @@ import { NominaService } from '../services/nomina.service';
 import { EmpleadoService } from '../services/empleado.service';
 import { EstadoNominaService } from '../services/estado-nomina.service';
 import { LoginService } from '../services/login.service';
+import { CuentaBancariaEmpresaService } from '../services/cuenta-bancaria-empresa.service';
+import { CorreoService } from '../services/correo.service';
+import { ParametroGlobalService } from '../services/parametro-global.service';
+import { ParametroGlobal } from '../models/ParametroGlobal.model';
+import { CuentaBancariaEmpresa } from '../models/CuentaBancariaEmpresa.model';
 import { FirmaNomina, Nomina, NominaCalculo, NominaMasivaResultado } from '../models/Nomina.model';
 import { EmpleadoResponse } from '../models/Empleado.model';
 import { EstadoNomina, HistorialEstadoNomina, CambiarEstadoNominaDto } from '../models/EstadoNomina.model';
@@ -38,6 +46,9 @@ import { EstadoNomina, HistorialEstadoNomina, CambiarEstadoNominaDto } from '../
     ConfirmDialogModule,
     TooltipModule,
     TextareaModule,
+    MultiSelectModule,
+    DividerModule,
+    TabsModule,
   ],
   providers: [MessageService, ConfirmationService],
   templateUrl: './nomina.html',
@@ -50,13 +61,70 @@ export class NominaComponent implements OnInit {
   private authService = inject(LoginService);
   private messageService = inject(MessageService);
   private confirmationService = inject(ConfirmationService);
+  private cuentaService      = inject(CuentaBancariaEmpresaService);
+  private correoService      = inject(CorreoService);
+  private parametroService   = inject(ParametroGlobalService);
+  enviandoCorreo = signal<number | null>(null);
 
-  nominas = signal<Nomina[]>([]);
-  empleados = signal<EmpleadoResponse[]>([]);
+  // ── Filtros de la tabla ───────────────────────────────────────────────────
+  filtroAnio: number | null = null;
+  filtroMes:  number | null = null;
+  filtroTipo: string        = '';
+
+  get aniosFiltro(): { label: string; value: number }[] {
+    const unicos = [...new Set(this.nominas().map(n => n.Anio))].sort((a, b) => b - a);
+    return unicos.map(a => ({ label: String(a), value: a }));
+  }
+
+  get nominasFiltradas(): Nomina[] {
+    return this.nominas().filter(n => {
+      if (this.filtroAnio && n.Anio !== this.filtroAnio) return false;
+      if (this.filtroMes  && n.Mes  !== this.filtroMes)  return false;
+      if (this.filtroTipo && n.TipoNomina !== this.filtroTipo) return false;
+      return true;
+    });
+  }
+
+  get totalFiltradas(): { cantidad: number; salario: number; liquido: number } {
+    const lista = this.nominasFiltradas;
+    return {
+      cantidad: lista.length,
+      salario:  lista.reduce((s, n) => s + this.getSalarioTotal(n), 0),
+      liquido:  lista.reduce((s, n) => s + this.getLiquidoTotal(n), 0),
+    };
+  }
+
+  limpiarFiltros() {
+    this.filtroAnio = null;
+    this.filtroMes  = null;
+    this.filtroTipo = '';
+  }
+
+  contarPorTipo(tipo: string): number {
+    return this.nominasFiltradas.filter(n => (n.TipoNomina ?? 'GENERAL') === tipo).length;
+  }
+
+  // ── Nómina Personalizada ──────────────────────────────────────────────────
+  parametros           = signal<ParametroGlobal[]>([]);
+  displayPersonalizada = signal(false);
+  formPersonalizada = {
+    idEmpleados:        [] as number[],
+    idParametros:       [] as number[],
+    Mes:                new Date().getMonth() + 1,
+    Anio:               new Date().getFullYear(),
+    IdCuenta:           null as number | null,
+    incluirSalarioBase: true,
+  };
+
+  nominas           = signal<Nomina[]>([]);
+  nominasEliminadas = signal<Nomina[]>([]);
+  tabActivo         = 'activas';
+  empleados         = signal<EmpleadoResponse[]>([]);
   estados = signal<EstadoNomina[]>([]);
   estadosDisponibles = signal<EstadoNomina[]>([]);
   historialEstados = signal<HistorialEstadoNomina[]>([]);
   firmasNomina = signal<FirmaNomina[]>([]);
+  cuentas = signal<CuentaBancariaEmpresa[]>([]);
   userRole = signal<string>('');
 
   displayDialog = signal(false);
@@ -71,15 +139,17 @@ export class NominaComponent implements OnInit {
     SalarioBase: 0,
     Mes: new Date().getMonth() + 1,
     Anio: new Date().getFullYear(),
+    IdCuenta: 0,
   };
 
   formMasiva = {
     Mes: new Date().getMonth() + 1,
     Anio: new Date().getFullYear(),
+    IdCuenta: 0,
   };
 
   firmaForm = { TipoFirmante: '', Comentarios: '' };
-  cambioEstadoForm = { IdEstadoNuevo: 0, NumeroBoleta: '', Comentarios: '' };
+  cambioEstadoForm = { IdEstadoNuevo: 0, NumeroBoleta: '', Comentarios: '', IdCuenta: 0 };
   calculoPreview: NominaCalculo | null = null;
   nominaSeleccionada: Nomina | null = null;
 
@@ -110,6 +180,8 @@ export class NominaComponent implements OnInit {
     this.loadNominas();
     this.loadEmpleados();
     this.loadEstados();
+    this.loadCuentas();
+    this.loadParametros();
 
     const currentYear = new Date().getFullYear();
     this.anios = Array.from({ length: currentYear - 2019 }, (_, i) => ({
@@ -138,6 +210,47 @@ export class NominaComponent implements OnInit {
     });
   }
 
+  loadNominasEliminadas() {
+    this.nominaService.getEliminadas().subscribe({
+      next: (data) => this.nominasEliminadas.set(data),
+      error: (err) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: this.handleError(err, 'No se pudieron cargar las nóminas eliminadas'),
+        });
+      },
+    });
+  }
+
+  onTabChange(tab: string | number | undefined) {
+    if (!tab) return;
+    this.tabActivo = String(tab);
+    if (tab === 'eliminadas') this.loadNominasEliminadas();
+  }
+
+  restaurarNomina(nomina: Nomina) {
+    this.confirmationService.confirm({
+      message: `¿Restaurar la nómina de ${this.getMesLabel(nomina.Mes)} ${nomina.Anio}?`,
+      header: 'Restaurar Nómina',
+      icon: 'pi pi-refresh',
+      acceptLabel: 'Sí, restaurar',
+      rejectLabel: 'Cancelar',
+      accept: () => {
+        this.nominaService.restaurar(nomina.IdNomina).subscribe({
+          next: () => {
+            this.messageService.add({ severity: 'success', summary: 'Restaurada', detail: 'Nómina restaurada correctamente.' });
+            this.loadNominasEliminadas();
+            this.loadNominas();
+          },
+          error: (err) => {
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: err?.message });
+          },
+        });
+      },
+    });
+  }
+
   loadEmpleados() {
     this.empleadoService.ObtenerEmplados().subscribe({
       next: (data: EmpleadoResponse[]) => this.empleados.set(data),
@@ -161,6 +274,20 @@ export class NominaComponent implements OnInit {
           detail: this.handleError(err, 'No se pudieron cargar los estados de nómina'),
         });
       },
+    });
+  }
+
+  loadParametros() {
+    this.parametroService.getAll().subscribe({
+      next: (data) => this.parametros.set(data.filter(p => p.Tipo !== 'REFERENCIA')),
+      error: () => {},
+    });
+  }
+
+  loadCuentas() {
+    this.cuentaService.getAll(true).subscribe({
+      next: (data) => this.cuentas.set(data),
+      error: () => this.messageService.add({ severity: 'warn', summary: 'Aviso', detail: 'No se pudieron cargar las cuentas bancarias' }),
     });
   }
 
@@ -209,15 +336,15 @@ export class NominaComponent implements OnInit {
     return nomina.EstadoNomina?.NombreEstado || 'Sin estado';
   }
 
-  getEstadoSeverity(nomina: Nomina): 'success' | 'info' | 'warn' | 'danger' {
-    switch (nomina.EstadoNomina?.NombreEstado) {
-      case 'BORRADOR': return 'info';
-      case 'PENDIENTE_APROBACION': return 'warn';
-      case 'APROBADO': return 'success';
-      case 'PAGADO': return 'success';
-      case 'CANCELADO': return 'danger';
-      default: return 'info';
-    }
+  getEstadoSeverity(nomina: Nomina): 'success' | 'info' | 'warn' | 'danger' | 'secondary' {
+    const color = (nomina.EstadoNomina as any)?.Color;
+    if (color) return color as any;
+    // Fallback si el estado no tiene Color configurado
+    const nombre = nomina.EstadoNomina?.NombreEstado ?? '';
+    if (nombre.includes('CANCEL')) return 'danger';
+    if (nombre.includes('PAGADO') || nombre.includes('APROBADO')) return 'success';
+    if (nombre.includes('PENDIENTE')) return 'warn';
+    return 'info';
   }
 
   // ─── Sistema de firmas ────────────────────────────────────────────────────
@@ -231,8 +358,8 @@ export class NominaComponent implements OnInit {
   }
 
   puedesFirmar(nomina: Nomina): boolean {
-    const estado = nomina.EstadoNomina?.NombreEstado;
-    if (estado !== 'PENDIENTE_APROBACION' && estado !== 'BORRADOR') return false;
+    const estado = nomina.EstadoNomina as any;
+    if (!estado || estado.EsFinal) return false;
     if (!this.isApprovalRole(this.userRole())) return false;
     return this.getFirmaCount(nomina) < 2;
   }
@@ -298,6 +425,7 @@ export class NominaComponent implements OnInit {
       SalarioBase: 0,
       Mes: new Date().getMonth() + 1,
       Anio: new Date().getFullYear(),
+      IdCuenta: 0,
     };
     this.calculoPreview = null;
     this.displayDialog.set(true);
@@ -314,7 +442,7 @@ export class NominaComponent implements OnInit {
     }
 
     this.nominaService
-      .generar(this.form.IdEmpleado, this.form.SalarioBase, this.form.Mes, this.form.Anio)
+      .generar(this.form.IdEmpleado, this.form.SalarioBase, this.form.Mes, this.form.Anio, this.form.IdCuenta || undefined)
       .subscribe({
         next: () => {
           this.messageService.add({
@@ -337,7 +465,7 @@ export class NominaComponent implements OnInit {
 
   calcularPreview() {
     if (this.form.IdEmpleado && this.form.SalarioBase > 0) {
-      this.nominaService.calcular(this.form.IdEmpleado, this.form.SalarioBase).subscribe({
+      this.nominaService.calcular(this.form.IdEmpleado, this.form.SalarioBase, this.form.Mes, this.form.Anio).subscribe({
         next: (data) => (this.calculoPreview = data),
         error: (err) => {
           this.calculoPreview = null;
@@ -355,6 +483,7 @@ export class NominaComponent implements OnInit {
     this.formMasiva = {
       Mes: new Date().getMonth() + 1,
       Anio: new Date().getFullYear(),
+      IdCuenta: 0,
     };
     this.displayMasiva.set(true);
   }
@@ -366,7 +495,7 @@ export class NominaComponent implements OnInit {
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.displayMasiva.set(false);
-        this.nominaService.generarMasiva(this.formMasiva.Mes, this.formMasiva.Anio).subscribe({
+        this.nominaService.generarMasiva(this.formMasiva.Mes, this.formMasiva.Anio, this.formMasiva.IdCuenta || undefined).subscribe({
           next: (resultado: NominaMasivaResultado) => {
             this.messageService.add({
               severity: 'success',
@@ -475,7 +604,7 @@ export class NominaComponent implements OnInit {
 
   cambiarEstado(nomina: Nomina) {
     this.nominaSeleccionada = nomina;
-    this.cambioEstadoForm = { IdEstadoNuevo: 0, NumeroBoleta: '', Comentarios: '' };
+    this.cambioEstadoForm = { IdEstadoNuevo: 0, NumeroBoleta: '', Comentarios: '', IdCuenta: nomina.IdCuenta ?? 0 };
     this.estadoNominaService.getEstadosDisponibles(nomina.IdNomina).subscribe({
       next: (data) => {
         this.estadosDisponibles.set(data);
@@ -503,7 +632,8 @@ export class NominaComponent implements OnInit {
     const estado = this.estadosDisponibles().find(
       (e) => e.IdEstadoNomina === this.cambioEstadoForm.IdEstadoNuevo,
     );
-    return estado?.NombreEstado === 'PAGADO';
+    // Es "pago" si es EsFinal pero no es de cancelación
+    return !!(estado?.EsFinal && !estado?.EsCancelacion);
   }
 
   confirmarCambioEstado() {
@@ -525,11 +655,21 @@ export class NominaComponent implements OnInit {
       return;
     }
 
+    if (this.esPagadoSeleccionado() && !this.cambioEstadoForm.IdCuenta) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Validación',
+        detail: 'Selecciona la cuenta bancaria desde donde se descontará el pago',
+      });
+      return;
+    }
+
     const cambioData: CambiarEstadoNominaDto = {
       IdNomina: this.nominaSeleccionada.IdNomina,
       IdEstadoNuevo: this.cambioEstadoForm.IdEstadoNuevo,
       NumeroBoleta: this.cambioEstadoForm.NumeroBoleta.trim() || undefined,
       Comentarios: this.cambioEstadoForm.Comentarios,
+      IdCuenta: this.cambioEstadoForm.IdCuenta || undefined,
     };
 
     this.estadoNominaService.cambiarEstado(cambioData).subscribe({
@@ -570,11 +710,100 @@ export class NominaComponent implements OnInit {
   }
 
   isCambioEstadoPermisible(nomina: Nomina): boolean {
-    const nombre = nomina.EstadoNomina?.NombreEstado;
-    if (!nombre) return true;
-    if (nombre === 'PAGADO' || nombre === 'CANCELADO') return false;
-    if (nombre === 'PENDIENTE_APROBACION') return this.isApprovalRole(this.userRole());
+    const estado = nomina.EstadoNomina as any;
+    if (!estado) return true;
+    if (estado.EsFinal) return false;
+    if (estado.RequiereAprobacion) return this.isApprovalRole(this.userRole());
     return true;
+  }
+
+  // ── Nómina Personalizada ──────────────────────────────────────────────────
+
+  abrirDialogoPersonalizada() {
+    this.formPersonalizada = {
+      idEmpleados:        [],
+      idParametros:       [],
+      Mes:                new Date().getMonth() + 1,
+      Anio:               new Date().getFullYear(),
+      IdCuenta:           null,
+      incluirSalarioBase: true,
+    };
+    this.displayPersonalizada.set(true);
+  }
+
+  confirmarNominaPersonalizada() {
+    if (!this.formPersonalizada.idEmpleados.length) {
+      this.messageService.add({ severity: 'warn', summary: 'Validación', detail: 'Selecciona al menos un empleado.' });
+      return;
+    }
+    if (!this.formPersonalizada.idParametros.length) {
+      this.messageService.add({ severity: 'warn', summary: 'Validación', detail: 'Selecciona al menos un parámetro.' });
+      return;
+    }
+
+    this.nominaService.generarPersonalizada(
+      this.formPersonalizada.idEmpleados,
+      this.formPersonalizada.idParametros,
+      this.formPersonalizada.Mes,
+      this.formPersonalizada.Anio,
+      this.formPersonalizada.IdCuenta ?? undefined,
+      this.formPersonalizada.incluirSalarioBase,
+    ).subscribe({
+      next: (resultado: any) => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Nómina Personalizada Generada',
+          detail: `Se generó nómina para ${resultado.totalEmpleados} empleado${resultado.totalEmpleados !== 1 ? 's' : ''} con ${resultado.parametrosAplicados} parámetro${resultado.parametrosAplicados !== 1 ? 's' : ''}.`,
+          life: 8000,
+        });
+        this.displayPersonalizada.set(false);
+        this.loadNominas();
+      },
+      error: (err) => {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: err?.message });
+      },
+    });
+  }
+
+  getParametroLabel(p: ParametroGlobal): string {
+    const unidad = p.Unidad === '%' ? `${p.Valor}%` : `Q ${p.Valor}`;
+    return `${p.NombreParametro} (${unidad})`;
+  }
+
+  getParametrosSelecionados(): ParametroGlobal[] {
+    return this.parametros().filter(p => this.formPersonalizada.idParametros.includes(p.IdParametro));
+  }
+
+  getEmpleadosSeleccionados(): EmpleadoResponse[] {
+    return this.empleados().filter(e => this.formPersonalizada.idEmpleados.includes(e.IdEmpleado));
+  }
+
+  enviarBoleta(nomina: Nomina) {
+    this.confirmationService.confirm({
+      message: `¿Enviar la boleta de pago de ${this.getMesLabel(nomina.Mes)} ${nomina.Anio} por correo a los empleados?`,
+      header: 'Enviar Boleta',
+      icon: 'pi pi-envelope',
+      acceptLabel: 'Sí, enviar',
+      rejectLabel: 'Cancelar',
+      accept: () => {
+        this.enviandoCorreo.set(nomina.IdNomina);
+        this.correoService.enviarBoletaNomina(nomina.IdNomina).subscribe({
+          next: (res) => {
+            this.enviandoCorreo.set(null);
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Correos enviados',
+              detail: `Boleta enviada a ${res.enviados} empleado${res.enviados !== 1 ? 's' : ''}.`,
+              life: 6000,
+            });
+          },
+          error: (err) => {
+            this.enviandoCorreo.set(null);
+            this.messageService.add({ severity: 'error', summary: 'Error al enviar', detail: err?.message });
+          },
+        });
+      },
+    });
   }
 
   private isApprovalRole(role: string | null): boolean {

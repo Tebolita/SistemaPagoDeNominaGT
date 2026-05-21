@@ -9,9 +9,10 @@ import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { SelectModule } from 'primeng/select';
-import { DatePickerModule } from 'primeng/datepicker'; 
-import { InputNumberModule } from 'primeng/inputnumber'; // Para las horas extra
-import { TagModule } from 'primeng/tag'; // Para que se vea bonito
+import { DatePickerModule } from 'primeng/datepicker';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { TagModule } from 'primeng/tag';
+import { TooltipModule } from 'primeng/tooltip';
 
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Subject, takeUntil } from 'rxjs';
@@ -35,7 +36,8 @@ import { EmpleadoService } from '../services/empleado.service';
     SelectModule,
     DatePickerModule,
     InputNumberModule,
-    TagModule
+    TagModule,
+    TooltipModule,
   ],
   templateUrl: './asistencia.html',
   styleUrl: './asistencia.css', // O scss

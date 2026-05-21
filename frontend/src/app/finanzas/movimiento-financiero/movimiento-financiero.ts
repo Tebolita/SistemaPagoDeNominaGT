@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, NgZone, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
@@ -12,7 +12,8 @@ import { TextareaModule } from 'primeng/textarea';
 import { TagModule } from 'primeng/tag';
 import { ToastModule } from 'primeng/toast';
 import { CardModule } from 'primeng/card';
-import { MessageService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { MessageService, ConfirmationService } from 'primeng/api';
 import { MovimientoFinancieroService } from '../../services/movimiento-financiero.service';
 import { CuentaBancariaEmpresaService } from '../../services/cuenta-bancaria-empresa.service';
 import { MovimientoFinanciero } from '../../models/MovimientoFinanciero.model';
@@ -35,8 +36,9 @@ import { finalize } from 'rxjs';
     TagModule,
     ToastModule,
     CardModule,
+    ConfirmDialogModule,
   ],
-  providers: [MessageService],
+  providers: [MessageService, ConfirmationService],
   templateUrl: './movimiento-financiero.html',
   styleUrl: './movimiento-financiero.css'
 })
@@ -69,9 +71,9 @@ export class MovimientoFinancieroComponent implements OnInit {
   filtroCuenta: number | null = null;
 
   private messageService = inject(MessageService);
+  private confirmationService = inject(ConfirmationService);
   private movimientoService = inject(MovimientoFinancieroService);
   private cuentaService = inject(CuentaBancariaEmpresaService);
-  private ngZone = inject(NgZone);
   private cdr = inject(ChangeDetectorRef);
 
   ngOnInit() {
@@ -124,45 +126,47 @@ export class MovimientoFinancieroComponent implements OnInit {
       return;
     }
 
-    if (this.savingMovimiento) {
-      return;
-    }
+    if (this.savingMovimiento) return;
 
-    setTimeout(() => {
-      this.savingMovimiento = true;
-      this.movimientoService.create(this.movimientoForm).pipe(finalize(() => this.savingMovimiento = false)).subscribe({
-        next: () => {
-          this.movimientoDialog = false;
-          this.movimientoForm = {};
-          this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Movimiento registrado correctamente.' });
-          this.loadMovimientos();
-        },
-        error: (err: any) => {
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: err.message });
-        }
-      });
-    }, 0);
+    this.savingMovimiento = true;
+    this.movimientoService.create(this.movimientoForm).pipe(finalize(() => this.savingMovimiento = false)).subscribe({
+      next: () => {
+        this.movimientoDialog = false;
+        this.movimientoForm = {};
+        this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Movimiento registrado correctamente.' });
+        this.loadMovimientos();
+      },
+      error: (err: any) => {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: err.message });
+      }
+    });
   }
 
-  deleteMovimiento(movimiento: MovimientoFinanciero, event?: MouseEvent) {
-    event?.stopPropagation();
+  deleteMovimiento(movimiento: MovimientoFinanciero) {
+    if (!movimiento.IdMovimiento) return;
 
-    if (!movimiento.IdMovimiento || this.deletingMovimiento) {
-      return;
-    }
-
-    setTimeout(() => {
-      this.deletingMovimiento = true;
-      this.movimientoService.delete(movimiento.IdMovimiento).pipe(finalize(() => this.deletingMovimiento = false)).subscribe({
-        next: () => {
-          this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Movimiento eliminado correctamente.' });
-          this.loadMovimientos();
-        },
-        error: (err: any) => {
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: err.message });
-        }
-      });
-    }, 0);
+    this.confirmationService.confirm({
+      message: `¿Eliminar este movimiento de ${movimiento.TipoMovimiento === 'INGRESO' ? 'ingreso' : 'egreso'} por Q ${Number(movimiento.Monto).toFixed(2)}? El saldo de la cuenta se ajustará automáticamente.`,
+      header: 'Confirmar eliminación',
+      icon: 'pi pi-exclamation-triangle',
+      acceptLabel: 'Sí, eliminar',
+      rejectLabel: 'Cancelar',
+      acceptButtonStyleClass: 'p-button-danger',
+      accept: () => {
+        this.deletingMovimiento = true;
+        this.movimientoService.delete(movimiento.IdMovimiento).pipe(
+          finalize(() => { this.deletingMovimiento = false; this.cdr.detectChanges(); })
+        ).subscribe({
+          next: () => {
+            this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Movimiento eliminado y saldo actualizado.' });
+            this.loadMovimientos();
+          },
+          error: (err: any) => {
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: err.message });
+          }
+        });
+      }
+    });
   }
 
   hideDialog() {
@@ -171,5 +175,9 @@ export class MovimientoFinancieroComponent implements OnInit {
 
   getColorPorTipo(tipo: string): 'success' | 'danger' {
     return tipo === 'INGRESO' ? 'success' : 'danger';
+  }
+
+  getNombreCuenta(idCuenta: number): string {
+    return this.cuentas.find(c => c.IdCuenta === idCuenta)?.NombreCuenta ?? 'N/A';
   }
 }

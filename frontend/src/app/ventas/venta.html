@@ -1,27 +1,35 @@
-<div class="venta-page">
-  <div class="venta-header">
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
+
+<div class="flex flex-col gap-4 p-4 min-h-screen">
+
+  <!-- ── Cabecera ──────────────────────────────────────────────────────────── -->
+  <div class="flex justify-between items-center flex-wrap gap-3">
     <div>
-      <h2>Ventas</h2>
-      <p>Administra órdenes de venta, clientes y estados de pago.</p>
+      <h1 class="text-2xl font-bold text-white">Ventas</h1>
+      <p class="text-sm text-slate-400 mt-1">{{ ventas.length }} venta{{ ventas.length !== 1 ? 's' : '' }} registradas</p>
     </div>
-    <button pButton type="button" label="Nueva Venta" icon="pi pi-shopping-cart" class="p-button-success" (click)="openNewSale()"></button>
+    <p-button label="Nueva Venta" icon="pi pi-plus" severity="success" (onClick)="openNewSale()"></p-button>
   </div>
 
-  <div class="venta-filters">
-    <div class="venta-filter-item">
-      <label>Estado de pago</label>
-      <p-select [options]="estadosPago" optionLabel="label" optionValue="value" [(ngModel)]="statusFilter" placeholder="Todos"></p-select>
+  <!-- ── Filtros ────────────────────────────────────────────────────────────── -->
+  <div class="flex flex-wrap gap-3 items-end">
+    <div class="flex flex-col gap-1">
+      <label class="text-xs text-slate-400 uppercase tracking-wide">Estado</label>
+      <p-select [options]="estadosPago" [(ngModel)]="statusFilter" optionLabel="label" optionValue="value"
+        placeholder="Todos" [showClear]="true" appendTo="body" class="w-44"></p-select>
     </div>
-    <div class="venta-filter-item">
-      <label>Cliente</label>
-      <p-select [options]="clientes" optionLabel="NombreCliente" optionValue="IdCliente" [(ngModel)]="clienteFilter" placeholder="Todos"></p-select>
+    <div class="flex flex-col gap-1">
+      <label class="text-xs text-slate-400 uppercase tracking-wide">Cliente</label>
+      <p-select [options]="clientes" [(ngModel)]="clienteFilter" optionLabel="NombreCliente" optionValue="IdCliente"
+        placeholder="Todos" [showClear]="true" appendTo="body" class="w-52"></p-select>
     </div>
-    <div class="venta-filter-item venta-filter-button">
-      <button pButton type="button" label="Filtrar" icon="pi pi-filter" (click)="loadVentas()"></button>
-    </div>
+    <p-button label="Filtrar" icon="pi pi-filter" severity="secondary" (onClick)="loadVentas()"></p-button>
   </div>
 
-  <p-table [value]="ventas" [loading]="loading" dataKey="IdVenta" responsiveLayout="scroll">
+  <!-- ── Tabla ──────────────────────────────────────────────────────────────── -->
+  <p-table [value]="ventas" [loading]="loading" dataKey="IdVenta" [rowHover]="true"
+    emptyMessage="No hay ventas registradas.">
     <ng-template pTemplate="header">
       <tr>
         <th>#</th>
@@ -29,178 +37,294 @@
         <th>Fecha</th>
         <th>Tipo</th>
         <th>Total</th>
+        <th>Cuenta cobro</th>
         <th>Estado</th>
         <th>Acciones</th>
       </tr>
     </ng-template>
-    <ng-template pTemplate="body" let-venta>
+    <ng-template pTemplate="body" let-v>
       <tr>
-        <td>{{ venta.IdVenta }}</td>
-        <td>{{ venta.Cliente?.NombreCliente || 'Sin cliente' }}</td>
-        <td>{{ venta.FechaVenta | date:'shortDate' }}</td>
-        <td>{{ venta.TipoVenta }}</td>
-        <td>{{ venta.Total | currency:'GTQ' }}</td>
+        <td class="font-mono text-slate-400 text-xs">{{ v.IdVenta }}</td>
+        <td class="font-medium text-slate-200">{{ v.Cliente?.NombreCliente || '—' }}</td>
+        <td class="text-sm text-slate-300">{{ v.FechaVenta | date:'dd/MM/yyyy' }}</td>
         <td>
-          <p-tag [value]="venta.EstadoPago" [severity]="venta.EstadoPago === 'PAGADO' ? 'success' : venta.EstadoPago === 'PENDIENTE' ? 'warn' : 'danger'"></p-tag>
+          <span class="text-xs font-semibold px-2 py-1 rounded"
+            [ngClass]="v.TipoVenta === 'CONTADO' ? 'bg-blue-900 text-blue-300' : 'bg-violet-900 text-violet-300'">
+            {{ v.TipoVenta }}
+          </span>
+        </td>
+        <td class="font-bold text-green-400">Q {{ v.Total | number:'1.2-2' }}</td>
+        <td class="text-xs text-cyan-300">{{ v.CuentaBancariaEmpresa?.NombreCuenta || '—' }}</td>
+        <td>
+          <p-tag [value]="v.EstadoPago" [severity]="getEstadoSeverity(v.EstadoPago)"></p-tag>
         </td>
         <td>
-          <button pButton type="button" icon="pi pi-eye" class="p-button-rounded p-button-text" (click)="openSaleDetails(venta)"></button>
-          <button pButton type="button" icon="pi pi-check" class="p-button-rounded p-button-text p-button-success" (click)="markAsPaid(venta)" [disabled]="venta.EstadoPago === 'PAGADO'"></button>
+          <p-button icon="pi pi-eye" [rounded]="true" [text]="true" severity="info"
+            pTooltip="Ver detalle" tooltipPosition="top" (onClick)="openDetalles(v)"></p-button>
+
+          <p-button icon="pi pi-envelope" [rounded]="true" [text]="true" severity="info"
+            pTooltip="Enviar factura por correo" tooltipPosition="top"
+            [loading]="enviandoCorreo === v.IdVenta"
+            [disabled]="!v.Cliente?.Correo"
+            (onClick)="enviarFactura(v)"></p-button>
+
+          @if (v.EstadoPago === 'PENDIENTE' || v.EstadoPago === 'VENCIDO') {
+            <p-button icon="pi pi-dollar" [rounded]="true" [text]="true" severity="success"
+              pTooltip="Registrar cobro" tooltipPosition="top" (onClick)="abrirPago(v)"></p-button>
+          }
+
+          @if (v.EstadoPago !== 'CANCELADO') {
+            <p-button icon="pi pi-ban" [rounded]="true" [text]="true" severity="warn"
+              pTooltip="Cancelar venta" tooltipPosition="top" (onClick)="cancelarVenta(v)"></p-button>
+          }
+
+          <p-button icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger"
+            pTooltip="Eliminar" tooltipPosition="top" (onClick)="eliminarVenta(v)"></p-button>
         </td>
       </tr>
     </ng-template>
   </p-table>
-
-  <p-dialog header="Nueva Venta" [(visible)]="saleDialog" [style]="{ width: '850px' }" [modal]="true" [closable]="false">
-    <div class="p-fluid venta-dialog">
-      <div class="venta-dialog-grid">
-        <div class="p-field">
-          <label for="cliente">Cliente <span class="required">*</span></label>
-          <p-select id="cliente" [options]="clientes" optionLabel="NombreCliente" optionValue="IdCliente" [(ngModel)]="newSale.IdCliente" placeholder="Seleccione un cliente" appendTo="body"></p-select>
-        </div>
-        <div class="p-field">
-          <label for="tipoVenta">Tipo de venta</label>
-          <p-select id="tipoVenta" [options]="tiposVenta" optionLabel="label" optionValue="value" [(ngModel)]="newSale.TipoVenta" placeholder="Seleccione tipo" appendTo="body"></p-select>
-        </div>
-        <div class="p-field">
-          <label for="fechaVenta">Fecha de venta <span class="required">*</span></label>
-          <p-datepicker id="fechaVenta" [(ngModel)]="newSale.FechaVenta" dateFormat="yy-mm-dd" appendTo="body"></p-datepicker>
-        </div>
-        <div class="p-field">
-          <label for="fechaVencimiento">Fecha de vencimiento</label>
-          <p-datepicker id="fechaVencimiento" [(ngModel)]="newSale.FechaVencimiento" dateFormat="yy-mm-dd" appendTo="body"></p-datepicker>
-        </div>
-        <div class="p-field">
-          <label for="estadoPago">Estado de pago</label>
-          <p-select id="estadoPago" [options]="estadosPago" optionLabel="label" optionValue="value" [(ngModel)]="newSale.EstadoPago" placeholder="Seleccione estado" appendTo="body"></p-select>
-        </div>
-        <div class="p-field">
-          <label for="descuento">Descuento general</label>
-          <p-inputNumber id="descuento" [(ngModel)]="newSale.Descuento" [min]="0" [mode]="'currency'" currency="GTQ" locale="es-GT" placeholder="0.00"></p-inputNumber>
-        </div>
-      </div>
-
-      <div class="venta-detail-header">
-        <h4>Detalles de la venta</h4>
-      </div>
-
-      <div class="venta-detail-form">
-        <div class="detail-form-grid">
-          <div class="p-field">
-            <label for="producto">Producto / Servicio <span class="required">*</span></label>
-            <p-select id="producto" [options]="productos" optionLabel="NombreProducto" optionValue="IdProducto" [(ngModel)]="detalleForm.IdProducto" (ngModelChange)="updateDetallePrice()" placeholder="Seleccionar producto" appendTo="body"></p-select>
-          </div>
-          <div class="p-field">
-            <label for="cantidad">Cantidad <span class="required">*</span></label>
-            <p-inputNumber id="cantidad" [(ngModel)]="detalleForm.Cantidad" [min]="1" [showButtons]="true" placeholder="1"></p-inputNumber>
-          </div>
-          <div class="p-field">
-            <label for="precioUnitario">Precio unitario</label>
-            <p-inputNumber id="precioUnitario" [(ngModel)]="detalleForm.PrecioUnitario" [mode]="'currency'" currency="GTQ" locale="es-GT" [min]="0" [disabled]="true" placeholder="0.00"></p-inputNumber>
-          </div>
-          <div class="p-field">
-            <label for="descuentoDetalle">Descuento</label>
-            <p-inputNumber id="descuentoDetalle" [(ngModel)]="detalleForm.Descuento" [min]="0" [mode]="'currency'" currency="GTQ" locale="es-GT" placeholder="0.00"></p-inputNumber>
-          </div>
-        </div>
-        <div class="venta-detail-action">
-          <button pButton type="button" label="Agregar detalle" icon="pi pi-plus" class="p-button-success" (click)="addDetalle()"></button>
-        </div>
-      </div>
-
-      <p-table [value]="newSale.Detalles" dataKey="IdProducto" class="detalle-table">
-        <ng-template pTemplate="header">
-          <tr>
-            <th>Producto</th>
-            <th>Cantidad</th>
-            <th>Precio</th>
-            <th>Descuento</th>
-            <th>Subtotal</th>
-            <th>Quitar</th>
-          </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-detalle let-i="rowIndex">
-          <tr>
-            <td>{{ productos.find(producto => producto.IdProducto === detalle.IdProducto)?.NombreProducto || 'N/A' }}</td>
-            <td>{{ detalle.Cantidad }}</td>
-            <td>{{ detalle.PrecioUnitario | currency:'GTQ' }}</td>
-            <td>{{ detalle.Descuento | currency:'GTQ' }}</td>
-            <td>{{ getDetailSubtotal(detalle) | currency:'GTQ' }}</td>
-            <td>
-              <button pButton type="button" icon="pi pi-trash" class="p-button-rounded p-button-danger p-button-text" (click)="removeDetalle(i)"></button>
-            </td>
-          </tr>
-        </ng-template>
-      </p-table>
-
-      <div class="venta-summary-card">
-        <p-card>
-          <div class="summary-row">
-            <span>Subtotal</span>
-            <span>{{ getSaleSubtotal() | currency:'GTQ' }}</span>
-          </div>
-          <div class="summary-row">
-            <span>Descuento</span>
-            <span>{{ newSale.Descuento | currency:'GTQ' }}</span>
-          </div>
-          <div class="summary-row">
-            <span>Impuestos</span>
-            <span>{{ getSaleTax() | currency:'GTQ' }}</span>
-          </div>
-          <div class="summary-row total">
-            <strong>Total</strong>
-            <strong>{{ calculateInvoiceTotal() | currency:'GTQ' }}</strong>
-          </div>
-        </p-card>
-      </div>
-
-      <div class="p-field">
-        <label>Notas</label>
-        <textarea pInputTextarea rows="3" [(ngModel)]="newSale.Notas"></textarea>
-      </div>
-    </div>
-
-    <ng-template pTemplate="footer">
-      <button pButton type="button" label="Cancelar" class="p-button-text" (click)="saleDialog = false"></button>
-      <button pButton type="button" label="Guardar" class="p-button-primary" (click)="saveSale()"></button>
-    </ng-template>
-  </p-dialog>
-
-  <p-dialog header="Detalle de Venta" [(visible)]="detallesDialog" [style]="{ width: '700px' }" [modal]="true" [closable]="true">
-    <div *ngIf="selectedSale">
-      <div class="p-grid">
-        <div class="p-col-12 p-md-6">
-          <p><strong>Cliente:</strong> {{ selectedSale.Cliente?.NombreCliente || 'Sin cliente' }}</p>
-          <p><strong>Fecha:</strong> {{ selectedSale.FechaVenta | date:'shortDate' }}</p>
-          <p><strong>Tipo:</strong> {{ selectedSale.TipoVenta }}</p>
-        </div>
-        <div class="p-col-12 p-md-6">
-          <p><strong>Estado:</strong> <p-tag [value]="selectedSale.EstadoPago" [severity]="selectedSale.EstadoPago === 'PAGADO' ? 'success' : selectedSale.EstadoPago === 'PENDIENTE' ? 'warn' : 'danger'"></p-tag></p>
-          <p><strong>Total:</strong> {{ selectedSale.Total | currency:'GTQ' }}</p>
-          <p><strong>Notas:</strong> {{ selectedSale.Notas || 'N/A' }}</p>
-        </div>
-      </div>
-
-      <p-table [value]="selectedSale.DetalleVenta" dataKey="IdDetalleVenta" responsiveLayout="scroll">
-        <ng-template pTemplate="header">
-          <tr>
-            <th>Producto</th>
-            <th>Cantidad</th>
-            <th>Precio</th>
-            <th>Descuento</th>
-            <th>Subtotal</th>
-          </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-detalle>
-          <tr>
-            <td>{{ detalle.ProductoServicio?.NombreProducto || 'N/A' }}</td>
-            <td>{{ detalle.Cantidad }}</td>
-            <td>{{ detalle.PrecioUnitario | currency:'GTQ' }}</td>
-            <td>{{ detalle.Descuento | currency:'GTQ' }}</td>
-            <td>{{ getDetailSubtotal(detalle) | currency:'GTQ' }}</td>
-          </tr>
-        </ng-template>
-      </p-table>
-    </div>
-  </p-dialog>
 </div>
+
+<!-- ── Diálogo: Nueva Venta ────────────────────────────────────────────────── -->
+<p-dialog header="Nueva Venta" [(visible)]="saleDialog" [modal]="true"
+  [style]="{ width: '100%', maxWidth: '860px' }" [breakpoints]="{ '768px': '95vw' }"
+  [draggable]="false" [resizable]="false">
+
+  <div class="flex flex-col gap-5 pt-2">
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div class="field-group sm:col-span-2 lg:col-span-1">
+        <label>Cliente *</label>
+        <p-select [options]="clientes" [(ngModel)]="newSale.IdCliente" optionLabel="NombreCliente"
+          optionValue="IdCliente" placeholder="Seleccionar" class="w-full" appendTo="body"></p-select>
+      </div>
+      <div class="field-group">
+        <label>Tipo de Venta</label>
+        <p-select [options]="tiposVenta" [(ngModel)]="newSale.TipoVenta" optionLabel="label"
+          optionValue="value" class="w-full" appendTo="body"></p-select>
+      </div>
+      <div class="field-group">
+        <label>Estado de Pago</label>
+        <p-select [options]="estadosPago" [(ngModel)]="newSale.EstadoPago" optionLabel="label"
+          optionValue="value" class="w-full" appendTo="body"></p-select>
+      </div>
+      <div class="field-group">
+        <label>Fecha de Venta</label>
+        <p-datepicker [(ngModel)]="newSale.FechaVenta" dateFormat="yy-mm-dd" [showIcon]="true"
+          class="w-full" appendTo="body"></p-datepicker>
+      </div>
+      <div class="field-group">
+        <label>Fecha Vencimiento</label>
+        <p-datepicker [(ngModel)]="newSale.FechaVencimiento" dateFormat="yy-mm-dd" [showIcon]="true"
+          [showClear]="true" class="w-full" appendTo="body"></p-datepicker>
+      </div>
+      <div class="field-group">
+        <label>Descuento General (Q)</label>
+        <p-inputNumber [(ngModel)]="newSale.Descuento" [minFractionDigits]="2" [min]="0" class="w-full"></p-inputNumber>
+      </div>
+
+      <div class="field-group sm:col-span-2 lg:col-span-1">
+        <label>
+          Cuenta de Cobro
+          @if (newSale.EstadoPago === 'PAGADO') { <span class="text-red-400">*</span> }
+        </label>
+        <p-select [options]="cuentas" [(ngModel)]="newSale.IdCuenta" optionLabel="NombreCuenta"
+          optionValue="IdCuenta" placeholder="Seleccionar cuenta" [showClear]="true"
+          class="w-full" appendTo="body">
+          <ng-template pTemplate="item" let-c>
+            <div class="flex justify-between items-center gap-3">
+              <span>{{ c.NombreCuenta }}</span>
+              <span class="text-xs text-green-400 font-mono">Q {{ c.SaldoActual | number:'1.2-2' }}</span>
+            </div>
+          </ng-template>
+        </p-select>
+        @if (newSale.EstadoPago === 'PAGADO') {
+          <p class="text-xs text-green-500 mt-1">El total se acreditará automáticamente a esta cuenta.</p>
+        }
+      </div>
+
+      <div class="field-group sm:col-span-2 lg:col-span-3">
+        <label>Notas</label>
+        <textarea pInputTextarea [(ngModel)]="newSale.Notas" rows="2" class="w-full"
+          placeholder="Observaciones opcionales..."></textarea>
+      </div>
+    </div>
+
+    <p-divider></p-divider>
+
+    <div>
+      <h3 class="text-sm font-semibold text-slate-300 mb-3 uppercase tracking-wide">Productos / Servicios</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 items-end mb-3">
+        <div class="field-group sm:col-span-2">
+          <label>Producto</label>
+          <p-select [options]="productos" [(ngModel)]="detalleForm.IdProducto" optionLabel="NombreProducto"
+            optionValue="IdProducto" placeholder="Seleccionar" class="w-full" appendTo="body"
+            (onChange)="onProductoSelect()"></p-select>
+        </div>
+        <div class="field-group">
+          <label>Cantidad</label>
+          <p-inputNumber [(ngModel)]="detalleForm.Cantidad" [min]="0.01" class="w-full"></p-inputNumber>
+        </div>
+        <div class="field-group">
+          <label>Descuento (Q)</label>
+          <p-inputNumber [(ngModel)]="detalleForm.Descuento" [min]="0" [minFractionDigits]="2" class="w-full"></p-inputNumber>
+        </div>
+      </div>
+      <div class="flex items-center gap-3 mb-3">
+        @if (detalleForm.IdProducto) {
+          <span class="text-sm text-slate-400">
+            Precio: <strong class="text-white">Q {{ detalleForm.PrecioUnitario | number:'1.2-2' }}</strong>
+          </span>
+        }
+        <p-button label="Agregar" icon="pi pi-plus" severity="info" size="small" (onClick)="addDetalle()"></p-button>
+      </div>
+
+      @if (newSale.Detalles.length > 0) {
+        <p-table [value]="newSale.Detalles">
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Producto</th><th>Cant.</th><th>Precio</th><th>Desc.</th><th>Subtotal</th><th></th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-d let-i="rowIndex">
+            <tr>
+              <td class="text-sm">{{ getNombreProducto(d.IdProducto) }}</td>
+              <td>{{ d.Cantidad }}</td>
+              <td>Q {{ d.PrecioUnitario | number:'1.2-2' }}</td>
+              <td>Q {{ d.Descuento | number:'1.2-2' }}</td>
+              <td class="font-semibold text-green-400">Q {{ getSubtotalDetalle(d) | number:'1.2-2' }}</td>
+              <td>
+                <p-button icon="pi pi-times" [rounded]="true" [text]="true" severity="danger"
+                  size="small" (onClick)="removeDetalle(i)"></p-button>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      }
+    </div>
+
+    @if (newSale.Detalles.length > 0) {
+      <div class="bg-slate-800 border border-slate-600 rounded-lg p-4 flex flex-col gap-2 text-sm self-end w-full sm:w-72">
+        <div class="flex justify-between text-slate-300"><span>Subtotal</span><span>Q {{ subtotalForm | number:'1.2-2' }}</span></div>
+        <div class="flex justify-between text-slate-300"><span>Descuento</span><span class="text-red-400">- Q {{ (newSale.Descuento || 0) | number:'1.2-2' }}</span></div>
+        <div class="flex justify-between text-slate-300"><span>IVA (12%)</span><span>Q {{ impuestosForm | number:'1.2-2' }}</span></div>
+        <div class="flex justify-between font-bold text-base text-green-400 border-t border-slate-600 pt-2 mt-1">
+          <span>Total</span><span>Q {{ totalForm | number:'1.2-2' }}</span>
+        </div>
+      </div>
+    }
+  </div>
+
+  <ng-template #footer>
+    <div class="flex justify-end gap-2">
+      <p-button label="Cancelar" severity="secondary" [outlined]="true" (onClick)="saleDialog = false"></p-button>
+      <p-button label="Crear Venta" icon="pi pi-check" severity="success" (onClick)="saveSale()"></p-button>
+    </div>
+  </ng-template>
+</p-dialog>
+
+<!-- ── Diálogo: Registrar Cobro ──────────────────────────────────────────── -->
+<p-dialog header="Registrar Cobro" [(visible)]="pagoDialog" [modal]="true"
+  [style]="{ width: '100%', maxWidth: '480px' }" [draggable]="false" [resizable]="false">
+
+  @if (selectedVenta) {
+    <div class="flex flex-col gap-4 pt-2">
+      <div class="bg-slate-800 border border-slate-600 rounded-lg p-3">
+        <div class="font-bold text-white">Venta #{{ selectedVenta.IdVenta }}</div>
+        <div class="text-sm text-slate-400 mt-1">{{ selectedVenta.Cliente?.NombreCliente || 'Sin cliente' }}</div>
+        <div class="text-lg font-bold text-green-400 mt-2">Total: Q {{ selectedVenta.Total | number:'1.2-2' }}</div>
+      </div>
+      <div class="field-group">
+        <label>Cuenta de Cobro <span class="text-red-400">*</span></label>
+        <p-select [options]="cuentas" [(ngModel)]="pagoForm.IdCuenta" optionLabel="NombreCuenta"
+          optionValue="IdCuenta" placeholder="Seleccionar cuenta" class="w-full" appendTo="body">
+          <ng-template pTemplate="item" let-c>
+            <div class="flex justify-between items-center gap-3">
+              <span>{{ c.NombreCuenta }}</span>
+              <span class="text-xs text-green-400 font-mono">Q {{ c.SaldoActual | number:'1.2-2' }}</span>
+            </div>
+          </ng-template>
+        </p-select>
+        <p class="text-xs text-slate-500 mt-1">El total se acreditará automáticamente al saldo de esta cuenta.</p>
+      </div>
+    </div>
+  }
+
+  <ng-template #footer>
+    <div class="flex justify-end gap-2">
+      <p-button label="Cancelar" severity="secondary" [outlined]="true" (onClick)="pagoDialog = false"></p-button>
+      <p-button label="Confirmar Cobro" icon="pi pi-dollar" severity="success" (onClick)="confirmarPago()"></p-button>
+    </div>
+  </ng-template>
+</p-dialog>
+
+<!-- ── Diálogo: Ver Detalle ───────────────────────────────────────────────── -->
+<p-dialog [header]="'Venta #' + (selectedVenta?.IdVenta ?? '')" [(visible)]="detallesDialog" [modal]="true"
+  [style]="{ width: '100%', maxWidth: '780px' }" [draggable]="false" [resizable]="false">
+
+  @if (selectedVenta) {
+    <div class="flex flex-col gap-4">
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-sm">
+        <div class="field-group">
+          <label>Cliente</label>
+          <div class="text-white font-medium">{{ selectedVenta.Cliente?.NombreCliente || '—' }}</div>
+        </div>
+        <div class="field-group">
+          <label>Fecha</label>
+          <div class="text-white">{{ selectedVenta.FechaVenta | date:'dd/MM/yyyy' }}</div>
+        </div>
+        <div class="field-group">
+          <label>Tipo</label>
+          <div class="text-white">{{ selectedVenta.TipoVenta }}</div>
+        </div>
+        <div class="field-group">
+          <label>Estado</label>
+          <p-tag [value]="selectedVenta.EstadoPago" [severity]="getEstadoSeverity(selectedVenta.EstadoPago)"></p-tag>
+        </div>
+        <div class="field-group">
+          <label>Cuenta cobro</label>
+          <div class="text-cyan-300">{{ selectedVenta.CuentaBancariaEmpresa?.NombreCuenta || '—' }}</div>
+        </div>
+        <div class="field-group">
+          <label>Total</label>
+          <div class="text-green-400 font-bold text-base">Q {{ selectedVenta.Total | number:'1.2-2' }}</div>
+        </div>
+      </div>
+
+      <p-table [value]="selectedVenta.DetalleVenta">
+        <ng-template pTemplate="header">
+          <tr><th>Producto</th><th>Cant.</th><th>Precio</th><th>Desc.</th><th>Subtotal</th></tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-d>
+          <tr>
+            <td>{{ d.ProductoServicio?.NombreProducto }}</td>
+            <td>{{ d.Cantidad | number:'1.0-2' }}</td>
+            <td>Q {{ d.PrecioUnitario | number:'1.2-2' }}</td>
+            <td>Q {{ d.Descuento | number:'1.2-2' }}</td>
+            <td class="font-semibold text-green-400">Q {{ d.Subtotal | number:'1.2-2' }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+
+      <div class="flex flex-col gap-1 text-sm self-end w-full sm:w-64 bg-slate-800 border border-slate-600 rounded-lg p-3">
+        <div class="flex justify-between text-slate-300"><span>Subtotal</span><span>Q {{ selectedVenta.Subtotal | number:'1.2-2' }}</span></div>
+        <div class="flex justify-between text-slate-300"><span>Descuento</span><span class="text-red-400">- Q {{ selectedVenta.Descuento | number:'1.2-2' }}</span></div>
+        <div class="flex justify-between text-slate-300"><span>IVA (12%)</span><span>Q {{ selectedVenta.Impuestos | number:'1.2-2' }}</span></div>
+        <div class="flex justify-between font-bold text-green-400 border-t border-slate-600 pt-2 mt-1 text-base">
+          <span>Total</span><span>Q {{ selectedVenta.Total | number:'1.2-2' }}</span>
+        </div>
+      </div>
+
+      @if (selectedVenta.Notas) {
+        <div class="text-sm text-slate-400 bg-slate-800 rounded p-3 border border-slate-700">
+          <span class="font-semibold text-slate-300">Notas: </span>{{ selectedVenta.Notas }}
+        </div>
+      }
+    </div>
+  }
+
+  <ng-template #footer>
+    <p-button label="Cerrar" severity="secondary" (onClick)="detallesDialog = false"></p-button>
+  </ng-template>
+</p-dialog>

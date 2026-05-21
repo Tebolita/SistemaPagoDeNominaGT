@@ -17,6 +17,9 @@ const FIRMA_INCLUDE = {
 const NOMINA_INCLUDE = {
   EstadoNomina: true,
   FirmaNomina: FIRMA_INCLUDE,
+  CuentaBancariaEmpresa: {
+    select: { IdCuenta: true, NombreCuenta: true, NumeroCuenta: true, SaldoActual: true, Moneda: true },
+  },
   NominaDetalle: {
     include: {
       Empleado: {
@@ -96,8 +99,28 @@ export class NominaService {
       include: NOMINA_INCLUDE,
       orderBy: [{ Anio: 'desc' }, { Mes: 'desc' }, { FechaGeneracion: 'desc' }],
     });
-
     return nominas.map(mapDetalles);
+  }
+
+  async findEliminadas() {
+    const nominas = await this.prisma.nominaEncabezado.findMany({
+      where: { Activo: false },
+      include: NOMINA_INCLUDE,
+      orderBy: [{ FechaEliminacion: 'desc' }],
+    });
+    return nominas.map(mapDetalles);
+  }
+
+  async restaurar(id: number) {
+    const nomina = await this.prisma.nominaEncabezado.findUnique({ where: { IdNomina: id } });
+    if (!nomina) throw new NotFoundException(`Nómina ${id} no encontrada`);
+    if (nomina.Activo) throw new BadRequestException('La nómina ya está activa');
+
+    return this.prisma.nominaEncabezado.update({
+      where: { IdNomina: id },
+      data: { Activo: true, FechaEliminacion: null },
+      include: NOMINA_INCLUDE,
+    });
   }
 
   async findOne(id: number) {
@@ -167,7 +190,7 @@ export class NominaService {
     });
   }
 
-  async calcularNomina(idEmpleado: number, salarioBase: number) {
+  async calcularNomina(idEmpleado: number, salarioBase: number, mes?: number, anio?: number) {
     const empleado = await this.prisma.empleado.findUnique({
       where: { IdEmpleado: idEmpleado, Activo: true },
     });
@@ -186,9 +209,12 @@ export class NominaService {
       where: { Activo: true },
     });
 
+    // Devuelve el valor del parámetro solo si el empleado cumple los filtros configurados
     const getParam = (nombre: string): number => {
       const param = parametros.find((p) => p.NombreParametro === nombre);
-      return param ? parseFloat(param.Valor.toString()) : 0;
+      if (!param) return 0;
+      if (!this.empleadoMatcheFiltro(empleado, param)) return 0;
+      return parseFloat(param.Valor.toString());
     };
 
     const igssEmpleado = getParam('IGSS_EMPLEADO') / 100;
@@ -204,6 +230,8 @@ export class NominaService {
     const bonoProd = getParam('BONO_PRODUCTIVIDAD');
     const irtra = getParam('IRTRA_PORCENTAJE') / 100;
     const intecap = getParam('INTECAP_PORCENTAJE') / 100;
+    const horasExtraPct    = getParam('HORAS_EXTRA_PORCENTAJE') / 100;   // e.g. 0.50 → 50%
+    const horasLaboralesDia = getParam('HORAS_LABORALES_DIA') || 8;      // default 8 hrs
 
     const salarioMensual = salarioBase;
     const descuentoIGSS = salarioMensual * igssEmpleado;
@@ -243,25 +271,43 @@ export class NominaService {
 
     const descuentoIRTRA = salarioMensual * irtra;
     const descuentoINTECAP = salarioMensual * intecap;
-    const totalDescuentos =
-      descuentoIGSS + isr + descuentoIRTRA + descuentoINTECAP;
-    const bono14 = salarioMensual * bono14Porcentaje;
+    const totalDescuentos = descuentoIGSS + isr + descuentoIRTRA + descuentoINTECAP;
+
+    const bono14    = salarioMensual * bono14Porcentaje;
     const aguinaldo = salarioMensual * aguinaldoPorcentaje;
-    const totalIngresos = salarioMensual + bono14 + aguinaldo + bonoProd;
-    const netoAPagar = totalIngresos - totalDescuentos;
+
+    // ── Horas extra (Guatemala: valor/hora × 1.5 × horas trabajadas) ─────
+    let horasExtrasTotal = 0;
+    let pagoHorasExtras  = 0;
+    let valorHoraExtra   = 0;
+
+    if (mes && anio && horasExtraPct > 0) {
+      horasExtrasTotal = await this.getHorasExtras(idEmpleado, mes, anio);
+      if (horasExtrasTotal > 0) {
+        const valorHoraNormal = salarioMensual / 30 / horasLaboralesDia;
+        valorHoraExtra  = Number((valorHoraNormal * (1 + horasExtraPct)).toFixed(4));
+        pagoHorasExtras = Number((horasExtrasTotal * valorHoraExtra).toFixed(2));
+      }
+    }
+
+    const totalIngresos = salarioMensual + bono14 + aguinaldo + bonoProd + pagoHorasExtras;
+    const netoAPagar    = totalIngresos - totalDescuentos;
 
     return {
-      salarioBase: salarioMensual,
-      bono14: Number(bono14.toFixed(2)),
-      aguinaldo: Number(aguinaldo.toFixed(2)),
+      salarioBase:       salarioMensual,
+      bono14:            Number(bono14.toFixed(2)),
+      aguinaldo:         Number(aguinaldo.toFixed(2)),
       bonoProductividad: Number(bonoProd.toFixed(2)),
-      totalIngresos: Number(totalIngresos.toFixed(2)),
-      descuentoIGSS: Number(descuentoIGSS.toFixed(2)),
-      descuentoISR: Number(isr.toFixed(2)),
-      descuentoIRTRA: Number(descuentoIRTRA.toFixed(2)),
-      descuentoINTECAP: Number(descuentoINTECAP.toFixed(2)),
-      totalDescuentos: Number(totalDescuentos.toFixed(2)),
-      netoAPagar: Number(netoAPagar.toFixed(2)),
+      horasExtras:       horasExtrasTotal,
+      valorHoraExtra,
+      pagoHorasExtras,
+      totalIngresos:     Number(totalIngresos.toFixed(2)),
+      descuentoIGSS:     Number(descuentoIGSS.toFixed(2)),
+      descuentoISR:      Number(isr.toFixed(2)),
+      descuentoIRTRA:    Number(descuentoIRTRA.toFixed(2)),
+      descuentoINTECAP:  Number(descuentoINTECAP.toFixed(2)),
+      totalDescuentos:   Number(totalDescuentos.toFixed(2)),
+      netoAPagar:        Number(netoAPagar.toFixed(2)),
     };
   }
 
@@ -271,6 +317,7 @@ export class NominaService {
     usuarioGerenteId?: number,
     mes?: number,
     anio?: number,
+    idCuenta?: number,
   ) {
     const empleado = await this.prisma.empleado.findUnique({
       where: { IdEmpleado: idEmpleado, Activo: true },
@@ -290,22 +337,24 @@ export class NominaService {
     const mesFinal = mes ?? ahora.getMonth() + 1;
     const anioFinal = anio ?? ahora.getFullYear();
 
+    // Solo se valida duplicado para nóminas GENERALES — las personalizadas son ilimitadas
     const nominaExistente = await this.prisma.nominaEncabezado.findFirst({
       where: {
         Mes: mesFinal,
         Anio: anioFinal,
         Activo: true,
+        TipoNomina: 'GENERAL',
         NominaDetalle: { some: { IdEmpleado: idEmpleado, Activo: true } },
       },
     });
 
     if (nominaExistente) {
       throw new BadRequestException(
-        `Ya existe una nómina para el empleado en ${mesFinal}/${anioFinal}`,
+        `Ya existe una nómina GENERAL para este empleado en ${mesFinal}/${anioFinal}`,
       );
     }
 
-    const detalles = await this.calcularNomina(idEmpleado, salarioBase);
+    const detalles = await this.calcularNomina(idEmpleado, salarioBase, mesFinal, anioFinal);
     const estadoGeneradaId = await this.getEstadoBorradorId();
     const diasLaborados = await this.getDiasLaborados(idEmpleado, mesFinal, anioFinal);
 
@@ -314,9 +363,11 @@ export class NominaService {
         Mes: mesFinal,
         Anio: anioFinal,
         FechaGeneracion: ahora,
+        TipoNomina: 'GENERAL',
         Estado: 'BORRADOR',
         IdEstadoActual: estadoGeneradaId ?? undefined,
         IdUsuarioGerente: usuarioGerenteId ?? undefined,
+        IdCuenta: idCuenta ?? undefined,
         Activo: true,
         NominaDetalle: {
           create: {
@@ -325,7 +376,7 @@ export class NominaService {
             SueldoBase: detalles.salarioBase,
             BonificacionIncentivo:
               detalles.bono14 + detalles.aguinaldo + detalles.bonoProductividad,
-            OtrosIngresos: 0,
+            OtrosIngresos: detalles.pagoHorasExtras,
             DescuentoIGSS: detalles.descuentoIGSS,
             DescuentoISR: detalles.descuentoISR,
             OtrosDescuentos:
@@ -341,18 +392,166 @@ export class NominaService {
     return mapDetalles(nomina);
   }
 
-  async generarNominaMasiva(usuarioGerenteId?: number, mes?: number, anio?: number) {
+  async crearNominaPersonalizada(
+    idEmpleados: number[],
+    idParametros: number[],
+    usuarioGerenteId?: number,
+    mes?: number,
+    anio?: number,
+    idCuenta?: number,
+    incluirSalarioBase = true,
+  ) {
+    if (!idEmpleados.length) throw new BadRequestException('Selecciona al menos un empleado');
+    if (!idParametros.length) throw new BadRequestException('Selecciona al menos un parámetro');
+    // Las nóminas personalizadas NO tienen restricción de duplicado por mes —
+    // el usuario puede generar múltiples en el mismo período para distintos conceptos.
+
+    const ahora     = new Date();
+    const mesFinal  = mes  ?? ahora.getMonth() + 1;
+    const anioFinal = anio ?? ahora.getFullYear();
+
+    const parametros = await this.prisma.parametroGlobal.findMany({
+      where: { IdParametro: { in: idParametros }, Activo: true },
+    });
+
+    const empleados = await this.prisma.empleado.findMany({
+      where: { IdEmpleado: { in: idEmpleados }, Activo: true },
+      include: {
+        Salario: {
+          where: {
+            Activo: true,
+            OR: [{ FechaFinVigencia: null }, { FechaFinVigencia: { gte: ahora } }],
+          },
+          orderBy: { FechaInicioVigencia: 'desc' },
+          take: 1,
+        },
+      },
+    });
+
+    if (!empleados.length) throw new BadRequestException('Ningún empleado seleccionado está activo');
+
+    const estadoId = await this.getEstadoBorradorId();
+
+    const nominaEncabezado = await this.prisma.nominaEncabezado.create({
+      data: {
+        Mes: mesFinal,
+        Anio: anioFinal,
+        FechaGeneracion: ahora,
+        TipoNomina: 'PERSONALIZADA',
+        Estado: 'BORRADOR',
+        IdEstadoActual: estadoId ?? undefined,
+        IdUsuarioGerente: usuarioGerenteId ?? undefined,
+        IdCuenta: idCuenta ?? undefined,
+        Activo: true,
+      },
+    });
+
+    const detallesPromises = empleados.map(async (empleado) => {
+      // Salario registrado del empleado — siempre se usa como base para calcular %
+      const salarioReal = empleado.Salario[0]
+        ? parseFloat(empleado.Salario[0].SalarioBase.toString())
+        : 0;
+
+      // SueldoBase que va en el detalle: 0 si el usuario eligió solo parámetros
+      const sueldoBaseDetalle = incluirSalarioBase ? salarioReal : 0;
+
+      let bonificacion    = 0;
+      let otrosIngresos   = 0;
+      let descIGSS        = 0;
+      let descISR         = 0;
+      let otrosDescuentos = 0;
+
+      // ── Horas extra — tratamiento especial ─────────────────────────────
+      const paramHorasExtra = parametros.find(p => p.NombreParametro === 'HORAS_EXTRA_PORCENTAJE');
+      const paramHorasDia   = parametros.find(p => p.NombreParametro === 'HORAS_LABORALES_DIA');
+
+      if (paramHorasExtra && this.empleadoMatcheFiltro(empleado, paramHorasExtra)) {
+        const pct             = parseFloat(paramHorasExtra.Valor.toString()) / 100;
+        const horasDia        = paramHorasDia ? parseFloat(paramHorasDia.Valor.toString()) : 8;
+        const horasExtrasTotal = await this.getHorasExtras(empleado.IdEmpleado, mesFinal, anioFinal);
+        if (horasExtrasTotal > 0) {
+          const valorHoraNormal = salarioReal / 30 / horasDia;
+          otrosIngresos += Number((horasExtrasTotal * valorHoraNormal * (1 + pct)).toFixed(2));
+        }
+      }
+
+      const SKIP_PARAMS = new Set(['HORAS_EXTRA_PORCENTAJE', 'HORAS_LABORALES_DIA']);
+
+      for (const param of parametros) {
+        if (SKIP_PARAMS.has(param.NombreParametro)) continue;
+        if (!this.empleadoMatcheFiltro(empleado, param)) continue;
+
+        const valor = parseFloat(param.Valor.toString());
+        // Los % siempre se calculan sobre el salario REAL del empleado
+        const importe = (param.Unidad === '%') ? salarioReal * (valor / 100) : valor;
+
+        if (param.Tipo === 'INGRESO') {
+          const nombre = param.NombreParametro.toUpperCase();
+          if (nombre.includes('BONO') || nombre.includes('AGUINALDO') || nombre.includes('INCENTIVO')) {
+            bonificacion += importe;
+          } else {
+            otrosIngresos += importe;
+          }
+        } else if (param.Tipo === 'DESCUENTO') {
+          const nombre = param.NombreParametro.toUpperCase();
+          if (nombre.includes('IGSS'))      descIGSS        += importe;
+          else if (nombre.includes('ISR'))  descISR         += importe;
+          else                              otrosDescuentos += importe;
+        }
+      }
+
+      const liquidoRecibir = sueldoBaseDetalle + bonificacion + otrosIngresos
+                           - descIGSS - descISR - otrosDescuentos;
+
+      return this.prisma.nominaDetalle.create({
+        data: {
+          IdNomina:              nominaEncabezado.IdNomina,
+          IdEmpleado:            empleado.IdEmpleado,
+          SueldoBase:            sueldoBaseDetalle,
+          BonificacionIncentivo: bonificacion,
+          OtrosIngresos:         otrosIngresos,
+          DescuentoIGSS:         descIGSS,
+          DescuentoISR:          descISR,
+          OtrosDescuentos:       otrosDescuentos,
+          LiquidoRecibir:        liquidoRecibir,
+          Activo: true,
+        },
+        include: {
+          Empleado: { select: { Nombres: true, Apellidos: true } },
+        },
+      });
+    });
+
+    const detalles = await Promise.all(detallesPromises);
+
+    return {
+      idNomina:           nominaEncabezado.IdNomina,
+      mes:                mesFinal,
+      anio:               anioFinal,
+      fechaGeneracion:    nominaEncabezado.FechaGeneracion,
+      totalEmpleados:     detalles.length,
+      parametrosAplicados: parametros.length,
+      detalles: detalles.map(d => ({
+        idEmpleado:    d.IdEmpleado,
+        empleado:      `${d.Empleado.Nombres} ${d.Empleado.Apellidos}`,
+        liquidoRecibir: parseFloat(d.LiquidoRecibir!.toString()),
+      })),
+    };
+  }
+
+  async generarNominaMasiva(usuarioGerenteId?: number, mes?: number, anio?: number, idCuenta?: number) {
     const ahora = new Date();
     const mesFinal = mes ?? ahora.getMonth() + 1;
     const anioFinal = anio ?? ahora.getFullYear();
 
+    // Solo verifica que no exista otra nómina GENERAL masiva para el mismo período
     const nominaExistente = await this.prisma.nominaEncabezado.findFirst({
-      where: { Mes: mesFinal, Anio: anioFinal, Activo: true },
+      where: { Mes: mesFinal, Anio: anioFinal, Activo: true, TipoNomina: 'GENERAL' },
     });
 
     if (nominaExistente) {
       throw new BadRequestException(
-        `Ya existe una nómina generada para ${mesFinal}/${anioFinal}`,
+        `Ya existe una nómina GENERAL para ${mesFinal}/${anioFinal}`,
       );
     }
 
@@ -397,10 +596,12 @@ export class NominaService {
         Mes: mesFinal,
         Anio: anioFinal,
         FechaGeneracion: ahora,
+        TipoNomina: 'GENERAL',
         Estado: 'BORRADOR',
         IdEstadoActual: estadoGeneradaId ?? undefined,
         Activo: true,
         IdUsuarioGerente: usuarioGerenteId ?? undefined,
+        IdCuenta: idCuenta ?? undefined,
       },
     });
 
@@ -408,7 +609,7 @@ export class NominaService {
       const salarioBase = parseFloat(
         empleado.Salario[0].SalarioBase.toString(),
       );
-      const calculo = await this.calcularNomina(empleado.IdEmpleado, salarioBase);
+      const calculo = await this.calcularNomina(empleado.IdEmpleado, salarioBase, mesFinal, anioFinal);
       const diasLaborados = await this.getDiasLaborados(
         empleado.IdEmpleado,
         mesFinal,
@@ -423,7 +624,7 @@ export class NominaService {
           SueldoBase: calculo.salarioBase,
           BonificacionIncentivo:
             calculo.bono14 + calculo.aguinaldo + calculo.bonoProductividad,
-          OtrosIngresos: 0,
+          OtrosIngresos: calculo.pagoHorasExtras,
           DescuentoIGSS: calculo.descuentoIGSS,
           DescuentoISR: calculo.descuentoISR,
           OtrosDescuentos: calculo.descuentoIRTRA + calculo.descuentoINTECAP,
@@ -478,10 +679,10 @@ export class NominaService {
       throw new NotFoundException(`Nómina con ID ${idNomina} no encontrada`);
     }
 
-    const estadoActual = nomina.EstadoNomina?.NombreEstado;
-    if (estadoActual !== 'PENDIENTE_APROBACION' && estadoActual !== 'BORRADOR') {
+    const estadoActual = nomina.EstadoNomina;
+    if (estadoActual?.EsFinal) {
       throw new BadRequestException(
-        `La nómina no puede ser firmada en el estado actual: ${estadoActual ?? 'sin estado'}`,
+        `La nómina no puede ser firmada en el estado actual: ${estadoActual.NombreEstado}`,
       );
     }
 
@@ -575,11 +776,49 @@ export class NominaService {
 
   // ─── Helpers ──────────────────────────────────────────────────────────────
 
+  private empleadoMatcheFiltro(
+    empleado: { Genero: boolean; IdDepartamento: number | null; IdPuesto: number; IdJornada: number },
+    param: { FiltroGenero: boolean | null; FiltroIdDepartamento: number | null; FiltroIdPuesto: number | null; FiltroIdJornada: number | null },
+  ): boolean {
+    if (param.FiltroGenero !== null && param.FiltroGenero !== undefined) {
+      if (empleado.Genero !== param.FiltroGenero) return false;
+    }
+    if (param.FiltroIdDepartamento) {
+      if (empleado.IdDepartamento !== param.FiltroIdDepartamento) return false;
+    }
+    if (param.FiltroIdPuesto) {
+      if (empleado.IdPuesto !== param.FiltroIdPuesto) return false;
+    }
+    if (param.FiltroIdJornada) {
+      if (empleado.IdJornada !== param.FiltroIdJornada) return false;
+    }
+    return true;
+  }
+
   private async getEstadoBorradorId(): Promise<number | null> {
     const estado = await this.prisma.estadoNomina.findUnique({
       where: { NombreEstado: 'BORRADOR' },
     });
     return estado?.IdEstadoNomina ?? null;
+  }
+
+  private async getHorasExtras(idEmpleado: number, mes: number, anio: number): Promise<number> {
+    const inicioMes = new Date(anio, mes - 1, 1);
+    const finMes    = new Date(anio, mes, 0, 23, 59, 59, 999);
+
+    const asistencias = await this.prisma.asistencia.findMany({
+      where: {
+        IdEmpleado: idEmpleado,
+        Activo: true,
+        Fecha: { gte: inicioMes, lte: finMes },
+        HorasExtra: { gt: 0 },
+      },
+    });
+
+    return asistencias.reduce(
+      (total, a) => total + parseFloat(a.HorasExtra?.toString() ?? '0'),
+      0,
+    );
   }
 
   private async getDiasLaborados(

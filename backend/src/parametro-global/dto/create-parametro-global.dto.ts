@@ -53,4 +53,23 @@ export class CreateParametroGlobalDto {
   @IsOptional()
   @MaxLength(5)
   Unidad?: string;
+
+  @ApiPropertyOptional({ description: 'Filtro: aplicar solo a este género (true=Femenino, false=Masculino)' })
+  @IsOptional()
+  FiltroGenero?: boolean | null;
+
+  @ApiPropertyOptional({ description: 'Filtro: aplicar solo a empleados de este departamento' })
+  @IsOptional()
+  @IsNumber()
+  FiltroIdDepartamento?: number | null;
+
+  @ApiPropertyOptional({ description: 'Filtro: aplicar solo a empleados con este puesto' })
+  @IsOptional()
+  @IsNumber()
+  FiltroIdPuesto?: number | null;
+
+  @ApiPropertyOptional({ description: 'Filtro: aplicar solo a empleados con esta jornada' })
+  @IsOptional()
+  @IsNumber()
+  FiltroIdJornada?: number | null;
 }

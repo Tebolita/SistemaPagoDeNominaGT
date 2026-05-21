@@ -7,6 +7,7 @@ import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { CheckboxModule } from 'primeng/checkbox';
+import { SelectModule } from 'primeng/select';
 import { TagModule } from 'primeng/tag';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
@@ -27,6 +28,7 @@ import { EstadoNomina } from '../models/EstadoNomina.model';
     InputTextModule,
     InputNumberModule,
     CheckboxModule,
+    SelectModule,
     TagModule,
     ToastModule,
     ConfirmDialogModule,
@@ -45,12 +47,28 @@ export class EstadoNominaComponent implements OnInit {
   displayDialog = signal(false);
   editingEstado: EstadoNomina | null = null;
 
-  form = {
-    NombreEstado: '',
-    Descripcion: '',
-    Orden: 0,
-    RequiereAprobacion: false,
-    Activo: true,
+  coloresOpciones = [
+    { label: '🔵 Info (azul)',      value: 'info'      },
+    { label: '🟡 Warn (amarillo)',  value: 'warn'      },
+    { label: '🟢 Success (verde)',  value: 'success'   },
+    { label: '🔴 Danger (rojo)',    value: 'danger'    },
+    { label: '⚫ Secondary (gris)', value: 'secondary' },
+    { label: '🩵 Cyan',            value: 'cyan'      },
+  ];
+
+  form: {
+    NombreEstado: string;
+    Descripcion: string;
+    Orden: number;
+    RequiereAprobacion: boolean;
+    Activo: boolean;
+    Color: string;
+    EsFinal: boolean;
+    EsCancelacion: boolean;
+  } = {
+    NombreEstado: '', Descripcion: '', Orden: 0,
+    RequiereAprobacion: false, Activo: true,
+    Color: 'info', EsFinal: false, EsCancelacion: false,
   };
 
   ngOnInit() {
@@ -87,20 +105,21 @@ export class EstadoNominaComponent implements OnInit {
     if (estado) {
       this.editingEstado = estado;
       this.form = {
-        NombreEstado: estado.NombreEstado,
-        Descripcion: estado.Descripcion || '',
-        Orden: estado.Orden,
-        RequiereAprobacion: estado.RequiereAprobacion || false,
-        Activo: estado.Activo || true,
+        NombreEstado:       estado.NombreEstado,
+        Descripcion:        estado.Descripcion ?? '',
+        Orden:              estado.Orden,
+        RequiereAprobacion: estado.RequiereAprobacion ?? false,
+        Activo:             estado.Activo ?? true,
+        Color:              estado.Color ?? 'info',
+        EsFinal:            estado.EsFinal ?? false,
+        EsCancelacion:      estado.EsCancelacion ?? false,
       };
     } else {
       this.editingEstado = null;
       this.form = {
-        NombreEstado: '',
-        Descripcion: '',
-        Orden: 0,
-        RequiereAprobacion: false,
-        Activo: true,
+        NombreEstado: '', Descripcion: '', Orden: 0,
+        RequiereAprobacion: false, Activo: true,
+        Color: 'info', EsFinal: false, EsCancelacion: false,
       };
     }
   }
@@ -201,5 +220,31 @@ export class EstadoNominaComponent implements OnInit {
 
   getEstadoLabel(activo: boolean | undefined): string {
     return activo ? 'Activo' : 'Inactivo';
+  }
+
+  getColorSeverity(color: string | undefined): 'success' | 'info' | 'warn' | 'danger' | 'secondary' {
+    return (color as any) ?? 'info';
+  }
+
+  /** Agrupa los estados activos por su Orden para el flujo visual dinámico */
+  getGruposPorOrden(): { orden: number; estados: EstadoNomina[] }[] {
+    const activos = this.estados().filter(e => e.Activo && !e.EsCancelacion);
+    const cancelacion = this.estados().filter(e => e.Activo && e.EsCancelacion);
+    const mapa = new Map<number, EstadoNomina[]>();
+
+    activos.forEach(e => {
+      if (!mapa.has(e.Orden)) mapa.set(e.Orden, []);
+      mapa.get(e.Orden)!.push(e);
+    });
+
+    const grupos = Array.from(mapa.entries())
+      .sort(([a], [b]) => a - b)
+      .map(([orden, estados]) => ({ orden, estados }));
+
+    if (cancelacion.length) {
+      grupos.push({ orden: 99, estados: cancelacion });
+    }
+
+    return grupos;
   }
 }

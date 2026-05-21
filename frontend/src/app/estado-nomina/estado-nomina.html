@@ -7,149 +7,124 @@
   <div class="flex justify-between items-center">
     <div>
       <h1 class="text-2xl font-bold text-white">Estados de Nómina</h1>
-      <p class="text-sm text-slate-400 mt-1">Configura el flujo de aprobación de la nómina</p>
+      <p class="text-sm text-slate-400 mt-1">Configura el flujo de aprobación. Los estados se muestran según su Orden.</p>
     </div>
-    <p-button
-      label="Nuevo Estado"
-      icon="pi pi-plus"
-      (onClick)="showDialog()"
-      severity="success"
-    ></p-button>
+    <p-button label="Nuevo Estado" icon="pi pi-plus" (onClick)="showDialog()" severity="success"></p-button>
   </div>
 
-  <!-- ── Flujo visual de estados ───────────────────────────────────── -->
+  <!-- ── Flujo dinámico ────────────────────────────────────────────── -->
   <div class="bg-slate-800 border border-slate-700 rounded-xl p-4">
     <div class="flex items-center gap-1 mb-3">
       <i class="pi pi-sitemap text-sky-400 text-sm"></i>
       <span class="text-xs font-semibold uppercase tracking-wide text-slate-400">Flujo de estados</span>
     </div>
-    <div class="flex flex-wrap items-center gap-2 overflow-x-auto pb-1">
 
-      <div class="flow-step">
-        <i class="pi pi-file text-slate-400 text-lg block mb-1"></i>
-        <div class="text-xs font-bold text-slate-200">BORRADOR</div>
-        <div class="text-xs text-slate-500 mt-0.5">Creación inicial</div>
-      </div>
-      <i class="pi pi-arrow-right flow-arrow"></i>
+    <div class="overflow-x-auto pb-2">
+      <div class="flex items-start gap-2 min-w-max">
+        @for (grupo of getGruposPorOrden(); track grupo.orden; let last = $last) {
 
-      <div class="flow-step">
-        <i class="pi pi-clock text-yellow-400 text-lg block mb-1"></i>
-        <div class="text-xs font-bold text-yellow-300">PENDIENTE_APROBACION</div>
-        <div class="text-xs text-slate-500 mt-0.5">En revisión</div>
-      </div>
-      <i class="pi pi-arrow-right flow-arrow"></i>
+          <!-- Grupo de estados con el mismo Orden -->
+          <div class="flex flex-col gap-2">
+            @for (estado of grupo.estados; track estado.IdEstadoNomina) {
+              <div class="flow-step"
+                [ngClass]="estado.EsCancelacion ? 'border-red-700 bg-red-950' : 'border-slate-600 bg-slate-900'">
+                <p-tag [value]="estado.NombreEstado" [severity]="getColorSeverity(estado.Color)"
+                  styleClass="text-xs font-mono"></p-tag>
+                <div class="text-xs text-slate-500 mt-1">Orden {{ estado.Orden }}</div>
+                @if (estado.EsFinal) {
+                  <div class="text-xs text-orange-400 mt-0.5 flex items-center gap-1">
+                    <i class="pi pi-lock text-xs"></i> Final
+                  </div>
+                }
+                @if (estado.EsCancelacion) {
+                  <div class="text-xs text-red-400 mt-0.5 flex items-center gap-1">
+                    <i class="pi pi-times text-xs"></i> Cancelación
+                  </div>
+                }
+              </div>
+            }
+          </div>
 
-      <div class="flex flex-col gap-2">
-        <div class="flow-step">
-          <i class="pi pi-check-circle text-green-400 text-lg block mb-1"></i>
-          <div class="text-xs font-bold text-green-300">APROBADO</div>
-          <div class="text-xs text-slate-500 mt-0.5">Doble firma OK</div>
-        </div>
-      </div>
-      <i class="pi pi-arrow-right flow-arrow"></i>
-
-      <div class="flow-step">
-        <i class="pi pi-wallet text-emerald-400 text-lg block mb-1"></i>
-        <div class="text-xs font-bold text-emerald-300">PAGADO</div>
-        <div class="text-xs text-slate-500 mt-0.5">Con boleta</div>
-      </div>
-
-      <div class="flex items-center gap-1 ml-4 px-2">
-        <div class="w-px h-8 bg-slate-600"></div>
-      </div>
-
-      <div class="flow-step border-red-800">
-        <i class="pi pi-times-circle text-red-400 text-lg block mb-1"></i>
-        <div class="text-xs font-bold text-red-300">CANCELADO</div>
-        <div class="text-xs text-slate-500 mt-0.5">Desde pendiente</div>
+          @if (!last) {
+            <div class="flex items-center self-center">
+              <i class="pi pi-arrow-right text-slate-500 text-sm"></i>
+            </div>
+          }
+        }
       </div>
     </div>
 
-    <!-- Reglas de aprobación -->
     <div class="mt-3 pt-3 border-t border-slate-700 flex flex-wrap gap-3 text-xs text-slate-400">
       <span class="flex items-center gap-1">
         <i class="pi pi-shield text-yellow-400"></i>
-        Estados con <strong class="text-yellow-300 mx-1">Requiere Aprobación</strong> → solo ADMINISTRADOR, GERENTE, RRHH pueden cambiarlos
+        <strong class="text-yellow-300">Requiere Aprobación</strong> → solo ADMIN, GERENTE, RRHH pueden transicionar a ese estado
       </span>
       <span class="flex items-center gap-1">
-        <i class="pi pi-verified text-sky-400"></i>
-        PENDIENTE_APROBACION → necesita 2 firmas para auto-aprobar
+        <i class="pi pi-lock text-orange-400"></i>
+        <strong class="text-orange-300">EsFinal</strong> → no hay transiciones salientes
+      </span>
+      <span class="flex items-center gap-1">
+        <i class="pi pi-times-circle text-red-400"></i>
+        <strong class="text-red-300">EsCancelacion</strong> → disponible desde cualquier estado no final
       </span>
     </div>
   </div>
 
-  <!-- ── Tabla de estados ──────────────────────────────────────────── -->
-  <p-table
-    [value]="estados()"
-    [tableStyle]="{ 'min-width': '50rem' }"
-    [rowHover]="true"
-  >
+  <!-- ── Tabla ─────────────────────────────────────────────────────── -->
+  <p-table [value]="estados()" [rowHover]="true" emptyMessage="No hay estados configurados.">
     <ng-template pTemplate="header">
       <tr>
-        <th pSortableColumn="Orden" style="width:70px">Orden <p-sortIcon field="Orden"></p-sortIcon></th>
-        <th pSortableColumn="NombreEstado">Nombre del Estado <p-sortIcon field="NombreEstado"></p-sortIcon></th>
+        <th style="width:70px">Orden</th>
+        <th>Nombre</th>
         <th>Descripción</th>
-        <th style="width:140px">Requiere Aprobación</th>
-        <th style="width:90px">Activo</th>
+        <th>Color</th>
+        <th>Flags</th>
+        <th style="width:130px">Aprobación</th>
+        <th style="width:80px">Activo</th>
         <th style="width:90px">Acciones</th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-estado>
       <tr>
         <td class="text-center">
-          <span class="bg-slate-700 text-slate-300 text-xs font-bold px-2 py-1 rounded">
-            {{ estado.Orden }}
-          </span>
+          <span class="bg-slate-700 text-slate-300 text-xs font-bold px-2 py-1 rounded">{{ estado.Orden }}</span>
         </td>
         <td>
-          <span class="font-mono text-sm font-semibold"
-            [ngClass]="{
-              'text-slate-300':  estado.NombreEstado === 'BORRADOR',
-              'text-yellow-300': estado.NombreEstado === 'PENDIENTE_APROBACION',
-              'text-green-300':  estado.NombreEstado === 'APROBADO',
-              'text-emerald-300':estado.NombreEstado === 'PAGADO',
-              'text-red-300':    estado.NombreEstado === 'CANCELADO',
-              'text-sky-300':    !['BORRADOR','PENDIENTE_APROBACION','APROBADO','PAGADO','CANCELADO'].includes(estado.NombreEstado)
-            }">
-            {{ estado.NombreEstado }}
-          </span>
+          <p-tag [value]="estado.NombreEstado" [severity]="getColorSeverity(estado.Color)"
+            styleClass="font-mono text-xs"></p-tag>
         </td>
         <td class="text-slate-400 text-sm">{{ estado.Descripcion || '—' }}</td>
-        <td class="text-center">
+        <td>
+          <span class="text-xs text-slate-300 font-mono">{{ estado.Color || '—' }}</span>
+        </td>
+        <td>
+          <div class="flex gap-1 flex-wrap">
+            @if (estado.EsFinal) {
+              <span class="text-xs bg-orange-900 text-orange-300 border border-orange-700 px-1.5 py-0.5 rounded">Final</span>
+            }
+            @if (estado.EsCancelacion) {
+              <span class="text-xs bg-red-900 text-red-300 border border-red-700 px-1.5 py-0.5 rounded">Cancelación</span>
+            }
+            @if (!estado.EsFinal && !estado.EsCancelacion) {
+              <span class="text-xs text-slate-500">—</span>
+            }
+          </div>
+        </td>
+        <td>
           <p-tag
-            [value]="estado.RequiereAprobacion ? 'Sí — Roles especiales' : 'No — Cualquier usuario'"
+            [value]="estado.RequiereAprobacion ? 'Sí' : 'No'"
             [severity]="estado.RequiereAprobacion ? 'warn' : 'secondary'"
           ></p-tag>
         </td>
-        <td class="text-center">
-          <p-tag
-            [value]="estado.Activo ? 'Activo' : 'Inactivo'"
-            [severity]="estado.Activo ? 'success' : 'danger'"
-          ></p-tag>
+        <td>
+          <p-tag [value]="estado.Activo ? 'Activo' : 'Inactivo'" [severity]="getEstadoSeverity(estado.Activo)"></p-tag>
         </td>
         <td>
-          <p-button
-            icon="pi pi-pencil"
-            [rounded]="true" [text]="true"
-            (onClick)="showDialog(estado)"
-            severity="warn"
-            pTooltip="Editar"
-            tooltipPosition="top"
-          ></p-button>
-          <p-button
-            icon="pi pi-trash"
-            [rounded]="true" [text]="true"
-            (onClick)="deleteEstado(estado)"
-            severity="danger"
-            pTooltip="Eliminar"
-            tooltipPosition="top"
-          ></p-button>
+          <p-button icon="pi pi-pencil" [rounded]="true" [text]="true" severity="warn"
+            pTooltip="Editar" tooltipPosition="top" (onClick)="showDialog(estado)"></p-button>
+          <p-button icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger"
+            pTooltip="Eliminar" tooltipPosition="top" (onClick)="deleteEstado(estado)"></p-button>
         </td>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="emptymessage">
-      <tr>
-        <td colspan="6" class="text-center text-slate-500 py-6">No hay estados configurados</td>
       </tr>
     </ng-template>
   </p-table>
@@ -159,73 +134,70 @@
 <p-dialog
   [visible]="displayDialog()"
   (visibleChange)="displayDialog.set($event)"
-  [header]="editingEstado ? 'Editar Estado de Nómina' : 'Nuevo Estado de Nómina'"
-  [modal]="true"
-  [style]="{ width: '480px', maxWidth: '95vw' }"
-  [resizable]="false"
+  [header]="editingEstado ? 'Editar Estado' : 'Nuevo Estado'"
+  [modal]="true" [style]="{ width: '520px', maxWidth: '95vw' }" [resizable]="false"
 >
   <div class="flex flex-col gap-4">
 
-    <div>
-      <label class="block text-sm font-medium mb-2 text-slate-300">Nombre del Estado *</label>
-      <input
-        pInputText
-        [(ngModel)]="form.NombreEstado"
-        placeholder="Ej: BORRADOR, PENDIENTE_APROBACION"
-        class="w-full font-mono"
-        maxlength="50"
-      />
-      <p class="text-xs text-slate-500 mt-1">Usa mayúsculas y guiones bajos. Este nombre es usado internamente por el sistema.</p>
-    </div>
+    <div class="grid grid-cols-2 gap-4">
+      <div class="col-span-2">
+        <label class="block text-sm font-medium mb-2 text-slate-300">Nombre del Estado *</label>
+        <input pInputText [(ngModel)]="form.NombreEstado" placeholder="Ej: EN_REVISION"
+          class="w-full font-mono" maxlength="50" />
+        <p class="text-xs text-slate-500 mt-1">Usa MAYÚSCULAS y guiones bajos.</p>
+      </div>
 
-    <div>
-      <label class="block text-sm font-medium mb-2 text-slate-300">Orden *</label>
-      <p-inputNumber
-        [(ngModel)]="form.Orden"
-        [min]="1" [max]="100"
-        placeholder="Posición en el flujo (1 = primero)"
-        class="w-full"
-      ></p-inputNumber>
+      <div>
+        <label class="block text-sm font-medium mb-2 text-slate-300">Orden *</label>
+        <p-inputNumber [(ngModel)]="form.Orden" [min]="0" [max]="100"
+          placeholder="1 = primero" class="w-full"></p-inputNumber>
+        <p class="text-xs text-slate-500 mt-1">Estados con mismo Orden aparecen juntos.</p>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium mb-2 text-slate-300">Color del badge</label>
+        <p-select [options]="coloresOpciones" [(ngModel)]="form.Color"
+          optionLabel="label" optionValue="value" class="w-full" appendTo="body"></p-select>
+      </div>
     </div>
 
     <div>
       <label class="block text-sm font-medium mb-2 text-slate-300">Descripción</label>
-      <textarea
-        pInputTextarea
-        [(ngModel)]="form.Descripcion"
-        placeholder="Descripción del estado"
-        class="w-full"
-        rows="2"
-        maxlength="255"
-      ></textarea>
+      <input pInputText [(ngModel)]="form.Descripcion" placeholder="Descripción breve"
+        class="w-full" maxlength="255" />
     </div>
 
+    <!-- Flags de comportamiento -->
     <div class="bg-slate-800 rounded-lg p-3 border border-slate-600 flex flex-col gap-3">
+      <p class="text-xs font-semibold text-slate-400 uppercase tracking-wide">Comportamiento en el flujo</p>
+
       <div class="flex items-start gap-3">
-        <p-checkbox
-          [(ngModel)]="form.RequiereAprobacion"
-          [binary]="true"
-          inputId="requiereAprobacion"
-        ></p-checkbox>
+        <p-checkbox [(ngModel)]="form.RequiereAprobacion" [binary]="true" inputId="req"></p-checkbox>
         <div>
-          <label for="requiereAprobacion" class="text-sm font-medium text-slate-200 cursor-pointer">
-            Requiere aprobación por rol especial
-          </label>
-          <p class="text-xs text-slate-500 mt-0.5">
-            Solo ADMINISTRADOR, ADMIN, GERENTE, RRHH pueden cambiar la nómina a este estado.
-          </p>
+          <label for="req" class="text-sm font-medium text-slate-200 cursor-pointer">Requiere rol especial</label>
+          <p class="text-xs text-slate-500 mt-0.5">Solo ADMIN, GERENTE, RRHH pueden transicionar a este estado.</p>
+        </div>
+      </div>
+
+      <div class="flex items-start gap-3">
+        <p-checkbox [(ngModel)]="form.EsFinal" [binary]="true" inputId="final"></p-checkbox>
+        <div>
+          <label for="final" class="text-sm font-medium text-orange-300 cursor-pointer">Estado final</label>
+          <p class="text-xs text-slate-500 mt-0.5">No permite más transiciones de salida (ej: PAGADO).</p>
+        </div>
+      </div>
+
+      <div class="flex items-start gap-3">
+        <p-checkbox [(ngModel)]="form.EsCancelacion" [binary]="true" inputId="cancel"></p-checkbox>
+        <div>
+          <label for="cancel" class="text-sm font-medium text-red-300 cursor-pointer">Estado de cancelación</label>
+          <p class="text-xs text-slate-500 mt-0.5">Disponible desde cualquier estado activo (ej: CANCELADO).</p>
         </div>
       </div>
 
       <div class="flex items-center gap-3 pt-2 border-t border-slate-700">
-        <p-checkbox
-          [(ngModel)]="form.Activo"
-          [binary]="true"
-          inputId="activo"
-        ></p-checkbox>
-        <label for="activo" class="text-sm font-medium text-slate-200 cursor-pointer">
-          Estado activo (visible en el flujo)
-        </label>
+        <p-checkbox [(ngModel)]="form.Activo" [binary]="true" inputId="act"></p-checkbox>
+        <label for="act" class="text-sm font-medium text-slate-200 cursor-pointer">Estado activo (visible en el flujo)</label>
       </div>
     </div>
 

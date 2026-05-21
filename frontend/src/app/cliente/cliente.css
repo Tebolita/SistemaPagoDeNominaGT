@@ -1,52 +1,20 @@
-.cliente-page {
-  padding: 1rem;
-}
-
-.cliente-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
-}
-
-.cliente-header h2 {
-  margin: 0;
-}
-
-.p-field {
-  margin-bottom: 1rem;
-}
-
-.form-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-  margin-bottom: 1rem;
-}
-
-.required {
-  color: #e74c3c;
-  font-weight: bold;
-}
-
-.p-field label {
+:host {
   display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 600;
-  color: #374151;
+  min-height: 100%;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 60%, #0f172a 100%);
 }
 
-.p-inputtext,
-.p-inputtextarea,
-.p-select {
-  width: 100%;
-}
+:host ::ng-deep .p-datatable { background: #1e293b; border-radius: 0.5rem; overflow: hidden; border: 1px solid #334155; }
+:host ::ng-deep .p-datatable .p-datatable-thead > tr > th { background: #0f172a !important; color: #94a3b8 !important; border-color: #334155 !important; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; }
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr { background: #1e293b !important; color: #e2e8f0 !important; border-color: #334155 !important; transition: background 0.12s; }
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr:hover { background: #253347 !important; }
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr > td { border-color: #334155 !important; color: #e2e8f0 !important; }
+:host ::ng-deep .p-datatable .p-datatable-emptymessage > td { background: #1e293b !important; color: #64748b !important; }
+:host ::ng-deep .p-paginator { background: #0f172a !important; border-color: #334155 !important; color: #94a3b8 !important; }
+:host ::ng-deep .p-paginator .p-paginator-page.p-highlight { background: #3b82f6 !important; color: #fff !important; }
 
-.p-dialog .p-dialog-content {
-  padding: 1.5rem;
-}
-
-.p-dialog .p-dialog-footer {
-  padding: 1rem 1.5rem;
-  border-top: 1px solid #e5e7eb;
-}
+:host ::ng-deep .p-inputtext { background: #0f172a !important; border-color: #334155 !important; color: #e2e8f0 !important; }
+:host ::ng-deep .p-inputtext:focus { border-color: #3b82f6 !important; }
+:host ::ng-deep .p-inputtext::placeholder { color: #475569 !important; }
+:host ::ng-deep textarea.p-inputtextarea { background: #0f172a !important; border-color: #334155 !important; color: #e2e8f0 !important; }
+:host ::ng-deep .p-select, :host ::ng-deep .p-select-label { background: #0f172a !important; border-color: #334155 !important; color: #e2e8f0 !important; }

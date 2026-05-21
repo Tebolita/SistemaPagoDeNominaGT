@@ -28,7 +28,6 @@ export class CreateProductoServicioDto {
   UnidadMedida?: string;
 
   @IsOptional()
-  @IsString()
   @IsBoolean()
   Activo?: boolean;
 }

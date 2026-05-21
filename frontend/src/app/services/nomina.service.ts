@@ -15,21 +15,33 @@ export class NominaService {
     private errorService: ErrorService,
   ) {}
 
-  calcular(idEmpleado: number, salarioBase: number): Observable<NominaCalculo> {
+  calcular(idEmpleado: number, salarioBase: number, mes?: number, anio?: number): Observable<NominaCalculo> {
     return this.http
-      .post<NominaCalculo>(`${this.apiUrl}/calcular`, { idEmpleado, salarioBase })
+      .post<NominaCalculo>(`${this.apiUrl}/calcular`, { idEmpleado, salarioBase, mes, anio })
       .pipe(catchError(this.errorService.handleError));
   }
 
-  generar(idEmpleado: number, salarioBase: number, mes?: number, anio?: number): Observable<Nomina> {
+  generar(idEmpleado: number, salarioBase: number, mes?: number, anio?: number, idCuenta?: number): Observable<Nomina> {
     return this.http
-      .post<Nomina>(`${this.apiUrl}/generar`, { idEmpleado, salarioBase, mes, anio })
+      .post<Nomina>(`${this.apiUrl}/generar`, { idEmpleado, salarioBase, mes, anio, idCuenta })
       .pipe(catchError(this.errorService.handleError));
   }
 
   getAll(): Observable<Nomina[]> {
     return this.http
       .get<Nomina[]>(this.apiUrl)
+      .pipe(catchError(this.errorService.handleError));
+  }
+
+  getEliminadas(): Observable<Nomina[]> {
+    return this.http
+      .get<Nomina[]>(`${this.apiUrl}/eliminadas`)
+      .pipe(catchError(this.errorService.handleError));
+  }
+
+  restaurar(id: number): Observable<Nomina> {
+    return this.http
+      .patch<Nomina>(`${this.apiUrl}/${id}/restaurar`, {})
       .pipe(catchError(this.errorService.handleError));
   }
 
@@ -57,9 +69,22 @@ export class NominaService {
       .pipe(catchError(this.errorService.handleError));
   }
 
-  generarMasiva(mes?: number, anio?: number): Observable<NominaMasivaResultado> {
+  generarPersonalizada(
+    idEmpleados: number[],
+    idParametros: number[],
+    mes?: number,
+    anio?: number,
+    idCuenta?: number,
+    incluirSalarioBase = true,
+  ): Observable<any> {
     return this.http
-      .post<NominaMasivaResultado>(`${this.apiUrl}/generar-masiva`, { mes, anio })
+      .post<any>(`${this.apiUrl}/generar-personalizada`, { idEmpleados, idParametros, mes, anio, idCuenta, incluirSalarioBase })
+      .pipe(catchError(this.errorService.handleError));
+  }
+
+  generarMasiva(mes?: number, anio?: number, idCuenta?: number): Observable<NominaMasivaResultado> {
+    return this.http
+      .post<NominaMasivaResultado>(`${this.apiUrl}/generar-masiva`, { mes, anio, idCuenta })
       .pipe(catchError(this.errorService.handleError));
   }
 

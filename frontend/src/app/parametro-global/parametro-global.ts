@@ -11,8 +11,13 @@ import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { TooltipModule } from 'primeng/tooltip';
 import { SelectModule } from 'primeng/select';
+import { DividerModule } from 'primeng/divider';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { ParametroGlobalService } from '../services/parametro-global.service';
+import { DepartamentoService } from '../services/departamento.service';
+import { PuestoService } from '../services/puesto.service';
+import { JornadaLaboralService } from '../services/jornada-laboral.service';
 import { ParametroGlobal } from '../models/ParametroGlobal.model';
 
 interface ParamMeta {
@@ -37,26 +42,57 @@ interface ParamMeta {
     ConfirmDialogModule,
     TooltipModule,
     SelectModule,
+    DividerModule,
+    ProgressSpinnerModule,
   ],
   providers: [MessageService, ConfirmationService],
   templateUrl: './parametro-global.html',
   styleUrl: './parametro-global.css',
 })
 export class ParametroGlobalComponent implements OnInit {
-  private parametroService = inject(ParametroGlobalService);
-  private messageService = inject(MessageService);
+  private parametroService    = inject(ParametroGlobalService);
+  private departamentoService = inject(DepartamentoService);
+  private puestoService       = inject(PuestoService);
+  private jornadaService      = inject(JornadaLaboralService);
+  private messageService      = inject(MessageService);
   private confirmationService = inject(ConfirmationService);
 
-  parametros = signal<ParametroGlobal[]>([]);
+  parametros   = signal<ParametroGlobal[]>([]);
   displayDialog = signal(false);
-  isEditMode = signal(false);
+  isEditMode    = signal(false);
+
+  // ── Simulador ────────────────────────────────────────────────────────────
+  departamentos = signal<any[]>([]);
+  puestos       = signal<any[]>([]);
+  jornadas      = signal<any[]>([]);
+
+  simuladorFiltros = {
+    IdParametro:    null as number | null,
+    Genero:         null as boolean | null,
+    IdDepartamento: null as number | null,
+    IdPuesto:       null as number | null,
+    IdJornada:      null as number | null,
+  };
+
+  simuladorResultado = signal<any | null>(null);
+  simulandoLoading   = signal(false);
+
+  generosOpciones = [
+    { label: 'Masculino', value: false },
+    { label: 'Femenino',  value: true  },
+  ];
   form: {
     NombreParametro: string;
     Valor: number;
     Descripcion?: string;
     Tipo?: 'INGRESO' | 'DESCUENTO' | 'REFERENCIA';
     Unidad?: '%' | 'Q';
-  } = { NombreParametro: '', Valor: 0, Descripcion: '', Tipo: undefined, Unidad: undefined };
+    FiltroGenero?: boolean | null;
+    FiltroIdDepartamento?: number | null;
+    FiltroIdPuesto?: number | null;
+    FiltroIdJornada?: number | null;
+  } = { NombreParametro: '', Valor: 0, Descripcion: '', Tipo: undefined, Unidad: undefined,
+        FiltroGenero: null, FiltroIdDepartamento: null, FiltroIdPuesto: null, FiltroIdJornada: null };
 
   readonly tiposOpciones: { label: string; value: 'INGRESO' | 'DESCUENTO' | 'REFERENCIA' }[] = [
     { label: '▲ Ingreso — suma al empleado',    value: 'INGRESO' },
@@ -143,6 +179,41 @@ export class ParametroGlobalComponent implements OnInit {
 
   ngOnInit() {
     this.loadParametros();
+    this.loadCatalogos();
+  }
+
+  loadCatalogos() {
+    this.departamentoService.getAll().subscribe({ next: d => this.departamentos.set(d), error: () => {} });
+    this.puestoService.getAll().subscribe({ next: d => this.puestos.set(d), error: () => {} });
+    this.jornadaService.getAll().subscribe({ next: d => this.jornadas.set(d), error: () => {} });
+  }
+
+  simular() {
+    if (!this.simuladorFiltros.IdParametro) {
+      this.messageService.add({ severity: 'warn', summary: 'Validación', detail: 'Selecciona un parámetro para simular.' });
+      return;
+    }
+    this.simulandoLoading.set(true);
+    this.simuladorResultado.set(null);
+    const payload = {
+      IdParametro:    this.simuladorFiltros.IdParametro,
+      Genero:         this.simuladorFiltros.Genero,
+      IdDepartamento: this.simuladorFiltros.IdDepartamento,
+      IdPuesto:       this.simuladorFiltros.IdPuesto,
+      IdJornada:      this.simuladorFiltros.IdJornada,
+    };
+    this.parametroService.simular(payload).subscribe({
+      next: (data) => { this.simuladorResultado.set(data); this.simulandoLoading.set(false); },
+      error: (err) => {
+        this.simulandoLoading.set(false);
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: err?.message });
+      },
+    });
+  }
+
+  limpiarSimulador() {
+    this.simuladorFiltros = { IdParametro: null, Genero: null, IdDepartamento: null, IdPuesto: null, IdJornada: null };
+    this.simuladorResultado.set(null);
   }
 
   loadParametros() {
@@ -185,6 +256,26 @@ export class ParametroGlobalComponent implements OnInit {
     return `Q ${val.toLocaleString('es-GT', { minimumFractionDigits: 2 })}`;
   }
 
+  getFiltrosLabel(param: ParametroGlobal): string {
+    const partes: string[] = [];
+    if (param.FiltroGenero !== null && param.FiltroGenero !== undefined)
+      partes.push(param.FiltroGenero ? 'Femenino' : 'Masculino');
+    if (param.Departamento?.NombreDepartamento)
+      partes.push(param.Departamento.NombreDepartamento);
+    if (param.Puesto?.NombrePuesto)
+      partes.push(param.Puesto.NombrePuesto);
+    if (param.JornadaLaboral?.NombreJornada)
+      partes.push(param.JornadaLaboral.NombreJornada);
+    return partes.length ? partes.join(' · ') : 'Todos';
+  }
+
+  tieneFiltros(param: ParametroGlobal): boolean {
+    return param.FiltroGenero !== null && param.FiltroGenero !== undefined
+      || !!param.FiltroIdDepartamento
+      || !!param.FiltroIdPuesto
+      || !!param.FiltroIdJornada;
+  }
+
   getParamsOrdenados(): ParametroGlobal[] {
     const orden: Record<string, number> = { INGRESO: 0, DESCUENTO: 1, REFERENCIA: 2 };
     return [...this.parametros()].sort((a, b) => {
@@ -196,7 +287,10 @@ export class ParametroGlobalComponent implements OnInit {
 
   showDialog() {
     this.isEditMode.set(false);
-    this.form = { NombreParametro: '', Valor: 0, Descripcion: '', Tipo: undefined, Unidad: undefined };
+    this.form = {
+      NombreParametro: '', Valor: 0, Descripcion: '', Tipo: undefined, Unidad: undefined,
+      FiltroGenero: null, FiltroIdDepartamento: null, FiltroIdPuesto: null, FiltroIdJornada: null,
+    };
     this.selectedParametro = null;
     this.displayDialog.set(true);
   }
@@ -204,11 +298,15 @@ export class ParametroGlobalComponent implements OnInit {
   editParametro(param: ParametroGlobal) {
     this.isEditMode.set(true);
     this.form = {
-      NombreParametro: param.NombreParametro,
-      Valor: Number(param.Valor),
-      Descripcion: param.Descripcion ?? '',
-      Tipo: param.Tipo,
-      Unidad: param.Unidad,
+      NombreParametro:      param.NombreParametro,
+      Valor:                Number(param.Valor),
+      Descripcion:          param.Descripcion ?? '',
+      Tipo:                 param.Tipo,
+      Unidad:               param.Unidad,
+      FiltroGenero:         param.FiltroGenero ?? null,
+      FiltroIdDepartamento: param.FiltroIdDepartamento ?? null,
+      FiltroIdPuesto:       param.FiltroIdPuesto ?? null,
+      FiltroIdJornada:      param.FiltroIdJornada ?? null,
     };
     this.selectedParametro = param;
     this.displayDialog.set(true);

@@ -44,6 +44,9 @@ export type EstadoNominaMinAggregateOutputType = {
   RequiereAprobacion: boolean | null
   Activo: boolean | null
   FechaEliminacion: Date | null
+  Color: string | null
+  EsFinal: boolean | null
+  EsCancelacion: boolean | null
 }
 
 export type EstadoNominaMaxAggregateOutputType = {
@@ -54,6 +57,9 @@ export type EstadoNominaMaxAggregateOutputType = {
   RequiereAprobacion: boolean | null
   Activo: boolean | null
   FechaEliminacion: Date | null
+  Color: string | null
+  EsFinal: boolean | null
+  EsCancelacion: boolean | null
 }
 
 export type EstadoNominaCountAggregateOutputType = {
@@ -64,6 +70,9 @@ export type EstadoNominaCountAggregateOutputType = {
   RequiereAprobacion: number
   Activo: number
   FechaEliminacion: number
+  Color: number
+  EsFinal: number
+  EsCancelacion: number
   _all: number
 }
 
@@ -86,6 +95,9 @@ export type EstadoNominaMinAggregateInputType = {
   RequiereAprobacion?: true
   Activo?: true
   FechaEliminacion?: true
+  Color?: true
+  EsFinal?: true
+  EsCancelacion?: true
 }
 
 export type EstadoNominaMaxAggregateInputType = {
@@ -96,6 +108,9 @@ export type EstadoNominaMaxAggregateInputType = {
   RequiereAprobacion?: true
   Activo?: true
   FechaEliminacion?: true
+  Color?: true
+  EsFinal?: true
+  EsCancelacion?: true
 }
 
 export type EstadoNominaCountAggregateInputType = {
@@ -106,6 +121,9 @@ export type EstadoNominaCountAggregateInputType = {
   RequiereAprobacion?: true
   Activo?: true
   FechaEliminacion?: true
+  Color?: true
+  EsFinal?: true
+  EsCancelacion?: true
   _all?: true
 }
 
@@ -203,6 +221,9 @@ export type EstadoNominaGroupByOutputType = {
   RequiereAprobacion: boolean | null
   Activo: boolean | null
   FechaEliminacion: Date | null
+  Color: string | null
+  EsFinal: boolean
+  EsCancelacion: boolean
   _count: EstadoNominaCountAggregateOutputType | null
   _avg: EstadoNominaAvgAggregateOutputType | null
   _sum: EstadoNominaSumAggregateOutputType | null
@@ -236,6 +257,9 @@ export type EstadoNominaWhereInput = {
   RequiereAprobacion?: Prisma.BoolNullableFilter<"EstadoNomina"> | boolean | null
   Activo?: Prisma.BoolNullableFilter<"EstadoNomina"> | boolean | null
   FechaEliminacion?: Prisma.DateTimeNullableFilter<"EstadoNomina"> | Date | string | null
+  Color?: Prisma.StringNullableFilter<"EstadoNomina"> | string | null
+  EsFinal?: Prisma.BoolFilter<"EstadoNomina"> | boolean
+  EsCancelacion?: Prisma.BoolFilter<"EstadoNomina"> | boolean
   HistorialEstadoNomina_HistorialEstadoNomina_IdEstadoAnteriorToEstadoNomina?: Prisma.HistorialEstadoNominaListRelationFilter
   HistorialEstadoNomina_HistorialEstadoNomina_IdEstadoNuevoToEstadoNomina?: Prisma.HistorialEstadoNominaListRelationFilter
   NominaEncabezado?: Prisma.NominaEncabezadoListRelationFilter
@@ -249,6 +273,9 @@ export type EstadoNominaOrderByWithRelationInput = {
   RequiereAprobacion?: Prisma.SortOrderInput | Prisma.SortOrder
   Activo?: Prisma.SortOrderInput | Prisma.SortOrder
   FechaEliminacion?: Prisma.SortOrderInput | Prisma.SortOrder
+  Color?: Prisma.SortOrderInput | Prisma.SortOrder
+  EsFinal?: Prisma.SortOrder
+  EsCancelacion?: Prisma.SortOrder
   HistorialEstadoNomina_HistorialEstadoNomina_IdEstadoAnteriorToEstadoNomina?: Prisma.HistorialEstadoNominaOrderByRelationAggregateInput
   HistorialEstadoNomina_HistorialEstadoNomina_IdEstadoNuevoToEstadoNomina?: Prisma.HistorialEstadoNominaOrderByRelationAggregateInput
   NominaEncabezado?: Prisma.NominaEncabezadoOrderByRelationAggregateInput
@@ -265,6 +292,9 @@ export type EstadoNominaWhereUniqueInput = Prisma.AtLeast<{
   RequiereAprobacion?: Prisma.BoolNullableFilter<"EstadoNomina"> | boolean | null
   Activo?: Prisma.BoolNullableFilter<"EstadoNomina"> | boolean | null
   FechaEliminacion?: Prisma.DateTimeNullableFilter<"EstadoNomina"> | Date | string | null
+  Color?: Prisma.StringNullableFilter<"EstadoNomina"> | string | null
+  EsFinal?: Prisma.BoolFilter<"EstadoNomina"> | boolean
+  EsCancelacion?: Prisma.BoolFilter<"EstadoNomina"> | boolean
   HistorialEstadoNomina_HistorialEstadoNomina_IdEstadoAnteriorToEstadoNomina?: Prisma.HistorialEstadoNominaListRelationFilter
   HistorialEstadoNomina_HistorialEstadoNomina_IdEstadoNuevoToEstadoNomina?: Prisma.HistorialEstadoNominaListRelationFilter
   NominaEncabezado?: Prisma.NominaEncabezadoListRelationFilter
@@ -278,6 +308,9 @@ export type EstadoNominaOrderByWithAggregationInput = {
   RequiereAprobacion?: Prisma.SortOrderInput | Prisma.SortOrder
   Activo?: Prisma.SortOrderInput | Prisma.SortOrder
   FechaEliminacion?: Prisma.SortOrderInput | Prisma.SortOrder
+  Color?: Prisma.SortOrderInput | Prisma.SortOrder
+  EsFinal?: Prisma.SortOrder
+  EsCancelacion?: Prisma.SortOrder
   _count?: Prisma.EstadoNominaCountOrderByAggregateInput
   _avg?: Prisma.EstadoNominaAvgOrderByAggregateInput
   _max?: Prisma.EstadoNominaMaxOrderByAggregateInput
@@ -296,6 +329,9 @@ export type EstadoNominaScalarWhereWithAggregatesInput = {
   RequiereAprobacion?: Prisma.BoolNullableWithAggregatesFilter<"EstadoNomina"> | boolean | null
   Activo?: Prisma.BoolNullableWithAggregatesFilter<"EstadoNomina"> | boolean | null
   FechaEliminacion?: Prisma.DateTimeNullableWithAggregatesFilter<"EstadoNomina"> | Date | string | null
+  Color?: Prisma.StringNullableWithAggregatesFilter<"EstadoNomina"> | string | null
+  EsFinal?: Prisma.BoolWithAggregatesFilter<"EstadoNomina"> | boolean
+  EsCancelacion?: Prisma.BoolWithAggregatesFilter<"EstadoNomina"> | boolean
 }
 
 export type EstadoNominaCreateInput = {
@@ -305,6 +341,9 @@ export type EstadoNominaCreateInput = {
   RequiereAprobacion?: boolean | null
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  Color?: string | null
+  EsFinal: boolean
+  EsCancelacion: boolean
   HistorialEstadoNomina_HistorialEstadoNomina_IdEstadoAnteriorToEstadoNomina?: Prisma.HistorialEstadoNominaCreateNestedManyWithoutEstadoNomina_HistorialEstadoNomina_IdEstadoAnteriorToEstadoNominaInput
   HistorialEstadoNomina_HistorialEstadoNomina_IdEstadoNuevoToEstadoNomina?: Prisma.HistorialEstadoNominaCreateNestedManyWithoutEstadoNomina_HistorialEstadoNomina_IdEstadoNuevoToEstadoNominaInput
   NominaEncabezado?: Prisma.NominaEncabezadoCreateNestedManyWithoutEstadoNominaInput
@@ -318,6 +357,9 @@ export type EstadoNominaUncheckedCreateInput = {
   RequiereAprobacion?: boolean | null
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  Color?: string | null
+  EsFinal: boolean
+  EsCancelacion: boolean
   HistorialEstadoNomina_HistorialEstadoNomina_IdEstadoAnteriorToEstadoNomina?: Prisma.HistorialEstadoNominaUncheckedCreateNestedManyWithoutEstadoNomina_HistorialEstadoNomina_IdEstadoAnteriorToEstadoNominaInput
   HistorialEstadoNomina_HistorialEstadoNomina_IdEstadoNuevoToEstadoNomina?: Prisma.HistorialEstadoNominaUncheckedCreateNestedManyWithoutEstadoNomina_HistorialEstadoNomina_IdEstadoNuevoToEstadoNominaInput
   NominaEncabezado?: Prisma.NominaEncabezadoUncheckedCreateNestedManyWithoutEstadoNominaInput
@@ -330,6 +372,9 @@ export type EstadoNominaUpdateInput = {
   RequiereAprobacion?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  EsFinal?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  EsCancelacion?: Prisma.BoolFieldUpdateOperationsInput | boolean
   HistorialEstadoNomina_HistorialEstadoNomina_IdEstadoAnteriorToEstadoNomina?: Prisma.HistorialEstadoNominaUpdateManyWithoutEstadoNomina_HistorialEstadoNomina_IdEstadoAnteriorToEstadoNominaNestedInput
   HistorialEstadoNomina_HistorialEstadoNomina_IdEstadoNuevoToEstadoNomina?: Prisma.HistorialEstadoNominaUpdateManyWithoutEstadoNomina_HistorialEstadoNomina_IdEstadoNuevoToEstadoNominaNestedInput
   NominaEncabezado?: Prisma.NominaEncabezadoUpdateManyWithoutEstadoNominaNestedInput
@@ -343,6 +388,9 @@ export type EstadoNominaUncheckedUpdateInput = {
   RequiereAprobacion?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  EsFinal?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  EsCancelacion?: Prisma.BoolFieldUpdateOperationsInput | boolean
   HistorialEstadoNomina_HistorialEstadoNomina_IdEstadoAnteriorToEstadoNomina?: Prisma.HistorialEstadoNominaUncheckedUpdateManyWithoutEstadoNomina_HistorialEstadoNomina_IdEstadoAnteriorToEstadoNominaNestedInput
   HistorialEstadoNomina_HistorialEstadoNomina_IdEstadoNuevoToEstadoNomina?: Prisma.HistorialEstadoNominaUncheckedUpdateManyWithoutEstadoNomina_HistorialEstadoNomina_IdEstadoNuevoToEstadoNominaNestedInput
   NominaEncabezado?: Prisma.NominaEncabezadoUncheckedUpdateManyWithoutEstadoNominaNestedInput
@@ -355,6 +403,9 @@ export type EstadoNominaCreateManyInput = {
   RequiereAprobacion?: boolean | null
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  Color?: string | null
+  EsFinal: boolean
+  EsCancelacion: boolean
 }
 
 export type EstadoNominaUpdateManyMutationInput = {
@@ -364,6 +415,9 @@ export type EstadoNominaUpdateManyMutationInput = {
   RequiereAprobacion?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  EsFinal?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  EsCancelacion?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type EstadoNominaUncheckedUpdateManyInput = {
@@ -374,6 +428,9 @@ export type EstadoNominaUncheckedUpdateManyInput = {
   RequiereAprobacion?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  EsFinal?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  EsCancelacion?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type EstadoNominaCountOrderByAggregateInput = {
@@ -384,6 +441,9 @@ export type EstadoNominaCountOrderByAggregateInput = {
   RequiereAprobacion?: Prisma.SortOrder
   Activo?: Prisma.SortOrder
   FechaEliminacion?: Prisma.SortOrder
+  Color?: Prisma.SortOrder
+  EsFinal?: Prisma.SortOrder
+  EsCancelacion?: Prisma.SortOrder
 }
 
 export type EstadoNominaAvgOrderByAggregateInput = {
@@ -399,6 +459,9 @@ export type EstadoNominaMaxOrderByAggregateInput = {
   RequiereAprobacion?: Prisma.SortOrder
   Activo?: Prisma.SortOrder
   FechaEliminacion?: Prisma.SortOrder
+  Color?: Prisma.SortOrder
+  EsFinal?: Prisma.SortOrder
+  EsCancelacion?: Prisma.SortOrder
 }
 
 export type EstadoNominaMinOrderByAggregateInput = {
@@ -409,6 +472,9 @@ export type EstadoNominaMinOrderByAggregateInput = {
   RequiereAprobacion?: Prisma.SortOrder
   Activo?: Prisma.SortOrder
   FechaEliminacion?: Prisma.SortOrder
+  Color?: Prisma.SortOrder
+  EsFinal?: Prisma.SortOrder
+  EsCancelacion?: Prisma.SortOrder
 }
 
 export type EstadoNominaSumOrderByAggregateInput = {
@@ -479,6 +545,9 @@ export type EstadoNominaCreateWithoutHistorialEstadoNomina_HistorialEstadoNomina
   RequiereAprobacion?: boolean | null
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  Color?: string | null
+  EsFinal: boolean
+  EsCancelacion: boolean
   HistorialEstadoNomina_HistorialEstadoNomina_IdEstadoNuevoToEstadoNomina?: Prisma.HistorialEstadoNominaCreateNestedManyWithoutEstadoNomina_HistorialEstadoNomina_IdEstadoNuevoToEstadoNominaInput
   NominaEncabezado?: Prisma.NominaEncabezadoCreateNestedManyWithoutEstadoNominaInput
 }
@@ -491,6 +560,9 @@ export type EstadoNominaUncheckedCreateWithoutHistorialEstadoNomina_HistorialEst
   RequiereAprobacion?: boolean | null
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  Color?: string | null
+  EsFinal: boolean
+  EsCancelacion: boolean
   HistorialEstadoNomina_HistorialEstadoNomina_IdEstadoNuevoToEstadoNomina?: Prisma.HistorialEstadoNominaUncheckedCreateNestedManyWithoutEstadoNomina_HistorialEstadoNomina_IdEstadoNuevoToEstadoNominaInput
   NominaEncabezado?: Prisma.NominaEncabezadoUncheckedCreateNestedManyWithoutEstadoNominaInput
 }
@@ -507,6 +579,9 @@ export type EstadoNominaCreateWithoutHistorialEstadoNomina_HistorialEstadoNomina
   RequiereAprobacion?: boolean | null
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  Color?: string | null
+  EsFinal: boolean
+  EsCancelacion: boolean
   HistorialEstadoNomina_HistorialEstadoNomina_IdEstadoAnteriorToEstadoNomina?: Prisma.HistorialEstadoNominaCreateNestedManyWithoutEstadoNomina_HistorialEstadoNomina_IdEstadoAnteriorToEstadoNominaInput
   NominaEncabezado?: Prisma.NominaEncabezadoCreateNestedManyWithoutEstadoNominaInput
 }
@@ -519,6 +594,9 @@ export type EstadoNominaUncheckedCreateWithoutHistorialEstadoNomina_HistorialEst
   RequiereAprobacion?: boolean | null
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  Color?: string | null
+  EsFinal: boolean
+  EsCancelacion: boolean
   HistorialEstadoNomina_HistorialEstadoNomina_IdEstadoAnteriorToEstadoNomina?: Prisma.HistorialEstadoNominaUncheckedCreateNestedManyWithoutEstadoNomina_HistorialEstadoNomina_IdEstadoAnteriorToEstadoNominaInput
   NominaEncabezado?: Prisma.NominaEncabezadoUncheckedCreateNestedManyWithoutEstadoNominaInput
 }
@@ -546,6 +624,9 @@ export type EstadoNominaUpdateWithoutHistorialEstadoNomina_HistorialEstadoNomina
   RequiereAprobacion?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  EsFinal?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  EsCancelacion?: Prisma.BoolFieldUpdateOperationsInput | boolean
   HistorialEstadoNomina_HistorialEstadoNomina_IdEstadoNuevoToEstadoNomina?: Prisma.HistorialEstadoNominaUpdateManyWithoutEstadoNomina_HistorialEstadoNomina_IdEstadoNuevoToEstadoNominaNestedInput
   NominaEncabezado?: Prisma.NominaEncabezadoUpdateManyWithoutEstadoNominaNestedInput
 }
@@ -558,6 +639,9 @@ export type EstadoNominaUncheckedUpdateWithoutHistorialEstadoNomina_HistorialEst
   RequiereAprobacion?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  EsFinal?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  EsCancelacion?: Prisma.BoolFieldUpdateOperationsInput | boolean
   HistorialEstadoNomina_HistorialEstadoNomina_IdEstadoNuevoToEstadoNomina?: Prisma.HistorialEstadoNominaUncheckedUpdateManyWithoutEstadoNomina_HistorialEstadoNomina_IdEstadoNuevoToEstadoNominaNestedInput
   NominaEncabezado?: Prisma.NominaEncabezadoUncheckedUpdateManyWithoutEstadoNominaNestedInput
 }
@@ -580,6 +664,9 @@ export type EstadoNominaUpdateWithoutHistorialEstadoNomina_HistorialEstadoNomina
   RequiereAprobacion?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  EsFinal?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  EsCancelacion?: Prisma.BoolFieldUpdateOperationsInput | boolean
   HistorialEstadoNomina_HistorialEstadoNomina_IdEstadoAnteriorToEstadoNomina?: Prisma.HistorialEstadoNominaUpdateManyWithoutEstadoNomina_HistorialEstadoNomina_IdEstadoAnteriorToEstadoNominaNestedInput
   NominaEncabezado?: Prisma.NominaEncabezadoUpdateManyWithoutEstadoNominaNestedInput
 }
@@ -592,6 +679,9 @@ export type EstadoNominaUncheckedUpdateWithoutHistorialEstadoNomina_HistorialEst
   RequiereAprobacion?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  EsFinal?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  EsCancelacion?: Prisma.BoolFieldUpdateOperationsInput | boolean
   HistorialEstadoNomina_HistorialEstadoNomina_IdEstadoAnteriorToEstadoNomina?: Prisma.HistorialEstadoNominaUncheckedUpdateManyWithoutEstadoNomina_HistorialEstadoNomina_IdEstadoAnteriorToEstadoNominaNestedInput
   NominaEncabezado?: Prisma.NominaEncabezadoUncheckedUpdateManyWithoutEstadoNominaNestedInput
 }
@@ -603,6 +693,9 @@ export type EstadoNominaCreateWithoutNominaEncabezadoInput = {
   RequiereAprobacion?: boolean | null
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  Color?: string | null
+  EsFinal: boolean
+  EsCancelacion: boolean
   HistorialEstadoNomina_HistorialEstadoNomina_IdEstadoAnteriorToEstadoNomina?: Prisma.HistorialEstadoNominaCreateNestedManyWithoutEstadoNomina_HistorialEstadoNomina_IdEstadoAnteriorToEstadoNominaInput
   HistorialEstadoNomina_HistorialEstadoNomina_IdEstadoNuevoToEstadoNomina?: Prisma.HistorialEstadoNominaCreateNestedManyWithoutEstadoNomina_HistorialEstadoNomina_IdEstadoNuevoToEstadoNominaInput
 }
@@ -615,6 +708,9 @@ export type EstadoNominaUncheckedCreateWithoutNominaEncabezadoInput = {
   RequiereAprobacion?: boolean | null
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  Color?: string | null
+  EsFinal: boolean
+  EsCancelacion: boolean
   HistorialEstadoNomina_HistorialEstadoNomina_IdEstadoAnteriorToEstadoNomina?: Prisma.HistorialEstadoNominaUncheckedCreateNestedManyWithoutEstadoNomina_HistorialEstadoNomina_IdEstadoAnteriorToEstadoNominaInput
   HistorialEstadoNomina_HistorialEstadoNomina_IdEstadoNuevoToEstadoNomina?: Prisma.HistorialEstadoNominaUncheckedCreateNestedManyWithoutEstadoNomina_HistorialEstadoNomina_IdEstadoNuevoToEstadoNominaInput
 }
@@ -642,6 +738,9 @@ export type EstadoNominaUpdateWithoutNominaEncabezadoInput = {
   RequiereAprobacion?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  EsFinal?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  EsCancelacion?: Prisma.BoolFieldUpdateOperationsInput | boolean
   HistorialEstadoNomina_HistorialEstadoNomina_IdEstadoAnteriorToEstadoNomina?: Prisma.HistorialEstadoNominaUpdateManyWithoutEstadoNomina_HistorialEstadoNomina_IdEstadoAnteriorToEstadoNominaNestedInput
   HistorialEstadoNomina_HistorialEstadoNomina_IdEstadoNuevoToEstadoNomina?: Prisma.HistorialEstadoNominaUpdateManyWithoutEstadoNomina_HistorialEstadoNomina_IdEstadoNuevoToEstadoNominaNestedInput
 }
@@ -654,6 +753,9 @@ export type EstadoNominaUncheckedUpdateWithoutNominaEncabezadoInput = {
   RequiereAprobacion?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  EsFinal?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  EsCancelacion?: Prisma.BoolFieldUpdateOperationsInput | boolean
   HistorialEstadoNomina_HistorialEstadoNomina_IdEstadoAnteriorToEstadoNomina?: Prisma.HistorialEstadoNominaUncheckedUpdateManyWithoutEstadoNomina_HistorialEstadoNomina_IdEstadoAnteriorToEstadoNominaNestedInput
   HistorialEstadoNomina_HistorialEstadoNomina_IdEstadoNuevoToEstadoNomina?: Prisma.HistorialEstadoNominaUncheckedUpdateManyWithoutEstadoNomina_HistorialEstadoNomina_IdEstadoNuevoToEstadoNominaNestedInput
 }
@@ -715,6 +817,9 @@ export type EstadoNominaSelect<ExtArgs extends runtime.Types.Extensions.Internal
   RequiereAprobacion?: boolean
   Activo?: boolean
   FechaEliminacion?: boolean
+  Color?: boolean
+  EsFinal?: boolean
+  EsCancelacion?: boolean
   HistorialEstadoNomina_HistorialEstadoNomina_IdEstadoAnteriorToEstadoNomina?: boolean | Prisma.EstadoNomina$HistorialEstadoNomina_HistorialEstadoNomina_IdEstadoAnteriorToEstadoNominaArgs<ExtArgs>
   HistorialEstadoNomina_HistorialEstadoNomina_IdEstadoNuevoToEstadoNomina?: boolean | Prisma.EstadoNomina$HistorialEstadoNomina_HistorialEstadoNomina_IdEstadoNuevoToEstadoNominaArgs<ExtArgs>
   NominaEncabezado?: boolean | Prisma.EstadoNomina$NominaEncabezadoArgs<ExtArgs>
@@ -731,9 +836,12 @@ export type EstadoNominaSelectScalar = {
   RequiereAprobacion?: boolean
   Activo?: boolean
   FechaEliminacion?: boolean
+  Color?: boolean
+  EsFinal?: boolean
+  EsCancelacion?: boolean
 }
 
-export type EstadoNominaOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"IdEstadoNomina" | "NombreEstado" | "Descripcion" | "Orden" | "RequiereAprobacion" | "Activo" | "FechaEliminacion", ExtArgs["result"]["estadoNomina"]>
+export type EstadoNominaOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"IdEstadoNomina" | "NombreEstado" | "Descripcion" | "Orden" | "RequiereAprobacion" | "Activo" | "FechaEliminacion" | "Color" | "EsFinal" | "EsCancelacion", ExtArgs["result"]["estadoNomina"]>
 export type EstadoNominaInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   HistorialEstadoNomina_HistorialEstadoNomina_IdEstadoAnteriorToEstadoNomina?: boolean | Prisma.EstadoNomina$HistorialEstadoNomina_HistorialEstadoNomina_IdEstadoAnteriorToEstadoNominaArgs<ExtArgs>
   HistorialEstadoNomina_HistorialEstadoNomina_IdEstadoNuevoToEstadoNomina?: boolean | Prisma.EstadoNomina$HistorialEstadoNomina_HistorialEstadoNomina_IdEstadoNuevoToEstadoNominaArgs<ExtArgs>
@@ -756,6 +864,9 @@ export type $EstadoNominaPayload<ExtArgs extends runtime.Types.Extensions.Intern
     RequiereAprobacion: boolean | null
     Activo: boolean | null
     FechaEliminacion: Date | null
+    Color: string | null
+    EsFinal: boolean
+    EsCancelacion: boolean
   }, ExtArgs["result"]["estadoNomina"]>
   composites: {}
 }
@@ -1135,6 +1246,9 @@ export interface EstadoNominaFieldRefs {
   readonly RequiereAprobacion: Prisma.FieldRef<"EstadoNomina", 'Boolean'>
   readonly Activo: Prisma.FieldRef<"EstadoNomina", 'Boolean'>
   readonly FechaEliminacion: Prisma.FieldRef<"EstadoNomina", 'DateTime'>
+  readonly Color: Prisma.FieldRef<"EstadoNomina", 'String'>
+  readonly EsFinal: Prisma.FieldRef<"EstadoNomina", 'Boolean'>
+  readonly EsCancelacion: Prisma.FieldRef<"EstadoNomina", 'Boolean'>
 }
     
 

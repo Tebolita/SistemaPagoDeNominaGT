@@ -13,6 +13,12 @@
         size="small"
       ></p-button>
       <p-button
+        label="Nómina Personalizada"
+        icon="pi pi-sliders-h"
+        (onClick)="abrirDialogoPersonalizada()"
+        severity="secondary"
+      ></p-button>
+      <p-button
         label="Generar Masiva"
         icon="pi pi-users"
         (onClick)="abrirDialogoMasiva()"
@@ -27,13 +33,98 @@
     </div>
   </div>
 
-  <p-table [value]="nominas()" [tableStyle]="{ 'min-width': '50rem' }">
+  <!-- ── Tabs ──────────────────────────────────────────────────────────── -->
+  <p-tabs [(value)]="tabActivo" (valueChange)="onTabChange($event)">
+    <p-tablist>
+      <p-tab value="activas">
+        <i class="pi pi-list mr-2"></i>Nóminas activas
+        <span class="ml-2 text-xs bg-blue-900 text-blue-300 px-2 py-0.5 rounded-full">{{ nominas().length }}</span>
+      </p-tab>
+      <p-tab value="eliminadas">
+        <i class="pi pi-trash mr-2"></i>Eliminadas
+        @if (nominasEliminadas().length > 0) {
+          <span class="ml-2 text-xs bg-red-900 text-red-300 px-2 py-0.5 rounded-full">{{ nominasEliminadas().length }}</span>
+        }
+      </p-tab>
+    </p-tablist>
+    <p-tabpanels>
+
+      <!-- ── Panel: Activas ──────────────────────────────────────────────── -->
+      <p-tabpanel value="activas">
+
+  <!-- ── Filtros ────────────────────────────────────────────────────────── -->
+  <div class="flex flex-wrap items-end gap-3">
+    <div class="flex flex-col gap-1">
+      <label class="text-xs text-slate-400 uppercase tracking-wide">Año</label>
+      <p-select [options]="aniosFiltro" [(ngModel)]="filtroAnio"
+        optionLabel="label" optionValue="value"
+        placeholder="Todos" [showClear]="true" appendTo="body" class="w-32"></p-select>
+    </div>
+    <div class="flex flex-col gap-1">
+      <label class="text-xs text-slate-400 uppercase tracking-wide">Mes</label>
+      <p-select [options]="meses" [(ngModel)]="filtroMes"
+        optionLabel="label" optionValue="value"
+        placeholder="Todos" [showClear]="true" appendTo="body" class="w-40"></p-select>
+    </div>
+    <div class="flex flex-col gap-1">
+      <label class="text-xs text-slate-400 uppercase tracking-wide">Tipo</label>
+      <p-select [options]="[{label:'General',value:'GENERAL'},{label:'Personalizada',value:'PERSONALIZADA'}]"
+        [(ngModel)]="filtroTipo" optionLabel="label" optionValue="value"
+        placeholder="Todos" [showClear]="true" appendTo="body" class="w-40"></p-select>
+    </div>
+    @if (filtroAnio || filtroMes || filtroTipo) {
+      <p-button label="Limpiar" icon="pi pi-times" severity="secondary" size="small"
+        [outlined]="true" (onClick)="limpiarFiltros()"></p-button>
+    }
+    <span class="text-xs text-slate-500 self-end mb-1 ml-auto">
+      {{ totalFiltradas.cantidad }} nómina{{ totalFiltradas.cantidad !== 1 ? 's' : '' }} encontradas
+    </span>
+  </div>
+
+  <!-- ── Cards de totales ───────────────────────────────────────────────── -->
+  @if (nominasFiltradas.length > 0) {
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-3">
+        <div class="text-xs text-slate-500 uppercase tracking-wide mb-1">Total nóminas</div>
+        <div class="text-2xl font-bold text-white">{{ totalFiltradas.cantidad }}</div>
+        @if (filtroAnio || filtroMes) {
+          <div class="text-xs text-slate-500 mt-0.5">
+            {{ filtroMes ? getMesLabel(filtroMes) : 'Todos los meses' }}
+            {{ filtroAnio ? filtroAnio : '' }}
+          </div>
+        }
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-3">
+        <div class="text-xs text-slate-500 uppercase tracking-wide mb-1">Personalizadas</div>
+        <div class="flex items-end gap-3">
+          <span class="text-xl font-bold text-blue-400">
+            {{ contarPorTipo('GENERAL') }} <span class="text-xs text-slate-500 font-normal">general</span>
+          </span>
+          <span class="text-xl font-bold text-violet-400">
+            {{ contarPorTipo('PERSONALIZADA') }} <span class="text-xs text-slate-500 font-normal">personalizadas</span>
+          </span>
+        </div>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-3">
+        <div class="text-xs text-slate-500 uppercase tracking-wide mb-1">Masa Salarial</div>
+        <div class="text-lg font-bold text-slate-200">Q {{ totalFiltradas.salario | number:'1.2-2' }}</div>
+      </div>
+      <div class="bg-slate-800 border border-blue-700 border-l-4 rounded-xl p-3">
+        <div class="text-xs text-slate-500 uppercase tracking-wide mb-1">Total Líquido</div>
+        <div class="text-lg font-bold text-green-400">Q {{ totalFiltradas.liquido | number:'1.2-2' }}</div>
+      </div>
+    </div>
+  }
+
+  <p-table [value]="nominasFiltradas" [tableStyle]="{ 'min-width': '50rem' }">
     <ng-template pTemplate="header">
       <tr>
+        <th>Tipo</th>
         <th>Empleado(s)</th>
         <th>Período</th>
         <th>Salario Base</th>
         <th>Líquido a Recibir</th>
+        <th>Cuenta Pago</th>
         <th>No. Boleta</th>
         <th>Firmas</th>
         <th>Estado</th>
@@ -42,10 +133,27 @@
     </ng-template>
     <ng-template pTemplate="body" let-nomina>
       <tr>
+        <td>
+          @if (nomina.TipoNomina === 'PERSONALIZADA') {
+            <span class="inline-flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-full bg-violet-900 text-violet-300 border border-violet-700">
+              <i class="pi pi-sliders-h text-xs"></i> Personalizada
+            </span>
+          } @else {
+            <span class="inline-flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-full bg-blue-900 text-blue-300 border border-blue-700">
+              <i class="pi pi-users text-xs"></i> General
+            </span>
+          }
+        </td>
         <td>{{ getEmpleadoLabel(nomina) }}</td>
         <td>{{ getMesLabel(nomina.Mes) }} {{ nomina.Anio }}</td>
         <td>Q {{ getSalarioTotal(nomina) | number: '1.2-2' }}</td>
         <td>Q {{ getLiquidoTotal(nomina) | number: '1.2-2' }}</td>
+        <td>
+          <span *ngIf="nomina.CuentaBancariaEmpresa" class="text-xs text-cyan-300 font-medium">
+            {{ nomina.CuentaBancariaEmpresa.NombreCuenta }}
+          </span>
+          <span *ngIf="!nomina.CuentaBancariaEmpresa" class="text-slate-500 text-xs">—</span>
+        </td>
         <td>
           <span *ngIf="nomina.NumeroBoleta" class="font-mono text-xs bg-slate-700 text-green-300 px-2 py-1 rounded border border-slate-600">
             {{ nomina.NumeroBoleta }}
@@ -124,6 +232,17 @@
             tooltipPosition="top"
           ></p-button>
 
+          <p-button
+            icon="pi pi-envelope"
+            [rounded]="true"
+            [text]="true"
+            (onClick)="enviarBoleta(nomina)"
+            [loading]="enviandoCorreo() === nomina.IdNomina"
+            severity="info"
+            pTooltip="Enviar boleta por correo"
+            tooltipPosition="top"
+          ></p-button>
+
           <span class="mx-1 text-slate-600">|</span>
 
           <p-button
@@ -158,10 +277,69 @@
     </ng-template>
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="7" class="text-center text-slate-500 py-6">No hay nóminas registradas</td>
+        <td colspan="9" class="text-center text-slate-500 py-6">No hay nóminas registradas</td>
       </tr>
     </ng-template>
   </p-table>
+
+      </p-tabpanel>
+
+      <!-- ── Panel: Eliminadas ───────────────────────────────────────────── -->
+      <p-tabpanel value="eliminadas">
+        @if (nominasEliminadas().length === 0) {
+          <div class="flex flex-col items-center justify-center py-16 gap-3 text-slate-500">
+            <i class="pi pi-trash text-5xl text-slate-600"></i>
+            <p class="text-sm">No hay nóminas eliminadas</p>
+          </div>
+        } @else {
+          <p-table [value]="nominasEliminadas()" [rowHover]="true"
+            emptyMessage="No hay nóminas eliminadas.">
+            <ng-template pTemplate="header">
+              <tr>
+                <th>Tipo</th>
+                <th>Empleado(s)</th>
+                <th>Período</th>
+                <th>Salario Base</th>
+                <th>Líquido</th>
+                <th>Estado al eliminar</th>
+                <th>Fecha eliminación</th>
+                <th>Acciones</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-nomina>
+              <tr class="opacity-70">
+                <td>
+                  @if (nomina.TipoNomina === 'PERSONALIZADA') {
+                    <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-violet-900 text-violet-300 border border-violet-700">
+                      Personalizada
+                    </span>
+                  } @else {
+                    <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-blue-900 text-blue-300 border border-blue-700">
+                      General
+                    </span>
+                  }
+                </td>
+                <td class="text-slate-300">{{ getEmpleadoLabel(nomina) }}</td>
+                <td class="text-slate-300">{{ getMesLabel(nomina.Mes) }} {{ nomina.Anio }}</td>
+                <td class="text-slate-400 font-mono">Q {{ getSalarioTotal(nomina) | number:'1.2-2' }}</td>
+                <td class="text-slate-400 font-mono">Q {{ getLiquidoTotal(nomina) | number:'1.2-2' }}</td>
+                <td>
+                  <p-tag [value]="getEstadoNombre(nomina)" [severity]="getEstadoSeverity(nomina)"></p-tag>
+                </td>
+                <td class="text-xs text-slate-500">{{ nomina.FechaEliminacion | date:'dd/MM/yyyy HH:mm' }}</td>
+                <td>
+                  <p-button icon="pi pi-refresh" [rounded]="true" [text]="true" severity="success"
+                    pTooltip="Restaurar nómina" tooltipPosition="top"
+                    (onClick)="restaurarNomina(nomina)"></p-button>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        }
+      </p-tabpanel>
+
+    </p-tabpanels>
+  </p-tabs>
 </div>
 
 <!-- ─── Diálogo: Generar Nómina Individual ─────────────────────────────── -->
@@ -230,6 +408,26 @@
         ></p-button>
       </div>
     </div>
+    <div>
+      <label class="block text-sm font-medium mb-2">Cuenta Bancaria de Pago</label>
+      <p-select
+        [options]="cuentas()"
+        [(ngModel)]="form.IdCuenta"
+        optionLabel="NombreCuenta"
+        optionValue="IdCuenta"
+        placeholder="Seleccionar cuenta (opcional)"
+        [showClear]="true"
+        class="w-full"
+        appendTo="body"
+      >
+        <ng-template pTemplate="item" let-c>
+          <div class="flex justify-between items-center gap-3">
+            <span>{{ c.NombreCuenta }}</span>
+            <span class="text-xs text-green-400 font-mono">Q {{ c.SaldoActual | number:'1.2-2' }}</span>
+          </div>
+        </ng-template>
+      </p-select>
+    </div>
     <div *ngIf="calculoPreview" class="bg-slate-800 p-4 rounded border border-slate-600">
       <h3 class="font-bold mb-2 text-sm text-slate-200">Previsualización de Cálculo</h3>
       <div class="grid grid-cols-2 gap-2 text-sm text-slate-300">
@@ -237,6 +435,14 @@
         <div>Bono 14: <strong class="text-white">Q {{ calculoPreview.bono14 | number: '1.2-2' }}</strong></div>
         <div>Aguinaldo: <strong class="text-white">Q {{ calculoPreview.aguinaldo | number: '1.2-2' }}</strong></div>
         <div>Bono Productividad: <strong class="text-white">Q {{ calculoPreview.bonoProductividad | number: '1.2-2' }}</strong></div>
+        @if (calculoPreview.horasExtras > 0) {
+          <div class="col-span-2 bg-amber-950 border border-amber-800 rounded p-2 flex items-center justify-between">
+            <span class="text-amber-300 text-xs">
+              ⏱ {{ calculoPreview.horasExtras }} hrs extra × Q {{ calculoPreview.valorHoraExtra | number:'1.2-4' }}/hr
+            </span>
+            <strong class="text-amber-300">+ Q {{ calculoPreview.pagoHorasExtras | number:'1.2-2' }}</strong>
+          </div>
+        }
         <div class="font-bold text-blue-400">Total Ingresos: Q {{ calculoPreview.totalIngresos | number: '1.2-2' }}</div>
         <div>Desc. IGSS: <strong class="text-white">Q {{ calculoPreview.descuentoIGSS | number: '1.2-2' }}</strong></div>
         <div>Desc. ISR: <strong class="text-white">Q {{ calculoPreview.descuentoISR | number: '1.2-2' }}</strong></div>
@@ -266,6 +472,26 @@
     <p class="text-sm text-slate-400">
       Selecciona el período para el cual deseas generar la nómina de todos los empleados activos.
     </p>
+    <div>
+      <label class="block text-sm font-medium mb-2">Cuenta Bancaria de Pago</label>
+      <p-select
+        [options]="cuentas()"
+        [(ngModel)]="formMasiva.IdCuenta"
+        optionLabel="NombreCuenta"
+        optionValue="IdCuenta"
+        placeholder="Seleccionar cuenta (opcional)"
+        [showClear]="true"
+        class="w-full"
+        appendTo="body"
+      >
+        <ng-template pTemplate="item" let-c>
+          <div class="flex justify-between items-center gap-3">
+            <span>{{ c.NombreCuenta }}</span>
+            <span class="text-xs text-green-400 font-mono">Q {{ c.SaldoActual | number:'1.2-2' }}</span>
+          </div>
+        </ng-template>
+      </p-select>
+    </div>
     <div class="grid grid-cols-2 gap-4">
       <div>
         <label class="block text-sm font-medium mb-2">Mes *</label>
@@ -423,7 +649,12 @@
         <div class="text-sm text-slate-400">Total Líquido</div>
         <div class="font-bold">Q {{ getLiquidoTotal(nominaSeleccionada) | number: '1.2-2' }}</div>
       </div>
-      <div *ngIf="nominaSeleccionada?.NumeroBoleta" class="col-span-2 border-b pb-2">
+      <div *ngIf="nominaSeleccionada?.CuentaBancariaEmpresa" class="border-b pb-2">
+        <div class="text-sm text-slate-400">Cuenta de Pago</div>
+        <div class="font-bold text-cyan-300">{{ nominaSeleccionada?.CuentaBancariaEmpresa?.NombreCuenta }}</div>
+        <div class="text-xs text-slate-500 font-mono">{{ nominaSeleccionada?.CuentaBancariaEmpresa?.NumeroCuenta }}</div>
+      </div>
+      <div *ngIf="nominaSeleccionada?.NumeroBoleta" class="border-b pb-2">
         <div class="text-sm text-slate-400">No. Boleta / Transacción</div>
         <div class="font-bold font-mono text-green-400">{{ nominaSeleccionada?.NumeroBoleta }}</div>
       </div>
@@ -433,10 +664,10 @@
       <ng-template pTemplate="header">
         <tr>
           <th>Empleado</th>
-          <th>Días Laborados</th>
+          <th>Días Lab.</th>
           <th>Salario Base</th>
           <th>Bonificación</th>
-          <th>Otros Ingresos</th>
+          <th>Hrs Extra</th>
           <th>Desc. IGSS</th>
           <th>Desc. ISR</th>
           <th>Otros Desc.</th>
@@ -449,7 +680,11 @@
           <td>{{ detalle.DiasLaborados | number: '1.0-2' }}</td>
           <td>Q {{ detalle.SueldoBase | number: '1.2-2' }}</td>
           <td>Q {{ detalle.BonificacionIncentivo | number: '1.2-2' }}</td>
-          <td>Q {{ detalle.OtrosIngresos | number: '1.2-2' }}</td>
+          <td>
+            @if (detalle.OtrosIngresos > 0) {
+              <span class="text-amber-400 font-mono">Q {{ detalle.OtrosIngresos | number:'1.2-2' }}</span>
+            } @else { <span class="text-slate-600">—</span> }
+          </td>
           <td>Q {{ detalle.DescuentoIGSS | number: '1.2-2' }}</td>
           <td>Q {{ detalle.DescuentoISR | number: '1.2-2' }}</td>
           <td>Q {{ detalle.OtrosDescuentos | number: '1.2-2' }}</td>
@@ -496,24 +731,52 @@
       ></p-select>
     </div>
 
-    <div *ngIf="esPagadoSeleccionado()" class="border border-green-700 bg-green-950 rounded-lg p-4">
-      <div class="flex items-center gap-2 mb-3">
+    <div *ngIf="esPagadoSeleccionado()" class="border border-green-700 bg-green-950 rounded-lg p-4 flex flex-col gap-3">
+      <div class="flex items-center gap-2">
         <i class="pi pi-receipt text-green-400"></i>
         <span class="font-semibold text-green-300 text-sm">Comprobante de Pago</span>
       </div>
-      <label class="block text-sm font-medium mb-2 text-green-200">
-        No. Boleta / Transacción <span class="text-red-400">*</span>
-      </label>
-      <input
-        pInputText
-        [(ngModel)]="cambioEstadoForm.NumeroBoleta"
-        placeholder="Ej. TRX-2026-00123 o No. de cheque"
-        class="w-full"
-        maxlength="100"
-      />
-      <p class="text-xs text-green-500 mt-1">
-        Número de referencia bancaria, cheque o transferencia que respalda el pago de la nómina.
-      </p>
+
+      <div>
+        <label class="block text-sm font-medium mb-2 text-green-200">
+          Cuenta Bancaria de Descuento <span class="text-red-400">*</span>
+        </label>
+        <p-select
+          [options]="cuentas()"
+          [(ngModel)]="cambioEstadoForm.IdCuenta"
+          optionLabel="NombreCuenta"
+          optionValue="IdCuenta"
+          placeholder="Seleccionar cuenta"
+          class="w-full"
+          appendTo="body"
+        >
+          <ng-template pTemplate="item" let-c>
+            <div class="flex justify-between items-center gap-3">
+              <span>{{ c.NombreCuenta }}</span>
+              <span class="text-xs font-mono" [ngClass]="c.SaldoActual > 0 ? 'text-green-400' : 'text-red-400'">
+                Q {{ c.SaldoActual | number:'1.2-2' }}
+              </span>
+            </div>
+          </ng-template>
+        </p-select>
+        <p class="text-xs text-green-500 mt-1">El total de la nómina se descontará automáticamente de esta cuenta.</p>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium mb-2 text-green-200">
+          No. Boleta / Transacción <span class="text-red-400">*</span>
+        </label>
+        <input
+          pInputText
+          [(ngModel)]="cambioEstadoForm.NumeroBoleta"
+          placeholder="Ej. TRX-2026-00123 o No. de cheque"
+          class="w-full"
+          maxlength="100"
+        />
+        <p class="text-xs text-green-500 mt-1">
+          Número de referencia bancaria, cheque o transferencia que respalda el pago.
+        </p>
+      </div>
     </div>
 
     <div>
@@ -585,4 +848,220 @@
       </tr>
     </ng-template>
   </p-table>
+</p-dialog>
+
+<!-- ─── Diálogo: Nómina Personalizada ───────────────────────────────────── -->
+<p-dialog
+  [visible]="displayPersonalizada()"
+  (visibleChange)="displayPersonalizada.set($event)"
+  header="Nómina Personalizada"
+  [modal]="true"
+  [style]="{ width: '100%', maxWidth: '760px' }"
+  [breakpoints]="{ '768px': '95vw' }"
+  [draggable]="false" [resizable]="false"
+>
+  <div class="flex flex-col gap-5 pt-2">
+
+    <!-- Período -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+      <div>
+        <label class="block text-xs text-slate-400 uppercase tracking-wide mb-1">Mes *</label>
+        <p-select [options]="meses" [(ngModel)]="formPersonalizada.Mes"
+          optionLabel="label" optionValue="value" class="w-full" appendTo="body"></p-select>
+      </div>
+      <div>
+        <label class="block text-xs text-slate-400 uppercase tracking-wide mb-1">Año *</label>
+        <p-select [options]="anios" [(ngModel)]="formPersonalizada.Anio"
+          optionLabel="label" optionValue="value" class="w-full" appendTo="body"></p-select>
+      </div>
+      <div class="col-span-2">
+        <label class="block text-xs text-slate-400 uppercase tracking-wide mb-1">Cuenta de Pago</label>
+        <p-select [options]="cuentas()" [(ngModel)]="formPersonalizada.IdCuenta"
+          optionLabel="NombreCuenta" optionValue="IdCuenta"
+          placeholder="Opcional" [showClear]="true" class="w-full" appendTo="body">
+          <ng-template pTemplate="item" let-c>
+            <div class="flex justify-between items-center gap-3">
+              <span>{{ c.NombreCuenta }}</span>
+              <span class="text-xs text-green-400 font-mono">Q {{ c.SaldoActual | number:'1.2-2' }}</span>
+            </div>
+          </ng-template>
+        </p-select>
+      </div>
+    </div>
+
+    <p-divider></p-divider>
+
+    <!-- Selección de empleados -->
+    <div>
+      <label class="block text-sm font-semibold text-slate-200 mb-1">
+        <i class="pi pi-users mr-2 text-blue-400"></i>Empleados *
+        @if (formPersonalizada.idEmpleados.length > 0) {
+          <span class="ml-2 text-xs bg-blue-900 text-blue-300 px-2 py-0.5 rounded-full">
+            {{ formPersonalizada.idEmpleados.length }} seleccionados
+          </span>
+        }
+      </label>
+      <p class="text-xs text-slate-500 mb-2">Selecciona los empleados que recibirán esta nómina personalizada.</p>
+      <p-multiselect
+        [options]="empleados()"
+        [(ngModel)]="formPersonalizada.idEmpleados"
+        optionLabel="NombreCompleto"
+        optionValue="IdEmpleado"
+        placeholder="Buscar y seleccionar empleados..."
+        [filter]="true"
+        filterBy="NombreCompleto,DPI"
+        [showClear]="true"
+        [showToggleAll]="true"
+        class="w-full"
+        appendTo="body"
+        display="chip"
+      >
+        <ng-template pTemplate="item" let-emp>
+          <div class="flex items-center gap-2">
+            <div class="w-7 h-7 rounded-full bg-slate-700 flex items-center justify-center text-xs font-bold text-slate-300 flex-shrink-0">
+              {{ emp.Nombres[0] }}{{ emp.Apellidos[0] }}
+            </div>
+            <div>
+              <div class="text-sm text-slate-200">{{ emp.Nombres }} {{ emp.Apellidos }}</div>
+              <div class="text-xs text-slate-500">{{ emp.Puesto?.NombrePuesto || 'Sin puesto' }}</div>
+            </div>
+          </div>
+        </ng-template>
+      </p-multiselect>
+    </div>
+
+    <p-divider></p-divider>
+
+    <!-- Selección de parámetros -->
+    <div>
+      <label class="block text-sm font-semibold text-slate-200 mb-1">
+        <i class="pi pi-sliders-h mr-2 text-violet-400"></i>Parámetros a aplicar *
+        @if (formPersonalizada.idParametros.length > 0) {
+          <span class="ml-2 text-xs bg-violet-900 text-violet-300 px-2 py-0.5 rounded-full">
+            {{ formPersonalizada.idParametros.length }} seleccionados
+          </span>
+        }
+      </label>
+      <p class="text-xs text-slate-500 mb-2">
+        Solo parámetros de tipo INGRESO y DESCUENTO. Si un parámetro tiene filtros configurados, solo se aplicará a los empleados que cumplan esos filtros.
+      </p>
+      <p-multiselect
+        [options]="parametros()"
+        [(ngModel)]="formPersonalizada.idParametros"
+        optionLabel="NombreParametro"
+        optionValue="IdParametro"
+        placeholder="Buscar y seleccionar parámetros..."
+        [filter]="true"
+        filterBy="NombreParametro"
+        [showClear]="true"
+        [showToggleAll]="true"
+        class="w-full"
+        appendTo="body"
+        display="chip"
+      >
+        <ng-template pTemplate="item" let-p>
+          <div class="flex items-center justify-between gap-3 w-full">
+            <div class="flex items-center gap-2">
+              <p-tag
+                [value]="p.Tipo === 'INGRESO' ? '▲' : '▼'"
+                [severity]="p.Tipo === 'INGRESO' ? 'success' : 'danger'"
+                styleClass="text-xs px-1"
+              ></p-tag>
+              <span class="text-sm font-mono text-slate-200">{{ p.NombreParametro }}</span>
+            </div>
+            <span class="text-xs font-mono"
+              [ngClass]="p.Tipo === 'INGRESO' ? 'text-green-400' : 'text-red-400'">
+              {{ p.Valor }}{{ p.Unidad === '%' ? '%' : ' Q' }}
+            </span>
+          </div>
+        </ng-template>
+      </p-multiselect>
+    </div>
+
+    <p-divider></p-divider>
+
+    <!-- Opciones de generación -->
+    <div class="bg-slate-800 border border-slate-700 rounded-lg p-4 flex flex-col gap-3">
+      <p class="text-xs font-semibold text-slate-400 uppercase tracking-wide flex items-center gap-2">
+        <i class="pi pi-cog text-slate-500"></i> Opciones
+      </p>
+
+      <!-- Toggle incluir salario -->
+      <div class="flex items-start gap-3 cursor-pointer" (click)="formPersonalizada.incluirSalarioBase = !formPersonalizada.incluirSalarioBase">
+        <div class="mt-0.5 w-10 h-5 rounded-full transition-colors flex-shrink-0 flex items-center px-0.5"
+          [ngClass]="formPersonalizada.incluirSalarioBase ? 'bg-blue-500' : 'bg-slate-600'">
+          <div class="w-4 h-4 bg-white rounded-full shadow transition-transform"
+            [ngClass]="formPersonalizada.incluirSalarioBase ? 'translate-x-5' : 'translate-x-0'"></div>
+        </div>
+        <div>
+          <div class="text-sm font-medium text-slate-200">
+            {{ formPersonalizada.incluirSalarioBase ? 'Incluir salario base' : 'Solo parámetros seleccionados' }}
+          </div>
+          <p class="text-xs text-slate-500 mt-0.5">
+            @if (formPersonalizada.incluirSalarioBase) {
+              El SueldoBase del empleado se suma al líquido. Los parámetros se aplican encima del salario.
+            } @else {
+              SueldoBase = Q 0. El líquido refleja únicamente los parámetros seleccionados.
+              Los parámetros en % se calculan sobre el salario registrado del empleado.
+            }
+          </p>
+        </div>
+      </div>
+
+      <!-- Nota sobre múltiples nóminas -->
+      <div class="flex items-start gap-2 text-xs text-slate-500 border-t border-slate-700 pt-3">
+        <i class="pi pi-info-circle text-blue-400 mt-0.5"></i>
+        <span>
+          Las nóminas personalizadas <strong class="text-slate-400">no tienen restricción de duplicado</strong> por mes.
+          Puedes generar múltiples en el mismo período para distintos conceptos (bonos, descuentos, etc.).
+        </span>
+      </div>
+    </div>
+
+    <!-- Resumen -->
+    @if (formPersonalizada.idEmpleados.length > 0 && formPersonalizada.idParametros.length > 0) {
+      <div class="bg-slate-800 border border-slate-700 rounded-lg p-4 flex flex-col gap-3">
+        <div class="text-xs font-semibold text-slate-400 uppercase tracking-wide">Resumen de la nómina</div>
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-sm">
+          <div>
+            <div class="text-slate-500 text-xs">Período</div>
+            <div class="text-white font-semibold">{{ getMesLabel(formPersonalizada.Mes) }} {{ formPersonalizada.Anio }}</div>
+          </div>
+          <div>
+            <div class="text-slate-500 text-xs">Empleados</div>
+            <div class="text-blue-400 font-bold">{{ formPersonalizada.idEmpleados.length }}</div>
+          </div>
+          <div>
+            <div class="text-slate-500 text-xs">Parámetros</div>
+            <div class="text-violet-400 font-bold">{{ formPersonalizada.idParametros.length }}</div>
+          </div>
+          <div>
+            <div class="text-slate-500 text-xs">Modo</div>
+            <div class="font-semibold text-xs" [ngClass]="formPersonalizada.incluirSalarioBase ? 'text-blue-400' : 'text-amber-400'">
+              {{ formPersonalizada.incluirSalarioBase ? 'Con salario base' : 'Solo parámetros' }}
+            </div>
+          </div>
+        </div>
+        <!-- Parámetros seleccionados -->
+        <div class="flex flex-wrap gap-2 mt-1">
+          @for (p of getParametrosSelecionados(); track p.IdParametro) {
+            <span class="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full"
+              [ngClass]="p.Tipo === 'INGRESO' ? 'bg-green-900 text-green-300 border border-green-700' : 'bg-red-900 text-red-300 border border-red-700'">
+              {{ p.Tipo === 'INGRESO' ? '▲' : '▼' }} {{ p.NombreParametro }}
+              <span class="font-mono">{{ p.Valor }}{{ p.Unidad === '%' ? '%' : ' Q' }}</span>
+            </span>
+          }
+        </div>
+      </div>
+    }
+  </div>
+
+  <ng-template #footer>
+    <div class="flex justify-end gap-2">
+      <p-button label="Cancelar" severity="secondary" [outlined]="true"
+        (onClick)="displayPersonalizada.set(false)"></p-button>
+      <p-button label="Generar Nómina Personalizada" icon="pi pi-check" severity="success"
+        (onClick)="confirmarNominaPersonalizada()"></p-button>
+    </div>
+  </ng-template>
 </p-dialog>

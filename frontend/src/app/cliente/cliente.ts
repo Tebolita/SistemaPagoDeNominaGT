@@ -10,7 +10,9 @@ import { ToastModule } from 'primeng/toast';
 import { SelectModule } from 'primeng/select';
 import { TagModule } from 'primeng/tag';
 import { FieldsetModule } from 'primeng/fieldset';
-import { MessageService } from 'primeng/api';
+import { MessageService, ConfirmationService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { TooltipModule } from 'primeng/tooltip';
 import { ClienteService } from '../services/cliente.service';
 import { Cliente } from '../models/Cliente.model';
 
@@ -28,9 +30,10 @@ import { Cliente } from '../models/Cliente.model';
     ToastModule,
     SelectModule,
     TagModule,
-    FieldsetModule,
+    TooltipModule,
+    ConfirmDialogModule,
   ],
-  providers: [MessageService],
+  providers: [MessageService, ConfirmationService],
   templateUrl: './cliente.html',
   styleUrl: './cliente.css'
 })
@@ -43,7 +46,7 @@ export class ClienteComponent implements OnInit {
 
   tiposCliente = [
     { label: 'Individual', value: 'INDIVIDUAL' },
-    { label: 'Empresarial', value: 'EMPRESARIAL' },
+    { label: 'Empresa', value: 'EMPRESA' },
   ];
 
   private messageService = inject(MessageService);

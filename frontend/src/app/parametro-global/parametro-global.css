@@ -137,3 +137,49 @@
     max-width: 95vw !important;
   }
 }
+
+/* ── Simulador ──────────────────────────────────────────────────────── */
+.sim-panel {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 0.75rem;
+  padding: 1.25rem 1.5rem;
+}
+
+.sim-stat-card {
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 0.5rem;
+  padding: 0.875rem 1rem;
+}
+
+.sim-stat-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #64748b;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.sim-stat-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.field-group label {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #94a3b8;
+  margin-bottom: 0.35rem;
+}
+
+:host ::ng-deep .p-select,
+:host ::ng-deep .p-select-label {
+  background: #0f172a !important;
+  border-color: #334155 !important;
+  color: #e2e8f0 !important;
+}

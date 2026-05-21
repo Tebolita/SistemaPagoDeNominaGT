@@ -2,3 +2,247 @@
 
 @import "tailwindcss";
 @import 'primeicons/primeicons.css';
+
+/* ═══════════════════════════════════════════════════════════════════
+   SHARED MODULE DASHBOARD — inicio / rrhh / nomina / etc.
+═══════════════════════════════════════════════════════════════════ */
+
+.inicio-wrapper { min-height: 100vh; background: #0f172a; }
+
+/* Hero */
+.hero-section {
+  position: relative; overflow: hidden;
+  background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 55%, #0e7490 100%);
+  padding: 56px 48px 72px; color: #fff;
+}
+.hero-shapes { position: absolute; inset: 0; pointer-events: none; }
+.shape { position: absolute; border-radius: 50%; opacity: 0.07; background: #fff; }
+.s1  { width: 500px; height: 500px; top: -200px; right: -100px; }
+.s2  { width: 300px; height: 300px; bottom: -150px; left: 200px; }
+.s3  { width: 200px; height: 200px; top: 60%; left: 60%; }
+.hero-body { position: relative; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 2rem; max-width: 1200px; }
+.hero-badge { display: inline-flex; align-items: center; gap: 0.4rem; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2); padding: 0.35rem 0.9rem; border-radius: 999px; font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #bfdbfe; margin-bottom: 1rem; }
+.hero-title { font-size: clamp(1.8rem,3vw,2.6rem); font-weight: 800; line-height: 1.15; margin: 0 0 0.75rem; }
+.highlight { color: #38bdf8; }
+.hero-sub { max-width: 520px; color: #cbd5e1; font-size: 0.95rem; line-height: 1.6; margin-bottom: 1.25rem; }
+
+/* Modules section */
+.modules-section { padding: 48px 48px 64px; background: #0f172a; }
+.section-header { margin-bottom: 0; }
+.section-title { font-size: 1.5rem; font-weight: 700; color: #f1f5f9; margin: 0 0 0.25rem; }
+.section-sub   { color: #64748b; font-size: 0.9rem; margin: 0; }
+
+/* Module cards grid */
+.modules-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.25rem; }
+
+/* Module card base */
+.module-card {
+  background: #1e293b; border: 1px solid #334155; border-radius: 1rem; padding: 1.25rem;
+  cursor: pointer; display: flex; flex-direction: column; gap: 0.875rem;
+  position: relative; overflow: hidden;
+  transition: transform 0.18s, box-shadow 0.18s, border-color 0.18s;
+}
+.module-card:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(0,0,0,0.4); }
+.card-glow { position: absolute; inset: 0; opacity: 0; pointer-events: none; transition: opacity 0.3s; border-radius: inherit; }
+.module-card:hover .card-glow { opacity: 1; }
+
+/* Color variants */
+.color-sky:hover    { border-color: #0ea5e9; } .color-sky    .card-glow { background: radial-gradient(ellipse at top left,rgba(14,165,233,.12) 0%,transparent 60%); } .color-sky    .card-icon-wrap { background: rgba(14,165,233,.15); } .color-sky    .card-icon-inner { color: #38bdf8; }
+.color-red:hover    { border-color: #ef4444; } .color-red    .card-glow { background: radial-gradient(ellipse at top left,rgba(239,68,68,.12) 0%,transparent 60%);   } .color-red    .card-icon-wrap { background: rgba(239,68,68,.15);  } .color-red    .card-icon-inner { color: #f87171; }
+.color-blue:hover   { border-color: #3b82f6; } .color-blue   .card-glow { background: radial-gradient(ellipse at top left,rgba(59,130,246,.12) 0%,transparent 60%);  } .color-blue   .card-icon-wrap { background: rgba(59,130,246,.15); } .color-blue   .card-icon-inner { color: #60a5fa; }
+.color-teal:hover   { border-color: #14b8a6; } .color-teal   .card-glow { background: radial-gradient(ellipse at top left,rgba(20,184,166,.12) 0%,transparent 60%);  } .color-teal   .card-icon-wrap { background: rgba(20,184,166,.15); } .color-teal   .card-icon-inner { color: #2dd4bf; }
+.color-violet:hover { border-color: #8b5cf6; } .color-violet .card-glow { background: radial-gradient(ellipse at top left,rgba(139,92,246,.12) 0%,transparent 60%);  } .color-violet .card-icon-wrap { background: rgba(139,92,246,.15); } .color-violet .card-icon-inner { color: #a78bfa; }
+.color-green:hover  { border-color: #22c55e; } .color-green  .card-glow { background: radial-gradient(ellipse at top left,rgba(34,197,94,.12) 0%,transparent 60%);   } .color-green  .card-icon-wrap { background: rgba(34,197,94,.15);  } .color-green  .card-icon-inner { color: #4ade80; }
+.color-orange:hover { border-color: #f97316; } .color-orange .card-glow { background: radial-gradient(ellipse at top left,rgba(249,115,22,.12) 0%,transparent 60%);  } .color-orange .card-icon-wrap { background: rgba(249,115,22,.15); } .color-orange .card-icon-inner { color: #fb923c; }
+.color-yellow:hover { border-color: #eab308; } .color-yellow .card-glow { background: radial-gradient(ellipse at top left,rgba(234,179,8,.12) 0%,transparent 60%);   } .color-yellow .card-icon-wrap { background: rgba(234,179,8,.15);  } .color-yellow .card-icon-inner { color: #facc15; }
+.color-slate:hover  { border-color: #94a3b8; } .color-slate  .card-glow { background: radial-gradient(ellipse at top left,rgba(148,163,184,.1) 0%,transparent 60%);   } .color-slate  .card-icon-wrap { background: rgba(148,163,184,.1);  } .color-slate  .card-icon-inner { color: #94a3b8; }
+
+/* Card parts */
+.card-top   { display: flex; justify-content: space-between; align-items: flex-start; }
+.card-icon-wrap { width: 44px; height: 44px; border-radius: 0.65rem; display: flex; align-items: center; justify-content: center; }
+.card-icon-inner { font-size: 1.2rem; }
+.card-available  { display: inline-flex; align-items: center; gap: 0.3rem; background: rgba(34,197,94,.12); color: #4ade80; border: 1px solid rgba(34,197,94,.25); padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.68rem; font-weight: 600; }
+.card-coming     { display: inline-flex; align-items: center; gap: 0.3rem; background: rgba(148,163,184,.1);  color: #94a3b8; border: 1px solid rgba(148,163,184,.2);   padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.68rem; font-weight: 600; }
+.card-body  { flex: 1; }
+.card-title { font-size: 1rem; font-weight: 700; color: #f1f5f9; margin: 0 0 0.35rem; }
+.card-desc  { font-size: 0.8rem; color: #64748b; line-height: 1.5; margin: 0 0 0.75rem; }
+.card-features { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.3rem; }
+.card-features li { font-size: 0.76rem; color: #94a3b8; display: flex; align-items: center; gap: 0.4rem; }
+.card-features li .pi-check { color: #22c55e; font-size: 0.65rem; }
+.card-footer { margin-top: auto; }
+.card-btn { width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); color: #e2e8f0; padding: 0.6rem; border-radius: 0.5rem; font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: background 0.15s; }
+.card-btn:hover { background: rgba(255,255,255,.1); }
+.card-btn.card-btn-coming { opacity: 0.45; cursor: not-allowed; }
+
+@media (max-width: 768px) {
+  .hero-section  { padding: 40px 24px 56px; }
+  .modules-section { padding: 32px 20px 48px; }
+  .modules-grid  { grid-template-columns: 1fr; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   DARK THEME GLOBAL — Dialogs, Overlays, ConfirmDialog
+   PrimeNG portals render outside :host, so these MUST be global.
+═══════════════════════════════════════════════════════════════════ */
+
+/* ── Dialog ──────────────────────────────────────────────────────── */
+.p-dialog {
+  background: #1e293b !important;
+  border: 1px solid #334155 !important;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6) !important;
+}
+
+.p-dialog .p-dialog-header {
+  background: #0f172a !important;
+  color: #f1f5f9 !important;
+  border-bottom: 1px solid #334155 !important;
+  padding: 1rem 1.25rem !important;
+}
+
+.p-dialog .p-dialog-header .p-dialog-title {
+  color: #f1f5f9 !important;
+  font-weight: 600 !important;
+}
+
+.p-dialog .p-dialog-header .p-dialog-header-icon {
+  color: #94a3b8 !important;
+}
+
+.p-dialog .p-dialog-header .p-dialog-header-icon:hover {
+  color: #f1f5f9 !important;
+  background: #334155 !important;
+}
+
+.p-dialog .p-dialog-content {
+  background: #1e293b !important;
+  color: #e2e8f0 !important;
+  padding: 1.25rem !important;
+}
+
+.p-dialog .p-dialog-footer {
+  background: #0f172a !important;
+  border-top: 1px solid #334155 !important;
+  padding: 0.75rem 1.25rem !important;
+}
+
+.p-dialog label {
+  color: #94a3b8 !important;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* ── ConfirmDialog ───────────────────────────────────────────────── */
+.p-confirmdialog .p-dialog-content {
+  background: #1e293b !important;
+  color: #e2e8f0 !important;
+}
+
+.p-confirmdialog .p-confirm-dialog-message {
+  color: #e2e8f0 !important;
+}
+
+/* ── Inputs dentro de dialogs ────────────────────────────────────── */
+.p-dialog .p-inputtext,
+.p-dialog textarea.p-inputtextarea,
+.p-dialog input[pInputText] {
+  background: #0f172a !important;
+  border-color: #334155 !important;
+  color: #e2e8f0 !important;
+}
+
+.p-dialog .p-inputtext:focus {
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2) !important;
+}
+
+.p-dialog .p-inputtext::placeholder {
+  color: #475569 !important;
+}
+
+.p-dialog .p-password input,
+.p-dialog .p-inputnumber input {
+  background: #0f172a !important;
+  border-color: #334155 !important;
+  color: #e2e8f0 !important;
+}
+
+/* ── Select dentro de dialogs ────────────────────────────────────── */
+.p-dialog .p-select,
+.p-dialog .p-select .p-select-label {
+  background: #0f172a !important;
+  border-color: #334155 !important;
+  color: #e2e8f0 !important;
+}
+
+/* ── DatePicker dentro de dialogs ────────────────────────────────── */
+.p-dialog .p-datepicker-input {
+  background: #0f172a !important;
+  border-color: #334155 !important;
+  color: #e2e8f0 !important;
+}
+
+/* ── Checkbox dentro de dialogs ──────────────────────────────────── */
+.p-dialog .p-checkbox .p-checkbox-box {
+  background: #0f172a !important;
+  border-color: #475569 !important;
+}
+
+.p-dialog .p-checkbox.p-highlight .p-checkbox-box {
+  background: #3b82f6 !important;
+  border-color: #3b82f6 !important;
+}
+
+/* ── Select overlay (fuera del dialog también) ───────────────────── */
+.p-select-overlay {
+  background: #1e293b !important;
+  border-color: #334155 !important;
+}
+
+.p-select-list .p-select-option {
+  color: #e2e8f0 !important;
+}
+
+.p-select-list .p-select-option:hover,
+.p-select-list .p-select-option.p-select-option-selected {
+  background: #253347 !important;
+}
+
+/* ── DatePicker overlay ──────────────────────────────────────────── */
+.p-datepicker {
+  background: #1e293b !important;
+  border-color: #334155 !important;
+  color: #e2e8f0 !important;
+}
+
+.p-datepicker .p-datepicker-header {
+  background: #0f172a !important;
+  color: #e2e8f0 !important;
+  border-bottom-color: #334155 !important;
+}
+
+.p-datepicker table td > span {
+  color: #e2e8f0 !important;
+}
+
+.p-datepicker table td > span:hover {
+  background: #253347 !important;
+}
+
+.p-datepicker table td > span.p-highlight {
+  background: #3b82f6 !important;
+  color: #fff !important;
+}
+
+.p-datepicker .p-datepicker-other-month span {
+  color: #475569 !important;
+}
+
+/* ── Password overlay ────────────────────────────────────────────── */
+.p-password-panel {
+  background: #1e293b !important;
+  border-color: #334155 !important;
+  color: #e2e8f0 !important;
+}
+

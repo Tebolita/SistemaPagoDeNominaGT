@@ -114,113 +114,153 @@
   <!-- ══════════════════════════════════════════════════════════════ -->
   @if (selectedReporte() === 'resumen') {
 
-    <!-- KPI Cards -->
-    <div class="grid grid-cols-2 lg:grid-cols-5 gap-3">
+    <!-- ── KPIs fila 1: RRHH + Nómina ───────────────────────────────── -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3">
+      <div class="stat-card flex flex-col gap-1">
+        <div class="stat-icon bg-blue-900 mb-1"><i class="pi pi-users text-blue-400"></i></div>
+        <div class="text-2xl font-bold text-white">{{ resumen()?.totalEmpleados ?? 0 }}</div>
+        <div class="text-xs text-slate-400">Empleados</div>
+      </div>
+      <div class="stat-card flex flex-col gap-1">
+        <div class="stat-icon bg-green-900 mb-1"><i class="pi pi-dollar text-green-400"></i></div>
+        <div class="text-2xl font-bold text-white">{{ resumen()?.empleadosConSalario ?? 0 }}</div>
+        <div class="text-xs text-slate-400">Con Salario</div>
+      </div>
+      <div class="stat-card flex flex-col gap-1">
+        <div class="stat-icon bg-orange-900 mb-1"><i class="pi pi-building text-orange-400"></i></div>
+        <div class="text-2xl font-bold text-white">{{ resumen()?.totalDepartamentos ?? 0 }}</div>
+        <div class="text-xs text-slate-400">Departamentos</div>
+      </div>
+      <div class="stat-card flex flex-col gap-1">
+        <div class="stat-icon bg-teal-900 mb-1"><i class="pi pi-sun text-teal-400"></i></div>
+        <div class="text-2xl font-bold text-white">{{ resumen()?.totalVacaciones ?? 0 }}</div>
+        <div class="text-xs text-slate-400">Vacaciones</div>
+      </div>
+      <div class="stat-card flex flex-col gap-1">
+        <div class="stat-icon bg-sky-900 mb-1"><i class="pi pi-clock text-sky-400"></i></div>
+        <div class="text-2xl font-bold text-white">{{ resumen()?.asistenciasMes ?? 0 }}</div>
+        <div class="text-xs text-slate-400">Asist. mes</div>
+      </div>
+      <div class="stat-card flex flex-col gap-1">
+        <div class="stat-icon bg-emerald-900 mb-1"><i class="pi pi-money-bill text-emerald-400"></i></div>
+        <div class="text-xl font-bold text-white">Q {{ resumen()?.salarioPromedio | number:'1.0-0' }}</div>
+        <div class="text-xs text-slate-400">Salario promedio</div>
+      </div>
+    </div>
+
+    <!-- ── KPIs fila 2: Ventas y Catálogo ─────────────────────────── -->
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-3">
       <div class="stat-card flex items-center gap-3">
-        <div class="stat-icon bg-blue-900"><i class="pi pi-users text-blue-400"></i></div>
+        <div class="stat-icon bg-pink-900"><i class="pi pi-users text-pink-400"></i></div>
         <div>
-          <div class="text-2xl font-bold text-white">{{ resumen()?.totalEmpleados ?? 0 }}</div>
-          <div class="text-xs text-slate-400 mt-0.5">Empleados</div>
+          <div class="text-2xl font-bold text-white">{{ resumen()?.totalClientes ?? 0 }}</div>
+          <div class="text-xs text-slate-400">Clientes</div>
         </div>
       </div>
       <div class="stat-card flex items-center gap-3">
-        <div class="stat-icon bg-green-900"><i class="pi pi-dollar text-green-400"></i></div>
+        <div class="stat-icon bg-indigo-900"><i class="pi pi-box text-indigo-400"></i></div>
         <div>
-          <div class="text-2xl font-bold text-white">{{ resumen()?.empleadosConSalario ?? 0 }}</div>
-          <div class="text-xs text-slate-400 mt-0.5">Con Salario</div>
+          <div class="text-2xl font-bold text-white">{{ resumen()?.totalProductos ?? 0 }}</div>
+          <div class="text-xs text-slate-400">Productos</div>
         </div>
       </div>
       <div class="stat-card flex items-center gap-3">
-        <div class="stat-icon bg-orange-900"><i class="pi pi-building text-orange-400"></i></div>
+        <div class="stat-icon bg-violet-900"><i class="pi pi-wrench text-violet-400"></i></div>
         <div>
-          <div class="text-2xl font-bold text-white">{{ resumen()?.totalDepartamentos ?? 0 }}</div>
-          <div class="text-xs text-slate-400 mt-0.5">Departamentos</div>
-        </div>
-      </div>
-      <div class="stat-card flex items-center gap-3">
-        <div class="stat-icon bg-purple-900"><i class="pi pi-briefcase text-purple-400"></i></div>
-        <div>
-          <div class="text-2xl font-bold text-white">{{ resumen()?.totalPuestos ?? 0 }}</div>
-          <div class="text-xs text-slate-400 mt-0.5">Puestos</div>
-        </div>
-      </div>
-      <div class="stat-card flex items-center gap-3">
-        <div class="stat-icon bg-teal-900"><i class="pi pi-sun text-teal-400"></i></div>
-        <div>
-          <div class="text-2xl font-bold text-white">{{ resumen()?.totalVacaciones ?? 0 }}</div>
-          <div class="text-xs text-slate-400 mt-0.5">Vacaciones</div>
+          <div class="text-2xl font-bold text-white">{{ resumen()?.totalServicios ?? 0 }}</div>
+          <div class="text-xs text-slate-400">Servicios</div>
         </div>
       </div>
     </div>
 
-    <!-- Gráficas fila 1: Empleados por depto + Distribución salarial -->
-    @if (chartEmpleados && chartSalarios) {
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-
-        <div class="content-card p-4">
-          <div class="flex items-center gap-2 mb-3">
-            <i class="pi pi-chart-bar text-blue-400"></i>
-            <span class="text-sm font-semibold text-slate-200">Empleados por Departamento</span>
-          </div>
-          <div style="height: 220px;">
-            <p-chart type="bar" [data]="chartEmpleados" [options]="chartOptions" height="220"></p-chart>
-          </div>
-        </div>
-
-        <div class="content-card p-4">
-          <div class="flex items-center gap-2 mb-3">
-            <i class="pi pi-chart-pie text-green-400"></i>
-            <span class="text-sm font-semibold text-slate-200">Distribución Salarial por Departamento</span>
-          </div>
-          <div style="height: 220px;">
-            <p-chart type="doughnut" [data]="chartSalarios" [options]="chartOptionsDoughnut" height="220"></p-chart>
-          </div>
-        </div>
-
-      </div>
-    }
-
-    <!-- Gráfica fila 2: Tendencia de nómina -->
-    @if (chartTendencia && chartTendencia.labels?.length > 0) {
-      <div class="content-card p-4">
-        <div class="flex items-center gap-2 mb-3">
-          <i class="pi pi-chart-line text-sky-400"></i>
-          <span class="text-sm font-semibold text-slate-200">Tendencia de Nómina — Últimos Períodos</span>
-        </div>
-        <div style="height: 200px;">
-          <p-chart type="line" [data]="chartTendencia" [options]="chartOptions" height="200"></p-chart>
-        </div>
-      </div>
-    }
-
-    <!-- Última nómina -->
+    <!-- ── Última nómina (banner) ────────────────────────────────── -->
     @if (resumen()?.ultimaNomina) {
       <div class="last-nomina-card">
-        <div class="flex items-center gap-2 mb-3">
-          <i class="pi pi-calculator text-sky-400"></i>
-          <span class="font-semibold text-slate-200 text-sm">Última Nómina Generada</span>
-        </div>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div>
-            <div class="text-xs text-slate-500 mb-1">Período</div>
-            <div class="font-semibold text-white">
-              {{ resumen()?.ultimaNomina?.Mes }}/{{ resumen()?.ultimaNomina?.Anio }}
-            </div>
-          </div>
-          <div>
-            <div class="text-xs text-slate-500 mb-1">Empleados</div>
-            <div class="font-semibold text-white">{{ resumen()?.ultimaNomina?.TotalEmpleados }}</div>
-          </div>
-          <div>
-            <div class="text-xs text-slate-500 mb-1">Total Líquido</div>
-            <div class="font-semibold text-green-400">
-              Q {{ resumen()?.ultimaNomina?.TotalLiquido | number:'1.2-2' }}
-            </div>
-          </div>
-          <div>
-            <div class="text-xs text-slate-500 mb-1">Estado</div>
+        <div class="flex flex-wrap justify-between items-start gap-4">
+          <div class="flex items-center gap-2">
+            <i class="pi pi-calculator text-sky-400"></i>
+            <span class="font-semibold text-slate-200 text-sm">Última Nómina</span>
             <p-tag [value]="resumen()?.ultimaNomina?.Estado ?? '—'" severity="info"></p-tag>
           </div>
+          <div class="flex flex-wrap gap-6 text-sm">
+            <div>
+              <div class="text-xs text-slate-500">Período</div>
+              <div class="font-semibold text-white">{{ resumen()?.ultimaNomina?.Mes }}/{{ resumen()?.ultimaNomina?.Anio }}</div>
+            </div>
+            <div>
+              <div class="text-xs text-slate-500">Empleados</div>
+              <div class="font-semibold text-white">{{ resumen()?.ultimaNomina?.TotalEmpleados }}</div>
+            </div>
+            <div>
+              <div class="text-xs text-slate-500">Líquido</div>
+              <div class="font-semibold text-green-400">Q {{ resumen()?.ultimaNomina?.TotalLiquido | number:'1.2-2' }}</div>
+            </div>
+            <div>
+              <div class="text-xs text-slate-500">Descuentos</div>
+              <div class="font-semibold text-red-400">Q {{ resumen()?.ultimaNomina?.TotalDescuentos | number:'1.2-2' }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- ── Fila 1: Empleados + Masa salarial + Distribución rangos ── -->
+    @if (chartEmpleados) {
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+
+        <div class="content-card p-4">
+          <div class="chart-title"><i class="pi pi-chart-bar text-blue-400"></i> Empleados por Departamento</div>
+          <div style="height: 230px;">
+            <p-chart type="bar" [data]="chartEmpleados" [options]="chartOptionsNoLeg"></p-chart>
+          </div>
+        </div>
+
+        <div class="content-card p-4">
+          <div class="chart-title"><i class="pi pi-chart-pie text-green-400"></i> Masa Salarial por Departamento</div>
+          <div style="height: 270px;">
+            <p-chart type="doughnut" [data]="chartSalarios" [options]="chartOptionsDoughnut"></p-chart>
+          </div>
+        </div>
+
+        <div class="content-card p-4">
+          <div class="chart-title"><i class="pi pi-chart-bar text-purple-400"></i> Distribución de Salarios</div>
+          <div style="height: 230px;">
+            <p-chart type="bar" [data]="chartDistribucion" [options]="chartOptionsNoLeg"></p-chart>
+          </div>
+        </div>
+
+      </div>
+    }
+
+    <!-- ── Fila 2: Tendencia nómina (línea) + Estados nómina + Apilado ── -->
+    @if (chartTendencia && chartTendencia.labels?.length > 0) {
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+
+        <div class="content-card p-4 lg:col-span-2">
+          <div class="chart-title"><i class="pi pi-chart-line text-sky-400"></i> Tendencia de Nómina — Sueldos / Líquido / Descuentos</div>
+          <div style="height: 270px;">
+            <p-chart type="line" [data]="chartTendencia" [options]="chartOptions"></p-chart>
+          </div>
+        </div>
+
+        <div class="content-card p-4">
+          <div class="chart-title"><i class="pi pi-chart-pie text-yellow-400"></i> Nóminas por Estado</div>
+          <div style="height: 270px;">
+            <p-chart type="doughnut" [data]="chartEstados" [options]="chartOptionsDoughnut"></p-chart>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ── Fila 3: Barras apiladas líquido vs descuentos ── -->
+      <div class="content-card p-4">
+        <div class="chart-title">
+          <i class="pi pi-chart-bar text-emerald-400"></i>
+          Composición de Nómina por Período
+          <span class="text-slate-500 font-normal text-xs ml-2">— barra total = sueldo bruto · verde = líquido · rojo = descuentos</span>
+        </div>
+        <div style="height: 220px;">
+          <p-chart type="bar" [data]="chartDescuentos" [options]="chartOptionsStacked"></p-chart>
         </div>
       </div>
     }

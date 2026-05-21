@@ -233,6 +233,7 @@ export type JornadaLaboralWhereInput = {
   Activo?: Prisma.BoolNullableFilter<"JornadaLaboral"> | boolean | null
   FechaEliminacion?: Prisma.DateTimeNullableFilter<"JornadaLaboral"> | Date | string | null
   Empleado?: Prisma.EmpleadoListRelationFilter
+  ParametroGlobal?: Prisma.ParametroGlobalListRelationFilter
 }
 
 export type JornadaLaboralOrderByWithRelationInput = {
@@ -243,6 +244,7 @@ export type JornadaLaboralOrderByWithRelationInput = {
   Activo?: Prisma.SortOrderInput | Prisma.SortOrder
   FechaEliminacion?: Prisma.SortOrderInput | Prisma.SortOrder
   Empleado?: Prisma.EmpleadoOrderByRelationAggregateInput
+  ParametroGlobal?: Prisma.ParametroGlobalOrderByRelationAggregateInput
 }
 
 export type JornadaLaboralWhereUniqueInput = Prisma.AtLeast<{
@@ -256,6 +258,7 @@ export type JornadaLaboralWhereUniqueInput = Prisma.AtLeast<{
   Activo?: Prisma.BoolNullableFilter<"JornadaLaboral"> | boolean | null
   FechaEliminacion?: Prisma.DateTimeNullableFilter<"JornadaLaboral"> | Date | string | null
   Empleado?: Prisma.EmpleadoListRelationFilter
+  ParametroGlobal?: Prisma.ParametroGlobalListRelationFilter
 }, "IdJornada">
 
 export type JornadaLaboralOrderByWithAggregationInput = {
@@ -291,6 +294,7 @@ export type JornadaLaboralCreateInput = {
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
   Empleado?: Prisma.EmpleadoCreateNestedManyWithoutJornadaLaboralInput
+  ParametroGlobal?: Prisma.ParametroGlobalCreateNestedManyWithoutJornadaLaboralInput
 }
 
 export type JornadaLaboralUncheckedCreateInput = {
@@ -301,6 +305,7 @@ export type JornadaLaboralUncheckedCreateInput = {
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
   Empleado?: Prisma.EmpleadoUncheckedCreateNestedManyWithoutJornadaLaboralInput
+  ParametroGlobal?: Prisma.ParametroGlobalUncheckedCreateNestedManyWithoutJornadaLaboralInput
 }
 
 export type JornadaLaboralUpdateInput = {
@@ -310,6 +315,7 @@ export type JornadaLaboralUpdateInput = {
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Empleado?: Prisma.EmpleadoUpdateManyWithoutJornadaLaboralNestedInput
+  ParametroGlobal?: Prisma.ParametroGlobalUpdateManyWithoutJornadaLaboralNestedInput
 }
 
 export type JornadaLaboralUncheckedUpdateInput = {
@@ -320,6 +326,7 @@ export type JornadaLaboralUncheckedUpdateInput = {
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   Empleado?: Prisma.EmpleadoUncheckedUpdateManyWithoutJornadaLaboralNestedInput
+  ParametroGlobal?: Prisma.ParametroGlobalUncheckedUpdateManyWithoutJornadaLaboralNestedInput
 }
 
 export type JornadaLaboralCreateManyInput = {
@@ -391,6 +398,11 @@ export type JornadaLaboralSumOrderByAggregateInput = {
   HorasSemanales?: Prisma.SortOrder
 }
 
+export type JornadaLaboralNullableScalarRelationFilter = {
+  is?: Prisma.JornadaLaboralWhereInput | null
+  isNot?: Prisma.JornadaLaboralWhereInput | null
+}
+
 export type JornadaLaboralCreateNestedOneWithoutEmpleadoInput = {
   create?: Prisma.XOR<Prisma.JornadaLaboralCreateWithoutEmpleadoInput, Prisma.JornadaLaboralUncheckedCreateWithoutEmpleadoInput>
   connectOrCreate?: Prisma.JornadaLaboralCreateOrConnectWithoutEmpleadoInput
@@ -405,12 +417,29 @@ export type JornadaLaboralUpdateOneRequiredWithoutEmpleadoNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.JornadaLaboralUpdateToOneWithWhereWithoutEmpleadoInput, Prisma.JornadaLaboralUpdateWithoutEmpleadoInput>, Prisma.JornadaLaboralUncheckedUpdateWithoutEmpleadoInput>
 }
 
+export type JornadaLaboralCreateNestedOneWithoutParametroGlobalInput = {
+  create?: Prisma.XOR<Prisma.JornadaLaboralCreateWithoutParametroGlobalInput, Prisma.JornadaLaboralUncheckedCreateWithoutParametroGlobalInput>
+  connectOrCreate?: Prisma.JornadaLaboralCreateOrConnectWithoutParametroGlobalInput
+  connect?: Prisma.JornadaLaboralWhereUniqueInput
+}
+
+export type JornadaLaboralUpdateOneWithoutParametroGlobalNestedInput = {
+  create?: Prisma.XOR<Prisma.JornadaLaboralCreateWithoutParametroGlobalInput, Prisma.JornadaLaboralUncheckedCreateWithoutParametroGlobalInput>
+  connectOrCreate?: Prisma.JornadaLaboralCreateOrConnectWithoutParametroGlobalInput
+  upsert?: Prisma.JornadaLaboralUpsertWithoutParametroGlobalInput
+  disconnect?: Prisma.JornadaLaboralWhereInput | boolean
+  delete?: Prisma.JornadaLaboralWhereInput | boolean
+  connect?: Prisma.JornadaLaboralWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.JornadaLaboralUpdateToOneWithWhereWithoutParametroGlobalInput, Prisma.JornadaLaboralUpdateWithoutParametroGlobalInput>, Prisma.JornadaLaboralUncheckedUpdateWithoutParametroGlobalInput>
+}
+
 export type JornadaLaboralCreateWithoutEmpleadoInput = {
   NombreJornada: string
   HorasDiarias: runtime.Decimal | runtime.DecimalJsLike | number | string
   HorasSemanales: runtime.Decimal | runtime.DecimalJsLike | number | string
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  ParametroGlobal?: Prisma.ParametroGlobalCreateNestedManyWithoutJornadaLaboralInput
 }
 
 export type JornadaLaboralUncheckedCreateWithoutEmpleadoInput = {
@@ -420,6 +449,7 @@ export type JornadaLaboralUncheckedCreateWithoutEmpleadoInput = {
   HorasSemanales: runtime.Decimal | runtime.DecimalJsLike | number | string
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  ParametroGlobal?: Prisma.ParametroGlobalUncheckedCreateNestedManyWithoutJornadaLaboralInput
 }
 
 export type JornadaLaboralCreateOrConnectWithoutEmpleadoInput = {
@@ -444,6 +474,7 @@ export type JornadaLaboralUpdateWithoutEmpleadoInput = {
   HorasSemanales?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ParametroGlobal?: Prisma.ParametroGlobalUpdateManyWithoutJornadaLaboralNestedInput
 }
 
 export type JornadaLaboralUncheckedUpdateWithoutEmpleadoInput = {
@@ -453,6 +484,61 @@ export type JornadaLaboralUncheckedUpdateWithoutEmpleadoInput = {
   HorasSemanales?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ParametroGlobal?: Prisma.ParametroGlobalUncheckedUpdateManyWithoutJornadaLaboralNestedInput
+}
+
+export type JornadaLaboralCreateWithoutParametroGlobalInput = {
+  NombreJornada: string
+  HorasDiarias: runtime.Decimal | runtime.DecimalJsLike | number | string
+  HorasSemanales: runtime.Decimal | runtime.DecimalJsLike | number | string
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
+  Empleado?: Prisma.EmpleadoCreateNestedManyWithoutJornadaLaboralInput
+}
+
+export type JornadaLaboralUncheckedCreateWithoutParametroGlobalInput = {
+  IdJornada?: number
+  NombreJornada: string
+  HorasDiarias: runtime.Decimal | runtime.DecimalJsLike | number | string
+  HorasSemanales: runtime.Decimal | runtime.DecimalJsLike | number | string
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
+  Empleado?: Prisma.EmpleadoUncheckedCreateNestedManyWithoutJornadaLaboralInput
+}
+
+export type JornadaLaboralCreateOrConnectWithoutParametroGlobalInput = {
+  where: Prisma.JornadaLaboralWhereUniqueInput
+  create: Prisma.XOR<Prisma.JornadaLaboralCreateWithoutParametroGlobalInput, Prisma.JornadaLaboralUncheckedCreateWithoutParametroGlobalInput>
+}
+
+export type JornadaLaboralUpsertWithoutParametroGlobalInput = {
+  update: Prisma.XOR<Prisma.JornadaLaboralUpdateWithoutParametroGlobalInput, Prisma.JornadaLaboralUncheckedUpdateWithoutParametroGlobalInput>
+  create: Prisma.XOR<Prisma.JornadaLaboralCreateWithoutParametroGlobalInput, Prisma.JornadaLaboralUncheckedCreateWithoutParametroGlobalInput>
+  where?: Prisma.JornadaLaboralWhereInput
+}
+
+export type JornadaLaboralUpdateToOneWithWhereWithoutParametroGlobalInput = {
+  where?: Prisma.JornadaLaboralWhereInput
+  data: Prisma.XOR<Prisma.JornadaLaboralUpdateWithoutParametroGlobalInput, Prisma.JornadaLaboralUncheckedUpdateWithoutParametroGlobalInput>
+}
+
+export type JornadaLaboralUpdateWithoutParametroGlobalInput = {
+  NombreJornada?: Prisma.StringFieldUpdateOperationsInput | string
+  HorasDiarias?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  HorasSemanales?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Empleado?: Prisma.EmpleadoUpdateManyWithoutJornadaLaboralNestedInput
+}
+
+export type JornadaLaboralUncheckedUpdateWithoutParametroGlobalInput = {
+  IdJornada?: Prisma.IntFieldUpdateOperationsInput | number
+  NombreJornada?: Prisma.StringFieldUpdateOperationsInput | string
+  HorasDiarias?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  HorasSemanales?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Empleado?: Prisma.EmpleadoUncheckedUpdateManyWithoutJornadaLaboralNestedInput
 }
 
 
@@ -462,10 +548,12 @@ export type JornadaLaboralUncheckedUpdateWithoutEmpleadoInput = {
 
 export type JornadaLaboralCountOutputType = {
   Empleado: number
+  ParametroGlobal: number
 }
 
 export type JornadaLaboralCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   Empleado?: boolean | JornadaLaboralCountOutputTypeCountEmpleadoArgs
+  ParametroGlobal?: boolean | JornadaLaboralCountOutputTypeCountParametroGlobalArgs
 }
 
 /**
@@ -485,6 +573,13 @@ export type JornadaLaboralCountOutputTypeCountEmpleadoArgs<ExtArgs extends runti
   where?: Prisma.EmpleadoWhereInput
 }
 
+/**
+ * JornadaLaboralCountOutputType without action
+ */
+export type JornadaLaboralCountOutputTypeCountParametroGlobalArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ParametroGlobalWhereInput
+}
+
 
 export type JornadaLaboralSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   IdJornada?: boolean
@@ -494,6 +589,7 @@ export type JornadaLaboralSelect<ExtArgs extends runtime.Types.Extensions.Intern
   Activo?: boolean
   FechaEliminacion?: boolean
   Empleado?: boolean | Prisma.JornadaLaboral$EmpleadoArgs<ExtArgs>
+  ParametroGlobal?: boolean | Prisma.JornadaLaboral$ParametroGlobalArgs<ExtArgs>
   _count?: boolean | Prisma.JornadaLaboralCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["jornadaLaboral"]>
 
@@ -511,6 +607,7 @@ export type JornadaLaboralSelectScalar = {
 export type JornadaLaboralOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"IdJornada" | "NombreJornada" | "HorasDiarias" | "HorasSemanales" | "Activo" | "FechaEliminacion", ExtArgs["result"]["jornadaLaboral"]>
 export type JornadaLaboralInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   Empleado?: boolean | Prisma.JornadaLaboral$EmpleadoArgs<ExtArgs>
+  ParametroGlobal?: boolean | Prisma.JornadaLaboral$ParametroGlobalArgs<ExtArgs>
   _count?: boolean | Prisma.JornadaLaboralCountOutputTypeDefaultArgs<ExtArgs>
 }
 
@@ -518,6 +615,7 @@ export type $JornadaLaboralPayload<ExtArgs extends runtime.Types.Extensions.Inte
   name: "JornadaLaboral"
   objects: {
     Empleado: Prisma.$EmpleadoPayload<ExtArgs>[]
+    ParametroGlobal: Prisma.$ParametroGlobalPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     IdJornada: number
@@ -867,6 +965,7 @@ readonly fields: JornadaLaboralFieldRefs;
 export interface Prisma__JornadaLaboralClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   Empleado<T extends Prisma.JornadaLaboral$EmpleadoArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.JornadaLaboral$EmpleadoArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EmpleadoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  ParametroGlobal<T extends Prisma.JornadaLaboral$ParametroGlobalArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.JornadaLaboral$ParametroGlobalArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ParametroGlobalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1270,6 +1369,30 @@ export type JornadaLaboral$EmpleadoArgs<ExtArgs extends runtime.Types.Extensions
   take?: number
   skip?: number
   distinct?: Prisma.EmpleadoScalarFieldEnum | Prisma.EmpleadoScalarFieldEnum[]
+}
+
+/**
+ * JornadaLaboral.ParametroGlobal
+ */
+export type JornadaLaboral$ParametroGlobalArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ParametroGlobal
+   */
+  select?: Prisma.ParametroGlobalSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ParametroGlobal
+   */
+  omit?: Prisma.ParametroGlobalOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ParametroGlobalInclude<ExtArgs> | null
+  where?: Prisma.ParametroGlobalWhereInput
+  orderBy?: Prisma.ParametroGlobalOrderByWithRelationInput | Prisma.ParametroGlobalOrderByWithRelationInput[]
+  cursor?: Prisma.ParametroGlobalWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ParametroGlobalScalarFieldEnum | Prisma.ParametroGlobalScalarFieldEnum[]
 }
 
 /**

@@ -1,99 +1,32 @@
-.venta-page {
-  padding: 1rem;
-}
-
-.venta-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
-}
-
-.venta-filters {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1rem;
-  margin-bottom: 1rem;
-}
-
-.venta-filter-button {
-  display: flex;
-  align-items: flex-end;
-}
-
-.venta-dialog {
-  display: grid;
-  gap: 1rem;
-}
-
-.venta-dialog-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1rem;
-}
-
-.venta-detail-header {
-  margin-top: 1rem;
-}
-
-.venta-detail-form {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 1rem;
-  align-items: end;
-  margin-bottom: 1rem;
-}
-
-.detail-form-grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 1rem;
-  grid-column: span 4;
-}
-
-.detalle-table {
-  margin-bottom: 1rem;
-}
-
-.venta-summary-card {
-  margin-bottom: 1rem;
-}
-
-.summary-row {
-  display: flex;
-  justify-content: space-between;
-  padding: 0.5rem 0;
-}
-
-.summary-row.total {
-  border-top: 1px solid var(--surface-d);
-  font-weight: bold;
-}
-
-.required {
-  color: #e74c3c;
-  font-weight: bold;
-}
-
-.p-field label {
+:host {
   display: block;
-  margin-bottom: 0.5rem;
+  min-height: 100%;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 60%, #0f172a 100%);
+}
+
+/* ── Tabla ─────────────────────────────────────────────────────────────── */
+:host ::ng-deep .p-datatable { background: #1e293b; border-radius: 0.5rem; overflow: hidden; border: 1px solid #334155; }
+:host ::ng-deep .p-datatable .p-datatable-thead > tr > th { background: #0f172a !important; color: #94a3b8 !important; border-color: #334155 !important; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; }
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr { background: #1e293b !important; color: #e2e8f0 !important; border-color: #334155 !important; transition: background 0.12s; }
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr:hover { background: #253347 !important; }
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr > td { border-color: #334155 !important; color: #e2e8f0 !important; }
+:host ::ng-deep .p-datatable .p-datatable-emptymessage > td { background: #1e293b !important; color: #64748b !important; }
+
+/* ── Inputs y selects ───────────────────────────────────────────────────── */
+:host ::ng-deep .p-inputtext { background: #0f172a !important; border-color: #334155 !important; color: #e2e8f0 !important; }
+:host ::ng-deep .p-inputtext:focus { border-color: #3b82f6 !important; }
+:host ::ng-deep .p-inputtext::placeholder { color: #475569 !important; }
+:host ::ng-deep textarea.p-inputtextarea { background: #0f172a !important; border-color: #334155 !important; color: #e2e8f0 !important; }
+:host ::ng-deep .p-select, :host ::ng-deep .p-select-label { background: #0f172a !important; border-color: #334155 !important; color: #e2e8f0 !important; }
+:host ::ng-deep .p-inputnumber-input { background: #0f172a !important; border-color: #334155 !important; color: #e2e8f0 !important; }
+
+/* ── Field groups ───────────────────────────────────────────────────────── */
+:host ::ng-deep .field-group label {
+  display: block;
+  font-size: 0.75rem;
   font-weight: 600;
-  color: #374151;
-}
-
-.p-inputtext,
-.p-inputtextarea,
-.p-select,
-.p-inputnumber {
-  width: 100%;
-}
-
-.p-dialog .p-dialog-content {
-  padding: 1.5rem;
-}
-
-.p-dialog .p-dialog-footer {
-  padding: 1rem 1.5rem;
-  border-top: 1px solid #e5e7eb;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #94a3b8;
+  margin-bottom: 0.4rem;
 }

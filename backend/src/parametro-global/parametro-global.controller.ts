@@ -11,6 +11,7 @@ import {
 import { ParametroGlobalService } from './parametro-global.service';
 import { CreateParametroGlobalDto } from './dto/create-parametro-global.dto';
 import { UpdateParametroGlobalDto } from './dto/update-parametro-global.dto';
+import { SimularParametroDto } from './dto/simular-parametro.dto';
 import { AuthGuard } from '../login/login.guard';
 
 @Controller('parametro-global')
@@ -56,5 +57,11 @@ export class ParametroGlobalController {
   @UseGuards(AuthGuard)
   remove(@Param('id') id: string) {
     return this.parametroGlobalService.remove(+id);
+  }
+
+  @Post('simular')
+  @UseGuards(AuthGuard)
+  simular(@Body() dto: SimularParametroDto) {
+    return this.parametroGlobalService.simular(dto);
   }
 }

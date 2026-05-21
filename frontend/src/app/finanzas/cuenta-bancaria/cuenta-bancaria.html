@@ -1,85 +1,133 @@
-<div class="cuenta-page">
-  <div class="cuenta-header">
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
+
+<div class="flex flex-col gap-4 p-4 min-h-screen">
+
+  <!-- ── Cabecera ───────────────────────────────────────────────────────────── -->
+  <div class="flex justify-between items-center flex-wrap gap-3">
     <div>
-      <h2>Cuentas Bancarias</h2>
-      <p>Administra las cuentas bancarias de la empresa.</p>
+      <h1 class="text-2xl font-bold text-white">Cuentas Bancarias</h1>
+      <p class="text-sm text-slate-400 mt-1">{{ cuentas.length }} cuenta{{ cuentas.length !== 1 ? 's' : '' }} registradas</p>
     </div>
-    <button pButton type="button" label="Nueva Cuenta" icon="pi pi-plus" class="p-button-success" (click)="openNew()"></button>
+    <p-button label="Nueva Cuenta" icon="pi pi-plus" severity="success" (onClick)="openNew()"></p-button>
   </div>
 
-  <p-table [value]="cuentas" [loading]="loading" dataKey="IdCuenta" responsiveLayout="scroll">
+  <!-- ── Cards de resumen ───────────────────────────────────────────────────── -->
+  @if (cuentas.length > 0) {
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+      @for (c of cuentas; track c.IdCuenta) {
+        @if (c.Activo) {
+          <div class="bg-slate-800 border border-slate-700 rounded-xl p-4 flex flex-col gap-1"
+            [ngClass]="Number(c.SaldoActual) > 0 ? 'border-l-4 border-l-green-500' : 'border-l-4 border-l-red-500'">
+            <div class="flex justify-between items-start">
+              <span class="text-xs text-slate-400 uppercase tracking-wide font-semibold">{{ c.Banco?.NombreBanco || '—' }}</span>
+              <span class="text-xs bg-slate-700 text-slate-300 px-2 py-0.5 rounded font-mono">{{ c.Moneda || 'GTQ' }}</span>
+            </div>
+            <div class="font-bold text-slate-100 text-sm">{{ c.NombreCuenta }}</div>
+            <div class="font-mono text-xs text-slate-500">{{ c.NumeroCuenta }}</div>
+            <div class="text-xl font-bold mt-1" [ngClass]="Number(c.SaldoActual) >= 0 ? 'text-green-400' : 'text-red-400'">
+              Q {{ Number(c.SaldoActual) | number:'1.2-2' }}
+            </div>
+          </div>
+        }
+      }
+      <!-- Total GTQ -->
+      <div class="bg-slate-900 border border-slate-600 rounded-xl p-4 flex flex-col gap-1 border-l-4 border-l-blue-500">
+        <span class="text-xs text-slate-400 uppercase tracking-wide font-semibold">Total en cuentas GTQ</span>
+        <div class="text-xl font-bold text-blue-400 mt-auto">Q {{ saldoTotal | number:'1.2-2' }}</div>
+      </div>
+    </div>
+  }
+
+  <!-- ── Tabla ──────────────────────────────────────────────────────────────── -->
+  <p-table [value]="cuentas" [loading]="loading" dataKey="IdCuenta" [rowHover]="true"
+    emptyMessage="No hay cuentas registradas.">
     <ng-template pTemplate="header">
       <tr>
         <th>Banco</th>
-        <th>Número de Cuenta</th>
-        <th>Nombre Cuenta</th>
+        <th>No. Cuenta</th>
+        <th>Nombre</th>
         <th>Tipo</th>
-        <th>Saldo Actual</th>
         <th>Moneda</th>
-        <th>Activo</th>
+        <th>Saldo Actual</th>
+        <th>Estado</th>
         <th>Acciones</th>
       </tr>
     </ng-template>
-    <ng-template pTemplate="body" let-cuenta>
+    <ng-template pTemplate="body" let-c>
       <tr>
-        <td>{{ cuenta.Banco?.NombreBanco }}</td>
-        <td>{{ cuenta.NumeroCuenta }}</td>
-        <td>{{ cuenta.NombreCuenta }}</td>
-        <td>{{ cuenta.TipoCuenta || 'N/A' }}</td>
-        <td>{{ cuenta.SaldoActual | currency:cuenta.Moneda }}</td>
-        <td>{{ cuenta.Moneda || 'GTQ' }}</td>
+        <td class="font-medium text-slate-200">{{ c.Banco?.NombreBanco || '—' }}</td>
+        <td class="font-mono text-xs text-slate-400">{{ c.NumeroCuenta }}</td>
+        <td>{{ c.NombreCuenta }}</td>
+        <td class="text-sm text-slate-300">{{ c.TipoCuenta || '—' }}</td>
         <td>
-          <p-tag [value]="cuenta.Activo ? 'Activo' : 'Inactivo'" [severity]="cuenta.Activo ? 'success' : 'danger'"></p-tag>
+          <span class="text-xs font-semibold bg-slate-700 text-slate-300 px-2 py-0.5 rounded">{{ c.Moneda || 'GTQ' }}</span>
+        </td>
+        <td class="font-bold font-mono" [ngClass]="Number(c.SaldoActual) >= 0 ? 'text-green-400' : 'text-red-400'">
+          Q {{ Number(c.SaldoActual) | number:'1.2-2' }}
         </td>
         <td>
-          <ng-container *ngIf="cuenta.Activo; else inactiveActions">
-            <button pButton type="button" icon="pi pi-pencil" class="p-button-rounded p-button-text" (click)="editCuenta(cuenta)"></button>
-            <button pButton type="button" icon="pi pi-trash" class="p-button-rounded p-button-danger p-button-text" (click)="deleteCuenta(cuenta, $event)" [disabled]="deletingCuenta"></button>
-          </ng-container>
-          <ng-template #inactiveActions>
-            <button pButton type="button" icon="pi pi-refresh" class="p-button-rounded p-button-success p-button-text" (click)="reactivateCuenta(cuenta, $event)" pTooltip="Reactivar cuenta"></button>
-          </ng-template>
+          <p-tag [value]="c.Activo ? 'Activa' : 'Inactiva'" [severity]="c.Activo ? 'success' : 'danger'"></p-tag>
+        </td>
+        <td>
+          @if (c.Activo) {
+            <p-button icon="pi pi-pencil" [rounded]="true" [text]="true" severity="info"
+              pTooltip="Editar" tooltipPosition="top" (onClick)="editCuenta(c)"></p-button>
+            <p-button icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger"
+              pTooltip="Desactivar" tooltipPosition="top" (onClick)="deleteCuenta(c)"></p-button>
+          } @else {
+            <p-button icon="pi pi-refresh" [rounded]="true" [text]="true" severity="success"
+              pTooltip="Reactivar" tooltipPosition="top" (onClick)="reactivateCuenta(c)"></p-button>
+          }
         </td>
       </tr>
     </ng-template>
   </p-table>
-
-  <p-dialog header="{{ isEdit ? 'Editar Cuenta' : 'Nueva Cuenta' }}" [(visible)]="cuentaDialog" [style]="{ width: '600px' }" [modal]="true" [closable]="true" [dismissableMask]="true">
-    <div class="form-grid">
-        <div class="p-field">
-          <label for="banco">Banco <span class="required">*</span></label>
-          <ng-container *ngIf="bancos.length > 0; else bancoCargando">
-            <p-select id="banco" [options]="bancos" optionLabel="NombreBanco" optionValue="IdBanco" [(ngModel)]="cuentaForm.IdBanco" placeholder="Seleccionar banco" appendTo="body"></p-select>
-          </ng-container>
-          <ng-template #bancoCargando>
-            <p-select [options]="[]" disabled placeholder="Cargando bancos..." appendTo="body"></p-select>
-          </ng-template>
-        </div>
-        <div class="p-field">
-          <label for="numeroCuenta">Número de Cuenta <span class="required">*</span></label>
-          <input pInputText id="numeroCuenta" [(ngModel)]="cuentaForm.NumeroCuenta" placeholder="Ingrese el número de cuenta" />
-        </div>
-        <div class="p-field">
-          <label for="nombreCuenta">Nombre de Cuenta <span class="required">*</span></label>
-          <input pInputText id="nombreCuenta" [(ngModel)]="cuentaForm.NombreCuenta" placeholder="Ingrese el nombre de la cuenta" />
-        </div>
-        <div class="p-field">
-          <label for="tipoCuenta">Tipo de Cuenta</label>
-          <p-select id="tipoCuenta" [options]="tiposCuenta" optionLabel="label" optionValue="value" [(ngModel)]="cuentaForm.TipoCuenta" placeholder="Seleccionar tipo" appendTo="body"></p-select>
-        </div>
-        <div class="p-field">
-          <label for="saldoInicial">Saldo Inicial</label>
-          <p-inputNumber id="saldoInicial" [(ngModel)]="cuentaForm.SaldoActual" [mode]="'currency'" currency="GTQ" locale="es-GT" placeholder="0.00"></p-inputNumber>
-        </div>
-        <div class="p-field">
-          <label for="moneda">Moneda</label>
-          <p-select id="moneda" [options]="monedas" optionLabel="label" optionValue="value" [(ngModel)]="cuentaForm.Moneda" placeholder="Seleccionar moneda" appendTo="body"></p-select>
-        </div>
-      </div>
-
-    <ng-template pTemplate="footer">
-      <button pButton type="button" label="Cancelar" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
-      <button pButton type="button" label="Guardar" icon="pi pi-check" class="p-button-primary" (click)="saveCuenta()" [disabled]="savingCuenta"></button>
-    </ng-template>
-  </p-dialog>
 </div>
+
+<!-- ── Diálogo ────────────────────────────────────────────────────────────── -->
+<p-dialog [header]="isEdit ? 'Editar Cuenta' : 'Nueva Cuenta'" [(visible)]="cuentaDialog"
+  [modal]="true" [style]="{ width: '100%', maxWidth: '580px' }"
+  [breakpoints]="{ '768px': '95vw' }" [draggable]="false" [resizable]="false">
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+    <div class="field-group sm:col-span-2">
+      <label>Banco *</label>
+      <p-select [options]="bancos" optionLabel="NombreBanco" optionValue="IdBanco"
+        [(ngModel)]="cuentaForm.IdBanco" placeholder="Seleccionar banco"
+        class="w-full" appendTo="body"></p-select>
+    </div>
+    <div class="field-group">
+      <label>Número de Cuenta *</label>
+      <input pInputText [(ngModel)]="cuentaForm.NumeroCuenta" placeholder="Ej. 021-123456-7" class="w-full" />
+    </div>
+    <div class="field-group">
+      <label>Nombre de Cuenta *</label>
+      <input pInputText [(ngModel)]="cuentaForm.NombreCuenta" placeholder="Nombre descriptivo" class="w-full" />
+    </div>
+    <div class="field-group">
+      <label>Tipo de Cuenta</label>
+      <p-select [options]="tiposCuenta" optionLabel="label" optionValue="value"
+        [(ngModel)]="cuentaForm.TipoCuenta" placeholder="Seleccionar tipo"
+        class="w-full" appendTo="body"></p-select>
+    </div>
+    <div class="field-group">
+      <label>Moneda</label>
+      <p-select [options]="monedas" optionLabel="label" optionValue="value"
+        [(ngModel)]="cuentaForm.Moneda" placeholder="Seleccionar moneda"
+        class="w-full" appendTo="body"></p-select>
+    </div>
+    <div class="field-group sm:col-span-2">
+      <label>{{ isEdit ? 'Saldo Actual' : 'Saldo Inicial' }}</label>
+      <p-inputNumber [(ngModel)]="cuentaForm.SaldoActual" [minFractionDigits]="2"
+        prefix="Q " class="w-full"></p-inputNumber>
+    </div>
+  </div>
+
+  <ng-template #footer>
+    <div class="flex justify-end gap-2">
+      <p-button label="Cancelar" severity="secondary" [outlined]="true" (onClick)="hideDialog()"></p-button>
+      <p-button label="Guardar" icon="pi pi-check" severity="success" [loading]="saving" (onClick)="saveCuenta()"></p-button>
+    </div>
+  </ng-template>
+</p-dialog>

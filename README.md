@@ -1,693 +1,583 @@
-# ESTRUCTURA DE DESGLOSE DEL TRABAJO (EDT) - SISTEMA DE PAGO DE NÓMINA
-## Proyecto: Sistema Integral de Gestión de Recursos Humanos y Finanzas
-## Fecha: Abril 2026
-## Versión: 2.0 - Actualizado con funcionalidades extendidas
+# Sistema Integral de Gestión de Nómina — Nómina GT
+
+## Versión 3.0 · Mayo 2026
+
+Sistema completo de gestión de recursos humanos, nómina, ventas y finanzas para empresas en Guatemala.
 
 ---
 
-## 📊 **RESUMEN EJECUTIVO**
+## Tecnologías
 
-### **Estado General del Proyecto:**
-- ✅ **Fase 1 (Datos Maestros RRHH)**: 100% Completada
-- ✅ **Fase 2 (Nómina Básica)**: 100% Completada
-- ✅ **Fase 3 (Estados de Nómina)**: 100% Completada
-- ✅ **Fase 4 (Reportería y Exportación)**: 100% Completada
-- ✅ **Fase 5 (Ventas y Clientes)**: 100% Completada
-- ✅ **Fase 6 (Finanzas y Capital)**: 100% Completada
-- 🟡 **Fase 7 (Estadísticas y Eficiencia)**: 0% Implementada
-- 🟡 **Fase 8 (Reportes Avanzados)**: 0% Implementada
-
-### **Tecnologías Utilizadas:**
-- **Backend**: NestJS 11+, Prisma ORM, SQL Server
-- **Frontend**: Angular 17+, PrimeNG 21, Signals
-- **Autenticación**: JWT con Guards
-- **Base de Datos**: SQL Server con Soft Delete
+| Capa | Tecnología |
+|---|---|
+| Backend | NestJS 11, Prisma ORM 7, SQL Server |
+| Frontend | Angular 17+, PrimeNG 21, Tailwind CSS, Signals |
+| Auth | JWT con `AuthGuard` y `roleGuard` |
+| Correo | Brevo API (transaccional) |
+| Exportación | ExcelJS, PDFKit |
 
 ---
 
-## 🎯 **DIAGRAMA GENERAL ACTUALIZADO**
+## Requisitos
 
-```mermaid
-flowchart TD
-    subgraph SEG[FASE 1: Seguridad y Usuarios ✅]
-        U1[Gestión de Usuarios]
-        U2[Autenticación JWT]
-        U3[Roles y Permisos]
-        U4[Empresa]
-    end
+- Node.js 18+
+- SQL Server 2019+
+- npm 9+
 
-    subgraph RRHH[FASE 1: Datos Maestros RRHH ✅]
-        E1[Empleado - CRM]
-        E2[Departamento]
-        E3[Puesto]
-        E4[Jornada Laboral]
-        E5[Banco]
-        E6[Historial Salario]
-    end
+---
 
-    subgraph NOM[FASE 2: Nómina Básica ✅]
-        N1[Encabezado Nómina]
-        N2[Detalle Nómina]
-        N3[Cálculos Guatemala]
-        N4[Envío Boletas]
-    end
+## Instalación
 
-    subgraph EST[FASE 3: Estados de Nómina ✅]
-        ES1[Estados de Nómina]
-        ES2[Flujo de Aprobación]
-        ES3[Historial de Cambios]
-        ES4[Notificaciones]
-    end
+```bash
+# Backend
+cd backend
+npm install
+npx prisma generate
+npm run start:dev
 
-    subgraph REP[FASE 4: Reportería y Exportación ✅]
-        R1[Reportes RRHH]
-        R2[Reportes Nómina]
-        R3[Exportación Excel]
-        R4[Exportación PDF]
-    end
+# Frontend
+cd frontend
+npm install
+ng serve
+```
 
-    subgraph VEN[FASE 5: Ventas y Clientes ✅]
-        V1[Gestión de Clientes]
-        V2[Productos/Servicios]
-        V3[Facturación]
-        V4[Estados de Pago]
-    end
+### Variables de entorno — `backend/.env`
 
-    subgraph FIN[FASE 6: Finanzas y Capital ✅]
-        F1[Cuentas Bancarias]
-        F2[Movimientos Financieros]
-        F3[Control de Capital]
-        F4[Balance General]
-    end
-
-    subgraph KPI[FASE 7: Estadísticas y Eficiencia 🟡]
-        K1[Indicadores de Eficiencia]
-        K2[Estadísticas Mensuales]
-        K3[Presupuestos Anuales]
-        K4[Dashboard Ejecutivo]
-    end
-
-    subgraph ADV[FASE 8: Reportes Avanzados 🟡]
-        A1[Análisis de Tendencias]
-        A2[Dashboard Interactivo]
-        A3[Exportación Avanzada]
-        A4[Alertas Automáticas]
-    end
-
-    SEG --> RRHH
-    RRHH --> NOM
-    NOM --> EST
-    EST --> REP
-    REP --> VEN
-    VEN --> FIN
-    FIN --> KPI
-    KPI --> ADV
+```env
+DATABASE_URL="sqlserver://servidor;database=nombre;user=usuario;password=clave;trustServerCertificate=true"
+JWT_SECRET="secreto_jwt"
+BREVO_KEY="tu_api_key_brevo"
+BREVO_SENDER_EMAIL="no-reply@tudominio.com"   # opcional
+BREVO_SENDER_NAME="Nómina GT"                  # opcional
+PORT=4000
 ```
 
 ---
 
-## 📋 **DETALLE POR FASES**
+## Resumen de Fases
 
-### **FASE 1: SEGURIDAD Y USUARIOS** ✅ COMPLETADA
-**Estado**: 100% Implementado
-**Módulos Backend**: ✅ `login/`, `usuario/`, `rol/`
-**Módulos Frontend**: ✅ `login/`, `usuario/`, `seguridad/`
-
-#### **1.1 Gestión de Usuarios**
-- ✅ CRUD completo de `Usuario`
-- ✅ Asociación con Empleado y Rol
-- ✅ Control de estado activo/inactivo
-- ✅ Soft delete con `FechaEliminacion`
-
-#### **1.2 Autenticación y Login**
-- ✅ Login con JWT tokens
-- ✅ Guards de autenticación en todas las rutas
-- ✅ Hash seguro de contraseñas
-- ✅ Interceptor de tokens en frontend
-
-#### **1.3 Roles y Permisos**
-- ✅ CRUD de `RolUsuario`
-- ✅ Asignación de roles por usuario
-- ✅ Verificación de permisos en backend
-- ✅ Control de acceso por roles
-- ✅ Reglas de aprobación de nómina aplicadas en frontend y backend
-  - `ADMINISTRADOR`
-  - `ADMIN`
-  - `GERENTE`
-  - `RRHH`
-  - `RECURSOS HUMANOS`
-
-##### Acceso por rol
-- `ADMINISTRADOR` / `ADMIN`
-  - Acceso completo a todos los módulos: seguridad, usuarios, roles, configuración, nómina y reportería.
-  - Puede crear y gestionar roles, usuarios y estados de nómina.
-  - Puede aprobar cambios de estado de nómina que requieran aprobación.
-- `GERENTE`
-  - Acceso a nómina y reportería.
-  - Puede ver nóminas, historial y aprobar cambios de estado en nóminas pendientes de aprobación.
-- `RRHH` / `RECURSOS HUMANOS`
-  - Acceso a recursos humanos: empleados, vacaciones, asistencias y nómina.
-  - Puede aprobar cambios de estado de nómina en estados que requieran aprobación.
-
-#### **1.4 Datos Corporativos**
-- ✅ Gestión de `Empresa`
-- ✅ NIT y número patronal IGSS
-- ✅ Razón social y nombre comercial
-- ✅ **NUEVO**: Campos de capital inicial/actual
+| Fase | Módulo | Estado |
+|---|---|---|
+| 1 | Seguridad y Usuarios | ✅ Completada |
+| 2 | Gestión de Empleados (RRHH) | ✅ Completada |
+| 3 | Asistencias y Vacaciones | ✅ Completada |
+| 4 | Nómina | ✅ Completada |
+| 5 | Parámetros Globales | ✅ Completada |
+| 6 | Estados de Nómina | ✅ Completada |
+| 7 | Reportería y Exportación | ✅ Completada |
+| 8 | Ventas y Clientes | ✅ Completada |
+| 9 | Finanzas | ✅ Completada |
+| 10 | Correo Electrónico (Brevo) | ✅ Completada |
 
 ---
 
-### **FASE 1: GESTIÓN DE EMPLEADOS** ✅ COMPLETADA
-**Estado**: 100% Implementado
-**Módulos Backend**: ✅ `empleado/`, `departamento/`, `puesto/`, `jornada-laboral/`, `banco/`
-**Módulos Frontend**: ✅ `empleado/`, `departamento/`, `puesto/`, `jornada-laboral/`, `banco/`
+## FASE 1 — Seguridad y Usuarios ✅
 
-#### **1.1 Registro de Empleado**
-- ✅ CRUD completo de `Empleado`
-- ✅ Validación DPI, NIT, correo único
-- ✅ Estado activo/inactivo con soft delete
+**Backend:** `login/`, `usuario/`, `rol/`
+**Frontend:** `login/`, `usuario/`, `seguridad/`, `roles/`
 
-#### **1.2 Datos Personales y Contacto**
-- ✅ Nombre, apellidos, teléfono, dirección
-- ✅ Género, estado civil, correo, fotografía
-- ✅ Fecha de ingreso y datos completos
+### Implementado
 
-#### **1.3 Organización Interna**
-- ✅ Gestión de `Departamento`
-- ✅ Gestión de `Puesto` con relación departamento
-- ✅ Gestión de `JornadaLaboral` (horas diarias/semanales)
+- Autenticación con JWT. `AuthGuard` aplicado a todos los endpoints protegidos
+- Hash de contraseñas con bcrypt (12 rounds)
+- CRUD de usuarios con asociación a empleado y rol
+- Soft delete con `Activo` / `FechaEliminacion`
+- `roleGuard` en el frontend: protege rutas y oculta secciones del menú según el rol
+- Al crear un usuario se envía automáticamente un correo con sus credenciales
 
-#### **1.4 Datos Financieros**
-- ✅ Gestión de `Banco`
-- ✅ Cuentas bancarias por empleado
-- ✅ Historial de `Salario` con fechas de vigencia
+### Roles y acceso
 
----
+| Rol | Acceso |
+|---|---|
+| `ADMINISTRADOR` / `ADMIN` | Todos los módulos |
+| `GERENTE` | Nómina, Ventas, Finanzas, Reportería |
+| `RRHH` / `RECURSOS HUMANOS` | RRHH, Configuración, Nómina, Reportería |
 
-### **FASE 2: NÓMINA BÁSICA** ✅ COMPLETADA
-**Estado**: 100% Implementado
-**Módulos Backend**: ✅ `nomina/`, `parametro-global/`
-**Módulos Frontend**: ✅ `nomina/`, `parametro-global/`
+### SQL — Insertar roles
 
-#### **2.1 Encabezado de Nómina**
-- ✅ CRUD de `NominaEncabezado`
-- ✅ Mes, año, quincena, fecha generación
-- ✅ Usuario gerente responsable
-
-#### **2.2 Detalle de Nómina**
-- ✅ CRUD de `NominaDetalle`
-- ✅ Días laborados, sueldo base, bonificaciones
-- ✅ Descuentos IGSS, ISR, IRTRA, INTECAP
-- ✅ Cálculo de líquido a recibir
-
-#### **2.3 Cálculos Guatemala**
-- ✅ IGSS 3.67% empleado
-- ✅ ISR progresivo (6 tramos)
-- ✅ Bono 14 (8.33% mensual)
-- ✅ Aguinaldo (8.33% mensual)
-- ✅ Bono productividad parametrizable
-
-#### **2.4 Envío de Boletas**
-- ✅ `RegistroEnvioBoleta`
-- ✅ Fecha envío, estado éxito
-- ✅ Usuario que realiza envío
-
----
-
-### **FASE 3: ESTADOS DE NÓMINA** ✅ COMPLETADA
-**Estado**: 100% Implementado
-**Módulos Backend**: ✅ `estado-nomina/`
-**Módulos Frontend**: ✅ `nomina/nomina.ts` con validaciones de rol
-
-#### **3.1 Estados de Nómina** ✅
-- ✅ Tabla `EstadoNomina` con flujo definido
-- ✅ Estados: BORRADOR → PENDIENTE → APROBADO → PAGADO
-- ✅ Campo `RequiereAprobacion` por estado
-
-#### **3.2 Historial de Cambios** ✅
-- ✅ Tabla `HistorialEstadoNomina`
-- ✅ Auditoría completa de cambios
-- ✅ Usuario, fecha y comentarios
-
-#### **3.3 Flujo de Aprobación** ✅
-- ✅ Lógica de cambio de estados en `EstadoNominaService`
-- ✅ Validaciones por rol de usuario (ADMINISTRADOR, ADMIN, GERENTE, RRHH, RECURSOS HUMANOS)
-- ✅ Método `puedeCambiarAEstado()` con reglas de negocio
-
-#### **3.4 Notificaciones** ✅
-- ✅ Validaciones en frontend con `isCambioEstadoPermisible()`
-- ✅ Persistencia de rol en localStorage
-- ✅ Control de acceso por permisos
-
----
-
-### **FASE 4: REPORTERÍA Y EXPORTACIÓN** ✅ COMPLETADA
-**Estado**: 100% Implementado
-**Módulos Backend**: ✅ `reporteria/`, `export/`
-**Módulos Frontend**: ✅ `reporteria/`, `reporteria-inicio/`
-
-#### **4.1 Reportes RRHH** ✅
-- ✅ Reporte de empleados activos con filtros por fecha
-- ✅ Reporte de salarios históricos
-- ✅ Reporte de departamentos con estadísticas
-- ✅ Resumen ejecutivo con métricas generales
-
-#### **4.2 Reportes de Nómina** ✅
-- ✅ Nómina mensual por período (mes/año)
-- ✅ Detalle de empleados con cálculos completos
-- ✅ Totales por nómina (sueldos, bonos, descuentos, líquido)
-
-#### **4.3 Exportación Excel** ✅
-- ✅ Exportar empleados a Excel con formato profesional
-- ✅ Exportar salarios históricos
-- ✅ Exportar nómina mensual
-- ✅ Exportar asistencias por período
-- ✅ Exportar vacaciones por año
-- ✅ Exportar departamentos con estadísticas
-
-#### **4.4 Exportación PDF** ✅
-- ✅ Generar reportes de empleados en PDF
-- ✅ Reportes de salarios en PDF
-- ✅ Nómina mensual en PDF con formato tabular
-- ✅ Reportes de asistencias
-- ✅ Reportes de vacaciones
-- ✅ Reportes de departamentos
-
-#### **4.5 Funcionalidades Adicionales** ✅
-- ✅ Filtros dinámicos por fecha, mes, año
-- ✅ Paginación en tablas grandes
-- ✅ Interfaz responsiva con PrimeNG
-- ✅ Manejo de errores y estados de carga
-- ✅ Navegación intuitiva desde módulo de reportería
-
----
-
-### **FASE 5: VENTAS Y CLIENTES** ✅ COMPLETADA
-**Estado**: 100% Implementado
-**Módulos Backend**: ✅ `cliente/`, `producto-servicio/`, `venta/`
-**Módulos Frontend**: ❌ Pendiente implementación
-
-#### **5.1 Gestión de Clientes** ✅
-- ✅ CRUD completo de clientes
-- ✅ Validación NIT/DPI únicos
-- ✅ Clientes individuales y empresariales
-- ✅ Soft delete con FechaEliminacion
-
-#### **5.2 Productos y Servicios** ✅
-- ✅ CRUD completo de productos/servicios
-- ✅ Catálogo de productos/servicios
-- ✅ Precios y costos parametrizables
-- ✅ Tipos: PRODUCTO/SERVICIO
-
-#### **5.3 Facturación** ✅
-- ✅ Tabla `Venta` y `DetalleVenta`
-- ✅ Generación de facturas con cálculos automáticos
-- ✅ Cálculos de subtotal, impuestos (IVA 12%), total
-- ✅ Descuentos por línea y generales
-
-#### **5.4 Estados de Pago** ✅
-- ✅ Estados: PENDIENTE, PAGADO, CANCELADO, VENCIDO
-- ✅ Fechas de vencimiento
-- ✅ Control de morosidad
-- ✅ Actualización de estados de pago
-
----
-
-### **FASE 6: FINANZAS Y CAPITAL** ✅ COMPLETADA
-**Estado**: 100% Implementado
-**Módulos Backend**: ✅ `cuenta-bancaria-empresa/`, ✅ `movimiento-financiero/`
-**Módulos Frontend**: ✅ `finanzas/cuenta-bancaria/`, ✅ `finanzas/movimiento-financiero/`, ✅ `finanzas/finanzas-inicio/`
-
-#### **6.1 Cuentas Bancarias**
-- ✅ Tabla `CuentaBancariaEmpresa` (ya existe en schema)
-- ✅ Servicio `CuentaBancariaEmpresaService` con CRUD completo
-- ✅ Controlador para gestionar cuentas bancarias
-- ✅ Validación de números de cuenta únicos
-- ✅ Actualización de saldos
-- ✅ Componente `CuentaBancariaComponent` con tabla y diálogos
-- ✅ Modelo `CuentaBancariaEmpresa` e interfaz `Banco`
-- ✅ Servicio HTTP `cuenta-bancaria-empresa.service.ts`
-
-#### **6.2 Movimientos Financieros**
-- ✅ Tabla `MovimientoFinanciero` (ya existe en schema)
-- ✅ Servicio `MovimientoFinancieroService` con CRUD completo
-- ✅ Controlador para gestionar movimientos
-- ✅ Categorización de movimientos (INGRESO/EGRESO)
-- ✅ Cálculo de balance por cuenta
-- ✅ Filtros por tipo, fecha y estado
-- ✅ Componente `MovimientoFinancieroComponent` con tabla y diálogos
-- ✅ Modelo `MovimientoFinanciero` e interfaz `BalanceInfo`
-- ✅ Servicio HTTP `movimiento-financiero.service.ts`
-
-#### **6.3 Control de Capital**
-- 🟡 Lógica de actualización automática de capital (en desarrollo)
-- 🟡 Alertas de niveles críticos (en desarrollo)
-- 🟡 Dashboard de capital (en desarrollo)
-
-#### **6.4 Balance General y Reportes**
-- 🟡 Vista `vw_BalanceMensual` (en desarrollo)
-- 🟡 Reportes de ingresos/egresos (en desarrollo)
-- 🟡 Análisis de flujo de caja (en desarrollo)
-
-#### **6.5 Rutas y Navegación**
-- ✅ Ruta `/finanzas/inicio` - Página de inicio del módulo
-- ✅ Ruta `/finanzas/cuentas` - CRUD de cuentas bancarias
-- ✅ Ruta `/finanzas/movimientos` - CRUD de movimientos financieros
-- ✅ Menú de navegación actualizado con sección Finanzas
-
----
-
-### **FASE 7: ESTADÍSTICAS Y EFICIENCIA** 🟡 PENDIENTE
-**Estado**: 0% Implementado
-**Módulos Backend**: ❌ Pendiente
-**Módulos Frontend**: ❌ Pendiente
-
-#### **7.1 Indicadores de Eficiencia**
-- ❌ Tabla `IndicadorEficiencia`
-- ❌ KPIs predefinidos (ventas, productividad, etc.)
-- ❌ Metas mínimas/máximas configurables
-
-#### **7.2 Estadísticas Mensuales**
-- ❌ Tabla `EstadisticaMensual`
-- ❌ Cálculo automático mensual
-- ❌ Almacenamiento histórico
-
-#### **7.3 Presupuestos Anuales**
-- ❌ Tabla `PresupuestoAnual`
-- ❌ Presupuestos por año
-- ❌ Comparación real vs presupuesto
-
-#### **7.4 Dashboard Ejecutivo**
-- ❌ Vista `vw_IndicadoresEficiencia`
-- ❌ Gráficos y métricas visuales
-- ❌ Alertas de desviaciones
-
----
-
-### **FASE 8: REPORTES AVANZADOS** 🟡 PENDIENTE
-**Estado**: 0% Implementado
-**Módulos Backend**: ❌ Pendiente
-**Módulos Frontend**: ❌ Pendiente
-
-#### **8.1 Reportes RRHH**
-- ❌ Reportes de empleados activos
-- ❌ Estadísticas de asistencia/vacaciones
-- ❌ Análisis de rotación de personal
-
-#### **8.2 Reportes Financieros**
-- ❌ Estados financieros mensuales
-- ❌ Análisis de rentabilidad
-- ❌ Proyecciones financieras
-
-#### **8.3 Análisis de Tendencias**
-- ❌ Gráficos de evolución mensual
-- ❌ Predicciones basadas en histórico
-- ❌ Identificación de patrones
-
-#### **8.4 Exportación de Datos**
-- ❌ Exportación a Excel/PDF
-- ❌ Filtros avanzados
-- ❌ Programación de reportes
-
----
-
-## 🔧 **ESTADO DE IMPLEMENTACIÓN DETALLADO**
-
-### **Backend - Módulos Completados:**
-✅ `login/` - Autenticación JWT completa
-✅ `usuario/` - Gestión de usuarios
-✅ `rol/` - Roles y permisos
-✅ `empleado/` - CRUD empleados
-✅ `departamento/` - Departamentos
-✅ `puesto/` - Puestos de trabajo
-✅ `jornada-laboral/` - Jornadas laborales
-✅ `cliente/` - Gestión de clientes
-✅ `producto-servicio/` - Productos y servicios
-✅ `venta/` - Ventas y facturación
-✅ `cuenta-bancaria-empresa/` - Cuentas bancarias
-✅ `movimiento-financiero/` - Movimientos financieros
-✅ `banco/` - Bancos
-✅ `nomina/` - Sistema de nómina
-✅ `parametro-global/` - Parámetros del sistema
-✅ `asistencia/` - Control de asistencias
-✅ `cont
-### **Backend - Módulos Pendientes:**
-❌ Estados de nómina (lógica de flujo)
-❌ Ventas y clientes
-❌ Finanzas y capital
-❌ Estadísticas y eficiencia
-❌ Reportes avanzados
-
-### **Frontend - Componentes Completados:**
-✅ `login/` - Autenticación
-✅ `usuario/` - Gestión usuarios
-✅ `seguridad/` - Seguridad del sistema
-✅ `empleado/` - CRUD empleados
-✅ `departamento/` - Departamentos
-✅ `puesto/` - Puestos
-✅ `jornada-laboral/` - Jornadas
-✅ `banco/` - Bancos
-✅ `nomina/` - Generador de nómina
-✅ `parametro-global/` - Parámetros
-✅ `asistencia/` - Asistencias
-✅ `vacacion/` - Vacaciones
-
-### **Frontend - Componentes Pendientes:**
-❌ Estados de nómina (aprobaciones)
-❌ Ventas y facturación
-❌ Finanzas y capital
-❌ Dashboard de estadísticas
-❌ Reportes avanzados
-
----
-
-## 📈 **PRIORIDADES DE DESARROLLO**
-
-### **Próximas Fases (Orden Sugerido):**
-
-1. **🔥 ALTA**: Fase 3 - Estados de Nómina (Completar lógica de flujo)
-2. **� ALTA**: Fase 4 - Ventas y Clientes (Funcionalidad crítica)
-3. **🟡 MEDIA**: Fase 5 - Finanzas y Capital (Complementario a ventas)
-4. **🟡 MEDIA**: Fase 6 - Estadísticas (Dashboard ejecutivo)
-5. **🟢 BAJA**: Fase 7 - Reportes Avanzados (Mejora continua)
-
-### **Tiempo Estimado por Fase:**
-- Fase 3: 2-3 semanas (completar lógica pendiente)
-- Fase 4: 4-5 semanas (ventas completas)
-- Fase 5: 3-4 semanas (finanzas)
-- Fase 6: 2-3 semanas (estadísticas)
-- Fase 7: 3-4 semanas (reportes)
-
----
-
-## 🎯 **CONCLUSIONES**
-
-### **Lo que tenemos:**
-✅ Sistema sólido de RRHH con nómina básica
-✅ Autenticación y seguridad implementada
-✅ Base de datos extendida con nuevas funcionalidades
-✅ Arquitectura modular y escalable
-
-### **Lo que necesitamos implementar:**
-🔄 Completar flujo de estados de nómina
-🆕 Sistema completo de ventas y facturación
-🆕 Control financiero y de capital
-🆕 Dashboard de estadísticas y eficiencia
-🆕 Reportes avanzados y análisis
-
-### **Recomendación:**
-Continuar con **Fase 3** (estados de nómina) para completar la funcionalidad crítica de nómina, luego proceder con **Fase 4** (ventas) que es fundamental para el control financiero de la empresa.
-
----
-
-*EDT actualizado al 19 de Abril 2026 - Versión 2.0*
-    P1[Parametros Globales]
-    P2[Valores IGSS / ISR]
-    P3[Bonos y Topes]
-    P4[Reglas de Negocio]
-  end
-
-  subgraph REP[Reportes y Consultas]
-    R1[Reportes de Empleados]
-    R2[Historial de Asistencias]
-    R3[Vacaciones / Incidencias]
-    R4[Reportes de Nómina]
-    R5[Auditoría]
-  end
-
-  U1 --> E1
-  U3 --> U1
-  U4 --> U1
-  U2 --> U1
-
-  E1 --> A1
-  E1 --> V1
-  E1 --> N1
-  E1 --> M2
-  E1 --> R1
-
-  A1 --> R2
-  V1 --> R3
-  N1 --> R4
-  M2 --> R4
-
-  P1 --> N1
-  P1 --> M2
-  P2 --> N3
-  P3 --> V1
-  P4 --> N3
-
-  U1 --> R5
-  E1 --> R5
-  A1 --> R5
-  V1 --> R5
-  N1 --> R5
-  M2 --> R5
-```
-
-## Módulos y submódulos detallados
-
-### 1. Seguridad y Administración de Usuarios
-- Gestión de usuarios
-  - Crear, leer, actualizar, eliminar usuarios (`Usuario`)
-  - Control de estado y fecha de eliminación
-  - Asociar usuario con empleado y rol
-- Autenticación y login
-  - Login con `username` y `contrasena`
-  - Generación de token / sesión
-  - Guardar contraseña segura con hash
-- Roles y permisos
-  - CRUD de `RolUsuario`
-  - Asignación de rol a cada usuario
-  - Verificación de permisos en rutas del backend
-  - Aprobación de cambios de estado de nómina reservada a roles específicos
-    - `ADMINISTRADOR`
-    - `ADMIN`
-    - `GERENTE`
-    - `RRHH`
-    - `RECURSOS HUMANOS`
-  - Acceso por rol:
-    - `ADMINISTRADOR` / `ADMIN`: acceso completo a todos los módulos y permisos.
-    - `GERENTE`: acceso a nómina, reporte y aprobación de estados de nómina.
-    - `RRHH` / `RECURSOS HUMANOS`: acceso a recursos humanos y aprobación de estados de nómina.
-- Datos corporativos
-  - Gestión de `Empresa`
-  - NIT y número patronal IGSS
-  - Datos de razón social y comercial
-
-### Inserción de roles de aprobación de nómina
 ```sql
 INSERT INTO RolUsuario (NombreRol) VALUES
-  ('ADMINISTRADOR'),
-  ('ADMIN'),
-  ('GERENTE'),
-  ('RRHH'),
-  ('RECURSOS HUMANOS');
+  ('ADMINISTRADOR'), ('ADMIN'), ('GERENTE'),
+  ('RRHH'), ('RECURSOS HUMANOS');
 ```
 
-### 2. Gestión de Empleados
-- Registro de empleado
-  - CRUD completo de `Empleado`
-  - Validación de DPI, NIT y correo
-  - Estado activo / inactivo
-- Datos personales y contacto
-  - Nombre, apellidos, teléfono, dirección, género, estado civil
-  - Correo personal y fotografía
-- Organización interna
-  - Gestión de `Departamento`
-  - Gestión de `Puesto`
-  - Gestión de `JornadaLaboral`
-- Datos financieros
-  - Gestión de `Banco`
-  - Cuentas bancarias
-  - Historial de `Salario` por empleado
-- Relaciones
-  - Empleado ↔ Usuario
-  - Empleado ↔ Asistencia
-  - Empleado ↔ ControlVacacion
-  - Empleado ↔ Incidencia
-  - Empleado ↔ MovimientoEmpleado
-  - Empleado ↔ NominaDetalle
+---
 
-### 3. Gestión de Asistencias
-- Registro diario
-  - CRUD de `Asistencia`
-  - Fecha, hora de entrada, hora de salida
-  - Cálculo de horas trabajadas
-- Horas extra
-  - Registro de `HorasExtra`
-  - Cálculos por jornada
-- Control de estado
-  - `Activo` y `FechaEliminacion`
-  - Filtrado por empleado y rango de fechas
-- Reportes
-  - Historial de asistencias por empleado
-  - Reportes de horarios y ausencias
+## FASE 2 — Gestión de Empleados (RRHH) ✅
 
-### 4. Vacaciones y Ausencias
-- Control de vacaciones
-  - CRUD de `ControlVacacion`
-  - Días ganados y días gozados
-  - Cálculo de saldo de vacaciones
-- Detalle de vacaciones
-  - CRUD de `DetalleControlVacacion`
-  - Relación con incidencias y días descontados
-- Incidencias
-  - CRUD de `Incidencia`
-  - Registro de ausencias, permisos y licencias
-  - Configurar con o sin goce de sueldo
-  - Autorización de usuario con permiso
+**Backend:** `empleado/`, `departamento/`, `puesto/`, `jornada-laboral/`, `banco/`, `salario/`
+**Frontend:** `empleado/`, `departamento/`, `puesto/`, `jornada-laboral/`, `banco/`, `rrhh/`
 
-### 5. Nómina
-- Encabezado de nómina
-  - CRUD de `NominaEncabezado`
-  - Mes, año, quincena, estado
-  - Usuario responsable / gerente
-- Detalle de nómina
-  - CRUD de `NominaDetalle`
-  - Dias laborados, sueldo base, bonificaciones, descuentos
-  - Cálculo de `LiquidoRecibir`
-- Envío de boletas
-  - `RegistroEnvioBoleta`
-  - Fecha de envío, éxito, usuario que envía
-- Integración con empleados
-  - Relación de cada detalle con empleado
-  - Generación de planilla por periodo
+### Implementado
 
-### 6. Movimientos y Provisiones
-- Tipos de movimiento
-  - CRUD de `TipoMovimiento`
-  - Clasificación, afectación a IGSS/ISR, fijo o variable
-- Movimientos de empleado
-  - CRUD de `MovimientoEmpleado`
-  - Monto, mes y año de aplicación
-  - Usuario que registra el movimiento
-- Provisiones legales
-  - CRUD de `ProvisionPrestacion`
-  - Bono 14, aguinaldo, indemnización, provisión de vacaciones
-  - Historial por mes y año
+- CRUD completo de empleados: DPI, NIT, nombre, correo, teléfono, dirección, género, estado civil, fotografía
+- Gestión de departamentos, puestos y jornadas laborales
+- Historial de salarios con fechas de vigencia (salario activo / inactivo)
+- Asignación de banco y cuenta bancaria por empleado
+- Vista detallada en tabs: **Información · Configuración · Salarios · Vacaciones · Asistencias**
+- Campo Género editable (Masculino / Femenino) con selector
 
-### 7. Parámetros y Cálculos
-- Parámetros globales
-  - CRUD de `ParametroGlobal`
-  - Valores base para cálculos legales y financieros
-- Valores fiscales
-  - IGSS, ISR, topes, bonificaciones
-  - Ajustes según normativa de Guatemala
-- Reglas de cálculo
-  - Fórmulas de nómina
-  - Cálculo de descuentos y salario líquido
-  - Aplicación de provisiones y cargas sociales
+---
 
-### 8. Reportes y Consultas
-- Reportes operativos
-  - Listado de empleados activos
-  - Historial de asistencias y vacaciones
-  - Control de incidencias
-- Reportes de nómina
-  - Nóminas generadas por mes/quincena
-  - Totales de descuentos y pagos
-  - Provisiones acumuladas
-- Auditoría
-  - Registro de cambios en datos maestros
-  - Acciones de usuario sobre nómina y autorizaciones
+## FASE 3 — Asistencias y Vacaciones ✅
+
+**Backend:** `asistencia/`, `control-vacacion/`, `detalle-control-vacacion/`, `incidencia/`
+**Frontend:** `asistencia/`, `vacacion/`
+
+### Implementado
+
+- Registro diario de asistencia: fecha, hora entrada, hora salida, **horas extra** (`HorasExtra`)
+- Las horas extra registradas se usan automáticamente en el cálculo de nómina del mes
+- Control de vacaciones: días ganados vs días gozados, con o sin goce de sueldo
+- Incidencias y detalle de control de vacaciones
+
+---
+
+## FASE 4 — Nómina ✅
+
+**Backend:** `nomina/`
+**Frontend:** `nomina/`
+
+### Tipos de nómina
+
+| Tipo | Descripción | Restricción mensual |
+|---|---|---|
+| `GENERAL` | Calcula todos los parámetros activos para los empleados | 1 por empleado/mes |
+| `PERSONALIZADA` | Empleados y parámetros elegidos manualmente | Sin límite |
+
+### Modos de generación
+
+- **Individual** — un empleado, salario ingresado manualmente, preview de cálculo antes de confirmar
+- **Masiva** — todos los empleados activos con salario vigente en un período
+- **Personalizada** — MultiSelect de empleados + MultiSelect de parámetros + opción de incluir o excluir el salario base
+
+### Cálculos Guatemala
+
+```
+Ingresos:
+  Sueldo Base
+  + Bono 14              (BONO_14_PORCENTAJE % del salario / 12 meses)
+  + Aguinaldo            (AGUINALDO_PORCENTAJE % del salario / 12 meses)
+  + Bono Productividad   (BONO_PRODUCTIVIDAD Q fijo)
+  + Horas Extra          (ver fórmula abajo)
+
+Descuentos:
+  - IGSS Empleado        (IGSS_EMPLEADO % del salario)
+  - ISR                  (6 tramos progresivos según normativa SAT)
+  - IRTRA                (IRTRA_PORCENTAJE % del salario)
+  - INTECAP              (INTECAP_PORCENTAJE % del salario)
+
+Líquido a Recibir = Total Ingresos − Total Descuentos
+```
+
+### Horas extra — fórmula legal Guatemala
+
+```
+Valor hora normal  = Salario mensual ÷ 30 ÷ HORAS_LABORALES_DIA
+Valor hora extra   = Valor hora normal × (1 + HORAS_EXTRA_PORCENTAJE / 100)
+Pago horas extra   = Horas extra del mes × Valor hora extra
+```
+
+Las horas extra se toman del campo `HorasExtra` de la tabla `Asistencia` para el mes correspondiente.
+
+### Número de boleta / transacción
+
+Al cambiar al estado final de pago se solicita el número de boleta bancaria o referencia de transferencia.
+
+### Cuenta bancaria de pago
+
+Al generar (individual, masiva o personalizada) se puede asignar la cuenta bancaria de la empresa desde donde se descontará el pago. Al marcar como pagada:
+1. Se valida que el saldo de la cuenta sea suficiente
+2. Se descuenta el total del saldo
+3. Se crea un `MovimientoFinanciero` EGRESO/NOMINA automáticamente
+
+Si la nómina se cancela desde el estado PAGADO, el movimiento se revierte.
+
+### Aprobación por doble firma
+
+Cuando la nómina está en un estado que lo requiera (como PENDIENTE_APROBACION) se necesitan 2 firmas:
+- **Jefe de Área** (`JEFE_AREA`)
+- **Encargado** (`ENCARGADO`)
+
+Con ambas firmas, la nómina avanza automáticamente al siguiente estado.
+
+### Filtros y totales en la tabla
+
+- Filtro por **Año**, **Mes** y **Tipo** (General / Personalizada)
+- Cards de resumen: Total nóminas, General vs Personalizada, Masa Salarial, Total Líquido
+- Tab **"Eliminadas"** para ver y restaurar nóminas con soft delete
+
+### Exportación Excel
+
+| Planilla | Endpoint |
+|---|---|
+| General | `GET /api/nomina/:id/export/general` |
+| IGSS | `GET /api/nomina/:id/export/igss` |
+| ISR / SAT | `GET /api/nomina/:id/export/isr` |
+
+---
+
+## FASE 5 — Parámetros Globales ✅
+
+**Backend:** `parametro-global/`
+**Frontend:** `parametro-global/`
+
+### Parámetros del sistema
+
+| Nombre | Valor defecto | Tipo | Unidad |
+|---|---|---|---|
+| `IGSS_EMPLEADO` | 3.67 | DESCUENTO | % |
+| `ISR_TASA_1` | variable | DESCUENTO | % |
+| `ISR_TASA_2` | variable | DESCUENTO | % |
+| `ISR_TASA_3` | variable | DESCUENTO | % |
+| `ISR_TASA_4` | variable | DESCUENTO | % |
+| `ISR_TASA_5` | variable | DESCUENTO | % |
+| `ISR_TASA_6` | variable | DESCUENTO | % |
+| `ISR_BASE_ANUAL` | variable | REFERENCIA | Q |
+| `BONO_14_PORCENTAJE` | 8.33 | INGRESO | % |
+| `AGUINALDO_PORCENTAJE` | 8.33 | INGRESO | % |
+| `BONO_PRODUCTIVIDAD` | variable | INGRESO | Q |
+| `IRTRA_PORCENTAJE` | variable | DESCUENTO | % |
+| `INTECAP_PORCENTAJE` | variable | DESCUENTO | % |
+| `HORAS_EXTRA_PORCENTAJE` | 50 | INGRESO | % |
+| `HORAS_LABORALES_DIA` | 8 | REFERENCIA | Q |
+
+### SQL — Insertar parámetros de horas extra
+
+```sql
+INSERT INTO ParametroGlobal
+  (NombreParametro, Valor, Descripcion, Activo, Tipo, Unidad,
+   FiltroGenero, FiltroIdDepartamento, FiltroIdPuesto, FiltroIdJornada)
+VALUES
+('HORAS_EXTRA_PORCENTAJE', 50.0000,
+ 'Recargo legal sobre horas extra en Guatemala (50% = pago al 150% del valor hora)',
+ 1, 'INGRESO', '%', NULL, NULL, NULL, NULL),
+('HORAS_LABORALES_DIA', 8.0000,
+ 'Horas laborales ordinarias por día para calcular el valor/hora',
+ 1, 'REFERENCIA', 'Q', NULL, NULL, NULL, NULL);
+```
+
+### Filtros por empleado
+
+Cada parámetro puede tener filtros opcionales para aplicarse solo a un subconjunto de empleados:
+
+| Filtro | Campo DB |
+|---|---|
+| Género | `FiltroGenero` (BIT) |
+| Departamento | `FiltroIdDepartamento` (INT) |
+| Puesto | `FiltroIdPuesto` (INT) |
+| Jornada Laboral | `FiltroIdJornada` (INT) |
+
+Si todos los filtros son `NULL`, el parámetro aplica a todos los empleados.
+
+### Simulador de impacto
+
+Panel integrado en la pantalla de parámetros: selecciona un parámetro + filtros de empleado y muestra en tiempo real:
+- Empleados afectados y cuántos tienen salario vigente
+- Masa salarial total
+- Impacto total (suma de lo que suma o resta)
+- Tabla con salario base → impacto → salario final por empleado
+
+### SQL — Columnas requeridas
+
+```sql
+ALTER TABLE ParametroGlobal ADD Tipo                  VARCHAR(20) NULL;
+ALTER TABLE ParametroGlobal ADD Unidad                VARCHAR(5)  NULL;
+ALTER TABLE ParametroGlobal ADD FiltroGenero          BIT         NULL;
+ALTER TABLE ParametroGlobal ADD FiltroIdDepartamento  INT         NULL;
+ALTER TABLE ParametroGlobal ADD FiltroIdPuesto        INT         NULL;
+ALTER TABLE ParametroGlobal ADD FiltroIdJornada       INT         NULL;
+
+ALTER TABLE ParametroGlobal ADD CONSTRAINT FK_Param_Departamento
+  FOREIGN KEY (FiltroIdDepartamento) REFERENCES Departamento(IdDepartamento);
+ALTER TABLE ParametroGlobal ADD CONSTRAINT FK_Param_Puesto
+  FOREIGN KEY (FiltroIdPuesto) REFERENCES Puesto(IdPuesto);
+ALTER TABLE ParametroGlobal ADD CONSTRAINT FK_Param_Jornada
+  FOREIGN KEY (FiltroIdJornada) REFERENCES JornadaLaboral(IdJornada);
+```
+
+---
+
+## FASE 6 — Estados de Nómina ✅
+
+**Backend:** `estado-nomina/`
+**Frontend:** `estado-nomina/`
+
+### Estados configurables
+
+Los estados son completamente administrables desde la interfaz. Campos clave:
+
+| Campo | Tipo | Descripción |
+|---|---|---|
+| `NombreEstado` | VARCHAR(50) | Identificador único del estado |
+| `Orden` | INT | Posición en el flujo. Varios estados pueden tener el mismo Orden (ramas paralelas) |
+| `Color` | VARCHAR(20) | Badge visual: `info`, `warn`, `success`, `danger`, `secondary`, `cyan` |
+| `EsFinal` | BIT | Estado terminal — no permite transiciones de salida |
+| `EsCancelacion` | BIT | Disponible desde cualquier estado no-final (ej. CANCELADO) |
+| `RequiereAprobacion` | BIT | Solo roles especiales (ADMIN, GERENTE, RRHH) pueden transicionar a este estado |
+
+### Flujo por defecto
+
+```
+BORRADOR (1) ──► PENDIENTE_APROBACION (2) ──┐
+                 PROVISION         (2) ──┤
+                                          └──► APROBADO (3) ──► PAGADO (4, final)
+
+                 Desde cualquier estado no-final:
+                 └──► CANCELADO (5, final + cancelación)
+```
+
+Agregar un nuevo estado en la BD (con su `Orden` y `Color`) lo incorpora automáticamente al flujo sin cambios de código.
+
+### SQL — Columnas requeridas
+
+```sql
+ALTER TABLE EstadoNomina ADD Color         VARCHAR(20) NULL;
+ALTER TABLE EstadoNomina ADD EsFinal       BIT NOT NULL DEFAULT 0;
+ALTER TABLE EstadoNomina ADD EsCancelacion BIT NOT NULL DEFAULT 0;
+
+-- Configurar estados existentes
+UPDATE EstadoNomina SET Color='info',    EsFinal=0, EsCancelacion=0 WHERE NombreEstado='BORRADOR';
+UPDATE EstadoNomina SET Color='warn',    EsFinal=0, EsCancelacion=0 WHERE NombreEstado='PENDIENTE_APROBACION';
+UPDATE EstadoNomina SET Color='cyan',    EsFinal=0, EsCancelacion=0 WHERE NombreEstado='Provision';
+UPDATE EstadoNomina SET Color='success', EsFinal=0, EsCancelacion=0 WHERE NombreEstado='APROBADO';
+UPDATE EstadoNomina SET Color='success', EsFinal=1, EsCancelacion=0 WHERE NombreEstado='PAGADO';
+UPDATE EstadoNomina SET Color='danger',  EsFinal=1, EsCancelacion=1 WHERE NombreEstado='CANCELADO';
+```
+
+---
+
+## FASE 7 — Reportería y Exportación ✅
+
+**Backend:** `reporteria/`, `export/`
+**Frontend:** `reporteria/`, `reporteria-inicio/`
+
+### Implementado
+
+- **Resumen ejecutivo** con métricas: total empleados, clientes, productos, servicios, asistencias del mes, vacaciones pendientes, nóminas por estado, distribución salarial
+- **Gráficos** (Chart.js via PrimeNG):
+  - Distribución salarial por rangos
+  - Masa salarial por departamento (barras apiladas)
+  - Nóminas por estado (doughnut)
+  - Composición de nómina: líquido vs descuentos (barras apiladas)
+  - Asistencias del mes
+- **Exportación Excel** de planilla general, IGSS e ISR desde la tabla de nóminas
+
+---
+
+## FASE 8 — Ventas y Clientes ✅
+
+**Backend:** `cliente/`, `producto-servicio/`, `venta/`
+**Frontend:** `ventas/`
+
+### Clientes
+
+- CRUD de clientes individuales y empresariales (NIT, DPI, correo, teléfono)
+- Validación de unicidad de NIT, DPI y correo
+- Soft delete
+
+### Productos y Servicios
+
+- Catálogo con nombre, tipo (PRODUCTO / SERVICIO), precio unitario y costo
+- Estado activo/inactivo
+
+### Ventas
+
+- Creación de órdenes con múltiples productos, descuento por línea y descuento general
+- IVA 12% calculado automáticamente
+- Estados: `PENDIENTE` → `PAGADO` / `CANCELADO` / `VENCIDO`
+- Al cambiar a **PAGADO**:
+  1. Selección de cuenta bancaria de cobro
+  2. Acreditación automática del total en el saldo de la cuenta
+  3. Creación de `MovimientoFinanciero` INGRESO/VENTA
+- Al **cancelar** una venta PAGADA: el movimiento financiero se revierte automáticamente
+- Botón ✉️ para enviar la factura por correo al cliente
+
+### SQL — Columna requerida
+
+```sql
+ALTER TABLE Venta ADD IdCuenta INT NULL;
+ALTER TABLE Venta ADD CONSTRAINT FK_Venta_Cuenta
+  FOREIGN KEY (IdCuenta) REFERENCES CuentaBancariaEmpresa(IdCuenta);
+```
+
+---
+
+## FASE 9 — Finanzas ✅
+
+**Backend:** `cuenta-bancaria-empresa/`, `movimiento-financiero/`
+**Frontend:** `finanzas/`
+
+### Cuentas Bancarias (`CuentaBancariaEmpresa`)
+
+- CRUD de cuentas: banco, número de cuenta, nombre, tipo (CORRIENTE / AHORROS / MONEDA_EXTRANJERA), moneda y saldo
+- Cards de resumen en tiempo real con saldo por cuenta y total en GTQ
+- Reactivar cuentas desactivadas
+
+### Movimientos Financieros
+
+- Registro manual de INGRESO / EGRESO con categoría, subcategoría, referencia y notas
+- Al **crear**: incrementa o decrementa `SaldoActual` de la cuenta automáticamente
+- Al **editar**: revierte el efecto original y aplica el nuevo (maneja cambios de monto, tipo y cuenta)
+- Al **eliminar**: revierte el efecto en el saldo antes del soft delete
+
+### Movimientos automáticos generados por el sistema
+
+| Origen | Tipo | Categoría | Subcategoría |
+|---|---|---|---|
+| Pago de nómina | EGRESO | NOMINA | PAGO_NOMINA |
+| Cobro de venta | INGRESO | VENTA | COBRO_VENTA |
+
+### SQL — Columnas requeridas en nómina
+
+```sql
+ALTER TABLE NominaEncabezado ADD IdCuenta    INT          NULL;
+ALTER TABLE NominaEncabezado ADD TipoNomina  VARCHAR(20)  NOT NULL DEFAULT 'GENERAL';
+
+ALTER TABLE NominaEncabezado ADD CONSTRAINT FK_NominaEncabezado_Cuenta
+  FOREIGN KEY (IdCuenta) REFERENCES CuentaBancariaEmpresa(IdCuenta);
+```
+
+---
+
+## FASE 10 — Correo Electrónico (Brevo) ✅
+
+**Backend:** `correo/`
+**Frontend:** `services/correo.service.ts`
+
+### Endpoints
+
+| Endpoint | Body | Descripción |
+|---|---|---|
+| `POST /api/correo/boleta-nomina` | `{ IdNomina }` | Envía boleta personalizada a cada empleado de la nómina |
+| `POST /api/correo/factura-venta` | `{ IdVenta }` | Envía factura al correo del cliente |
+| `POST /api/correo/notificacion` | `{ Destinatarios[], Asunto, Mensaje }` | Correo genérico a uno o varios destinatarios |
+
+### Correos automáticos
+
+- **Creación de usuario**: se envía al empleado vinculado con su usuario y contraseña (no bloquea si falla)
+- **Boleta de nómina** (botón manual en la tabla): tabla con ingresos, descuentos y líquido a recibir
+- **Factura de venta** (botón manual en la tabla): detalle de productos, IVA y total
+
+### Templates HTML
+
+Todos los correos usan templates HTML inline con diseño profesional oscuro/claro compatible con clientes de correo.
+
+---
+
+## Arquitectura del frontend
+
+```
+src/app/
+├── models/           ← Interfaces TypeScript por entidad
+├── services/         ← Servicios HTTP por módulo
+├── auth.guard.ts     ← Protección de rutas autenticadas
+├── role.guard.ts     ← Protección de rutas por rol
+├── menu/             ← Sidebar con visibilidad dinámica por rol
+├── inicio/           ← Dashboard con resumen ejecutivo
+├── login/
+├── seguridad/        ← Gestión de usuarios y roles
+├── rrhh/             ← Hub del módulo RRHH
+├── empleado/
+├── asistencia/
+├── vacacion/
+├── configuracion/    ← Hub de configuración
+│   ├── departamento/
+│   ├── puesto/
+│   ├── jornada-laboral/
+│   ├── banco/
+│   ├── parametro-global/
+│   └── estado-nomina/
+├── nomina/
+│   ├── nomina-inicio/
+│   └── nomina.ts     ← Generación, firmas, estados, exportación
+├── reporteria/
+├── reporteria-inicio/
+├── ventas/
+│   ├── venta-inicio/
+│   ├── cliente/
+│   ├── producto-servicio/
+│   └── venta.ts
+└── finanzas/
+    ├── finanzas-inicio/
+    ├── cuenta-bancaria/
+    └── movimiento-financiero/
+```
+
+---
+
+## Notas técnicas
+
+- **Soft delete** en todas las entidades (`Activo = false`, `FechaEliminacion`)
+- **`ValidationPipe`** global con `whitelist: true` y `transform: true` — elimina campos no declarados en los DTOs e inyecta `@Transform`
+- **Prisma `Decimal`** se serializa como string en JSON. El frontend usa `parseFloat()` explícito al construir payloads
+- **Dialogs PrimeNG 21** se portalan fuera del componente host — los estilos de dialogs van en `styles.css` global, no en `:host ::ng-deep`
+- **NG0100** (ExpressionChangedAfterItHasBeenChecked) — las operaciones destructivas (delete, etc.) usan `ConfirmationService` para crear una barrera asíncrona natural entre el evento y el cambio de estado
+- **Prisma Decimal / SQL Server** — no acepta `@default(false)` en campos BIT sin schema reset; los defaults se manejan en los DTOs
+- **Nóminas GENERALES**: máximo 1 por empleado/mes. **PERSONALIZADAS**: sin límite por mes
+
+---
+
+## API — Referencia rápida
+
+```
+Auth:
+  POST   /api/login
+  GET    /api/login/profile
+  POST   /api/login/logout
+
+Nómina:
+  GET    /api/nomina                        Lista activas
+  GET    /api/nomina/eliminadas             Lista eliminadas
+  POST   /api/nomina/calcular               Preview (incluye horas extra)
+  POST   /api/nomina/generar                Individual
+  POST   /api/nomina/generar-masiva         Masiva
+  POST   /api/nomina/generar-personalizada  Personalizada
+  POST   /api/nomina/:id/firmar             Agregar firma
+  PATCH  /api/nomina/:id/restaurar          Restaurar eliminada
+  DELETE /api/nomina/:id                    Soft delete
+  GET    /api/nomina/:id/export/general     Excel planilla general
+  GET    /api/nomina/:id/export/igss        Excel IGSS
+  GET    /api/nomina/:id/export/isr         Excel ISR/SAT
+
+Estado Nómina:
+  GET    /api/estado-nomina
+  POST   /api/estado-nomina
+  GET    /api/estado-nomina/:idNomina/disponibles
+  POST   /api/estado-nomina/cambiar
+  GET    /api/estado-nomina/:idNomina/historial
+
+Parámetros:
+  GET    /api/parametro-global
+  POST   /api/parametro-global
+  PATCH  /api/parametro-global/:id
+  DELETE /api/parametro-global/:id
+  POST   /api/parametro-global/simular      Simulador de impacto
+
+Ventas:
+  GET    /api/venta
+  POST   /api/venta
+  PATCH  /api/venta/:id
+  PUT    /api/venta/:id/estado-pago
+  DELETE /api/venta/:id
+
+Finanzas:
+  GET    /api/cuenta-bancaria-empresa
+  POST   /api/cuenta-bancaria-empresa
+  PATCH  /api/cuenta-bancaria-empresa/:id
+  PATCH  /api/cuenta-bancaria-empresa/:id/saldo
+  DELETE /api/cuenta-bancaria-empresa/:id
+  GET    /api/movimiento-financiero
+  POST   /api/movimiento-financiero
+  PATCH  /api/movimiento-financiero/:id
+  DELETE /api/movimiento-financiero/:id
+
+Correo:
+  POST   /api/correo/boleta-nomina
+  POST   /api/correo/factura-venta
+  POST   /api/correo/notificacion
+```
+
+---
+
+*Actualizado: Mayo 2026 · Versión 3.0*

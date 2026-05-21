@@ -47,4 +47,21 @@ export class ParametroGlobalService {
       catchError(this.errorService.handleError)
     );
   }
+
+  simular(body: {
+    IdParametro: number | null;
+    Genero?: boolean | null;
+    IdDepartamento?: number | null;
+    IdPuesto?: number | null;
+    IdJornada?: number | null;
+  }): Observable<any> {
+    const payload: any = { IdParametro: body.IdParametro };
+    if (body.Genero !== null && body.Genero !== undefined) payload.Genero = body.Genero;
+    if (body.IdDepartamento) payload.IdDepartamento = body.IdDepartamento;
+    if (body.IdPuesto)       payload.IdPuesto       = body.IdPuesto;
+    if (body.IdJornada)      payload.IdJornada       = body.IdJornada;
+    return this.http.post<any>(`${this.apiUrl}/simular`, payload).pipe(
+      catchError(this.errorService.handleError)
+    );
+  }
 }

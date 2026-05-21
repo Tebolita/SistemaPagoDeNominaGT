@@ -1,20 +1,23 @@
 import { IsInt, IsOptional, IsString, IsDateString, IsNumber, IsPositive, IsIn, MaxLength, Min, ValidateNested, IsArray } from 'class-validator';
-import { Type } from 'class-transformer';
+import { Type, Transform } from 'class-transformer';
 
 export class DetalleVentaDto {
   @IsInt()
   @IsPositive()
   IdProducto: number;
 
+  @Transform(({ value }) => parseFloat(value))
   @IsNumber({ maxDecimalPlaces: 2 })
   @IsPositive()
   Cantidad: number;
 
+  @Transform(({ value }) => parseFloat(value))
   @IsNumber({ maxDecimalPlaces: 2 })
   @IsPositive()
   PrecioUnitario: number;
 
   @IsOptional()
+  @Transform(({ value }) => (value != null ? parseFloat(value) : 0))
   @IsNumber({ maxDecimalPlaces: 2 })
   @Min(0)
   Descuento?: number;
@@ -25,6 +28,11 @@ export class CreateVentaDto {
   @IsInt()
   @IsPositive()
   IdCliente?: number;
+
+  @IsOptional()
+  @IsInt()
+  @IsPositive()
+  IdCuenta?: number;
 
   @IsOptional()
   @IsDateString()
@@ -65,6 +73,11 @@ export class UpdateVentaDto {
   @IsInt()
   @IsPositive()
   IdCliente?: number;
+
+  @IsOptional()
+  @IsInt()
+  @IsPositive()
+  IdCuenta?: number;
 
   @IsOptional()
   @IsDateString()

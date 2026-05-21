@@ -1,69 +1,141 @@
-<div class="producto-page">
-  <div class="producto-header">
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
+
+<div class="flex flex-col gap-5 p-4 min-h-screen">
+
+  <!-- ── Cabecera ──────────────────────────────────────────────────── -->
+  <div class="flex justify-between items-center flex-wrap gap-3">
     <div>
-      <h2>Productos y Servicios</h2>
-      <p>Administra los productos y servicios disponibles para ventas.</p>
+      <h1 class="text-2xl font-bold text-white">Productos y Servicios</h1>
+      <p class="text-sm text-slate-400 mt-1">Catálogo de productos y servicios disponibles para ventas</p>
     </div>
-    <button pButton type="button" label="Nuevo Producto/Servicio" icon="pi pi-plus" class="p-button-success" (click)="openNew()"></button>
+    <p-button
+      label="Nuevo Producto/Servicio"
+      icon="pi pi-plus"
+      severity="success"
+      (onClick)="openNew()"
+    ></p-button>
   </div>
 
-  <p-table [value]="productos" [loading]="loading" dataKey="IdProducto" responsiveLayout="scroll">
+  <!-- ── Tabla ─────────────────────────────────────────────────────── -->
+  <p-table
+    [value]="productos"
+    [loading]="loading"
+    [paginator]="true"
+    [rows]="10"
+    [rowHover]="true"
+    dataKey="IdProducto"
+    emptyMessage="No hay productos/servicios registrados."
+  >
     <ng-template pTemplate="header">
       <tr>
-        <th>Nombre</th>
-        <th>Tipo</th>
-        <th>Precio</th>
-        <th>Costo</th>
+        <th pSortableColumn="NombreProducto">Nombre <p-sortIcon field="NombreProducto"></p-sortIcon></th>
+        <th style="width:110px">Tipo</th>
+        <th pSortableColumn="PrecioUnitario" class="text-right">Precio <p-sortIcon field="PrecioUnitario"></p-sortIcon></th>
+        <th class="text-right">Costo</th>
         <th>Unidad</th>
-        <th>Activo</th>
-        <th>Acciones</th>
+        <th style="width:90px">Estado</th>
+        <th style="width:90px">Acciones</th>
       </tr>
     </ng-template>
-    <ng-template pTemplate="body" let-producto>
+
+    <ng-template pTemplate="body" let-p>
       <tr>
-        <td>{{ producto.NombreProducto }}</td>
-        <td>{{ producto.TipoProducto || 'N/A' }}</td>
-        <td>{{ producto.PrecioUnitario | currency:'GTQ' }}</td>
-        <td>{{ producto.CostoUnitario != null ? (producto.CostoUnitario | currency:'GTQ') : 'N/A' }}</td>
-        <td>{{ producto.UnidadMedida || 'N/A' }}</td>
+        <td class="font-medium text-slate-100">{{ p.NombreProducto }}</td>
         <td>
-          <p-tag [value]="producto.Activo ? 'Activo' : 'Inactivo'" [severity]="producto.Activo ? 'success' : 'danger'"></p-tag>
+          <p-tag
+            [value]="p.TipoProducto || 'N/A'"
+            [severity]="p.TipoProducto === 'PRODUCTO' ? 'info' : p.TipoProducto === 'SERVICIO' ? 'warn' : 'secondary'"
+          ></p-tag>
+        </td>
+        <td class="text-right font-semibold text-green-400">
+          Q {{ p.PrecioUnitario | number:'1.2-2' }}
+        </td>
+        <td class="text-right text-slate-400">
+          {{ p.CostoUnitario != null ? ('Q ' + (p.CostoUnitario | number:'1.2-2')) : '—' }}
+        </td>
+        <td class="text-slate-400 text-sm">{{ p.UnidadMedida || '—' }}</td>
+        <td>
+          <p-tag
+            [value]="p.Activo ? 'Activo' : 'Inactivo'"
+            [severity]="p.Activo ? 'success' : 'danger'"
+          ></p-tag>
         </td>
         <td>
-          <button pButton type="button" icon="pi pi-pencil" class="p-button-rounded p-button-text" (click)="editProducto(producto)"></button>
-          <button pButton type="button" icon="pi pi-trash" class="p-button-rounded p-button-danger p-button-text" (click)="deleteProducto(producto)"></button>
+          <p-button icon="pi pi-pencil" [rounded]="true" [text]="true" severity="warn"
+            pTooltip="Editar" tooltipPosition="top" (onClick)="editProducto(p)"></p-button>
+          <p-button icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger"
+            pTooltip="Eliminar" tooltipPosition="top" (onClick)="deleteProducto(p)"></p-button>
         </td>
       </tr>
     </ng-template>
   </p-table>
+</div>
 
-  <p-dialog header="{{ isEdit ? 'Editar Producto/Servicio' : 'Nuevo Producto/Servicio' }}" [(visible)]="productoDialog" [style]="{ width: '600px' }" [modal]="true" [closable]="false">
-    <div class="form-grid">
-        <div class="p-field">
-          <label for="nombreProducto">Nombre <span class="required">*</span></label>
-          <input pInputText id="nombreProducto" [(ngModel)]="productoForm.NombreProducto" placeholder="Ingrese el nombre del producto/servicio" />
-        </div>
-        <div class="p-field">
-          <label for="tipoProducto">Tipo</label>
-          <p-select id="tipoProducto" [options]="tiposProducto" optionLabel="label" optionValue="value" [(ngModel)]="productoForm.TipoProducto" placeholder="Seleccionar tipo" appendTo="body"></p-select>
-        </div>
-        <div class="p-field">
-          <label for="precioUnitario">Precio Unitario <span class="required">*</span></label>
-          <p-inputNumber id="precioUnitario" [(ngModel)]="productoForm.PrecioUnitario" [mode]="'currency'" currency="GTQ" locale="es-GT" [minFractionDigits]="2" placeholder="0.00"></p-inputNumber>
-        </div>
-        <div class="p-field">
-          <label for="costoUnitario">Costo Unitario</label>
-          <p-inputNumber id="costoUnitario" [(ngModel)]="productoForm.CostoUnitario" [mode]="'currency'" currency="GTQ" locale="es-GT" [minFractionDigits]="2" placeholder="0.00"></p-inputNumber>
-        </div>
-        <div class="p-field">
-          <label for="unidadMedida">Unidad de Medida</label>
-          <input pInputText id="unidadMedida" [(ngModel)]="productoForm.UnidadMedida" placeholder="Ej: Unidad, Kg, Litro, etc." />
-        </div>
+<!-- ── Diálogo ───────────────────────────────────────────────────── -->
+<p-dialog
+  [visible]="productoDialog"
+  (visibleChange)="productoDialog = $event"
+  [header]="isEdit ? 'Editar Producto/Servicio' : 'Nuevo Producto/Servicio'"
+  [modal]="true"
+  [style]="{ width: '580px', maxWidth: '95vw' }"
+  [resizable]="false"
+>
+  <div class="flex flex-col gap-4 pt-2">
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div class="flex flex-col gap-1 sm:col-span-2">
+        <label>Nombre *</label>
+        <input pInputText [(ngModel)]="productoForm.NombreProducto"
+          placeholder="Nombre del producto o servicio" class="w-full" />
       </div>
 
-    <ng-template pTemplate="footer">
-      <button pButton type="button" label="Cancelar" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
-      <button pButton type="button" label="Guardar" icon="pi pi-check" class="p-button-primary" (click)="saveProducto()"></button>
-    </ng-template>
-  </p-dialog>
-</div>
+      <div class="flex flex-col gap-1">
+        <label>Tipo</label>
+        <p-select
+          [options]="tiposProducto"
+          optionLabel="label"
+          optionValue="value"
+          [(ngModel)]="productoForm.TipoProducto"
+          placeholder="Seleccionar tipo"
+          class="w-full"
+          appendTo="body"
+        ></p-select>
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label>Unidad de Medida</label>
+        <input pInputText [(ngModel)]="productoForm.UnidadMedida"
+          placeholder="Ej: Unidad, Kg, Litro" class="w-full" />
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label>Precio Unitario (Q) *</label>
+        <p-inputNumber
+          [(ngModel)]="productoForm.PrecioUnitario"
+          [minFractionDigits]="2"
+          [maxFractionDigits]="2"
+          [min]="0"
+          class="w-full"
+        ></p-inputNumber>
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label>Costo Unitario (Q) <span class="text-slate-500 text-xs font-normal">opcional</span></label>
+        <p-inputNumber
+          [(ngModel)]="productoForm.CostoUnitario"
+          [minFractionDigits]="2"
+          [maxFractionDigits]="2"
+          [min]="0"
+          class="w-full"
+        ></p-inputNumber>
+      </div>
+    </div>
+
+  </div>
+
+  <ng-template pTemplate="footer">
+    <p-button label="Cancelar" icon="pi pi-times" [text]="true" severity="secondary" (onClick)="hideDialog()"></p-button>
+    <p-button label="Guardar" icon="pi pi-check" severity="success" (onClick)="saveProducto()"></p-button>
+  </ng-template>
+</p-dialog>

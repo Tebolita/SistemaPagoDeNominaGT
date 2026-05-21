@@ -1,19 +1,16 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, ParseIntPipe, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, ParseIntPipe, Put, UseGuards, Request } from '@nestjs/common';
 import { VentaService } from './venta.service';
 import { CreateVentaDto, UpdateVentaDto } from './dto/venta.dto';
-import { Request } from 'express';
+import { AuthGuard } from '../login/login.guard';
 
-// Decorador personalizado para obtener el usuario del JWT
-// Por ahora usaremos un usuario fijo para testing
 @Controller('venta')
+@UseGuards(AuthGuard)
 export class VentaController {
   constructor(private readonly ventaService: VentaService) {}
 
   @Post()
-  create(@Body() createVentaDto: CreateVentaDto) {
-    // TODO: Obtener ID del usuario del JWT token
-    const idUsuario = 1; // Usuario por defecto para testing
-    return this.ventaService.create(createVentaDto, idUsuario);
+  create(@Request() req: any, @Body() createVentaDto: CreateVentaDto) {
+    return this.ventaService.create(createVentaDto, req.user?.sub ?? 1);
   }
 
   @Get()
@@ -39,10 +36,11 @@ export class VentaController {
 
   @Put(':id/estado-pago')
   updateEstadoPago(
+    @Request() req: any,
     @Param('id', ParseIntPipe) id: number,
-    @Body('estadoPago') estadoPago: string,
+    @Body() body: { estadoPago: string; IdCuenta?: number },
   ) {
-    return this.ventaService.updateEstadoPago(id, estadoPago);
+    return this.ventaService.updateEstadoPago(id, body.estadoPago, body.IdCuenta, req.user?.sub ?? 1);
   }
 
   @Delete(':id')

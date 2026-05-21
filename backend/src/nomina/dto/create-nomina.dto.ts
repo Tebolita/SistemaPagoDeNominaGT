@@ -78,4 +78,10 @@ export class CreateNominaDto {
   })
   @IsOptional()
   Activo?: boolean;
+
+  @ApiPropertyOptional({ description: 'Cuenta bancaria de la empresa desde donde se pagará la nómina' })
+  @IsOptional()
+  @IsNumber()
+  @Min(1)
+  IdCuenta?: number;
 }
