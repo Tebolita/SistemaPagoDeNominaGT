@@ -2,8 +2,11 @@ import {
   Injectable,
   BadRequestException,
   NotFoundException,
+  ForbiddenException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { ConfigFirmanteService } from '../config-firmante/config-firmante.service';
+import { CorreoService } from '../correo/correo.service';
 import { CreateNominaDto } from './dto/create-nomina.dto';
 import { UpdateNominaDto } from './dto/update-nomina.dto';
 
@@ -20,15 +23,24 @@ const NOMINA_INCLUDE = {
   CuentaBancariaEmpresa: {
     select: { IdCuenta: true, NombreCuenta: true, NumeroCuenta: true, SaldoActual: true, Moneda: true },
   },
+  FirmanteAsignadoNomina: {
+    where: { Activo: true },
+    include: {
+      Usuario: {
+        select: {
+          IdUsuario: true,
+          Username: true,
+          IdEmpleado: true,
+          RolUsuario: { select: { NombreRol: true } },
+          Empleado:   { select: { Nombres: true, Apellidos: true, CorreoPersonal: true } },
+        },
+      },
+    },
+  },
   NominaDetalle: {
     include: {
       Empleado: {
-        select: {
-          Nombres: true,
-          Apellidos: true,
-          DPI: true,
-          NIT: true,
-        },
+        select: { Nombres: true, Apellidos: true, DPI: true, NIT: true },
       },
     },
   },
@@ -67,7 +79,11 @@ function mapDetalles(nomina: any) {
 
 @Injectable()
 export class NominaService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private configFirmanteService: ConfigFirmanteService,
+    private correoService: CorreoService,
+  ) {}
 
   async create(createNominaDto: CreateNominaDto, usuarioGerenteId?: number) {
     const fechaGeneracion = createNominaDto.FechaGeneracion
@@ -189,6 +205,95 @@ export class NominaService {
       },
     });
   }
+
+  // ─── Firmantes asignados por nómina ──────────────────────────────────────
+
+  async getAsignacionesFirmantes(idNomina: number) {
+    return this.prisma.firmanteAsignadoNomina.findMany({
+      where: { IdNomina: idNomina, Activo: true },
+      include: {
+        Usuario: {
+          select: {
+            IdUsuario: true,
+            Username: true,
+            IdEmpleado: true,
+            RolUsuario: { select: { NombreRol: true } },
+            Empleado:   { select: { Nombres: true, Apellidos: true, CorreoPersonal: true } },
+          },
+        },
+      },
+    });
+  }
+
+  async asignarFirmantesNomina(
+    idNomina: number,
+    asignaciones: {
+      TipoFirmante:      string;
+      Modo:              string;
+      RolRequerido?:     string | null;
+      IdUsuarioAsignado?: number | null;
+      NotificarCorreo:   boolean;
+    }[],
+    idUsuarioRegistra?: number,
+  ) {
+    const nomina = await this.findOne(idNomina);
+
+    // Desactivar asignaciones anteriores
+    await this.prisma.firmanteAsignadoNomina.updateMany({
+      where: { IdNomina: idNomina, Activo: true },
+      data:  { Activo: false },
+    });
+
+    // Crear nuevas
+    for (const asig of asignaciones) {
+      await this.prisma.firmanteAsignadoNomina.create({
+        data: {
+          IdNomina:          idNomina,
+          TipoFirmante:      asig.TipoFirmante,
+          Modo:              asig.Modo,
+          RolRequerido:      asig.RolRequerido  ?? null,
+          IdUsuarioAsignado: asig.IdUsuarioAsignado ?? null,
+          NotificarCorreo:   asig.NotificarCorreo,
+          Activo:            true,
+        },
+      });
+    }
+
+    // Notificar a usuarios asignados
+    const aNotificar = asignaciones.filter(a => a.NotificarCorreo && a.IdUsuarioAsignado);
+    if (aNotificar.length) {
+      await this.notificarFirmantesAsignados(idNomina, aNotificar.map(a => a.IdUsuarioAsignado!), nomina);
+    }
+
+    return this.getAsignacionesFirmantes(idNomina);
+  }
+
+  private async notificarFirmantesAsignados(idNomina: number, idsUsuarios: number[], nomina: any) {
+    const meses = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+    const periodo = `${meses[(nomina.Mes ?? 1) - 1]} ${nomina.Anio}`;
+
+    for (const idUsuario of idsUsuarios) {
+      const usuario = await this.prisma.usuario.findUnique({
+        where: { IdUsuario: idUsuario },
+        include: { Empleado: { select: { CorreoPersonal: true, Nombres: true, Apellidos: true } } },
+      });
+      if (!usuario?.Empleado?.CorreoPersonal) continue;
+
+      const asig = await this.prisma.firmanteAsignadoNomina.findFirst({
+        where: { IdNomina: idNomina, IdUsuarioAsignado: idUsuario, Activo: true },
+      });
+
+      await this.correoService.enviarNotificacionFirma(
+        usuario.Empleado.CorreoPersonal,
+        `${usuario.Empleado.Nombres} ${usuario.Empleado.Apellidos}`,
+        asig?.TipoFirmante ?? 'Firmante',
+        periodo,
+        idNomina,
+      );
+    }
+  }
+
+  // ─── Calcular nómina ──────────────────────────────────────────────────────
 
   async calcularNomina(idEmpleado: number, salarioBase: number, mes?: number, anio?: number) {
     const empleado = await this.prisma.empleado.findUnique({
@@ -663,11 +768,46 @@ export class NominaService {
     idUsuario: number,
     comentarios?: string,
   ) {
-    const tiposValidos = ['JEFE_AREA', 'ENCARGADO'];
-    if (!tiposValidos.includes(tipoFirmante)) {
+    // Validar tipo de firmante contra los configurados en BD
+    const todosLosConfigs = await this.configFirmanteService.findAll();
+    const tiposValidos = todosLosConfigs.map(c => c.TipoFirmante);
+
+    if (tiposValidos.length > 0 && !tiposValidos.includes(tipoFirmante)) {
       throw new BadRequestException(
-        `Tipo de firmante inválido. Debe ser: ${tiposValidos.join(' o ')}`,
+        `Tipo de firmante inválido. Tipos disponibles: ${tiposValidos.join(', ')}`,
       );
+    }
+
+    // Verificar asignación específica de ESTA nómina primero
+    const asignacion = await this.prisma.firmanteAsignadoNomina.findFirst({
+      where: { IdNomina: idNomina, TipoFirmante: tipoFirmante, Activo: true },
+    });
+
+    if (asignacion) {
+      if (asignacion.Modo === 'USUARIO' && asignacion.IdUsuarioAsignado) {
+        if (asignacion.IdUsuarioAsignado !== idUsuario) {
+          const u = await this.prisma.usuario.findUnique({
+            where:   { IdUsuario: asignacion.IdUsuarioAsignado },
+            include: { Empleado: { select: { Nombres: true, Apellidos: true } } },
+          });
+          const nombre = u?.Empleado ? `${u.Empleado.Nombres} ${u.Empleado.Apellidos}` : `Usuario #${asignacion.IdUsuarioAsignado}`;
+          throw new ForbiddenException(`Solo ${nombre} puede firmar como ${tipoFirmante} en esta nómina`);
+        }
+      } else if (asignacion.Modo === 'ROL' && asignacion.RolRequerido) {
+        const usuarioFirmante = await this.prisma.usuario.findUnique({
+          where:   { IdUsuario: idUsuario },
+          include: { RolUsuario: { select: { NombreRol: true } } },
+        });
+        const rolUsuario = (usuarioFirmante?.RolUsuario?.NombreRol ?? '').trim().toUpperCase().replace(/\s+/g, '_');
+        const rolReq     = asignacion.RolRequerido.trim().toUpperCase().replace(/\s+/g, '_');
+        if (rolUsuario !== rolReq) {
+          throw new ForbiddenException(`Solo usuarios con rol ${asignacion.RolRequerido} pueden firmar como ${tipoFirmante} en esta nómina`);
+        }
+      }
+    } else {
+      // Sin asignación específica → usar configuración global
+      const { puede, razon } = await this.configFirmanteService.puedeUsuarioFirmar(tipoFirmante, idUsuario);
+      if (!puede) throw new ForbiddenException(razon ?? 'No tiene permisos para firmar como este tipo');
     }
 
     const nomina = await this.prisma.nominaEncabezado.findUnique({
@@ -803,22 +943,24 @@ export class NominaService {
   }
 
   private async getHorasExtras(idEmpleado: number, mes: number, anio: number): Promise<number> {
-    const inicioMes = new Date(anio, mes - 1, 1);
-    const finMes    = new Date(anio, mes, 0, 23, 59, 59, 999);
+    if (!idEmpleado || !mes || !anio) return 0;
 
-    const asistencias = await this.prisma.asistencia.findMany({
+    const inicioMes = new Date(Date.UTC(anio, mes - 1, 1));
+    const finMes    = new Date(Date.UTC(anio, mes, 0, 23, 59, 59, 999));
+
+    // Aggregate directo — solo suma HorasExtra del empleado en el mes indicado.
+    // NOT: { Activo: false } incluye registros con Activo = true Y Activo = null.
+    const result = await this.prisma.asistencia.aggregate({
+      _sum: { HorasExtra: true },
       where: {
-        IdEmpleado: idEmpleado,
-        Activo: true,
-        Fecha: { gte: inicioMes, lte: finMes },
+        IdEmpleado: { equals: idEmpleado },
+        NOT:        { Activo: false },
+        Fecha:      { gte: inicioMes, lte: finMes },
         HorasExtra: { gt: 0 },
       },
     });
 
-    return asistencias.reduce(
-      (total, a) => total + parseFloat(a.HorasExtra?.toString() ?? '0'),
-      0,
-    );
+    return parseFloat(result._sum.HorasExtra?.toString() ?? '0');
   }
 
   private async getDiasLaborados(
@@ -826,8 +968,8 @@ export class NominaService {
     mes: number,
     anio: number,
   ): Promise<number> {
-    const inicioMes = new Date(anio, mes - 1, 1);
-    const finMes = new Date(anio, mes, 0, 23, 59, 59, 999);
+    const inicioMes = new Date(Date.UTC(anio, mes - 1, 1));
+    const finMes    = new Date(Date.UTC(anio, mes, 0, 23, 59, 59, 999));
 
     const asistencias = await this.prisma.asistencia.findMany({
       where: {
@@ -835,6 +977,7 @@ export class NominaService {
         Activo: true,
         Fecha: { gte: inicioMes, lte: finMes },
       },
+      select: { Fecha: true },
     });
 
     const diasUnicos = new Set(

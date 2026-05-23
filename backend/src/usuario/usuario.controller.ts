@@ -8,6 +8,7 @@ import {
   Patch,
   Delete,
   ParseIntPipe,
+  Request,
 } from '@nestjs/common';
 import { AuthGuard } from 'src/login/login.guard';
 import { UsuarioService } from './usuario.service';
@@ -50,6 +51,16 @@ export class UsuarioController {
     @Body() updateUsuarioDto: UpdateUsuarioDto,
   ) {
     return this.usuarioService.update(id, updateUsuarioDto);
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
+  @Patch(':id/cambiar-password')
+  cambiarPassword(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() body: { passwordActual: string; passwordNueva: string; claveNueva?: string },
+  ) {
+    return this.usuarioService.cambiarPassword(id, body.passwordActual, body.passwordNueva, body.claveNueva);
   }
 
   // Eliminar un usuario (Protegido con Token)

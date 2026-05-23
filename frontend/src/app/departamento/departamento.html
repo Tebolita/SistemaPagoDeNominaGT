@@ -12,10 +12,12 @@
     ></p-button>
   </div>
 
-  <p-table [value]="departamentos()" [tableStyle]="{ 'min-width': '50rem' }">
+  <p-table [value]="departamentos()" [tableStyle]="{ 'min-width': '60rem' }">
     <ng-template pTemplate="header">
       <tr>
         <th pSortableColumn="NombreDepartamento">Nombre <p-sortIcon field="NombreDepartamento"></p-sortIcon></th>
+        <th>Presupuesto</th>
+        <th>Uso del Presupuesto</th>
         <th>Estado</th>
         <th>Acciones</th>
       </tr>
@@ -24,8 +26,40 @@
       <tr>
         <td>{{ dept.NombreDepartamento }}</td>
         <td>
-          <p-tag 
-            [value]="dept.Activo ? 'Activo' : 'Inactivo'" 
+          @if (dept.Presupuesto) {
+            <span class="font-semibold">Q{{ dept.Presupuesto | number:'1.2-2' }}</span>
+          } @else {
+            <span class="text-surface-400">Sin límite</span>
+          }
+        </td>
+        <td style="min-width: 200px">
+          @if (dept.Presupuesto) {
+            <div class="flex flex-col gap-1">
+              <div class="flex justify-between text-xs text-surface-500 mb-1">
+                <span>Usado: Q{{ (dept.PresupuestoUsado ?? 0) | number:'1.2-2' }}</span>
+                <span>{{ getPorcentajeUso(dept) }}%</span>
+              </div>
+              <p-progressBar
+                [value]="getPorcentajeUso(dept)"
+                [showValue]="false"
+                [style]="{ height: '8px' }"
+                [styleClass]="getSeveridadPresupuesto(dept) === 'danger' ? 'presupuesto-danger' : getSeveridadPresupuesto(dept) === 'warn' ? 'presupuesto-warn' : 'presupuesto-ok'"
+              ></p-progressBar>
+              @if (getPorcentajeUso(dept) >= 100) {
+                <span class="text-xs text-red-500 font-semibold">Presupuesto agotado</span>
+              } @else {
+                <span class="text-xs text-surface-400">
+                  Disponible: Q{{ (dept.Presupuesto - (dept.PresupuestoUsado ?? 0)) | number:'1.2-2' }}
+                </span>
+              }
+            </div>
+          } @else {
+            <span class="text-surface-400 text-sm">—</span>
+          }
+        </td>
+        <td>
+          <p-tag
+            [value]="dept.Activo ? 'Activo' : 'Inactivo'"
             [severity]="dept.Activo ? 'success' : 'danger'"
           ></p-tag>
         </td>
@@ -59,17 +93,32 @@
   (visibleChange)="displayDialog.set($event)"
   [header]="isEditMode() ? 'Editar Departamento' : 'Nuevo Departamento'"
   [modal]="true"
-  [style]="{ width: '50vw' }"
+  [style]="{ width: '40vw' }"
 >
   <div class="flex flex-col gap-4">
     <div>
-      <label class="block text-sm font-medium mb-2">Nombre del Departamento</label>
+      <label class="block text-sm font-medium mb-2">Nombre del Departamento <span class="text-red-500">*</span></label>
       <input
         type="text"
         pInputText
         [(ngModel)]="form.NombreDepartamento"
         class="w-full"
+        placeholder="Ej: Recursos Humanos"
       />
+    </div>
+    <div>
+      <label class="block text-sm font-medium mb-2">Presupuesto Mensual (Q)</label>
+      <p-inputNumber
+        [(ngModel)]="form.Presupuesto"
+        mode="decimal"
+        [minFractionDigits]="2"
+        [maxFractionDigits]="2"
+        [min]="0"
+        placeholder="Sin límite"
+        class="w-full"
+        inputStyleClass="w-full"
+      ></p-inputNumber>
+      <small class="text-surface-400">Deja vacío para no establecer un límite.</small>
     </div>
   </div>
   <ng-template pTemplate="footer">

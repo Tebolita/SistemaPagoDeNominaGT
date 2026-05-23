@@ -20,9 +20,11 @@ export interface UsuarioResponseCUD {
 export interface UsuarioInterface {
   IdUsuario?: number;
   Username: string;
-  Contrasena?: string; 
-  Clave?: string;      
+  Contrasena?: string;
+  Clave?: string;
   IdRol: number;
   IdEmpleado: number;
+  Activo?: boolean;
   RolUsuario?: { NombreRol: string };
+  Empleado?: { Nombres: string; Apellidos: string };
 }

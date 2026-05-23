@@ -1,0 +1,273 @@
+<p-toast></p-toast>
+
+<div class="hist-wrapper">
+
+  <!-- ── Cabecera ─────────────────────────────────────────────────── -->
+  <div class="hist-header">
+    <div>
+      <h1 class="hist-title">Historiales</h1>
+      <p class="hist-sub">Consulta registros históricos de salarios, nóminas, asistencias y vacaciones</p>
+    </div>
+    <div class="flex gap-2">
+      <p-button icon="pi pi-file-excel" label="Excel" severity="success" [outlined]="true"
+        (onClick)="exportar('excel')"></p-button>
+      <p-button icon="pi pi-file-pdf" label="PDF" severity="danger" [outlined]="true"
+        (onClick)="exportar('pdf')"></p-button>
+    </div>
+  </div>
+
+  <!-- ── Tabs ─────────────────────────────────────────────────────── -->
+  <p-tabs [value]="tabActivo" (valueChange)="onTabChange($event)">
+    <p-tablist>
+      <p-tab value="salarios"><i class="pi pi-dollar mr-2"></i>Historial de Salarios</p-tab>
+      <p-tab value="nominas"><i class="pi pi-calculator mr-2"></i>Historial de Nóminas</p-tab>
+      <p-tab value="asistencias"><i class="pi pi-clock mr-2"></i>Asistencias</p-tab>
+      <p-tab value="vacaciones"><i class="pi pi-sun mr-2"></i>Vacaciones</p-tab>
+    </p-tablist>
+
+    <p-tabpanels>
+
+      <!-- ══ SALARIOS ══════════════════════════════════════════════ -->
+      <p-tabpanel value="salarios">
+        <div class="tab-actions">
+          <p-button icon="pi pi-refresh" label="Actualizar" [loading]="loading()" (onClick)="buscar()"></p-button>
+        </div>
+
+        <p-table [value]="salarios()" [loading]="loading()" [paginator]="true" [rows]="15"
+          [rowHover]="true" emptyMessage="No hay registros de salarios.">
+          <ng-template pTemplate="header">
+            <tr>
+              <th pSortableColumn="NombreEmpleado">Empleado <p-sortIcon field="NombreEmpleado"></p-sortIcon></th>
+              <th>DPI</th>
+              <th>Puesto</th>
+              <th>Departamento</th>
+              <th pSortableColumn="SalarioBase" class="text-right">Salario Base <p-sortIcon field="SalarioBase"></p-sortIcon></th>
+              <th>Inicio Vigencia</th>
+              <th>Fin Vigencia</th>
+              <th>Estado</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-sal>
+            <tr>
+              <td>
+                <div class="emp-cell">
+                  <div class="emp-avatar">{{ sal.NombreEmpleado?.[0] ?? '?' }}</div>
+                  <span class="emp-name">{{ sal.NombreEmpleado }}</span>
+                </div>
+              </td>
+              <td class="font-mono text-xs text-slate-400">{{ sal.DPI }}</td>
+              <td class="text-sm text-slate-300">{{ sal.Puesto ?? '—' }}</td>
+              <td class="text-sm text-slate-400">{{ sal.Departamento ?? '—' }}</td>
+              <td class="text-right font-semibold text-green-400">Q {{ sal.SalarioBase | number:'1.2-2' }}</td>
+              <td class="text-sm text-slate-400">{{ sal.FechaInicioVigencia | date:'dd/MM/yyyy' }}</td>
+              <td class="text-sm text-slate-400">
+                @if (sal.FechaFinVigencia) { {{ sal.FechaFinVigencia | date:'dd/MM/yyyy' }} }
+                @else { <span class="text-slate-600">—</span> }
+              </td>
+              <td>
+                @if (!sal.FechaFinVigencia) {
+                  <p-tag value="Vigente" severity="success"></p-tag>
+                } @else {
+                  <p-tag value="Histórico" severity="secondary"></p-tag>
+                }
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </p-tabpanel>
+
+      <!-- ══ NÓMINAS ═══════════════════════════════════════════════ -->
+      <p-tabpanel value="nominas">
+        <div class="tab-actions">
+          <div class="filter-row">
+            <div class="filter-item">
+              <label>Mes</label>
+              <p-select [options]="meses" [(ngModel)]="mes" optionLabel="label" optionValue="value"
+                placeholder="Todos" appendTo="body"></p-select>
+            </div>
+            <div class="filter-item">
+              <label>Año</label>
+              <p-select [options]="anios" [(ngModel)]="anio" optionLabel="label" optionValue="value"
+                placeholder="Todos" appendTo="body"></p-select>
+            </div>
+            <p-button icon="pi pi-search" label="Buscar" [loading]="loading()" (onClick)="buscar()"></p-button>
+          </div>
+        </div>
+
+        @if (nominas().length === 0 && !loading()) {
+          <div class="empty-state">
+            <i class="pi pi-calculator"></i>
+            <p>No hay nóminas para el período seleccionado.</p>
+          </div>
+        }
+
+        @for (nomina of nominas(); track nomina.IdNomina) {
+          <div class="nomina-card">
+            <div class="nomina-header">
+              <div class="nomina-header-left">
+                <i class="pi pi-calculator text-sky-400"></i>
+                <span class="nomina-periodo">Nómina {{ nomina.Mes }}/{{ nomina.Anio }}</span>
+                <p-tag [value]="nomina.Estado" severity="info"></p-tag>
+                <span class="nomina-tipo">{{ nomina.TipoNomina ?? 'GENERAL' }}</span>
+              </div>
+              <div class="nomina-totales">
+                <div class="nomina-total-item">
+                  <span class="label">Empleados</span>
+                  <span class="value text-white">{{ nomina.TotalEmpleados }}</span>
+                </div>
+                <div class="nomina-total-item">
+                  <span class="label">Sueldos</span>
+                  <span class="value text-slate-200">Q {{ nomina.TotalSueldos | number:'1.2-2' }}</span>
+                </div>
+                <div class="nomina-total-item">
+                  <span class="label">Descuentos</span>
+                  <span class="value text-red-400">Q {{ nomina.TotalDescuentos | number:'1.2-2' }}</span>
+                </div>
+                <div class="nomina-total-item nomina-total-item--highlight">
+                  <span class="label">Líquido</span>
+                  <span class="value text-green-400">Q {{ nomina.TotalLiquido | number:'1.2-2' }}</span>
+                </div>
+              </div>
+            </div>
+
+            <p-table [value]="nomina.Detalle" [rows]="5" [paginator]="nomina.Detalle?.length > 5">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>Empleado</th>
+                  <th>Puesto</th>
+                  <th class="text-right">Días</th>
+                  <th class="text-right">Sueldo</th>
+                  <th class="text-right">Bonif.</th>
+                  <th class="text-right">IGSS</th>
+                  <th class="text-right">ISR</th>
+                  <th class="text-right">Líquido</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-det>
+                <tr>
+                  <td class="font-medium text-slate-100">{{ det.NombreEmpleado }}</td>
+                  <td class="text-slate-400 text-xs">{{ det.Puesto }}</td>
+                  <td class="text-right text-sm">{{ det.DiasLaborados }}</td>
+                  <td class="text-right text-sm">Q {{ det.SueldoBase | number:'1.2-2' }}</td>
+                  <td class="text-right text-sm text-green-400">Q {{ det.BonificacionIncentivo || 0 | number:'1.2-2' }}</td>
+                  <td class="text-right text-sm text-red-400">Q {{ det.DescuentoIGSS || 0 | number:'1.2-2' }}</td>
+                  <td class="text-right text-sm text-red-400">Q {{ det.DescuentoISR || 0 | number:'1.2-2' }}</td>
+                  <td class="text-right font-bold text-green-400">Q {{ det.LiquidoRecibir | number:'1.2-2' }}</td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+        }
+      </p-tabpanel>
+
+      <!-- ══ ASISTENCIAS ════════════════════════════════════════════ -->
+      <p-tabpanel value="asistencias">
+        <div class="tab-actions">
+          <div class="filter-row">
+            <div class="filter-item">
+              <label>Desde</label>
+              <p-datepicker [(ngModel)]="fechaInicio" dateFormat="dd/mm/yy" [showIcon]="true"
+                appendTo="body" placeholder="Fecha inicio"></p-datepicker>
+            </div>
+            <div class="filter-item">
+              <label>Hasta</label>
+              <p-datepicker [(ngModel)]="fechaFin" dateFormat="dd/mm/yy" [showIcon]="true"
+                appendTo="body" placeholder="Fecha fin"></p-datepicker>
+            </div>
+            <p-button icon="pi pi-search" label="Buscar" [loading]="loading()" (onClick)="buscar()"></p-button>
+          </div>
+          @if (!fechaInicio() || !fechaFin()) {
+            <p class="filter-hint"><i class="pi pi-info-circle"></i> Selecciona un rango de fechas para ver las asistencias.</p>
+          }
+        </div>
+
+        <p-table [value]="asistencias()" [loading]="loading()" [paginator]="true" [rows]="15"
+          [rowHover]="true" emptyMessage="Selecciona un rango de fechas y presiona Buscar.">
+          <ng-template pTemplate="header">
+            <tr>
+              <th pSortableColumn="NombreEmpleado">Empleado <p-sortIcon field="NombreEmpleado"></p-sortIcon></th>
+              <th>Puesto</th>
+              <th>Departamento</th>
+              <th class="text-right">Registros</th>
+              <th class="text-right">Con Entrada</th>
+              <th class="text-right">Con Salida</th>
+              <th class="text-right">Horas Extra</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-a>
+            <tr>
+              <td>
+                <div class="emp-cell">
+                  <div class="emp-avatar">{{ a.NombreEmpleado?.[0] ?? '?' }}</div>
+                  <span class="emp-name">{{ a.NombreEmpleado }}</span>
+                </div>
+              </td>
+              <td class="text-sm text-slate-300">{{ a.Puesto ?? '—' }}</td>
+              <td class="text-sm text-slate-400">{{ a.Departamento ?? '—' }}</td>
+              <td class="text-right font-semibold text-slate-200">{{ a.TotalAsistencias }}</td>
+              <td class="text-right text-slate-300">{{ a.DiasConEntrada }}</td>
+              <td class="text-right text-slate-300">{{ a.DiasConSalida }}</td>
+              <td class="text-right font-semibold text-orange-400">
+                @if (a.TotalHorasExtra > 0) { {{ a.TotalHorasExtra | number:'1.2-2' }} hrs }
+                @else { <span class="text-slate-600">—</span> }
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </p-tabpanel>
+
+      <!-- ══ VACACIONES ════════════════════════════════════════════ -->
+      <p-tabpanel value="vacaciones">
+        <div class="tab-actions">
+          <div class="filter-row">
+            <div class="filter-item">
+              <label>Año</label>
+              <p-select [options]="anios" [(ngModel)]="anioVac" optionLabel="label" optionValue="value"
+                placeholder="Todos" appendTo="body"></p-select>
+            </div>
+            <p-button icon="pi pi-search" label="Buscar" [loading]="loading()" (onClick)="buscar()"></p-button>
+          </div>
+        </div>
+
+        <p-table [value]="vacaciones()" [loading]="loading()" [paginator]="true" [rows]="15"
+          [rowHover]="true" emptyMessage="No hay registros de vacaciones.">
+          <ng-template pTemplate="header">
+            <tr>
+              <th pSortableColumn="NombreEmpleado">Empleado <p-sortIcon field="NombreEmpleado"></p-sortIcon></th>
+              <th>Puesto</th>
+              <th>Departamento</th>
+              <th class="text-right">Año</th>
+              <th class="text-right">Días Ganados</th>
+              <th class="text-right">Días Gozados</th>
+              <th class="text-right">Pendientes</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-v>
+            <tr>
+              <td>
+                <div class="emp-cell">
+                  <div class="emp-avatar">{{ v.NombreEmpleado?.[0] ?? '?' }}</div>
+                  <span class="emp-name">{{ v.NombreEmpleado }}</span>
+                </div>
+              </td>
+              <td class="text-sm text-slate-300">{{ v.Puesto ?? '—' }}</td>
+              <td class="text-sm text-slate-400">{{ v.Departamento ?? '—' }}</td>
+              <td class="text-right font-mono text-slate-300">{{ v.Anio }}</td>
+              <td class="text-right font-semibold text-sky-400">{{ v.DiasGanados }}</td>
+              <td class="text-right text-slate-300">{{ v.DiasGozados }}</td>
+              <td class="text-right">
+                @if (v.DiasPendientes > 0) {
+                  <p-tag severity="warn" [value]="v.DiasPendientes + ' días'"></p-tag>
+                } @else {
+                  <p-tag severity="success" value="Al día"></p-tag>
+                }
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </p-tabpanel>
+
+    </p-tabpanels>
+  </p-tabs>
+
+</div>

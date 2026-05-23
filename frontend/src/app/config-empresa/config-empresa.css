@@ -1,0 +1,19 @@
+:host { display: block; }
+.emp-wrapper { max-width: 860px; margin: 0 auto; padding: 2rem 1.5rem; display: flex; flex-direction: column; gap: 1.5rem; }
+.emp-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; flex-wrap: wrap; }
+.emp-title  { font-size: 1.5rem; font-weight: 800; color: #f1f5f9; margin: 0 0 4px; }
+.emp-sub    { font-size: 0.85rem; color: #475569; margin: 0; }
+.emp-grid   { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+@media (max-width: 700px) { .emp-grid { grid-template-columns: 1fr; } }
+.emp-section { background: #131f35; border: 1px solid #1e3254; border-radius: 12px; padding: 1.25rem; display: flex; flex-direction: column; gap: 1rem; }
+.emp-section--full { grid-column: span 2; }
+@media (max-width: 700px) { .emp-section--full { grid-column: span 1; } }
+.emp-section-title { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; }
+.emp-fields { display: flex; flex-direction: column; gap: 0.875rem; }
+.field-group { display: flex; flex-direction: column; gap: 4px; }
+.field-group label { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: #64748b; }
+.logo-preview { padding: 0.75rem; background: #0a1628; border: 1px solid #334155; border-radius: 8px; display: flex; justify-content: center; }
+.logo-img { max-height: 80px; max-width: 220px; object-fit: contain; }
+.emp-footer { font-size: 0.72rem; color: #334155; text-align: right; }
+:host ::ng-deep .p-inputtext { background: #0a1628 !important; border-color: #334155 !important; color: #e2e8f0 !important; }
+:host ::ng-deep .p-select { background: #0a1628 !important; border-color: #334155 !important; }

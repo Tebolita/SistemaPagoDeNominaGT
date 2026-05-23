@@ -1,0 +1,205 @@
+:host { display: block; }
+
+.hist-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1.5rem;
+  min-height: 100vh;
+  background: #0f172a;
+}
+
+.hist-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.hist-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #f1f5f9;
+  margin: 0 0 4px;
+}
+
+.hist-sub {
+  font-size: 0.85rem;
+  color: #475569;
+  margin: 0;
+}
+
+/* Tabs */
+:host ::ng-deep .p-tabs { background: transparent !important; }
+:host ::ng-deep .p-tablist { background: #131f35 !important; border-color: #1e3254 !important; border-radius: 10px 10px 0 0; }
+:host ::ng-deep .p-tab { color: #64748b !important; }
+:host ::ng-deep .p-tab.p-tab-active { color: #60a5fa !important; border-bottom-color: #3b82f6 !important; }
+:host ::ng-deep .p-tabpanels { background: #131f35 !important; border: 1px solid #1e3254 !important; border-top: none; border-radius: 0 0 10px 10px; padding: 1.25rem; }
+
+/* Table */
+:host ::ng-deep .p-datatable { background: #0f1f35 !important; border-radius: 8px; overflow: hidden; border: 1px solid #1e3254 !important; }
+:host ::ng-deep .p-datatable .p-datatable-thead > tr > th { background: #0a1628 !important; color: #475569 !important; border-color: #1e3254 !important; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; padding: 0.7rem 1rem; }
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr { background: #0f1f35 !important; border-color: #1e3254 !important; transition: background 0.1s; }
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr:hover { background: #162840 !important; }
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr > td { border-color: #1e3254 !important; color: #e2e8f0 !important; padding: 0.65rem 1rem; }
+:host ::ng-deep .p-datatable .p-datatable-emptymessage > td { background: #0f1f35 !important; color: #475569 !important; text-align: center; padding: 3rem !important; }
+:host ::ng-deep .p-paginator { background: #0a1628 !important; border-color: #1e3254 !important; color: #64748b !important; }
+:host ::ng-deep .p-paginator .p-paginator-page.p-highlight { background: #2563eb !important; color: #fff !important; }
+
+/* Acciones de tab */
+.tab-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: flex-end;
+}
+
+.filter-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 150px;
+}
+
+.filter-item label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #475569;
+}
+
+.filter-hint {
+  font-size: 0.78rem;
+  color: #475569;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+}
+
+/* Avatar empleado */
+.emp-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.emp-avatar {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: rgba(96,165,250,0.15);
+  border: 1px solid rgba(96,165,250,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #60a5fa;
+  flex-shrink: 0;
+}
+
+.emp-name {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #e2e8f0;
+}
+
+/* Nómina card */
+.nomina-card {
+  background: #0a1628;
+  border: 1px solid #1e3254;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.nomina-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  background: #0f1f35;
+  border-bottom: 1px solid #1e3254;
+}
+
+.nomina-header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.nomina-periodo {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #f1f5f9;
+}
+
+.nomina-tipo {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #475569;
+  background: #1e3254;
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+.nomina-totales {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.nomina-total-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.nomina-total-item .label {
+  font-size: 0.68rem;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.nomina-total-item .value {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.nomina-total-item--highlight {
+  border-left: 1px solid #1e3254;
+  padding-left: 1.5rem;
+}
+
+/* Empty state */
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #475569;
+}
+
+.empty-state i {
+  font-size: 2.5rem;
+  display: block;
+  margin-bottom: 0.75rem;
+}
+
+.empty-state p {
+  font-size: 0.9rem;
+  margin: 0;
+}

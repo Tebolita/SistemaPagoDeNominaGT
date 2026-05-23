@@ -2,6 +2,7 @@ import {
   Controller,
   Get,
   Post,
+  Put,
   Body,
   Patch,
   Param,
@@ -32,9 +33,28 @@ export class RolController {
     return this.rolService.findAll();
   }
 
+  // Catálogo de todos los permisos agrupados por módulo — debe ir antes de :id
+  @Get('permisos')
+  getPermisos() {
+    return this.rolService.getPermisos();
+  }
+
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.rolService.findOne(id);
+  }
+
+  @Get(':id/permisos')
+  getPermisosRol(@Param('id', ParseIntPipe) id: number) {
+    return this.rolService.getPermisosRol(id);
+  }
+
+  @Put(':id/permisos')
+  asignarPermisos(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() body: { idPermisos: number[] },
+  ) {
+    return this.rolService.asignarPermisos(id, body.idPermisos);
   }
 
   @Patch(':id')

@@ -1,0 +1,74 @@
+<p-toast></p-toast>
+
+<div class="emp-wrapper">
+  <div class="emp-header">
+    <div>
+      <h1 class="emp-title">Configuración de Empresa</h1>
+      <p class="emp-sub">Datos generales que aparecen en boletas, reportes y documentos oficiales</p>
+    </div>
+    <p-button label="Guardar cambios" icon="pi pi-save" severity="success" [loading]="saving()" (onClick)="guardar()"></p-button>
+  </div>
+
+  <div class="emp-grid">
+
+    <!-- Identidad -->
+    <div class="emp-section">
+      <div class="emp-section-title"><i class="pi pi-building"></i> Identidad legal</div>
+      <div class="emp-fields">
+        <div class="field-group">
+          <label>Nombre de la empresa *</label>
+          <input pInputText [(ngModel)]="form.NombreEmpresa" placeholder="Empresa S.A." class="w-full" />
+        </div>
+        <div class="field-group">
+          <label>NIT *</label>
+          <input pInputText [(ngModel)]="form.NIT" placeholder="1234567-8" class="w-full font-mono" />
+        </div>
+        <div class="field-group">
+          <label>Régimen fiscal</label>
+          <p-select [options]="regimenes" [(ngModel)]="form.RegimenFiscal" optionLabel="label" optionValue="value" appendTo="body"></p-select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contacto -->
+    <div class="emp-section">
+      <div class="emp-section-title"><i class="pi pi-phone"></i> Contacto</div>
+      <div class="emp-fields">
+        <div class="field-group">
+          <label>Dirección</label>
+          <input pInputText [(ngModel)]="form.Direccion" placeholder="Ciudad de Guatemala, Zona 10" class="w-full" />
+        </div>
+        <div class="field-group">
+          <label>Teléfono</label>
+          <input pInputText [(ngModel)]="form.Telefono" placeholder="2345-6789" class="w-full" />
+        </div>
+        <div class="field-group">
+          <label>Correo</label>
+          <input pInputText [(ngModel)]="form.CorreoEmpresa" type="email" placeholder="info@empresa.com" class="w-full" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Logo -->
+    <div class="emp-section emp-section--full">
+      <div class="emp-section-title"><i class="pi pi-image"></i> Logo</div>
+      <div class="emp-fields">
+        <div class="field-group">
+          <label>URL del logo</label>
+          <input pInputText [(ngModel)]="form.Logo" placeholder="https://empresa.com/logo.png" class="w-full" />
+          <small class="text-slate-500">Ingresa la URL pública de tu logo. Se usará en documentos y boletas.</small>
+        </div>
+        @if (form.Logo) {
+          <div class="logo-preview">
+            <img [src]="form.Logo" alt="Logo empresa" class="logo-img" (error)="form.Logo = ''" />
+          </div>
+        }
+      </div>
+    </div>
+
+  </div>
+
+  @if (form.FechaActualizacion) {
+    <p class="emp-footer">Última actualización: {{ form.FechaActualizacion | date:'dd/MM/yyyy HH:mm' }}</p>
+  }
+</div>

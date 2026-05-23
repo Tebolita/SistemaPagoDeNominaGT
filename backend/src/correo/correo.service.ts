@@ -140,6 +140,23 @@ export class CorreoService {
     return { enviado: true, destinatario: venta.Cliente.Correo };
   }
 
+  // ── Notificación de firma pendiente ──────────────────────────────────────
+
+  async enviarNotificacionFirma(
+    correo: string,
+    nombre: string,
+    tipoFirmante: string,
+    periodo: string,
+    idNomina: number,
+  ): Promise<void> {
+    const html = this.templateNotificacionFirma({ nombre, tipoFirmante, periodo, idNomina });
+    await this.enviarCorreo(
+      [{ email: correo, name: nombre }],
+      `Firma requerida — Nómina ${periodo}`,
+      html,
+    );
+  }
+
   // ── Credenciales de nuevo usuario ────────────────────────────────────────
 
   async enviarCredencialesUsuario(
@@ -336,6 +353,43 @@ export class CorreoService {
     </div>
   </div>
   <div class="ftr">Nómina GT · No respondas a este correo, es generado automáticamente.</div>
+</div></body></html>`;
+  }
+
+  private templateNotificacionFirma(d: {
+    nombre: string; tipoFirmante: string; periodo: string; idNomina: number;
+  }): string {
+    return `<!DOCTYPE html><html><head><meta charset="UTF-8">
+<style>
+  body{font-family:Arial,sans-serif;background:#f1f5f9;margin:0;padding:24px}
+  .card{background:#fff;border-radius:8px;max-width:520px;margin:0 auto;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.08)}
+  .hdr{background:#0f172a;color:#fff;padding:24px 28px}
+  .hdr h1{margin:0;font-size:20px}.hdr p{margin:6px 0 0;color:#94a3b8;font-size:13px}
+  .body{padding:24px 28px;font-size:14px;color:#334155;line-height:1.7}
+  .badge{display:inline-block;background:#fef9c3;color:#854d0e;font-size:12px;font-weight:700;padding:6px 14px;border-radius:999px;margin:12px 0}
+  .info-box{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:14px 18px;margin:16px 0}
+  .info-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #f1f5f9;font-size:13px}
+  .info-row:last-child{border-bottom:none}
+  .info-label{color:#94a3b8}
+  .info-value{font-weight:600;color:#1e293b}
+  .ftr{background:#f8fafc;padding:14px 28px;text-align:center;color:#94a3b8;font-size:12px;border-top:1px solid #e2e8f0}
+</style></head><body>
+<div class="card">
+  <div class="hdr">
+    <h1>Firma Requerida</h1>
+    <p>Tienes una nómina pendiente de aprobación</p>
+  </div>
+  <div class="body">
+    <p>Hola <strong>${d.nombre}</strong>,</p>
+    <p>Se te ha asignado como firmante de la siguiente nómina. Tu autorización es necesaria para continuar el proceso de pago.</p>
+    <div class="badge">✍️ Firma requerida como: ${d.tipoFirmante.replace(/_/g, ' ')}</div>
+    <div class="info-box">
+      <div class="info-row"><span class="info-label">Período</span><span class="info-value">${d.periodo}</span></div>
+      <div class="info-row"><span class="info-label">ID Nómina</span><span class="info-value">#${d.idNomina}</span></div>
+    </div>
+    <p>Ingresa al sistema <strong>Nómina GT</strong>, dirígete al módulo de Nómina y busca esta nómina para registrar tu firma.</p>
+  </div>
+  <div class="ftr">Nómina GT · Este correo es automático, no responder.</div>
 </div></body></html>`;
   }
 

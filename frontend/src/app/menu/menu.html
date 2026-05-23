@@ -4,10 +4,18 @@
     <!-- ── Logo ──────────────────────────────────────────────────── -->
     <ng-template #start>
       <span class="menu-logo inline-flex items-center gap-2 px-3 py-3">
-        <img width="48" height="48" class="block"
-          src="https://upload.wikimedia.org/wikipedia/commons/1/15/Escudo_de_la_universidad_Mariano_G%C3%A1lvez_Guatemala.svg" />
-        <span class="text-xl font-semibold text-white">
-          Nomina<span class="text-sky-400"> GT</span>
+        @if (empresa()?.Logo) {
+          <img [src]="empresa()!.Logo" width="40" height="40" class="block rounded-lg object-contain"
+            style="max-width:40px;max-height:40px;" (error)="empresa.set({ ...empresa()!, Logo: '' })" />
+        } @else {
+          <div class="menu-logo-fallback"><i class="pi pi-building-columns"></i></div>
+        }
+        <span class="text-lg font-semibold text-white truncate" style="max-width:140px">
+          @if (empresa()?.NombreEmpresa) {
+            {{ empresa()!.NombreEmpresa }}
+          } @else {
+            Nomina<span class="text-sky-400"> GT</span>
+          }
         </span>
       </span>
       <p-divider />

@@ -17,15 +17,19 @@ import { TooltipModule } from 'primeng/tooltip';
 import { TextareaModule } from 'primeng/textarea';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { NominaService } from '../services/nomina.service';
+import { UsuarioService } from '../services/usuario.service';
+import { UsuarioInterface } from '../models/Usuario.model';
 import { EmpleadoService } from '../services/empleado.service';
 import { EstadoNominaService } from '../services/estado-nomina.service';
 import { LoginService } from '../services/login.service';
 import { CuentaBancariaEmpresaService } from '../services/cuenta-bancaria-empresa.service';
 import { CorreoService } from '../services/correo.service';
 import { ParametroGlobalService } from '../services/parametro-global.service';
+import { ConfigFirmanteService } from '../services/config-firmante.service';
 import { ParametroGlobal } from '../models/ParametroGlobal.model';
+import { ConfigFirmanteNomina } from '../models/ConfigFirmante.model';
 import { CuentaBancariaEmpresa } from '../models/CuentaBancariaEmpresa.model';
-import { FirmaNomina, Nomina, NominaCalculo, NominaMasivaResultado } from '../models/Nomina.model';
+import { FirmaNomina, FirmanteAsignado, Nomina, NominaCalculo, NominaMasivaResultado } from '../models/Nomina.model';
 import { EmpleadoResponse } from '../models/Empleado.model';
 import { EstadoNomina, HistorialEstadoNomina, CambiarEstadoNominaDto } from '../models/EstadoNomina.model';
 
@@ -63,7 +67,24 @@ export class NominaComponent implements OnInit {
   private confirmationService = inject(ConfirmationService);
   private cuentaService      = inject(CuentaBancariaEmpresaService);
   private correoService      = inject(CorreoService);
-  private parametroService   = inject(ParametroGlobalService);
+  private parametroService    = inject(ParametroGlobalService);
+  private configFirmanteService = inject(ConfigFirmanteService);
+  private usuarioService        = inject(UsuarioService);
+  configsFirmante = signal<ConfigFirmanteNomina[]>([]);
+  usuarios        = signal<UsuarioInterface[]>([]);
+
+  // ── Firmantes por nómina ──────────────────────────────────────────────────
+  displayFirmantesDialog = signal(false);
+  nominaParaFirmantes: Nomina | null = null;
+  firmantesConfig: {
+    TipoFirmante:      string;
+    Descripcion:       string;
+    Modo:              'ROL' | 'USUARIO';
+    RolRequerido:      string;
+    IdUsuarioAsignado: number | null;
+    NotificarCorreo:   boolean;
+  }[] = [];
+  readonly ROLES_SISTEMA = ['ADMINISTRADOR', 'ADMIN', 'GERENTE', 'RRHH', 'RECURSOS HUMANOS'];
   enviandoCorreo = signal<number | null>(null);
 
   // ── Filtros de la tabla ───────────────────────────────────────────────────
@@ -182,6 +203,8 @@ export class NominaComponent implements OnInit {
     this.loadEstados();
     this.loadCuentas();
     this.loadParametros();
+    this.loadConfigsFirmante();
+    this.loadUsuarios();
 
     const currentYear = new Date().getFullYear();
     this.anios = Array.from({ length: currentYear - 2019 }, (_, i) => ({
@@ -277,6 +300,92 @@ export class NominaComponent implements OnInit {
     });
   }
 
+  loadUsuarios() {
+    this.usuarioService.ObtenerUsuarios().subscribe({
+      next: d => this.usuarios.set(d),
+      error: () => {},
+    });
+  }
+
+  loadConfigsFirmante() {
+    this.configFirmanteService.getAll().subscribe({
+      next: d => this.configsFirmante.set(d),
+      error: () => {},
+    });
+  }
+
+  /** Descripción de quién puede firmar un tipo */
+  // ── Configurador de firmantes por nómina ─────────────────────────────────
+
+  abrirConfigFirmantes(nomina: Nomina) {
+    this.nominaParaFirmantes = nomina;
+    const asignadas = nomina.FirmanteAsignadoNomina ?? [];
+
+    this.firmantesConfig = this.configsFirmante().map(cfg => {
+      const existe = asignadas.find(a => a.TipoFirmante === cfg.TipoFirmante);
+      return {
+        TipoFirmante:      cfg.TipoFirmante,
+        Descripcion:       cfg.Descripcion ?? cfg.TipoFirmante,
+        Modo:              (existe?.Modo as 'ROL' | 'USUARIO') ?? 'ROL',
+        RolRequerido:      existe?.RolRequerido ?? cfg.RolesPermitidos?.split(',')[0]?.trim() ?? '',
+        IdUsuarioAsignado: existe?.IdUsuarioAsignado ?? null,
+        NotificarCorreo:   existe?.NotificarCorreo ?? false,
+      };
+    });
+
+    this.displayFirmantesDialog.set(true);
+  }
+
+  guardarFirmantes() {
+    if (!this.nominaParaFirmantes) return;
+
+    const asignaciones = this.firmantesConfig.map(f => ({
+      TipoFirmante:      f.TipoFirmante,
+      Modo:              f.Modo,
+      RolRequerido:      f.Modo === 'ROL'    ? f.RolRequerido      : null,
+      IdUsuarioAsignado: f.Modo === 'USUARIO' ? f.IdUsuarioAsignado : null,
+      NotificarCorreo:   f.NotificarCorreo,
+    }));
+
+    this.nominaService.asignarFirmantes(this.nominaParaFirmantes.IdNomina, asignaciones).subscribe({
+      next: () => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Firmantes configurados',
+          detail: asignaciones.some(a => a.NotificarCorreo && a.IdUsuarioAsignado)
+            ? 'Firmantes guardados. Se enviaron notificaciones por correo.'
+            : 'Firmantes guardados correctamente.',
+          life: 6000,
+        });
+        this.displayFirmantesDialog.set(false);
+        this.loadNominas();
+      },
+      error: err => this.messageService.add({ severity: 'error', summary: 'Error', detail: err?.message }),
+    });
+  }
+
+  getNombreUsuario(idUsuario: number | null): string {
+    if (!idUsuario) return '—';
+    const u = this.usuarios().find(x => x.IdUsuario === idUsuario);
+    if (!u) return `#${idUsuario}`;
+    // Buscar nombre del empleado vinculado
+    const emp = this.empleados().find(e => e.IdEmpleado === u.IdEmpleado);
+    return emp ? `${emp.Nombres} ${emp.Apellidos}`.trim() : u.Username;
+  }
+
+  getFirmanteAsignado(nomina: Nomina, tipo: string): FirmanteAsignado | undefined {
+    return nomina.FirmanteAsignadoNomina?.find(f => f.TipoFirmante === tipo && f.Activo);
+  }
+
+  getRequisitoFirmante(tipoFirmante: string): string {
+    const cfg = this.configsFirmante().find(c => c.TipoFirmante === tipoFirmante);
+    if (!cfg) return 'Roles de aprobación';
+    if (cfg.IdEmpleadoRequerido && cfg.Empleado) {
+      return `${cfg.Empleado.Nombres} ${cfg.Empleado.Apellidos}`;
+    }
+    return cfg.RolesPermitidos?.replace(/,/g, ', ') || 'Sin restricción';
+  }
+
   loadParametros() {
     this.parametroService.getAll().subscribe({
       next: (data) => this.parametros.set(data.filter(p => p.Tipo !== 'REFERENCIA')),
@@ -364,9 +473,18 @@ export class NominaComponent implements OnInit {
     return this.getFirmaCount(nomina) < 2;
   }
 
-  getTiposFirmanteDisponibles(): { label: string; value: string }[] {
-    const firmadas = this.firmasNomina().map((f) => f.TipoFirmante);
-    return this.tiposFirmante.filter((t) => !firmadas.includes(t.value as any));
+  getTiposFirmanteDisponibles(): { label: string; value: string; requisito: string }[] {
+    const firmadas = this.firmasNomina().map(f => f.TipoFirmante);
+    const configs  = this.configsFirmante();
+
+    // Si hay configs en BD, usar esas; si no, usar los tiposFirmante por defecto
+    const fuente = configs.length > 0
+      ? configs.map(c => ({ label: c.Descripcion || c.TipoFirmante, value: c.TipoFirmante }))
+      : this.tiposFirmante;
+
+    return fuente
+      .filter(t => !firmadas.includes(t.value as any))
+      .map(t => ({ ...t, requisito: this.getRequisitoFirmante(t.value) }));
   }
 
   abrirDialogoFirma(nomina: Nomina) {

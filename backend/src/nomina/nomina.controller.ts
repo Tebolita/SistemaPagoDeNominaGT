@@ -97,6 +97,20 @@ export class NominaController {
     return this.nominaService.findEliminadas();
   }
 
+  @Get(':id/firmantes-asignados')
+  getFirmantesAsignados(@Param('id', ParseIntPipe) id: number) {
+    return this.nominaService.getAsignacionesFirmantes(id);
+  }
+
+  @Post(':id/firmantes-asignados')
+  asignarFirmantes(
+    @Request() req: any,
+    @Param('id', ParseIntPipe) id: number,
+    @Body() body: { asignaciones: any[] },
+  ) {
+    return this.nominaService.asignarFirmantesNomina(id, body.asignaciones, req.user?.sub);
+  }
+
   @Patch(':id/restaurar')
   restaurar(@Param('id', ParseIntPipe) id: number) {
     return this.nominaService.restaurar(id);

@@ -11,8 +11,9 @@ interface ModuleCard {
   icon: string;
   route: string;
   color: string;
+  accent: string;
   features: string[];
-  roles: string[];  // vacío = todos los autenticados
+  roles: string[];
 }
 
 @Component({
@@ -34,7 +35,7 @@ export class Inicio implements OnInit {
     {
       title: 'Reportería',
       description: 'Resumen ejecutivo, KPIs y exportaciones de todos los módulos del sistema.',
-      icon: 'pi pi-chart-bar', route: '/reporteria/reportes', color: 'sky', roles: [],
+      icon: 'pi pi-chart-bar', route: '/reporteria/reportes', color: 'sky', accent: '#0ea5e9', roles: [],
       features: ['Resumen ejecutivo', 'Gráficas y KPIs', 'Exportar Excel/PDF'],
     },
 
@@ -42,14 +43,14 @@ export class Inicio implements OnInit {
     {
       title: 'Usuarios',
       description: 'Crea y administra los accesos al sistema para cada empleado.',
-      icon: 'pi pi-user-edit', route: '/seguridad/usuarios', color: 'red',
+      icon: 'pi pi-user-edit', route: '/seguridad/usuarios', color: 'red', accent: '#ef4444',
       roles: ['ADMINISTRADOR', 'ADMIN'],
       features: ['Gestión de credenciales', 'Asignación de roles', 'Control de accesos'],
     },
     {
       title: 'Roles y Permisos',
       description: 'Define los niveles de acceso y a qué módulos puede entrar cada rol.',
-      icon: 'pi pi-sitemap', route: '/seguridad/roles', color: 'red',
+      icon: 'pi pi-sitemap', route: '/seguridad/roles', color: 'red', accent: '#ef4444',
       roles: ['ADMINISTRADOR', 'ADMIN'],
       features: ['Creación de roles', 'Permisos por módulo', 'Jerarquía de accesos'],
     },
@@ -58,21 +59,21 @@ export class Inicio implements OnInit {
     {
       title: 'Empleados',
       description: 'Gestión completa del personal: altas, bajas y consulta de información.',
-      icon: 'pi pi-users', route: '/recursoshumanos/empleados', color: 'blue',
+      icon: 'pi pi-users', route: '/recursoshumanos/empleados', color: 'blue', accent: '#3b82f6',
       roles: ['ADMINISTRADOR', 'ADMIN', 'RRHH', 'RECURSOS HUMANOS'],
       features: ['Registro de empleados', 'Historial salarial', 'Gestión de puestos'],
     },
     {
       title: 'Vacaciones',
       description: 'Control de solicitudes de descanso con o sin goce de sueldo.',
-      icon: 'pi pi-sun', route: '/recursoshumanos/vacaciones', color: 'teal',
+      icon: 'pi pi-sun', route: '/recursoshumanos/vacaciones', color: 'teal', accent: '#14b8a6',
       roles: ['ADMINISTRADOR', 'ADMIN', 'RRHH', 'RECURSOS HUMANOS'],
       features: ['Solicitudes de vacaciones', 'Goce de sueldo', 'Historial por empleado'],
     },
     {
       title: 'Asistencias',
       description: 'Registro diario de entradas, salidas y horas extras del personal.',
-      icon: 'pi pi-clock', route: '/recursoshumanos/asistencias', color: 'violet',
+      icon: 'pi pi-clock', route: '/recursoshumanos/asistencias', color: 'violet', accent: '#8b5cf6',
       roles: ['ADMINISTRADOR', 'ADMIN', 'RRHH', 'RECURSOS HUMANOS'],
       features: ['Registro de entrada/salida', 'Horas extra', 'Reportes de asistencia'],
     },
@@ -81,14 +82,14 @@ export class Inicio implements OnInit {
     {
       title: 'Configuración',
       description: 'Departamentos, puestos, jornadas, bancos y parámetros del sistema.',
-      icon: 'pi pi-cog', route: '/configuracion/inicio', color: 'slate',
+      icon: 'pi pi-cog', route: '/configuracion/inicio', color: 'slate', accent: '#94a3b8',
       roles: ['ADMINISTRADOR', 'ADMIN', 'RRHH', 'RECURSOS HUMANOS'],
       features: ['Departamentos y puestos', 'Jornadas laborales', 'Parámetros globales'],
     },
     {
       title: 'Estados de Nómina',
       description: 'Configura el flujo de aprobación de nóminas del sistema.',
-      icon: 'pi pi-tags', route: '/configuracion/estados-nomina', color: 'slate',
+      icon: 'pi pi-tags', route: '/configuracion/estados-nomina', color: 'slate', accent: '#94a3b8',
       roles: ['ADMINISTRADOR', 'ADMIN', 'RRHH', 'RECURSOS HUMANOS'],
       features: ['Flujo de aprobación', 'Requiere aprobación', 'Historial de cambios'],
     },
@@ -97,7 +98,7 @@ export class Inicio implements OnInit {
     {
       title: 'Nómina',
       description: 'Generación masiva de planillas con cálculos de ley guatemalteca.',
-      icon: 'pi pi-calculator', route: '/nomina/nominas', color: 'green',
+      icon: 'pi pi-calculator', route: '/nomina/nominas', color: 'green', accent: '#22c55e',
       roles: ['ADMINISTRADOR', 'ADMIN', 'GERENTE', 'RRHH', 'RECURSOS HUMANOS'],
       features: ['Cálculo IGSS / ISR', 'Bono 14 y Aguinaldo', 'Doble firma y estados'],
     },
@@ -106,14 +107,14 @@ export class Inicio implements OnInit {
     {
       title: 'Ventas',
       description: 'Clientes, productos/servicios y control de facturación.',
-      icon: 'pi pi-shopping-cart', route: '/ventas/inicio', color: 'orange',
+      icon: 'pi pi-shopping-cart', route: '/ventas/inicio', color: 'orange', accent: '#f97316',
       roles: ['ADMINISTRADOR', 'ADMIN', 'GERENTE'],
       features: ['Gestión de clientes', 'Catálogo de productos', 'Estados de pago'],
     },
     {
       title: 'Finanzas',
       description: 'Cuentas bancarias de la empresa y movimientos financieros.',
-      icon: 'pi pi-building-columns', route: '/finanzas/inicio', color: 'yellow',
+      icon: 'pi pi-building-columns', route: '/finanzas/inicio', color: 'yellow', accent: '#eab308',
       roles: ['ADMINISTRADOR', 'ADMIN', 'GERENTE'],
       features: ['Cuentas bancarias', 'Movimientos ingreso/egreso', 'Balance general'],
     },

@@ -1,0 +1,76 @@
+<p-toast></p-toast>
+
+<div class="perfil-wrapper">
+
+  <!-- ── Cabecera ─────────────────────────────────────────────────── -->
+  <div class="perfil-header">
+    <div class="perfil-avatar">{{ initials }}</div>
+    <div>
+      <h1 class="perfil-username">{{ username }}</h1>
+      <p-tag [value]="role" [severity]="getRoleSeverity()"></p-tag>
+      @if (usuario()?.Empleado) {
+        <p class="perfil-empleado">{{ usuario()?.Empleado?.Nombres }} {{ usuario()?.Empleado?.Apellidos }}</p>
+      }
+    </div>
+  </div>
+
+  <div class="perfil-grid">
+
+    <!-- ── Info del usuario ────────────────────────────────────────── -->
+    <div class="perfil-card">
+      <h2 class="perfil-card-title"><i class="pi pi-user"></i> Información de cuenta</h2>
+      <div class="perfil-info-list">
+        <div class="perfil-info-row">
+          <span class="perfil-info-label">Usuario</span>
+          <span class="perfil-info-value font-mono">{{ username }}</span>
+        </div>
+        <div class="perfil-info-row">
+          <span class="perfil-info-label">Rol</span>
+          <p-tag [value]="role" [severity]="getRoleSeverity()"></p-tag>
+        </div>
+        @if (usuario()) {
+          <div class="perfil-info-row">
+            <span class="perfil-info-label">ID Usuario</span>
+            <span class="perfil-info-value text-slate-500 font-mono">#{{ usuario()?.IdUsuario }}</span>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- ── Cambiar contraseña ──────────────────────────────────────── -->
+    <div class="perfil-card">
+      <h2 class="perfil-card-title"><i class="pi pi-lock"></i> Cambiar contraseña</h2>
+
+      <div class="perfil-form">
+        <div class="field-group">
+          <label>Contraseña actual *</label>
+          <p-password [(ngModel)]="form.passwordActual" [feedback]="false" [toggleMask]="true"
+            placeholder="Contraseña actual" styleClass="w-full" inputStyleClass="w-full"></p-password>
+        </div>
+        <div class="field-group">
+          <label>Nueva contraseña *</label>
+          <p-password [(ngModel)]="form.passwordNueva" [toggleMask]="true"
+            placeholder="Mínimo 6 caracteres" styleClass="w-full" inputStyleClass="w-full"></p-password>
+        </div>
+        <div class="field-group">
+          <label>Confirmar nueva contraseña *</label>
+          <p-password [(ngModel)]="form.passwordConfirm" [feedback]="false" [toggleMask]="true"
+            placeholder="Repite la nueva contraseña" styleClass="w-full" inputStyleClass="w-full"></p-password>
+        </div>
+
+        <p-divider></p-divider>
+
+        <div class="field-group">
+          <label>Nueva clave numérica (opcional)</label>
+          <input pInputText type="password" [(ngModel)]="form.claveNueva"
+            placeholder="Dejar vacío para no cambiar" class="w-full" />
+          <small class="text-slate-500">La clave numérica se usa junto con la contraseña para iniciar sesión.</small>
+        </div>
+
+        <p-button label="Guardar cambios" icon="pi pi-save" severity="success" class="w-full"
+          [loading]="saving()" (onClick)="cambiarPassword()"></p-button>
+      </div>
+    </div>
+
+  </div>
+</div>

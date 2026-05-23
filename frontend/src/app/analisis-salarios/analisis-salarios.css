@@ -1,0 +1,169 @@
+:host { display: block; }
+
+.sal-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1.5rem;
+  min-height: 100vh;
+  background: #0f172a;
+}
+
+.sal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.sal-title { font-size: 1.5rem; font-weight: 800; color: #f1f5f9; margin: 0 0 4px; }
+.sal-sub   { font-size: 0.85rem; color: #475569; margin: 0; }
+
+/* ── KPIs ───────────────────────────────────────────────────────── */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 0.875rem;
+}
+
+.kpi-card {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  padding: 1rem 1.25rem;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  background: #131f35;
+  transition: transform 0.15s;
+}
+.kpi-card:hover { transform: translateY(-2px); }
+
+.kpi-card--blue   { border-color: rgba(59,130,246,0.2); }
+.kpi-card--green  { border-color: rgba(34,197,94,0.2); }
+.kpi-card--teal   { border-color: rgba(20,184,166,0.2); }
+.kpi-card--emerald{ border-color: rgba(52,211,153,0.2); }
+.kpi-card--orange { border-color: rgba(249,115,22,0.2); }
+.kpi-card--violet { border-color: rgba(139,92,246,0.2); }
+
+.kpi-icon {
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+.kpi-card--blue    .kpi-icon { background: rgba(59,130,246,0.15);  color: #60a5fa;  border: 1px solid rgba(59,130,246,0.3);  }
+.kpi-card--green   .kpi-icon { background: rgba(34,197,94,0.15);   color: #4ade80;  border: 1px solid rgba(34,197,94,0.3);   }
+.kpi-card--teal    .kpi-icon { background: rgba(20,184,166,0.15);  color: #2dd4bf;  border: 1px solid rgba(20,184,166,0.3);  }
+.kpi-card--emerald .kpi-icon { background: rgba(52,211,153,0.15);  color: #34d399;  border: 1px solid rgba(52,211,153,0.3);  }
+.kpi-card--orange  .kpi-icon { background: rgba(249,115,22,0.15);  color: #fb923c;  border: 1px solid rgba(249,115,22,0.3);  }
+.kpi-card--violet  .kpi-icon { background: rgba(139,92,246,0.15);  color: #a78bfa;  border: 1px solid rgba(139,92,246,0.3);  }
+
+.kpi-body { display: flex; flex-direction: column; min-width: 0; }
+.kpi-value { font-size: 1.75rem; font-weight: 800; color: #f1f5f9; line-height: 1; }
+.kpi-value--sm { font-size: 1.2rem; }
+.kpi-label { font-size: 0.7rem; color: #64748b; margin-top: 4px; }
+
+/* ── Charts ─────────────────────────────────────────────────────── */
+.chart-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1rem;
+}
+@media (max-width: 900px) { .chart-grid { grid-template-columns: 1fr; } }
+
+.chart-card {
+  background: #131f35;
+  border: 1px solid #1e3254;
+  border-radius: 12px;
+  padding: 1.25rem;
+}
+.chart-card--wide { grid-column: span 1; }
+
+.chart-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #94a3b8;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.chart-body { height: 220px; }
+.chart-body--tall { height: 260px; }
+
+/* ── Filtros ─────────────────────────────────────────────────────── */
+.sal-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: flex-end;
+  padding: 1rem 1.25rem;
+  background: #131f35;
+  border: 1px solid #1e3254;
+  border-radius: 12px;
+}
+
+.filter-item { display: flex; flex-direction: column; gap: 4px; min-width: 160px; }
+.filter-item--wide { flex: 1; min-width: 220px; }
+
+.filter-item label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #475569;
+}
+
+.filter-input {
+  background: #0a1628;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  padding: 0.45rem 0.75rem;
+  color: #e2e8f0;
+  font-size: 0.85rem;
+  outline: none;
+  width: 100%;
+}
+.filter-input:focus { border-color: #2563eb; }
+
+.filter-summary {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  color: #64748b;
+  padding-bottom: 2px;
+}
+
+/* ── Tabla ───────────────────────────────────────────────────────── */
+:host ::ng-deep .p-datatable { background: #131f35 !important; border-radius: 12px; overflow: hidden; border: 1px solid #1e3254 !important; }
+:host ::ng-deep .p-datatable .p-datatable-thead > tr > th { background: #0a1628 !important; color: #475569 !important; border-color: #1e3254 !important; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; padding: 0.7rem 1rem; }
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr { background: #131f35 !important; border-color: #1e3254 !important; transition: background 0.1s; }
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr:hover { background: #1a2b45 !important; }
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr > td { border-color: #1e3254 !important; color: #e2e8f0 !important; padding: 0.65rem 1rem; }
+:host ::ng-deep .p-datatable .p-datatable-emptymessage > td { background: #131f35 !important; color: #475569 !important; text-align: center; padding: 3rem !important; }
+:host ::ng-deep .p-paginator { background: #0a1628 !important; border-color: #1e3254 !important; color: #64748b !important; }
+:host ::ng-deep .p-paginator .p-paginator-page.p-highlight { background: #2563eb !important; color: #fff !important; }
+:host ::ng-deep .p-datatable .p-datatable-tfoot > tr > td { background: #0a1628 !important; border-color: #1e3254 !important; padding: 0.6rem 1rem; }
+
+.emp-cell { display: flex; align-items: center; gap: 0.5rem; }
+.emp-avatar {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: rgba(96,165,250,0.15); border: 1px solid rgba(96,165,250,0.3);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.72rem; font-weight: 700; color: #60a5fa; flex-shrink: 0;
+}
+.emp-name { font-size: 0.875rem; font-weight: 500; color: #e2e8f0; }
+
+.diff { font-size: 0.78rem; font-weight: 700; padding: 2px 6px; border-radius: 4px; }
+.diff--pos { color: #4ade80; background: rgba(34,197,94,0.1); }
+.diff--neg { color: #f87171; background: rgba(239,68,68,0.1); }
+
+.table-footer { font-size: 0.82rem; color: #64748b; }

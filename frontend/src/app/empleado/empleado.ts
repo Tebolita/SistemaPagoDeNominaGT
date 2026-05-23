@@ -27,18 +27,20 @@ import { RolService } from '../services/rol.service';
 import { AsistenciaService } from '../services/asistencia.service';
 import { VacacionesService } from '../vacacion/vacacion.service';
 import { UsuarioService } from '../services/usuario.service';
-import { PuestoService } from '../services/puesto.service'; // ✅ Descomentado
+import { PuestoService } from '../services/puesto.service';
 import { JornadaLaboralService } from '../services/jornada-laboral.service';
 import { BancoService } from '../services/banco.service';
 import { SalarioService } from '../services/salario.service';
+import { DepartamentoService } from '../services/departamento.service';
 
 import { EmpleadoResponse, EmpleadoRequest } from '../models/Empleado.model';
 import { RolInterface } from '../models/Rol.model';
 import { UsuarioInterface } from '../models/Usuario.model';
-import { Puesto } from '../models/Puesto.model'; // ✅ Importado
+import { Puesto } from '../models/Puesto.model';
 import { JornadaLaboral } from '../models/JornadaLaboral.model';
 import { Banco } from '../models/Banco.model';
 import { SalarioResponse } from '../models/Salario.model';
+import { Departamento } from '../models/Departamento.model';
 
 @Component({
   selector: 'app-empleados',
@@ -76,10 +78,11 @@ export class Empleado implements OnInit {
   private asistenciaService = inject(AsistenciaService);
   private vacacionesService = inject(VacacionesService);
   private usuarioService = inject(UsuarioService);
-  private puestoService = inject(PuestoService); // ✅ Inyectado 
+  private puestoService = inject(PuestoService);
   private jornadaService = inject(JornadaLaboralService);
   private bancoService = inject(BancoService);
   private salarioService = inject(SalarioService);
+  private departamentoService = inject(DepartamentoService);
 
   // --- ESTADOS PRINCIPALES (UI y Datos) ---
   users = signal<EmpleadoResponse[]>([]);
@@ -112,15 +115,13 @@ export class Empleado implements OnInit {
 
   // --- CATÁLOGOS PARA DROPDOWNS ---
   roles = signal<RolInterface[]>([]);
-  puestos = signal<Puesto[]>([]); // ✅ Tipo correcto
+  puestos = signal<Puesto[]>([]);
   jornadas = signal<JornadaLaboral[]>([]);
   bancos = signal<Banco[]>([]);
+  departamentos = signal<Departamento[]>([]);
   generos = signal<{label: string, value: boolean}[]>([
     { label: 'Masculino', value: false },
     { label: 'Femenino', value: true }
-  ]);
-  JornadaLaboral = signal<{IdJornada: number, NombreJornada: string}[]>([
-    { IdJornada: 1, NombreJornada: 'Diurna' }
   ]);
 
   get empleadosFiltrados(): EmpleadoResponse[] {
@@ -155,6 +156,7 @@ export class Empleado implements OnInit {
     this.cargarPuestos();
     this.cargarJornadas();
     this.cargarBancos();
+    this.cargarDepartamentos();
   }
 
   cargarEmpleados() {
@@ -208,6 +210,17 @@ export class Empleado implements OnInit {
         severity: 'error',
         summary: 'Error',
         detail: 'No se pudieron cargar los bancos'
+      })
+    });
+  }
+
+  cargarDepartamentos() {
+    this.departamentoService.getAll().subscribe({
+      next: (data) => this.departamentos.set(data),
+      error: () => this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'No se pudieron cargar los departamentos'
       })
     });
   }
@@ -385,9 +398,11 @@ export class Empleado implements OnInit {
       Direccion: userToUpdate.Direccion,
       EstadoCivil: userToUpdate.EstadoCivil,
       Genero: userToUpdate.Genero,
+      IdPuesto: userToUpdate.IdPuesto,
       IdJornada: userToUpdate.IdJornada ?? userToUpdate.JornadaLaboral?.IdJornada,
       IdBanco: userToUpdate.IdBanco ?? userToUpdate.Banco?.IdBanco,
-      CuentaBancaria: userToUpdate.CuentaBancaria
+      CuentaBancaria: userToUpdate.CuentaBancaria,
+      ...(userToUpdate.IdDepartamento ? { IdDepartamento: userToUpdate.IdDepartamento } : {}),
     };
 
     this.empleadoService.ActualizarEmpleado(userToUpdate.IdEmpleado, payload).subscribe({

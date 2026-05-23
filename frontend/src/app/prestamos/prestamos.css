@@ -1,0 +1,54 @@
+:host { display: block; }
+.prest-wrapper { display: flex; flex-direction: column; gap: 1.25rem; padding: 1.5rem; min-height: 100vh; background: #0f172a; }
+.prest-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+.prest-title { font-size: 1.5rem; font-weight: 800; color: #f1f5f9; margin: 0 0 4px; }
+.prest-sub   { font-size: 0.85rem; color: #475569; margin: 0; }
+
+.prest-filter { display: flex; gap: 0.75rem; }
+:host ::ng-deep .prest-filter-select { min-width: 260px; }
+
+/* Tabla */
+:host ::ng-deep .p-datatable { background: #131f35 !important; border-radius: 12px; overflow: hidden; border: 1px solid #1e3254 !important; }
+:host ::ng-deep .p-datatable .p-datatable-thead > tr > th { background: #0a1628 !important; color: #475569 !important; border-color: #1e3254 !important; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.05em; padding: 0.65rem 0.75rem; }
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr { background: #131f35 !important; border-color: #1e3254 !important; transition: background 0.1s; }
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr:hover { background: #1a2b45 !important; }
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr > td { border-color: #1e3254 !important; color: #e2e8f0 !important; padding: 0.6rem 0.75rem; font-size: 0.82rem; }
+:host ::ng-deep .p-paginator { background: #0a1628 !important; border-color: #1e3254 !important; }
+
+.emp-cell { display: flex; align-items: center; gap: 0.6rem; }
+.emp-avatar { width: 30px; height: 30px; border-radius: 50%; background: rgba(96,165,250,0.15); border: 1px solid rgba(96,165,250,0.3); display: flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 700; color: #60a5fa; flex-shrink: 0; }
+
+.cuota-progress { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; }
+.cuota-bar { width: 80px; height: 5px; background: #1e3254; border-radius: 3px; overflow: hidden; }
+.cuota-bar-fill { height: 100%; background: linear-gradient(90deg, #3b82f6, #22c55e); border-radius: 3px; transition: width 0.3s; }
+
+/* Diálogos */
+:host ::ng-deep .p-dialog { background: #1e293b !important; border: 1px solid #334155 !important; }
+:host ::ng-deep .p-dialog .p-dialog-header { background: #0f172a !important; color: #f1f5f9 !important; border-bottom: 1px solid #334155 !important; }
+:host ::ng-deep .p-dialog .p-dialog-content { background: #1e293b !important; color: #e2e8f0 !important; }
+:host ::ng-deep .p-dialog .p-dialog-footer { background: #0f172a !important; border-top: 1px solid #334155 !important; }
+:host ::ng-deep .p-inputtext { background: #0a1628 !important; border-color: #334155 !important; color: #e2e8f0 !important; }
+
+.form-dialog { display: flex; flex-direction: column; gap: 1rem; padding: 0.25rem 0; }
+.field-group { display: flex; flex-direction: column; gap: 4px; }
+.field-group label { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: #64748b; }
+
+.cuota-estimada { display: flex; align-items: center; gap: 6px; font-size: 0.82rem; color: #64748b; background: rgba(56,189,248,0.08); border: 1px solid rgba(56,189,248,0.2); border-radius: 8px; padding: 0.5rem 0.75rem; }
+
+/* Diálogo cuotas */
+.cuotas-dialog { display: flex; flex-direction: column; gap: 1rem; }
+.cuotas-resumen { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+.cuota-resumen-item { display: flex; flex-direction: column; background: rgba(255,255,255,0.03); border: 1px solid #334155; border-radius: 8px; padding: 0.6rem 0.875rem; }
+.cuota-resumen-item span { font-size: 0.68rem; color: #475569; text-transform: uppercase; letter-spacing: 0.04em; }
+.cuota-resumen-item strong { font-size: 0.9rem; color: #f1f5f9; margin-top: 2px; }
+
+.cuotas-progress-bar { height: 8px; background: #1e293b; border-radius: 4px; overflow: hidden; }
+.cuotas-progress-fill { height: 100%; background: linear-gradient(90deg, #3b82f6, #22c55e); border-radius: 4px; transition: width 0.4s; }
+.cuotas-pct-label { font-size: 0.72rem; color: #475569; text-align: center; margin: 0; }
+
+.cuotas-list { display: flex; flex-direction: column; gap: 4px; max-height: 320px; overflow-y: auto; }
+.cuota-row { display: flex; align-items: center; gap: 0.75rem; padding: 0.6rem 0.875rem; background: rgba(255,255,255,0.03); border: 1px solid #334155; border-radius: 8px; }
+.cuota-row--pagada { opacity: 0.6; }
+.cuota-num   { font-size: 0.78rem; font-weight: 700; color: #64748b; min-width: 28px; }
+.cuota-monto { font-size: 0.85rem; font-weight: 600; color: #e2e8f0; flex: 1; }
+.cuota-estado { flex: 1; }

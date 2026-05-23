@@ -1,96 +1,82 @@
-<div class="inicio-wrapper">
+<div class="home-wrapper">
 
-  <!-- ── Hero ──────────────────────────────────────────────────────── -->
-  <div class="hero-section">
-    <div class="hero-shapes">
-      <div class="shape s1"></div>
-      <div class="shape s2"></div>
-      <div class="shape s3"></div>
+  <!-- ── Hero personalizado ────────────────────────────────────────── -->
+  <section class="home-hero">
+    <div class="home-hero-bg"></div>
+    <div class="inicio-orbs">
+      <div class="inicio-orb inicio-orb-1"></div>
+      <div class="inicio-orb inicio-orb-2"></div>
+      <div class="inicio-orb inicio-orb-3"></div>
     </div>
-    <div class="hero-body">
-      <div class="hero-left">
-        <div class="hero-badge">
-          <i class="pi pi-verified"></i> Sistema Activo
-        </div>
-        <h1 class="hero-title">
+
+    <div class="home-hero-body">
+      <!-- Saludo -->
+      <div class="home-greeting">
+        <div class="inicio-badge"><i class="pi pi-verified"></i> Sistema Activo</div>
+        <h1 class="home-title">
           {{ greeting }},<br>
-          <span class="highlight">{{ username }}</span>
+          <span class="home-username">{{ username }}</span>
         </h1>
-        <p class="hero-sub">
-          Plataforma de gestión de recursos humanos y pago de nóminas para empresas guatemaltecas.
-        </p>
-        <div class="hero-meta">
-          <p-tag [value]="getRoleLabel()" [severity]="getRoleSeverity()" styleClass="text-sm"></p-tag>
-          <span class="meta-divider"></span>
-          <span class="meta-item"><i class="pi pi-th-large"></i> {{ modules.length }} módulos disponibles</span>
-          <span class="meta-divider"></span>
-          <span class="meta-item"><i class="pi pi-shield"></i> Acceso seguro</span>
+        <p class="home-sub">Plataforma de gestión de recursos humanos y nómina para empresas guatemaltecas.</p>
+        <div class="home-meta">
+          <p-tag [value]="getRoleLabel()" [severity]="getRoleSeverity()"></p-tag>
+          <span class="home-meta-sep"></span>
+          <span class="home-meta-item"><i class="pi pi-th-large"></i> {{ modules.length }} módulos disponibles</span>
+          <span class="home-meta-sep"></span>
+          <span class="home-meta-item"><i class="pi pi-shield"></i> Acceso seguro</span>
         </div>
       </div>
 
-      <!-- Stats rápidas -->
-      <div class="hero-stats-grid">
-        <div class="hs-card">
-          <i class="pi pi-users hs-icon blue"></i>
-          <span class="hs-label">Empleados</span>
+      <!-- Mini stats -->
+      <div class="home-stats">
+        <div class="home-stat">
+          <div class="home-stat-icon home-stat-icon--blue"><i class="pi pi-users"></i></div>
+          <span class="home-stat-label">Empleados</span>
         </div>
-        <div class="hs-card">
-          <i class="pi pi-calculator hs-icon green"></i>
-          <span class="hs-label">Nómina</span>
+        <div class="home-stat">
+          <div class="home-stat-icon home-stat-icon--green"><i class="pi pi-calculator"></i></div>
+          <span class="home-stat-label">Nómina</span>
         </div>
-        <div class="hs-card">
-          <i class="pi pi-chart-bar hs-icon purple"></i>
-          <span class="hs-label">Reportes</span>
+        <div class="home-stat">
+          <div class="home-stat-icon home-stat-icon--violet"><i class="pi pi-chart-bar"></i></div>
+          <span class="home-stat-label">Reportes</span>
         </div>
-        <div class="hs-card">
-          <i class="pi pi-database hs-icon orange"></i>
-          <span class="hs-label">14 Tablas</span>
+        <div class="home-stat">
+          <div class="home-stat-icon home-stat-icon--orange"><i class="pi pi-lock"></i></div>
+          <span class="home-stat-label">Seguridad</span>
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
   <!-- ── Módulos ────────────────────────────────────────────────────── -->
-  <div class="modules-section">
-    <div class="section-header">
-      <h2 class="section-title">Módulos disponibles</h2>
-      <p class="section-sub">Haz clic en cualquier módulo para acceder</p>
+  <section class="inicio-cards-section">
+    <div class="inicio-section-header">
+      <h2 class="inicio-section-title">Módulos disponibles</h2>
+      <p class="inicio-section-sub">Haz clic en cualquier módulo para acceder</p>
     </div>
 
-    <div class="modules-grid">
+    <div class="inicio-cards-grid">
       @for (mod of modules; track mod.route) {
-        <div class="module-card color-{{ mod.color }}" (click)="navigate(mod.route)">
-
-          <div class="card-glow"></div>
-
-          <div class="card-top">
-            <div class="card-icon-wrap">
-              <i [class]="mod.icon + ' card-icon-inner'"></i>
-            </div>
-            <div class="card-available">
-              <i class="pi pi-check-circle"></i> Disponible
-            </div>
+        <div class="inicio-card" [style.--accent]="mod.accent" (click)="navigate(mod.route)">
+          <div class="inicio-card-glow"></div>
+          <div class="inicio-card-status inicio-card-status--active">
+            <i class="pi pi-check-circle"></i> Disponible
           </div>
-
-          <div class="card-body">
-            <h3 class="card-title">{{ mod.title }}</h3>
-            <p class="card-desc">{{ mod.description }}</p>
-            <ul class="card-features">
-              @for (f of mod.features; track f) {
-                <li><i class="pi pi-check"></i> {{ f }}</li>
-              }
+          <div class="inicio-card-icon"><i [class]="mod.icon"></i></div>
+          <div class="inicio-card-body">
+            <h3 class="inicio-card-title">{{ mod.title }}</h3>
+            <p class="inicio-card-desc">{{ mod.description }}</p>
+            <ul class="inicio-features">
+              @for (f of mod.features; track f) { <li><i class="pi pi-check"></i> {{ f }}</li> }
             </ul>
           </div>
-
-          <div class="card-footer">
-            <button class="card-btn" pRipple>
-              Ir al módulo <i class="pi pi-arrow-right"></i>
-            </button>
+          <div class="inicio-card-footer">
+            <span class="inicio-card-btn">Ir al módulo <i class="pi pi-arrow-right"></i></span>
           </div>
-
         </div>
       }
     </div>
-  </div>
+  </section>
 
 </div>

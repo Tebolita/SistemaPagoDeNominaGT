@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { CreateEmpleadoDto } from './dto/create-empleado.dto';
 import { UpdateEmpleadoDto } from './dto/update-empleado.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -31,7 +31,7 @@ export class EmpleadoService {
           JornadaLaboral: { connect: { IdJornada: Number(IdJornada) } },
         }),
         ...(IdBanco && { Banco: { connect: { IdBanco: Number(IdBanco) } } }),
-        ...(CuentaBancaria && { CuentaBancaria }),
+        ...(CuentaBancaria !== undefined && { CuentaBancaria }),
       },
       select: {
         Nombres: true,
@@ -58,6 +58,7 @@ export class EmpleadoService {
         Puesto: { select: { NombrePuesto: true } },
         JornadaLaboral: { select: { IdJornada: true, NombreJornada: true } },
         Banco: { select: { IdBanco: true, NombreBanco: true } },
+        Departamento: { select: { NombreDepartamento: true } },
       },
     });
 
@@ -94,18 +95,30 @@ export class EmpleadoService {
   }
 
   async update(id: number, updateEmpleadoDto: UpdateEmpleadoDto) {
-    await this.findOne(id);
+    const empleadoActual = await this.findOne(id);
 
     const {
       IdEmpleado,
       IdPuesto,
       IdJornada,
       IdBanco,
+      IdDepartamento,
       CuentaBancaria,
       Estado,
       IdRol,
       ...dataToUpdate
     } = updateEmpleadoDto as any;
+
+    // Si se está cambiando o asignando departamento, verificar presupuesto
+    if (IdDepartamento && IdDepartamento !== empleadoActual?.IdDepartamento) {
+      const salarioActivo = await this.prismaService.salario.findFirst({
+        where: { IdEmpleado: id, NOT: { Activo: false } },
+        orderBy: { FechaInicioVigencia: 'desc' },
+        select: { SalarioBase: true },
+      });
+      const salario = salarioActivo ? parseFloat(salarioActivo.SalarioBase.toString()) : 0;
+      await this.verificarPresupuestoDepartamento(IdDepartamento, salario, id);
+    }
 
     const empleadoActualizado = await this.prismaService.empleado.update({
       where: { IdEmpleado: id },
@@ -121,7 +134,12 @@ export class EmpleadoService {
           JornadaLaboral: { connect: { IdJornada: Number(IdJornada) } },
         }),
         ...(IdBanco && { Banco: { connect: { IdBanco: Number(IdBanco) } } }),
-        ...(CuentaBancaria && { CuentaBancaria }),
+        ...(IdDepartamento
+          ? { Departamento: { connect: { IdDepartamento: Number(IdDepartamento) } } }
+          : IdDepartamento === null
+            ? { Departamento: { disconnect: true } }
+            : {}),
+        ...(CuentaBancaria !== undefined && { CuentaBancaria }),
       },
     });
 
@@ -129,6 +147,48 @@ export class EmpleadoService {
       message: `Empleado actualizado correctamente.`,
       id: empleadoActualizado.IdEmpleado,
     };
+  }
+
+  private async verificarPresupuestoDepartamento(
+    idDepartamento: number,
+    salarioNuevo: number,
+    excludeIdEmpleado?: number,
+  ): Promise<void> {
+    const dept = await this.prismaService.departamento.findUnique({
+      where: { IdDepartamento: idDepartamento },
+      select: { Presupuesto: true, NombreDepartamento: true },
+    });
+
+    if (!dept || dept.Presupuesto === null) return;
+
+    const presupuesto = parseFloat(dept.Presupuesto.toString());
+
+    const empleados = await this.prismaService.empleado.findMany({
+      where: {
+        IdDepartamento: idDepartamento,
+        NOT: { Activo: false },
+        ...(excludeIdEmpleado ? { IdEmpleado: { not: excludeIdEmpleado } } : {}),
+      },
+      select: { IdEmpleado: true },
+    });
+
+    let usado = 0;
+    if (empleados.length > 0) {
+      const ids = empleados.map((e) => e.IdEmpleado);
+      const result = await this.prismaService.salario.aggregate({
+        _sum: { SalarioBase: true },
+        where: { IdEmpleado: { in: ids }, NOT: { Activo: false } },
+      });
+      usado = parseFloat(result._sum.SalarioBase?.toString() ?? '0');
+    }
+
+    if (usado + salarioNuevo > presupuesto) {
+      const disponible = Math.max(0, presupuesto - usado);
+      throw new BadRequestException(
+        `El departamento "${dept.NombreDepartamento}" no tiene presupuesto suficiente. ` +
+          `Presupuesto: Q${presupuesto.toFixed(2)}, Usado: Q${usado.toFixed(2)}, Disponible: Q${disponible.toFixed(2)}.`,
+      );
+    }
   }
 
   async remove(id: number) {

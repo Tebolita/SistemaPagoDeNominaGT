@@ -14,6 +14,7 @@ interface ModuleCard {
   route: string;
   status: 'active' | 'coming';
   color: string;
+  accent: string;
   features: string[];
 }
 
@@ -32,7 +33,7 @@ export class RecursosHumanos {
       title: 'Expedientes de Empleados',
       description: 'Gestión completa de los datos personales, contratos y asignación bancaria.',
       icon: 'pi pi-id-card',
-      color: 'blue',
+      color: 'blue', accent: '#3b82f6',
       route: '/recursoshumanos/empleados',
       status: 'active',
       features: [
@@ -45,7 +46,7 @@ export class RecursosHumanos {
       title: 'Control de Vacaciones',
       description: 'Cálculo de días ganados y registro de días gozados por año laborado.',
       icon: 'pi pi-sun',
-      color: 'orange',
+      color: 'orange', accent: '#f97316',
       route: '/recursoshumanos/vacaciones',
       status: 'active',
       features: [
@@ -58,7 +59,7 @@ export class RecursosHumanos {
       title: 'Asistencia e Incidencias',
       description: 'Control de ingresos, horas extra, permisos y suspensiones del IGSS.',
       icon: 'pi pi-calendar-clock',
-      color: 'teal',
+      color: 'teal', accent: '#14b8a6',
       route: '/recursoshumanos/asistencias',
       status: 'active',
       features: [

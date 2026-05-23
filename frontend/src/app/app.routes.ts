@@ -16,6 +16,7 @@ import { BancoComponent } from './banco/banco';
 import { ParametroGlobalComponent } from './parametro-global/parametro-global';
 import { NominaComponent } from './nomina/nomina';
 import { EstadoNominaComponent } from './estado-nomina/estado-nomina';
+import { ConfigFirmanteComponent } from './config-firmante/config-firmante';
 import { Reporteria } from './reporteria/reporteria';
 import { ClienteComponent } from './cliente/cliente';
 import { ProductoServicioComponent } from './producto-servicio/producto-servicio';
@@ -27,6 +28,15 @@ import { ConfiguracionInicio } from './configuracion/configuracion-inicio/config
 import { FinanzasInicioComponent } from './finanzas/finanzas-inicio/finanzas-inicio';
 import { CuentaBancariaComponent } from './finanzas/cuenta-bancaria/cuenta-bancaria';
 import { MovimientoFinancieroComponent } from './finanzas/movimiento-financiero/movimiento-financiero';
+import { AuditoriaComponent } from './auditoria/auditoria';
+import { HistorialesComponent } from './historiales/historiales';
+import { InformesEjecutivosComponent } from './informes-ejecutivos/informes-ejecutivos';
+import { AnalisisSalariosComponent } from './analisis-salarios/analisis-salarios';
+import { NominaDetalleComponent } from './nomina/nomina-detalle/nomina-detalle';
+import { PerfilComponent } from './perfil/perfil';
+import { ConfigEmpresaComponent } from './config-empresa/config-empresa';
+import { PrestacionesComponent } from './prestaciones/prestaciones';
+import { PrestamosComponent } from './prestamos/prestamos';
 import { authGuard } from './auth.guard';
 import { roleGuard } from './role.guard';
 
@@ -59,7 +69,9 @@ export const routes: Routes = [
             { path: 'inicio',      component: RecursosHumanos },
             { path: 'empleados',   component: Empleado        },
             { path: 'vacaciones',  component: Vacacion        },
-            { path: 'asistencias', component: Asistencia      },
+            { path: 'asistencias',  component: Asistencia           },
+            { path: 'prestaciones', component: PrestacionesComponent },
+            { path: 'prestamos',    component: PrestamosComponent    },
         ]
     },
 
@@ -70,9 +82,11 @@ export const routes: Routes = [
         canActivate: [authGuard, roleGuard],
         data: { roles: ADMIN_ROLES },
         children: [
-            { path: 'inicio',   component: Seguridad },
-            { path: 'usuarios', component: Usuario   },
-            { path: 'roles',    component: Roles     },
+            { path: 'inicio',     component: Seguridad          },
+            { path: 'usuarios',   component: Usuario            },
+            { path: 'roles',      component: Roles              },
+            { path: 'auditoria',  component: AuditoriaComponent },
+            { path: 'perfil',     component: PerfilComponent    },
         ]
     },
 
@@ -89,7 +103,9 @@ export const routes: Routes = [
             { path: 'jornadas',       component: JornadaLaboralComponent },
             { path: 'bancos',         component: BancoComponent        },
             { path: 'parametros',     component: ParametroGlobalComponent },
-            { path: 'estados-nomina', component: EstadoNominaComponent },
+            { path: 'estados-nomina',  component: EstadoNominaComponent },
+          { path: 'firmantes',       component: ConfigFirmanteComponent },
+          { path: 'empresa',         component: ConfigEmpresaComponent  },
         ]
     },
 
@@ -100,9 +116,10 @@ export const routes: Routes = [
         canActivate: [authGuard, roleGuard],
         data: { roles: GERENTE_ROLES },
         children: [
-            { path: 'inicio',   component: NominaInicio  },
-            { path: 'nominas',  component: NominaComponent },
-            { path: 'generar',  component: NominaComponent },
+            { path: 'inicio',    component: NominaInicio        },
+            { path: 'nominas',   component: NominaComponent     },
+            { path: 'generar',   component: NominaComponent     },
+            { path: 'detalles',  component: NominaDetalleComponent },
         ]
     },
 
@@ -139,9 +156,12 @@ export const routes: Routes = [
         component: Home,
         canActivate: [authGuard],
         children: [
-            { path: 'inicio',   component: ReporteriaInicio },
-            { path: 'reportes', component: Reporteria       },
-            { path: '**',       component: ReporteriaInicio },
+            { path: 'inicio',      component: ReporteriaInicio           },
+            { path: 'reportes',    component: Reporteria                 },
+            { path: 'historiales', component: HistorialesComponent        },
+            { path: 'ejecutivos',  component: InformesEjecutivosComponent },
+            { path: 'salarios',    component: AnalisisSalariosComponent   },
+            { path: '**',          component: ReporteriaInicio           },
         ]
     },
 

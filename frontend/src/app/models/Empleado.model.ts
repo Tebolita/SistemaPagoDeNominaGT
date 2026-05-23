@@ -1,5 +1,5 @@
 export interface EmpleadoResponse {
-  IdEmpleado: number;    
+  IdEmpleado: number;
   DPI: string;
   NIT: string;
   Nombres: string;
@@ -7,13 +7,14 @@ export interface EmpleadoResponse {
   NombreCompleto: string;
   CorreoPersonal: string;
   FechaIngresa: Date | null;
-  IdPuesto: number;      
+  IdPuesto: number;
   IdJornada?: number;
   IdBanco?: number;
+  IdDepartamento?: number;
   Activo: boolean;
   FechaEliminacion: Date | null;
-  Telefono: string;     
-  Genero: boolean;       
+  Telefono: string;
+  Genero: boolean;
   EstadoCivil: string;
   Direccion: string;
   Fotografia: string;
@@ -36,6 +37,9 @@ export interface EmpleadoResponse {
     IdBanco?: number;
     NombreBanco: string;
   };
+  Departamento?: {
+    NombreDepartamento: string;
+  };
 }
 
 export interface EmpleadoRequest {
@@ -48,6 +52,7 @@ export interface EmpleadoRequest {
   IdPuesto: number;
   IdJornada: number;
   IdBanco?: number;
+  IdDepartamento?: number;
   CuentaBancaria?: string;
   Activo: boolean;
   FechaEliminacion: Date | null;

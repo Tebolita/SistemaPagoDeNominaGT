@@ -192,6 +192,19 @@
                 }
               </div>
               <div class="field-group">
+                <label>Departamento</label>
+                <p-select
+                  [options]="departamentos()"
+                  [(ngModel)]="emp.IdDepartamento"
+                  optionLabel="NombreDepartamento"
+                  optionValue="IdDepartamento"
+                  placeholder="Seleccionar Departamento"
+                  [showClear]="true"
+                  class="w-full"
+                  appendTo="body"
+                ></p-select>
+              </div>
+              <div class="field-group">
                 <label>Puesto</label>
                 <p-select
                   [options]="puestos()"
@@ -223,11 +236,12 @@
                   optionLabel="NombreBanco"
                   optionValue="IdBanco"
                   placeholder="Seleccionar Banco"
+                  [showClear]="true"
                   class="w-full"
                   appendTo="body"
                 ></p-select>
               </div>
-              <div class="field-group sm:col-span-2">
+              <div class="field-group">
                 <label>Número de Cuenta Bancaria</label>
                 <input pInputText [(ngModel)]="emp.CuentaBancaria" placeholder="No. de cuenta" class="w-full font-mono" />
               </div>
@@ -382,8 +396,12 @@
         <p-select [options]="jornadas()" [(ngModel)]="nuevoEmpleado().IdJornada" optionLabel="NombreJornada" optionValue="IdJornada" placeholder="Seleccionar" class="w-full" appendTo="body" />
       </div>
       <div class="field-group">
+        <label>Departamento</label>
+        <p-select [options]="departamentos()" [(ngModel)]="nuevoEmpleado().IdDepartamento" optionLabel="NombreDepartamento" optionValue="IdDepartamento" placeholder="Seleccionar" [showClear]="true" class="w-full" appendTo="body" />
+      </div>
+      <div class="field-group">
         <label>Banco</label>
-        <p-select [options]="bancos()" [(ngModel)]="nuevoEmpleado().IdBanco" optionLabel="NombreBanco" optionValue="IdBanco" placeholder="Seleccionar" class="w-full" appendTo="body" />
+        <p-select [options]="bancos()" [(ngModel)]="nuevoEmpleado().IdBanco" optionLabel="NombreBanco" optionValue="IdBanco" placeholder="Seleccionar" [showClear]="true" class="w-full" appendTo="body" />
       </div>
       <div class="field-group">
         <label>Cuenta Bancaria</label>

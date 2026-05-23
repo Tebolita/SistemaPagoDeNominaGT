@@ -1,0 +1,186 @@
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
+
+<div class="prest-wrapper">
+
+  <!-- Cabecera -->
+  <div class="prest-header">
+    <div>
+      <h1 class="prest-title">Préstamos a Empleados</h1>
+      <p class="prest-sub">Gestiona préstamos y el seguimiento de cuotas mensuales</p>
+    </div>
+    <p-button label="Nuevo Préstamo" icon="pi pi-plus" severity="success" (onClick)="abrirForm()"></p-button>
+  </div>
+
+  <!-- Filtro -->
+  <div class="prest-filter">
+    <p-select
+      [options]="[{ NombreCompleto: 'Todos los empleados', IdEmpleado: null }, ...empleados()]"
+      [ngModel]="filtroEmpleado()"
+      (ngModelChange)="filtroEmpleado.set($event); cargar()"
+      optionLabel="NombreCompleto"
+      optionValue="IdEmpleado"
+      appendTo="body"
+      styleClass="prest-filter-select"
+    ></p-select>
+  </div>
+
+  <!-- Tabla -->
+  <p-table [value]="prestamos()" [loading]="loading()" [paginator]="true" [rows]="10" [rowHover]="true"
+    emptyMessage="Sin préstamos registrados.">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Empleado</th>
+        <th class="text-right">Monto</th>
+        <th class="text-right">Cuota</th>
+        <th class="text-right">Progreso</th>
+        <th class="text-right">Saldo</th>
+        <th>Fecha</th>
+        <th>Estado</th>
+        <th style="width:100px" class="text-center">Acciones</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-p>
+      <tr>
+        <td>
+          <div class="emp-cell">
+            <div class="emp-avatar">{{ p.Empleado?.Nombres?.[0] ?? '?' }}</div>
+            <div>
+              <div class="text-sm font-medium text-slate-200">{{ p.Empleado?.Nombres }} {{ p.Empleado?.Apellidos }}</div>
+              @if (p.Descripcion) { <div class="text-xs text-slate-500">{{ p.Descripcion }}</div> }
+            </div>
+          </div>
+        </td>
+        <td class="text-right font-semibold text-slate-200">Q {{ p.MontoPrestamo | number:'1.2-2' }}</td>
+        <td class="text-right text-sm text-sky-400">Q {{ p.CuotaMensual | number:'1.2-2' }}</td>
+        <td class="text-right">
+          <div class="cuota-progress">
+            <span class="text-xs text-slate-400">{{ p.CuotasPagadas }}/{{ p.TotalCuotas }}</span>
+            <div class="cuota-bar">
+              <div class="cuota-bar-fill" [style.width.%]="(p.CuotasPagadas / p.TotalCuotas) * 100"></div>
+            </div>
+          </div>
+        </td>
+        <td class="text-right font-semibold" [class.text-green-400]="p.SaldoPendiente === 0" [class.text-orange-400]="p.SaldoPendiente > 0">
+          Q {{ p.SaldoPendiente | number:'1.2-2' }}
+        </td>
+        <td class="text-sm text-slate-400">{{ p.FechaAprobacion | date:'dd/MM/yyyy' }}</td>
+        <td><p-tag [value]="p.Estado" [severity]="getSeveridadEstado(p.Estado)"></p-tag></td>
+        <td class="text-center">
+          <p-button icon="pi pi-list" [rounded]="true" [text]="true" severity="info"
+            pTooltip="Ver cuotas" (onClick)="verCuotas(p)"></p-button>
+          @if (p.Estado === 'ACTIVO') {
+            <p-button icon="pi pi-ban" [rounded]="true" [text]="true" severity="danger"
+              pTooltip="Cancelar" (onClick)="cancelarPrestamo(p)"></p-button>
+          }
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<!-- ── Diálogo: Nuevo préstamo ─────────────────────────────────── -->
+<p-dialog
+  [visible]="mostrarForm()"
+  (visibleChange)="mostrarForm.set($event)"
+  header="Nuevo Préstamo"
+  [modal]="true"
+  [style]="{ width: '480px', maxWidth: '95vw' }"
+  [resizable]="false"
+>
+  <div class="form-dialog">
+    <div class="field-group">
+      <label>Empleado *</label>
+      <p-select [options]="empleados()" [(ngModel)]="form.idEmpleado" optionLabel="NombreCompleto"
+        optionValue="IdEmpleado" placeholder="Seleccionar empleado" [filter]="true" filterBy="NombreCompleto" appendTo="body"></p-select>
+    </div>
+    <div class="field-group">
+      <label>Monto del préstamo *</label>
+      <p-inputNumber [(ngModel)]="form.montoPrestamo" mode="decimal" [minFractionDigits]="2" [min]="1"
+        placeholder="Q 0.00" styleClass="w-full" inputStyleClass="w-full"></p-inputNumber>
+    </div>
+    <div class="field-group">
+      <label>Número de cuotas *</label>
+      <p-select [options]="cuotasOpciones" [(ngModel)]="form.totalCuotas" optionLabel="label" optionValue="value" appendTo="body"></p-select>
+    </div>
+    @if (form.montoPrestamo && form.totalCuotas) {
+      <div class="cuota-estimada">
+        <i class="pi pi-info-circle text-sky-400"></i>
+        Cuota mensual estimada: <strong class="text-sky-300">Q {{ cuotaEstimada | number:'1.2-2' }}</strong>
+      </div>
+    }
+    <div class="field-group">
+      <label>Fecha de aprobación *</label>
+      <p-datepicker [(ngModel)]="form.fechaAprobacion" dateFormat="dd/mm/yy" [showIcon]="true" appendTo="body"></p-datepicker>
+    </div>
+    <div class="field-group">
+      <label>Descripción (opcional)</label>
+      <input pInputText [(ngModel)]="form.descripcion" placeholder="Motivo del préstamo..." class="w-full" />
+    </div>
+  </div>
+  <ng-template pTemplate="footer">
+    <p-button label="Cancelar" icon="pi pi-times" [text]="true" severity="secondary" (onClick)="mostrarForm.set(false)"></p-button>
+    <p-button label="Registrar" icon="pi pi-check" severity="success" [loading]="guardando()" (onClick)="guardar()"></p-button>
+  </ng-template>
+</p-dialog>
+
+<!-- ── Diálogo: Cuotas ─────────────────────────────────────────── -->
+<p-dialog
+  [visible]="mostrarCuotas()"
+  (visibleChange)="mostrarCuotas.set($event)"
+  [header]="'Cuotas — ' + (prestamoActual()?.Empleado?.Nombres ?? '')"
+  [modal]="true"
+  [style]="{ width: '550px', maxWidth: '95vw' }"
+  [resizable]="false"
+>
+  @if (prestamoActual(); as p) {
+    <div class="cuotas-dialog">
+      <div class="cuotas-resumen">
+        <div class="cuota-resumen-item">
+          <span>Monto total</span><strong>Q {{ p.MontoPrestamo | number:'1.2-2' }}</strong>
+        </div>
+        <div class="cuota-resumen-item">
+          <span>Cuota mensual</span><strong class="text-sky-400">Q {{ p.CuotaMensual | number:'1.2-2' }}</strong>
+        </div>
+        <div class="cuota-resumen-item">
+          <span>Saldo pendiente</span><strong class="text-orange-400">Q {{ p.SaldoPendiente | number:'1.2-2' }}</strong>
+        </div>
+        <div class="cuota-resumen-item">
+          <span>Progreso</span><strong>{{ p.CuotasPagadas }}/{{ p.TotalCuotas }} cuotas</strong>
+        </div>
+      </div>
+
+      <div class="cuotas-progress-bar">
+        <div class="cuotas-progress-fill" [style.width.%]="porcentajePagado"></div>
+      </div>
+      <p class="cuotas-pct-label">{{ porcentajePagado }}% pagado</p>
+
+      <div class="cuotas-list">
+        @for (c of p.CuotaPrestamo; track c.IdCuota) {
+          <div class="cuota-row" [class.cuota-row--pagada]="c.Estado === 'PAGADO'">
+            <div class="cuota-num">#{{ c.NumeroCuota }}</div>
+            <div class="cuota-monto">Q {{ c.MontoCuota | number:'1.2-2' }}</div>
+            <div class="cuota-estado">
+              @if (c.Estado === 'PAGADO') {
+                <div class="flex items-center gap-2">
+                  <p-tag value="Pagado" severity="success"></p-tag>
+                  <span class="text-xs text-slate-500">{{ c.FechaPago | date:'dd/MM/yy' }}</span>
+                </div>
+              } @else {
+                <p-tag value="Pendiente" severity="warn"></p-tag>
+              }
+            </div>
+            @if (c.Estado === 'PENDIENTE' && p.Estado === 'ACTIVO') {
+              <p-button icon="pi pi-check" label="Pagar" size="small" severity="success" [outlined]="true"
+                (onClick)="pagarCuota(c)"></p-button>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  }
+  <ng-template pTemplate="footer">
+    <p-button label="Cerrar" icon="pi pi-times" [text]="true" severity="secondary" (onClick)="mostrarCuotas.set(false)"></p-button>
+  </ng-template>
+</p-dialog>

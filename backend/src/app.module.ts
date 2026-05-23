@@ -24,6 +24,11 @@ import { VentaModule } from './venta/venta.module';
 import { CuentaBancariaEmpresaModule } from './cuenta-bancaria-empresa/cuenta-bancaria-empresa.module';
 import { MovimientoFinancieroModule } from './movimiento-financiero/movimiento-financiero.module';
 import { CorreoModule } from './correo/correo.module';
+import { ConfigFirmanteModule } from './config-firmante/config-firmante.module';
+import { AuditoriaModule } from './auditoria/auditoria.module';
+import { ConfigEmpresaModule } from './config-empresa/config-empresa.module';
+import { LiquidacionModule } from './liquidacion/liquidacion.module';
+import { PrestamoModule } from './prestamo/prestamo.module';
 
 @Module({
   imports: [
@@ -51,6 +56,11 @@ import { CorreoModule } from './correo/correo.module';
     CuentaBancariaEmpresaModule,
     MovimientoFinancieroModule,
     CorreoModule,
+    ConfigFirmanteModule,
+    AuditoriaModule,
+    ConfigEmpresaModule,
+    LiquidacionModule,
+    PrestamoModule,
   ],
   controllers: [],
   providers: [PrismaService],

@@ -7,29 +7,58 @@ import { UpdateDepartamentoDto } from './dto/update-departamento.dto';
 export class DepartamentoService {
   constructor(private prismaService: PrismaService) {}
 
-  create(createDepartamentoDto: CreateDepartamentoDto) {
-    return this.prismaService.departamento.create({
-      data: createDepartamentoDto,
+  async getPresupuestoUsado(idDepartamento: number, excludeIdEmpleado?: number): Promise<number> {
+    const empleados = await this.prismaService.empleado.findMany({
+      where: {
+        IdDepartamento: idDepartamento,
+        NOT: { Activo: false },
+        ...(excludeIdEmpleado ? { IdEmpleado: { not: excludeIdEmpleado } } : {}),
+      },
+      select: { IdEmpleado: true },
     });
+
+    if (empleados.length === 0) return 0;
+
+    const ids = empleados.map((e) => e.IdEmpleado);
+    const result = await this.prismaService.salario.aggregate({
+      _sum: { SalarioBase: true },
+      where: { IdEmpleado: { in: ids }, NOT: { Activo: false } },
+    });
+
+    return parseFloat(result._sum.SalarioBase?.toString() ?? '0');
   }
 
-  findAll() {
-    return this.prismaService.departamento.findMany({
+  create(createDepartamentoDto: CreateDepartamentoDto) {
+    return this.prismaService.departamento.create({ data: createDepartamentoDto });
+  }
+
+  async findAll() {
+    const departamentos = await this.prismaService.departamento.findMany({
       where: { OR: [{ Activo: true }, { Activo: null }] },
-      include: {
-        Puesto: true,
-      },
+      include: { Puesto: true },
       orderBy: { NombreDepartamento: 'asc' },
     });
+
+    return Promise.all(
+      departamentos.map(async (dept) => ({
+        ...dept,
+        Presupuesto: dept.Presupuesto ? parseFloat(dept.Presupuesto.toString()) : null,
+        PresupuestoUsado: await this.getPresupuestoUsado(dept.IdDepartamento),
+      })),
+    );
   }
 
-  findOne(id: number) {
-    return this.prismaService.departamento.findUnique({
+  async findOne(id: number) {
+    const dept = await this.prismaService.departamento.findUnique({
       where: { IdDepartamento: id },
-      include: {
-        Puesto: true,
-      },
+      include: { Puesto: true },
     });
+    if (!dept) return null;
+    return {
+      ...dept,
+      Presupuesto: dept.Presupuesto ? parseFloat(dept.Presupuesto.toString()) : null,
+      PresupuestoUsado: await this.getPresupuestoUsado(id),
+    };
   }
 
   update(id: number, updateDepartamentoDto: UpdateDepartamentoDto) {
@@ -42,10 +71,7 @@ export class DepartamentoService {
   remove(id: number) {
     return this.prismaService.departamento.update({
       where: { IdDepartamento: id },
-      data: {
-        Activo: false,
-        FechaEliminacion: new Date(),
-      },
+      data: { Activo: false, FechaEliminacion: new Date() },
     });
   }
 }

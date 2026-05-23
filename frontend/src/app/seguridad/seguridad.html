@@ -1,76 +1,104 @@
-<div class="dashboard-wrapper">
-  
-  <div class="hero-section">
-    <div class="hero-bg-shapes">
-      <div class="shape shape-1"></div>
-      <div class="shape shape-2"></div>
-      <div class="shape shape-3"></div>
+<div class="seg-wrapper">
+
+  <!-- ── Hero ───────────────────────────────────────────────────────── -->
+  <section class="seg-hero">
+    <div class="seg-hero-orbs">
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+      <div class="orb orb-3"></div>
     </div>
-    <div class="hero-content">
-      <div class="hero-badge">
+
+    <div class="seg-hero-content">
+      <div class="seg-badge">
         <i class="pi pi-lock"></i>
-        Acceso Restringido
+        Módulo de Seguridad
       </div>
-      <h1 class="hero-title">
-        Gestión de <span class="highlight">Seguridad</span>
+
+      <h1 class="seg-title">
+        Gestión de <span class="seg-gradient-text">Accesos</span>
       </h1>
-      <p class="hero-subtitle">
-        Administrá los accesos, credenciales y privilegios del personal. 
-        Garantizá la protección de la información del sistema de nóminas.
+      <p class="seg-subtitle">
+        Administra usuarios, roles y permisos del sistema. Controla quién puede acceder y qué acciones puede realizar.
       </p>
-      <div class="hero-stats">
-        <div class="stat-item">
-          <i class="pi pi-users"></i>
-          <span>Usuarios</span>
+
+      <!-- Métricas en vivo -->
+      <div class="seg-metrics">
+        <div class="metric-card">
+          <div class="metric-icon metric-icon--blue">
+            <i class="pi pi-users"></i>
+          </div>
+          <div>
+            <span class="metric-value">{{ totalUsuariosActivos() }}</span>
+            <span class="metric-label">Usuarios registrados</span>
+          </div>
         </div>
-        <div class="stat-divider"></div>
-        <div class="stat-item">
-          <i class="pi pi-id-card"></i>
-          <span>Roles</span>
+
+        <div class="metric-divider"></div>
+
+        <div class="metric-card">
+          <div class="metric-icon metric-icon--teal">
+            <i class="pi pi-id-card"></i>
+          </div>
+          <div>
+            <span class="metric-value">{{ totalRoles() }}</span>
+            <span class="metric-label">Roles definidos</span>
+          </div>
         </div>
-        <div class="stat-divider"></div>
-        <div class="stat-item">
-          <i class="pi pi-shield"></i>
-          <span>Encriptación Activa</span>
+
+        <div class="metric-divider"></div>
+
+        <div class="metric-card">
+          <div class="metric-icon metric-icon--violet">
+            <i class="pi pi-shield"></i>
+          </div>
+          <div>
+            <span class="metric-value">{{ totalPermisos() }}</span>
+            <span class="metric-label">Permisos asignados</span>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
-  <div class="modules-section">
-    <div class="section-header">
-      <h2 class="section-title">Opciones de Seguridad</h2>
-      <p class="section-subtitle">Seleccioná el área que deseás administrar</p>
+  <!-- ── Cards ──────────────────────────────────────────────────────── -->
+  <section class="seg-cards-section">
+    <div class="seg-section-header">
+      <h2 class="seg-section-title">Opciones disponibles</h2>
+      <p class="seg-section-sub">Selecciona el área que deseas administrar</p>
     </div>
 
-    <div class="cards-grid">
+    <div class="seg-cards-grid">
       @for (mod of modules; track mod.route) {
-        <div class="module-card card-{{ mod.color }}" [class.coming-soon]="mod.status === 'coming'" (click)="navigate(mod.route)">
-          
-          <div class="card-glow"></div>
+        <div
+          class="seg-card seg-card--{{ mod.color }}"
+          [class.seg-card--disabled]="mod.status === 'coming'"
+          (click)="navigate(mod.route, mod.status)"
+          [style.--accent]="mod.accent"
+        >
+          <!-- Fondo decorativo -->
+          <div class="seg-card-bg"></div>
 
-          @if (mod.status === 'coming') {
-            <div class="status-badge coming">
-              <i class="pi pi-clock"></i> Próximamente
-            </div>
-          } @else {
-            <div class="status-badge active">
-              <i class="pi pi-check-circle"></i> Disponible
-            </div>
-          }
-
-          <div class="card-icon-wrapper">
-            <div class="card-icon">
-              <i [class]="mod.icon"></i>
-            </div>
-            <div class="icon-ring"></div>
+          <!-- Estado -->
+          <div class="seg-card-status"
+            [class.seg-card-status--active]="mod.status === 'active'"
+            [class.seg-card-status--coming]="mod.status === 'coming'">
+            <i [class]="mod.status === 'active' ? 'pi pi-check-circle' : 'pi pi-clock'"></i>
+            {{ mod.status === 'active' ? 'Disponible' : 'Próximamente' }}
           </div>
 
-          <div class="card-content">
-            <h3 class="card-title">{{ mod.title }}</h3>
-            <p class="card-description">{{ mod.description }}</p>
+          <!-- Icono -->
+          <div class="seg-card-icon-wrap">
+            <div class="seg-card-icon">
+              <i [class]="mod.icon"></i>
+            </div>
+          </div>
 
-            <ul class="features-list">
+          <!-- Contenido -->
+          <div class="seg-card-body">
+            <h3 class="seg-card-title">{{ mod.title }}</h3>
+            <p class="seg-card-desc">{{ mod.description }}</p>
+
+            <ul class="seg-features">
               @for (feat of mod.features; track feat) {
                 <li>
                   <i class="pi pi-check"></i>
@@ -80,21 +108,23 @@
             </ul>
           </div>
 
-          <div class="card-footer">
+          <!-- Footer -->
+          <div class="seg-card-footer">
             @if (mod.status === 'active') {
-              <button class="card-btn" pRipple>
-                Gestionar <i class="pi pi-arrow-right"></i>
-              </button>
+              <span class="seg-card-btn">
+                Gestionar
+                <i class="pi pi-arrow-right"></i>
+              </span>
             } @else {
-              <button class="card-btn disabled" disabled>
-                En desarrollo <i class="pi pi-wrench"></i>
-              </button>
+              <span class="seg-card-btn seg-card-btn--disabled">
+                En desarrollo
+                <i class="pi pi-wrench"></i>
+              </span>
             }
           </div>
-
         </div>
       }
     </div>
-  </div>
-  
+  </section>
+
 </div>

@@ -248,8 +248,10 @@ export type UsuarioWhereInput = {
   Clave?: Prisma.StringNullableFilter<"Usuario"> | string | null
   Activo?: Prisma.BoolNullableFilter<"Usuario"> | boolean | null
   FechaEliminacion?: Prisma.DateTimeNullableFilter<"Usuario"> | Date | string | null
+  AuditoriaSession?: Prisma.AuditoriaSessionListRelationFilter
   EstadisticaMensual?: Prisma.EstadisticaMensualListRelationFilter
   FirmaNomina?: Prisma.FirmaNominaListRelationFilter
+  FirmanteAsignadoNomina?: Prisma.FirmanteAsignadoNominaListRelationFilter
   HistorialEstadoNomina?: Prisma.HistorialEstadoNominaListRelationFilter
   Incidencia?: Prisma.IncidenciaListRelationFilter
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoListRelationFilter
@@ -271,8 +273,10 @@ export type UsuarioOrderByWithRelationInput = {
   Clave?: Prisma.SortOrderInput | Prisma.SortOrder
   Activo?: Prisma.SortOrderInput | Prisma.SortOrder
   FechaEliminacion?: Prisma.SortOrderInput | Prisma.SortOrder
+  AuditoriaSession?: Prisma.AuditoriaSessionOrderByRelationAggregateInput
   EstadisticaMensual?: Prisma.EstadisticaMensualOrderByRelationAggregateInput
   FirmaNomina?: Prisma.FirmaNominaOrderByRelationAggregateInput
+  FirmanteAsignadoNomina?: Prisma.FirmanteAsignadoNominaOrderByRelationAggregateInput
   HistorialEstadoNomina?: Prisma.HistorialEstadoNominaOrderByRelationAggregateInput
   Incidencia?: Prisma.IncidenciaOrderByRelationAggregateInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoOrderByRelationAggregateInput
@@ -297,8 +301,10 @@ export type UsuarioWhereUniqueInput = Prisma.AtLeast<{
   Clave?: Prisma.StringNullableFilter<"Usuario"> | string | null
   Activo?: Prisma.BoolNullableFilter<"Usuario"> | boolean | null
   FechaEliminacion?: Prisma.DateTimeNullableFilter<"Usuario"> | Date | string | null
+  AuditoriaSession?: Prisma.AuditoriaSessionListRelationFilter
   EstadisticaMensual?: Prisma.EstadisticaMensualListRelationFilter
   FirmaNomina?: Prisma.FirmaNominaListRelationFilter
+  FirmanteAsignadoNomina?: Prisma.FirmanteAsignadoNominaListRelationFilter
   HistorialEstadoNomina?: Prisma.HistorialEstadoNominaListRelationFilter
   Incidencia?: Prisma.IncidenciaListRelationFilter
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoListRelationFilter
@@ -347,8 +353,10 @@ export type UsuarioCreateInput = {
   Clave?: string | null
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  AuditoriaSession?: Prisma.AuditoriaSessionCreateNestedManyWithoutUsuarioInput
   EstadisticaMensual?: Prisma.EstadisticaMensualCreateNestedManyWithoutUsuarioInput
   FirmaNomina?: Prisma.FirmaNominaCreateNestedManyWithoutUsuarioInput
+  FirmanteAsignadoNomina?: Prisma.FirmanteAsignadoNominaCreateNestedManyWithoutUsuarioInput
   HistorialEstadoNomina?: Prisma.HistorialEstadoNominaCreateNestedManyWithoutUsuarioInput
   Incidencia?: Prisma.IncidenciaCreateNestedManyWithoutUsuarioInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoCreateNestedManyWithoutUsuarioInput
@@ -370,8 +378,10 @@ export type UsuarioUncheckedCreateInput = {
   Clave?: string | null
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  AuditoriaSession?: Prisma.AuditoriaSessionUncheckedCreateNestedManyWithoutUsuarioInput
   EstadisticaMensual?: Prisma.EstadisticaMensualUncheckedCreateNestedManyWithoutUsuarioInput
   FirmaNomina?: Prisma.FirmaNominaUncheckedCreateNestedManyWithoutUsuarioInput
+  FirmanteAsignadoNomina?: Prisma.FirmanteAsignadoNominaUncheckedCreateNestedManyWithoutUsuarioInput
   HistorialEstadoNomina?: Prisma.HistorialEstadoNominaUncheckedCreateNestedManyWithoutUsuarioInput
   Incidencia?: Prisma.IncidenciaUncheckedCreateNestedManyWithoutUsuarioInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUncheckedCreateNestedManyWithoutUsuarioInput
@@ -388,8 +398,10 @@ export type UsuarioUpdateInput = {
   Clave?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  AuditoriaSession?: Prisma.AuditoriaSessionUpdateManyWithoutUsuarioNestedInput
   EstadisticaMensual?: Prisma.EstadisticaMensualUpdateManyWithoutUsuarioNestedInput
   FirmaNomina?: Prisma.FirmaNominaUpdateManyWithoutUsuarioNestedInput
+  FirmanteAsignadoNomina?: Prisma.FirmanteAsignadoNominaUpdateManyWithoutUsuarioNestedInput
   HistorialEstadoNomina?: Prisma.HistorialEstadoNominaUpdateManyWithoutUsuarioNestedInput
   Incidencia?: Prisma.IncidenciaUpdateManyWithoutUsuarioNestedInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUpdateManyWithoutUsuarioNestedInput
@@ -411,8 +423,10 @@ export type UsuarioUncheckedUpdateInput = {
   Clave?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  AuditoriaSession?: Prisma.AuditoriaSessionUncheckedUpdateManyWithoutUsuarioNestedInput
   EstadisticaMensual?: Prisma.EstadisticaMensualUncheckedUpdateManyWithoutUsuarioNestedInput
   FirmaNomina?: Prisma.FirmaNominaUncheckedUpdateManyWithoutUsuarioNestedInput
+  FirmanteAsignadoNomina?: Prisma.FirmanteAsignadoNominaUncheckedUpdateManyWithoutUsuarioNestedInput
   HistorialEstadoNomina?: Prisma.HistorialEstadoNominaUncheckedUpdateManyWithoutUsuarioNestedInput
   Incidencia?: Prisma.IncidenciaUncheckedUpdateManyWithoutUsuarioNestedInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUncheckedUpdateManyWithoutUsuarioNestedInput
@@ -743,14 +757,48 @@ export type UsuarioUpdateOneRequiredWithoutVentaNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UsuarioUpdateToOneWithWhereWithoutVentaInput, Prisma.UsuarioUpdateWithoutVentaInput>, Prisma.UsuarioUncheckedUpdateWithoutVentaInput>
 }
 
+export type UsuarioCreateNestedOneWithoutFirmanteAsignadoNominaInput = {
+  create?: Prisma.XOR<Prisma.UsuarioCreateWithoutFirmanteAsignadoNominaInput, Prisma.UsuarioUncheckedCreateWithoutFirmanteAsignadoNominaInput>
+  connectOrCreate?: Prisma.UsuarioCreateOrConnectWithoutFirmanteAsignadoNominaInput
+  connect?: Prisma.UsuarioWhereUniqueInput
+}
+
+export type UsuarioUpdateOneWithoutFirmanteAsignadoNominaNestedInput = {
+  create?: Prisma.XOR<Prisma.UsuarioCreateWithoutFirmanteAsignadoNominaInput, Prisma.UsuarioUncheckedCreateWithoutFirmanteAsignadoNominaInput>
+  connectOrCreate?: Prisma.UsuarioCreateOrConnectWithoutFirmanteAsignadoNominaInput
+  upsert?: Prisma.UsuarioUpsertWithoutFirmanteAsignadoNominaInput
+  disconnect?: Prisma.UsuarioWhereInput | boolean
+  delete?: Prisma.UsuarioWhereInput | boolean
+  connect?: Prisma.UsuarioWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UsuarioUpdateToOneWithWhereWithoutFirmanteAsignadoNominaInput, Prisma.UsuarioUpdateWithoutFirmanteAsignadoNominaInput>, Prisma.UsuarioUncheckedUpdateWithoutFirmanteAsignadoNominaInput>
+}
+
+export type UsuarioCreateNestedOneWithoutAuditoriaSessionInput = {
+  create?: Prisma.XOR<Prisma.UsuarioCreateWithoutAuditoriaSessionInput, Prisma.UsuarioUncheckedCreateWithoutAuditoriaSessionInput>
+  connectOrCreate?: Prisma.UsuarioCreateOrConnectWithoutAuditoriaSessionInput
+  connect?: Prisma.UsuarioWhereUniqueInput
+}
+
+export type UsuarioUpdateOneWithoutAuditoriaSessionNestedInput = {
+  create?: Prisma.XOR<Prisma.UsuarioCreateWithoutAuditoriaSessionInput, Prisma.UsuarioUncheckedCreateWithoutAuditoriaSessionInput>
+  connectOrCreate?: Prisma.UsuarioCreateOrConnectWithoutAuditoriaSessionInput
+  upsert?: Prisma.UsuarioUpsertWithoutAuditoriaSessionInput
+  disconnect?: Prisma.UsuarioWhereInput | boolean
+  delete?: Prisma.UsuarioWhereInput | boolean
+  connect?: Prisma.UsuarioWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UsuarioUpdateToOneWithWhereWithoutAuditoriaSessionInput, Prisma.UsuarioUpdateWithoutAuditoriaSessionInput>, Prisma.UsuarioUncheckedUpdateWithoutAuditoriaSessionInput>
+}
+
 export type UsuarioCreateWithoutEmpleadoInput = {
   Username: string
   Contrasena: string
   Clave?: string | null
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  AuditoriaSession?: Prisma.AuditoriaSessionCreateNestedManyWithoutUsuarioInput
   EstadisticaMensual?: Prisma.EstadisticaMensualCreateNestedManyWithoutUsuarioInput
   FirmaNomina?: Prisma.FirmaNominaCreateNestedManyWithoutUsuarioInput
+  FirmanteAsignadoNomina?: Prisma.FirmanteAsignadoNominaCreateNestedManyWithoutUsuarioInput
   HistorialEstadoNomina?: Prisma.HistorialEstadoNominaCreateNestedManyWithoutUsuarioInput
   Incidencia?: Prisma.IncidenciaCreateNestedManyWithoutUsuarioInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoCreateNestedManyWithoutUsuarioInput
@@ -770,8 +818,10 @@ export type UsuarioUncheckedCreateWithoutEmpleadoInput = {
   Clave?: string | null
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  AuditoriaSession?: Prisma.AuditoriaSessionUncheckedCreateNestedManyWithoutUsuarioInput
   EstadisticaMensual?: Prisma.EstadisticaMensualUncheckedCreateNestedManyWithoutUsuarioInput
   FirmaNomina?: Prisma.FirmaNominaUncheckedCreateNestedManyWithoutUsuarioInput
+  FirmanteAsignadoNomina?: Prisma.FirmanteAsignadoNominaUncheckedCreateNestedManyWithoutUsuarioInput
   HistorialEstadoNomina?: Prisma.HistorialEstadoNominaUncheckedCreateNestedManyWithoutUsuarioInput
   Incidencia?: Prisma.IncidenciaUncheckedCreateNestedManyWithoutUsuarioInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUncheckedCreateNestedManyWithoutUsuarioInput
@@ -827,7 +877,9 @@ export type UsuarioCreateWithoutFirmaNominaInput = {
   Clave?: string | null
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  AuditoriaSession?: Prisma.AuditoriaSessionCreateNestedManyWithoutUsuarioInput
   EstadisticaMensual?: Prisma.EstadisticaMensualCreateNestedManyWithoutUsuarioInput
+  FirmanteAsignadoNomina?: Prisma.FirmanteAsignadoNominaCreateNestedManyWithoutUsuarioInput
   HistorialEstadoNomina?: Prisma.HistorialEstadoNominaCreateNestedManyWithoutUsuarioInput
   Incidencia?: Prisma.IncidenciaCreateNestedManyWithoutUsuarioInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoCreateNestedManyWithoutUsuarioInput
@@ -849,7 +901,9 @@ export type UsuarioUncheckedCreateWithoutFirmaNominaInput = {
   Clave?: string | null
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  AuditoriaSession?: Prisma.AuditoriaSessionUncheckedCreateNestedManyWithoutUsuarioInput
   EstadisticaMensual?: Prisma.EstadisticaMensualUncheckedCreateNestedManyWithoutUsuarioInput
+  FirmanteAsignadoNomina?: Prisma.FirmanteAsignadoNominaUncheckedCreateNestedManyWithoutUsuarioInput
   HistorialEstadoNomina?: Prisma.HistorialEstadoNominaUncheckedCreateNestedManyWithoutUsuarioInput
   Incidencia?: Prisma.IncidenciaUncheckedCreateNestedManyWithoutUsuarioInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUncheckedCreateNestedManyWithoutUsuarioInput
@@ -882,7 +936,9 @@ export type UsuarioUpdateWithoutFirmaNominaInput = {
   Clave?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  AuditoriaSession?: Prisma.AuditoriaSessionUpdateManyWithoutUsuarioNestedInput
   EstadisticaMensual?: Prisma.EstadisticaMensualUpdateManyWithoutUsuarioNestedInput
+  FirmanteAsignadoNomina?: Prisma.FirmanteAsignadoNominaUpdateManyWithoutUsuarioNestedInput
   HistorialEstadoNomina?: Prisma.HistorialEstadoNominaUpdateManyWithoutUsuarioNestedInput
   Incidencia?: Prisma.IncidenciaUpdateManyWithoutUsuarioNestedInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUpdateManyWithoutUsuarioNestedInput
@@ -904,7 +960,9 @@ export type UsuarioUncheckedUpdateWithoutFirmaNominaInput = {
   Clave?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  AuditoriaSession?: Prisma.AuditoriaSessionUncheckedUpdateManyWithoutUsuarioNestedInput
   EstadisticaMensual?: Prisma.EstadisticaMensualUncheckedUpdateManyWithoutUsuarioNestedInput
+  FirmanteAsignadoNomina?: Prisma.FirmanteAsignadoNominaUncheckedUpdateManyWithoutUsuarioNestedInput
   HistorialEstadoNomina?: Prisma.HistorialEstadoNominaUncheckedUpdateManyWithoutUsuarioNestedInput
   Incidencia?: Prisma.IncidenciaUncheckedUpdateManyWithoutUsuarioNestedInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUncheckedUpdateManyWithoutUsuarioNestedInput
@@ -921,7 +979,9 @@ export type UsuarioCreateWithoutEstadisticaMensualInput = {
   Clave?: string | null
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  AuditoriaSession?: Prisma.AuditoriaSessionCreateNestedManyWithoutUsuarioInput
   FirmaNomina?: Prisma.FirmaNominaCreateNestedManyWithoutUsuarioInput
+  FirmanteAsignadoNomina?: Prisma.FirmanteAsignadoNominaCreateNestedManyWithoutUsuarioInput
   HistorialEstadoNomina?: Prisma.HistorialEstadoNominaCreateNestedManyWithoutUsuarioInput
   Incidencia?: Prisma.IncidenciaCreateNestedManyWithoutUsuarioInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoCreateNestedManyWithoutUsuarioInput
@@ -943,7 +1003,9 @@ export type UsuarioUncheckedCreateWithoutEstadisticaMensualInput = {
   Clave?: string | null
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  AuditoriaSession?: Prisma.AuditoriaSessionUncheckedCreateNestedManyWithoutUsuarioInput
   FirmaNomina?: Prisma.FirmaNominaUncheckedCreateNestedManyWithoutUsuarioInput
+  FirmanteAsignadoNomina?: Prisma.FirmanteAsignadoNominaUncheckedCreateNestedManyWithoutUsuarioInput
   HistorialEstadoNomina?: Prisma.HistorialEstadoNominaUncheckedCreateNestedManyWithoutUsuarioInput
   Incidencia?: Prisma.IncidenciaUncheckedCreateNestedManyWithoutUsuarioInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUncheckedCreateNestedManyWithoutUsuarioInput
@@ -976,7 +1038,9 @@ export type UsuarioUpdateWithoutEstadisticaMensualInput = {
   Clave?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  AuditoriaSession?: Prisma.AuditoriaSessionUpdateManyWithoutUsuarioNestedInput
   FirmaNomina?: Prisma.FirmaNominaUpdateManyWithoutUsuarioNestedInput
+  FirmanteAsignadoNomina?: Prisma.FirmanteAsignadoNominaUpdateManyWithoutUsuarioNestedInput
   HistorialEstadoNomina?: Prisma.HistorialEstadoNominaUpdateManyWithoutUsuarioNestedInput
   Incidencia?: Prisma.IncidenciaUpdateManyWithoutUsuarioNestedInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUpdateManyWithoutUsuarioNestedInput
@@ -998,7 +1062,9 @@ export type UsuarioUncheckedUpdateWithoutEstadisticaMensualInput = {
   Clave?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  AuditoriaSession?: Prisma.AuditoriaSessionUncheckedUpdateManyWithoutUsuarioNestedInput
   FirmaNomina?: Prisma.FirmaNominaUncheckedUpdateManyWithoutUsuarioNestedInput
+  FirmanteAsignadoNomina?: Prisma.FirmanteAsignadoNominaUncheckedUpdateManyWithoutUsuarioNestedInput
   HistorialEstadoNomina?: Prisma.HistorialEstadoNominaUncheckedUpdateManyWithoutUsuarioNestedInput
   Incidencia?: Prisma.IncidenciaUncheckedUpdateManyWithoutUsuarioNestedInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUncheckedUpdateManyWithoutUsuarioNestedInput
@@ -1015,8 +1081,10 @@ export type UsuarioCreateWithoutHistorialEstadoNominaInput = {
   Clave?: string | null
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  AuditoriaSession?: Prisma.AuditoriaSessionCreateNestedManyWithoutUsuarioInput
   EstadisticaMensual?: Prisma.EstadisticaMensualCreateNestedManyWithoutUsuarioInput
   FirmaNomina?: Prisma.FirmaNominaCreateNestedManyWithoutUsuarioInput
+  FirmanteAsignadoNomina?: Prisma.FirmanteAsignadoNominaCreateNestedManyWithoutUsuarioInput
   Incidencia?: Prisma.IncidenciaCreateNestedManyWithoutUsuarioInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoCreateNestedManyWithoutUsuarioInput
   MovimientoFinanciero?: Prisma.MovimientoFinancieroCreateNestedManyWithoutUsuarioInput
@@ -1037,8 +1105,10 @@ export type UsuarioUncheckedCreateWithoutHistorialEstadoNominaInput = {
   Clave?: string | null
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  AuditoriaSession?: Prisma.AuditoriaSessionUncheckedCreateNestedManyWithoutUsuarioInput
   EstadisticaMensual?: Prisma.EstadisticaMensualUncheckedCreateNestedManyWithoutUsuarioInput
   FirmaNomina?: Prisma.FirmaNominaUncheckedCreateNestedManyWithoutUsuarioInput
+  FirmanteAsignadoNomina?: Prisma.FirmanteAsignadoNominaUncheckedCreateNestedManyWithoutUsuarioInput
   Incidencia?: Prisma.IncidenciaUncheckedCreateNestedManyWithoutUsuarioInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUncheckedCreateNestedManyWithoutUsuarioInput
   MovimientoFinanciero?: Prisma.MovimientoFinancieroUncheckedCreateNestedManyWithoutUsuarioInput
@@ -1070,8 +1140,10 @@ export type UsuarioUpdateWithoutHistorialEstadoNominaInput = {
   Clave?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  AuditoriaSession?: Prisma.AuditoriaSessionUpdateManyWithoutUsuarioNestedInput
   EstadisticaMensual?: Prisma.EstadisticaMensualUpdateManyWithoutUsuarioNestedInput
   FirmaNomina?: Prisma.FirmaNominaUpdateManyWithoutUsuarioNestedInput
+  FirmanteAsignadoNomina?: Prisma.FirmanteAsignadoNominaUpdateManyWithoutUsuarioNestedInput
   Incidencia?: Prisma.IncidenciaUpdateManyWithoutUsuarioNestedInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUpdateManyWithoutUsuarioNestedInput
   MovimientoFinanciero?: Prisma.MovimientoFinancieroUpdateManyWithoutUsuarioNestedInput
@@ -1092,8 +1164,10 @@ export type UsuarioUncheckedUpdateWithoutHistorialEstadoNominaInput = {
   Clave?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  AuditoriaSession?: Prisma.AuditoriaSessionUncheckedUpdateManyWithoutUsuarioNestedInput
   EstadisticaMensual?: Prisma.EstadisticaMensualUncheckedUpdateManyWithoutUsuarioNestedInput
   FirmaNomina?: Prisma.FirmaNominaUncheckedUpdateManyWithoutUsuarioNestedInput
+  FirmanteAsignadoNomina?: Prisma.FirmanteAsignadoNominaUncheckedUpdateManyWithoutUsuarioNestedInput
   Incidencia?: Prisma.IncidenciaUncheckedUpdateManyWithoutUsuarioNestedInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUncheckedUpdateManyWithoutUsuarioNestedInput
   MovimientoFinanciero?: Prisma.MovimientoFinancieroUncheckedUpdateManyWithoutUsuarioNestedInput
@@ -1109,8 +1183,10 @@ export type UsuarioCreateWithoutIncidenciaInput = {
   Clave?: string | null
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  AuditoriaSession?: Prisma.AuditoriaSessionCreateNestedManyWithoutUsuarioInput
   EstadisticaMensual?: Prisma.EstadisticaMensualCreateNestedManyWithoutUsuarioInput
   FirmaNomina?: Prisma.FirmaNominaCreateNestedManyWithoutUsuarioInput
+  FirmanteAsignadoNomina?: Prisma.FirmanteAsignadoNominaCreateNestedManyWithoutUsuarioInput
   HistorialEstadoNomina?: Prisma.HistorialEstadoNominaCreateNestedManyWithoutUsuarioInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoCreateNestedManyWithoutUsuarioInput
   MovimientoFinanciero?: Prisma.MovimientoFinancieroCreateNestedManyWithoutUsuarioInput
@@ -1131,8 +1207,10 @@ export type UsuarioUncheckedCreateWithoutIncidenciaInput = {
   Clave?: string | null
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  AuditoriaSession?: Prisma.AuditoriaSessionUncheckedCreateNestedManyWithoutUsuarioInput
   EstadisticaMensual?: Prisma.EstadisticaMensualUncheckedCreateNestedManyWithoutUsuarioInput
   FirmaNomina?: Prisma.FirmaNominaUncheckedCreateNestedManyWithoutUsuarioInput
+  FirmanteAsignadoNomina?: Prisma.FirmanteAsignadoNominaUncheckedCreateNestedManyWithoutUsuarioInput
   HistorialEstadoNomina?: Prisma.HistorialEstadoNominaUncheckedCreateNestedManyWithoutUsuarioInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUncheckedCreateNestedManyWithoutUsuarioInput
   MovimientoFinanciero?: Prisma.MovimientoFinancieroUncheckedCreateNestedManyWithoutUsuarioInput
@@ -1164,8 +1242,10 @@ export type UsuarioUpdateWithoutIncidenciaInput = {
   Clave?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  AuditoriaSession?: Prisma.AuditoriaSessionUpdateManyWithoutUsuarioNestedInput
   EstadisticaMensual?: Prisma.EstadisticaMensualUpdateManyWithoutUsuarioNestedInput
   FirmaNomina?: Prisma.FirmaNominaUpdateManyWithoutUsuarioNestedInput
+  FirmanteAsignadoNomina?: Prisma.FirmanteAsignadoNominaUpdateManyWithoutUsuarioNestedInput
   HistorialEstadoNomina?: Prisma.HistorialEstadoNominaUpdateManyWithoutUsuarioNestedInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUpdateManyWithoutUsuarioNestedInput
   MovimientoFinanciero?: Prisma.MovimientoFinancieroUpdateManyWithoutUsuarioNestedInput
@@ -1186,8 +1266,10 @@ export type UsuarioUncheckedUpdateWithoutIncidenciaInput = {
   Clave?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  AuditoriaSession?: Prisma.AuditoriaSessionUncheckedUpdateManyWithoutUsuarioNestedInput
   EstadisticaMensual?: Prisma.EstadisticaMensualUncheckedUpdateManyWithoutUsuarioNestedInput
   FirmaNomina?: Prisma.FirmaNominaUncheckedUpdateManyWithoutUsuarioNestedInput
+  FirmanteAsignadoNomina?: Prisma.FirmanteAsignadoNominaUncheckedUpdateManyWithoutUsuarioNestedInput
   HistorialEstadoNomina?: Prisma.HistorialEstadoNominaUncheckedUpdateManyWithoutUsuarioNestedInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUncheckedUpdateManyWithoutUsuarioNestedInput
   MovimientoFinanciero?: Prisma.MovimientoFinancieroUncheckedUpdateManyWithoutUsuarioNestedInput
@@ -1203,8 +1285,10 @@ export type UsuarioCreateWithoutMovimientoEmpleadoInput = {
   Clave?: string | null
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  AuditoriaSession?: Prisma.AuditoriaSessionCreateNestedManyWithoutUsuarioInput
   EstadisticaMensual?: Prisma.EstadisticaMensualCreateNestedManyWithoutUsuarioInput
   FirmaNomina?: Prisma.FirmaNominaCreateNestedManyWithoutUsuarioInput
+  FirmanteAsignadoNomina?: Prisma.FirmanteAsignadoNominaCreateNestedManyWithoutUsuarioInput
   HistorialEstadoNomina?: Prisma.HistorialEstadoNominaCreateNestedManyWithoutUsuarioInput
   Incidencia?: Prisma.IncidenciaCreateNestedManyWithoutUsuarioInput
   MovimientoFinanciero?: Prisma.MovimientoFinancieroCreateNestedManyWithoutUsuarioInput
@@ -1225,8 +1309,10 @@ export type UsuarioUncheckedCreateWithoutMovimientoEmpleadoInput = {
   Clave?: string | null
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  AuditoriaSession?: Prisma.AuditoriaSessionUncheckedCreateNestedManyWithoutUsuarioInput
   EstadisticaMensual?: Prisma.EstadisticaMensualUncheckedCreateNestedManyWithoutUsuarioInput
   FirmaNomina?: Prisma.FirmaNominaUncheckedCreateNestedManyWithoutUsuarioInput
+  FirmanteAsignadoNomina?: Prisma.FirmanteAsignadoNominaUncheckedCreateNestedManyWithoutUsuarioInput
   HistorialEstadoNomina?: Prisma.HistorialEstadoNominaUncheckedCreateNestedManyWithoutUsuarioInput
   Incidencia?: Prisma.IncidenciaUncheckedCreateNestedManyWithoutUsuarioInput
   MovimientoFinanciero?: Prisma.MovimientoFinancieroUncheckedCreateNestedManyWithoutUsuarioInput
@@ -1258,8 +1344,10 @@ export type UsuarioUpdateWithoutMovimientoEmpleadoInput = {
   Clave?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  AuditoriaSession?: Prisma.AuditoriaSessionUpdateManyWithoutUsuarioNestedInput
   EstadisticaMensual?: Prisma.EstadisticaMensualUpdateManyWithoutUsuarioNestedInput
   FirmaNomina?: Prisma.FirmaNominaUpdateManyWithoutUsuarioNestedInput
+  FirmanteAsignadoNomina?: Prisma.FirmanteAsignadoNominaUpdateManyWithoutUsuarioNestedInput
   HistorialEstadoNomina?: Prisma.HistorialEstadoNominaUpdateManyWithoutUsuarioNestedInput
   Incidencia?: Prisma.IncidenciaUpdateManyWithoutUsuarioNestedInput
   MovimientoFinanciero?: Prisma.MovimientoFinancieroUpdateManyWithoutUsuarioNestedInput
@@ -1280,8 +1368,10 @@ export type UsuarioUncheckedUpdateWithoutMovimientoEmpleadoInput = {
   Clave?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  AuditoriaSession?: Prisma.AuditoriaSessionUncheckedUpdateManyWithoutUsuarioNestedInput
   EstadisticaMensual?: Prisma.EstadisticaMensualUncheckedUpdateManyWithoutUsuarioNestedInput
   FirmaNomina?: Prisma.FirmaNominaUncheckedUpdateManyWithoutUsuarioNestedInput
+  FirmanteAsignadoNomina?: Prisma.FirmanteAsignadoNominaUncheckedUpdateManyWithoutUsuarioNestedInput
   HistorialEstadoNomina?: Prisma.HistorialEstadoNominaUncheckedUpdateManyWithoutUsuarioNestedInput
   Incidencia?: Prisma.IncidenciaUncheckedUpdateManyWithoutUsuarioNestedInput
   MovimientoFinanciero?: Prisma.MovimientoFinancieroUncheckedUpdateManyWithoutUsuarioNestedInput
@@ -1297,8 +1387,10 @@ export type UsuarioCreateWithoutMovimientoFinancieroInput = {
   Clave?: string | null
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  AuditoriaSession?: Prisma.AuditoriaSessionCreateNestedManyWithoutUsuarioInput
   EstadisticaMensual?: Prisma.EstadisticaMensualCreateNestedManyWithoutUsuarioInput
   FirmaNomina?: Prisma.FirmaNominaCreateNestedManyWithoutUsuarioInput
+  FirmanteAsignadoNomina?: Prisma.FirmanteAsignadoNominaCreateNestedManyWithoutUsuarioInput
   HistorialEstadoNomina?: Prisma.HistorialEstadoNominaCreateNestedManyWithoutUsuarioInput
   Incidencia?: Prisma.IncidenciaCreateNestedManyWithoutUsuarioInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoCreateNestedManyWithoutUsuarioInput
@@ -1319,8 +1411,10 @@ export type UsuarioUncheckedCreateWithoutMovimientoFinancieroInput = {
   Clave?: string | null
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  AuditoriaSession?: Prisma.AuditoriaSessionUncheckedCreateNestedManyWithoutUsuarioInput
   EstadisticaMensual?: Prisma.EstadisticaMensualUncheckedCreateNestedManyWithoutUsuarioInput
   FirmaNomina?: Prisma.FirmaNominaUncheckedCreateNestedManyWithoutUsuarioInput
+  FirmanteAsignadoNomina?: Prisma.FirmanteAsignadoNominaUncheckedCreateNestedManyWithoutUsuarioInput
   HistorialEstadoNomina?: Prisma.HistorialEstadoNominaUncheckedCreateNestedManyWithoutUsuarioInput
   Incidencia?: Prisma.IncidenciaUncheckedCreateNestedManyWithoutUsuarioInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUncheckedCreateNestedManyWithoutUsuarioInput
@@ -1352,8 +1446,10 @@ export type UsuarioUpdateWithoutMovimientoFinancieroInput = {
   Clave?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  AuditoriaSession?: Prisma.AuditoriaSessionUpdateManyWithoutUsuarioNestedInput
   EstadisticaMensual?: Prisma.EstadisticaMensualUpdateManyWithoutUsuarioNestedInput
   FirmaNomina?: Prisma.FirmaNominaUpdateManyWithoutUsuarioNestedInput
+  FirmanteAsignadoNomina?: Prisma.FirmanteAsignadoNominaUpdateManyWithoutUsuarioNestedInput
   HistorialEstadoNomina?: Prisma.HistorialEstadoNominaUpdateManyWithoutUsuarioNestedInput
   Incidencia?: Prisma.IncidenciaUpdateManyWithoutUsuarioNestedInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUpdateManyWithoutUsuarioNestedInput
@@ -1374,8 +1470,10 @@ export type UsuarioUncheckedUpdateWithoutMovimientoFinancieroInput = {
   Clave?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  AuditoriaSession?: Prisma.AuditoriaSessionUncheckedUpdateManyWithoutUsuarioNestedInput
   EstadisticaMensual?: Prisma.EstadisticaMensualUncheckedUpdateManyWithoutUsuarioNestedInput
   FirmaNomina?: Prisma.FirmaNominaUncheckedUpdateManyWithoutUsuarioNestedInput
+  FirmanteAsignadoNomina?: Prisma.FirmanteAsignadoNominaUncheckedUpdateManyWithoutUsuarioNestedInput
   HistorialEstadoNomina?: Prisma.HistorialEstadoNominaUncheckedUpdateManyWithoutUsuarioNestedInput
   Incidencia?: Prisma.IncidenciaUncheckedUpdateManyWithoutUsuarioNestedInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUncheckedUpdateManyWithoutUsuarioNestedInput
@@ -1391,8 +1489,10 @@ export type UsuarioCreateWithoutNominaEncabezadoInput = {
   Clave?: string | null
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  AuditoriaSession?: Prisma.AuditoriaSessionCreateNestedManyWithoutUsuarioInput
   EstadisticaMensual?: Prisma.EstadisticaMensualCreateNestedManyWithoutUsuarioInput
   FirmaNomina?: Prisma.FirmaNominaCreateNestedManyWithoutUsuarioInput
+  FirmanteAsignadoNomina?: Prisma.FirmanteAsignadoNominaCreateNestedManyWithoutUsuarioInput
   HistorialEstadoNomina?: Prisma.HistorialEstadoNominaCreateNestedManyWithoutUsuarioInput
   Incidencia?: Prisma.IncidenciaCreateNestedManyWithoutUsuarioInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoCreateNestedManyWithoutUsuarioInput
@@ -1413,8 +1513,10 @@ export type UsuarioUncheckedCreateWithoutNominaEncabezadoInput = {
   Clave?: string | null
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  AuditoriaSession?: Prisma.AuditoriaSessionUncheckedCreateNestedManyWithoutUsuarioInput
   EstadisticaMensual?: Prisma.EstadisticaMensualUncheckedCreateNestedManyWithoutUsuarioInput
   FirmaNomina?: Prisma.FirmaNominaUncheckedCreateNestedManyWithoutUsuarioInput
+  FirmanteAsignadoNomina?: Prisma.FirmanteAsignadoNominaUncheckedCreateNestedManyWithoutUsuarioInput
   HistorialEstadoNomina?: Prisma.HistorialEstadoNominaUncheckedCreateNestedManyWithoutUsuarioInput
   Incidencia?: Prisma.IncidenciaUncheckedCreateNestedManyWithoutUsuarioInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUncheckedCreateNestedManyWithoutUsuarioInput
@@ -1446,8 +1548,10 @@ export type UsuarioUpdateWithoutNominaEncabezadoInput = {
   Clave?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  AuditoriaSession?: Prisma.AuditoriaSessionUpdateManyWithoutUsuarioNestedInput
   EstadisticaMensual?: Prisma.EstadisticaMensualUpdateManyWithoutUsuarioNestedInput
   FirmaNomina?: Prisma.FirmaNominaUpdateManyWithoutUsuarioNestedInput
+  FirmanteAsignadoNomina?: Prisma.FirmanteAsignadoNominaUpdateManyWithoutUsuarioNestedInput
   HistorialEstadoNomina?: Prisma.HistorialEstadoNominaUpdateManyWithoutUsuarioNestedInput
   Incidencia?: Prisma.IncidenciaUpdateManyWithoutUsuarioNestedInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUpdateManyWithoutUsuarioNestedInput
@@ -1468,8 +1572,10 @@ export type UsuarioUncheckedUpdateWithoutNominaEncabezadoInput = {
   Clave?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  AuditoriaSession?: Prisma.AuditoriaSessionUncheckedUpdateManyWithoutUsuarioNestedInput
   EstadisticaMensual?: Prisma.EstadisticaMensualUncheckedUpdateManyWithoutUsuarioNestedInput
   FirmaNomina?: Prisma.FirmaNominaUncheckedUpdateManyWithoutUsuarioNestedInput
+  FirmanteAsignadoNomina?: Prisma.FirmanteAsignadoNominaUncheckedUpdateManyWithoutUsuarioNestedInput
   HistorialEstadoNomina?: Prisma.HistorialEstadoNominaUncheckedUpdateManyWithoutUsuarioNestedInput
   Incidencia?: Prisma.IncidenciaUncheckedUpdateManyWithoutUsuarioNestedInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUncheckedUpdateManyWithoutUsuarioNestedInput
@@ -1485,8 +1591,10 @@ export type UsuarioCreateWithoutPresupuestoAnualInput = {
   Clave?: string | null
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  AuditoriaSession?: Prisma.AuditoriaSessionCreateNestedManyWithoutUsuarioInput
   EstadisticaMensual?: Prisma.EstadisticaMensualCreateNestedManyWithoutUsuarioInput
   FirmaNomina?: Prisma.FirmaNominaCreateNestedManyWithoutUsuarioInput
+  FirmanteAsignadoNomina?: Prisma.FirmanteAsignadoNominaCreateNestedManyWithoutUsuarioInput
   HistorialEstadoNomina?: Prisma.HistorialEstadoNominaCreateNestedManyWithoutUsuarioInput
   Incidencia?: Prisma.IncidenciaCreateNestedManyWithoutUsuarioInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoCreateNestedManyWithoutUsuarioInput
@@ -1507,8 +1615,10 @@ export type UsuarioUncheckedCreateWithoutPresupuestoAnualInput = {
   Clave?: string | null
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  AuditoriaSession?: Prisma.AuditoriaSessionUncheckedCreateNestedManyWithoutUsuarioInput
   EstadisticaMensual?: Prisma.EstadisticaMensualUncheckedCreateNestedManyWithoutUsuarioInput
   FirmaNomina?: Prisma.FirmaNominaUncheckedCreateNestedManyWithoutUsuarioInput
+  FirmanteAsignadoNomina?: Prisma.FirmanteAsignadoNominaUncheckedCreateNestedManyWithoutUsuarioInput
   HistorialEstadoNomina?: Prisma.HistorialEstadoNominaUncheckedCreateNestedManyWithoutUsuarioInput
   Incidencia?: Prisma.IncidenciaUncheckedCreateNestedManyWithoutUsuarioInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUncheckedCreateNestedManyWithoutUsuarioInput
@@ -1540,8 +1650,10 @@ export type UsuarioUpdateWithoutPresupuestoAnualInput = {
   Clave?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  AuditoriaSession?: Prisma.AuditoriaSessionUpdateManyWithoutUsuarioNestedInput
   EstadisticaMensual?: Prisma.EstadisticaMensualUpdateManyWithoutUsuarioNestedInput
   FirmaNomina?: Prisma.FirmaNominaUpdateManyWithoutUsuarioNestedInput
+  FirmanteAsignadoNomina?: Prisma.FirmanteAsignadoNominaUpdateManyWithoutUsuarioNestedInput
   HistorialEstadoNomina?: Prisma.HistorialEstadoNominaUpdateManyWithoutUsuarioNestedInput
   Incidencia?: Prisma.IncidenciaUpdateManyWithoutUsuarioNestedInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUpdateManyWithoutUsuarioNestedInput
@@ -1562,8 +1674,10 @@ export type UsuarioUncheckedUpdateWithoutPresupuestoAnualInput = {
   Clave?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  AuditoriaSession?: Prisma.AuditoriaSessionUncheckedUpdateManyWithoutUsuarioNestedInput
   EstadisticaMensual?: Prisma.EstadisticaMensualUncheckedUpdateManyWithoutUsuarioNestedInput
   FirmaNomina?: Prisma.FirmaNominaUncheckedUpdateManyWithoutUsuarioNestedInput
+  FirmanteAsignadoNomina?: Prisma.FirmanteAsignadoNominaUncheckedUpdateManyWithoutUsuarioNestedInput
   HistorialEstadoNomina?: Prisma.HistorialEstadoNominaUncheckedUpdateManyWithoutUsuarioNestedInput
   Incidencia?: Prisma.IncidenciaUncheckedUpdateManyWithoutUsuarioNestedInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUncheckedUpdateManyWithoutUsuarioNestedInput
@@ -1579,8 +1693,10 @@ export type UsuarioCreateWithoutRegistroEnvioBoletaInput = {
   Clave?: string | null
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  AuditoriaSession?: Prisma.AuditoriaSessionCreateNestedManyWithoutUsuarioInput
   EstadisticaMensual?: Prisma.EstadisticaMensualCreateNestedManyWithoutUsuarioInput
   FirmaNomina?: Prisma.FirmaNominaCreateNestedManyWithoutUsuarioInput
+  FirmanteAsignadoNomina?: Prisma.FirmanteAsignadoNominaCreateNestedManyWithoutUsuarioInput
   HistorialEstadoNomina?: Prisma.HistorialEstadoNominaCreateNestedManyWithoutUsuarioInput
   Incidencia?: Prisma.IncidenciaCreateNestedManyWithoutUsuarioInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoCreateNestedManyWithoutUsuarioInput
@@ -1601,8 +1717,10 @@ export type UsuarioUncheckedCreateWithoutRegistroEnvioBoletaInput = {
   Clave?: string | null
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  AuditoriaSession?: Prisma.AuditoriaSessionUncheckedCreateNestedManyWithoutUsuarioInput
   EstadisticaMensual?: Prisma.EstadisticaMensualUncheckedCreateNestedManyWithoutUsuarioInput
   FirmaNomina?: Prisma.FirmaNominaUncheckedCreateNestedManyWithoutUsuarioInput
+  FirmanteAsignadoNomina?: Prisma.FirmanteAsignadoNominaUncheckedCreateNestedManyWithoutUsuarioInput
   HistorialEstadoNomina?: Prisma.HistorialEstadoNominaUncheckedCreateNestedManyWithoutUsuarioInput
   Incidencia?: Prisma.IncidenciaUncheckedCreateNestedManyWithoutUsuarioInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUncheckedCreateNestedManyWithoutUsuarioInput
@@ -1634,8 +1752,10 @@ export type UsuarioUpdateWithoutRegistroEnvioBoletaInput = {
   Clave?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  AuditoriaSession?: Prisma.AuditoriaSessionUpdateManyWithoutUsuarioNestedInput
   EstadisticaMensual?: Prisma.EstadisticaMensualUpdateManyWithoutUsuarioNestedInput
   FirmaNomina?: Prisma.FirmaNominaUpdateManyWithoutUsuarioNestedInput
+  FirmanteAsignadoNomina?: Prisma.FirmanteAsignadoNominaUpdateManyWithoutUsuarioNestedInput
   HistorialEstadoNomina?: Prisma.HistorialEstadoNominaUpdateManyWithoutUsuarioNestedInput
   Incidencia?: Prisma.IncidenciaUpdateManyWithoutUsuarioNestedInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUpdateManyWithoutUsuarioNestedInput
@@ -1656,8 +1776,10 @@ export type UsuarioUncheckedUpdateWithoutRegistroEnvioBoletaInput = {
   Clave?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  AuditoriaSession?: Prisma.AuditoriaSessionUncheckedUpdateManyWithoutUsuarioNestedInput
   EstadisticaMensual?: Prisma.EstadisticaMensualUncheckedUpdateManyWithoutUsuarioNestedInput
   FirmaNomina?: Prisma.FirmaNominaUncheckedUpdateManyWithoutUsuarioNestedInput
+  FirmanteAsignadoNomina?: Prisma.FirmanteAsignadoNominaUncheckedUpdateManyWithoutUsuarioNestedInput
   HistorialEstadoNomina?: Prisma.HistorialEstadoNominaUncheckedUpdateManyWithoutUsuarioNestedInput
   Incidencia?: Prisma.IncidenciaUncheckedUpdateManyWithoutUsuarioNestedInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUncheckedUpdateManyWithoutUsuarioNestedInput
@@ -1673,8 +1795,10 @@ export type UsuarioCreateWithoutRolUsuarioInput = {
   Clave?: string | null
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  AuditoriaSession?: Prisma.AuditoriaSessionCreateNestedManyWithoutUsuarioInput
   EstadisticaMensual?: Prisma.EstadisticaMensualCreateNestedManyWithoutUsuarioInput
   FirmaNomina?: Prisma.FirmaNominaCreateNestedManyWithoutUsuarioInput
+  FirmanteAsignadoNomina?: Prisma.FirmanteAsignadoNominaCreateNestedManyWithoutUsuarioInput
   HistorialEstadoNomina?: Prisma.HistorialEstadoNominaCreateNestedManyWithoutUsuarioInput
   Incidencia?: Prisma.IncidenciaCreateNestedManyWithoutUsuarioInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoCreateNestedManyWithoutUsuarioInput
@@ -1694,8 +1818,10 @@ export type UsuarioUncheckedCreateWithoutRolUsuarioInput = {
   Clave?: string | null
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  AuditoriaSession?: Prisma.AuditoriaSessionUncheckedCreateNestedManyWithoutUsuarioInput
   EstadisticaMensual?: Prisma.EstadisticaMensualUncheckedCreateNestedManyWithoutUsuarioInput
   FirmaNomina?: Prisma.FirmaNominaUncheckedCreateNestedManyWithoutUsuarioInput
+  FirmanteAsignadoNomina?: Prisma.FirmanteAsignadoNominaUncheckedCreateNestedManyWithoutUsuarioInput
   HistorialEstadoNomina?: Prisma.HistorialEstadoNominaUncheckedCreateNestedManyWithoutUsuarioInput
   Incidencia?: Prisma.IncidenciaUncheckedCreateNestedManyWithoutUsuarioInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUncheckedCreateNestedManyWithoutUsuarioInput
@@ -1737,8 +1863,10 @@ export type UsuarioCreateWithoutVentaInput = {
   Clave?: string | null
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  AuditoriaSession?: Prisma.AuditoriaSessionCreateNestedManyWithoutUsuarioInput
   EstadisticaMensual?: Prisma.EstadisticaMensualCreateNestedManyWithoutUsuarioInput
   FirmaNomina?: Prisma.FirmaNominaCreateNestedManyWithoutUsuarioInput
+  FirmanteAsignadoNomina?: Prisma.FirmanteAsignadoNominaCreateNestedManyWithoutUsuarioInput
   HistorialEstadoNomina?: Prisma.HistorialEstadoNominaCreateNestedManyWithoutUsuarioInput
   Incidencia?: Prisma.IncidenciaCreateNestedManyWithoutUsuarioInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoCreateNestedManyWithoutUsuarioInput
@@ -1759,8 +1887,10 @@ export type UsuarioUncheckedCreateWithoutVentaInput = {
   Clave?: string | null
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  AuditoriaSession?: Prisma.AuditoriaSessionUncheckedCreateNestedManyWithoutUsuarioInput
   EstadisticaMensual?: Prisma.EstadisticaMensualUncheckedCreateNestedManyWithoutUsuarioInput
   FirmaNomina?: Prisma.FirmaNominaUncheckedCreateNestedManyWithoutUsuarioInput
+  FirmanteAsignadoNomina?: Prisma.FirmanteAsignadoNominaUncheckedCreateNestedManyWithoutUsuarioInput
   HistorialEstadoNomina?: Prisma.HistorialEstadoNominaUncheckedCreateNestedManyWithoutUsuarioInput
   Incidencia?: Prisma.IncidenciaUncheckedCreateNestedManyWithoutUsuarioInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUncheckedCreateNestedManyWithoutUsuarioInput
@@ -1792,8 +1922,10 @@ export type UsuarioUpdateWithoutVentaInput = {
   Clave?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  AuditoriaSession?: Prisma.AuditoriaSessionUpdateManyWithoutUsuarioNestedInput
   EstadisticaMensual?: Prisma.EstadisticaMensualUpdateManyWithoutUsuarioNestedInput
   FirmaNomina?: Prisma.FirmaNominaUpdateManyWithoutUsuarioNestedInput
+  FirmanteAsignadoNomina?: Prisma.FirmanteAsignadoNominaUpdateManyWithoutUsuarioNestedInput
   HistorialEstadoNomina?: Prisma.HistorialEstadoNominaUpdateManyWithoutUsuarioNestedInput
   Incidencia?: Prisma.IncidenciaUpdateManyWithoutUsuarioNestedInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUpdateManyWithoutUsuarioNestedInput
@@ -1814,6 +1946,109 @@ export type UsuarioUncheckedUpdateWithoutVentaInput = {
   Clave?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  AuditoriaSession?: Prisma.AuditoriaSessionUncheckedUpdateManyWithoutUsuarioNestedInput
+  EstadisticaMensual?: Prisma.EstadisticaMensualUncheckedUpdateManyWithoutUsuarioNestedInput
+  FirmaNomina?: Prisma.FirmaNominaUncheckedUpdateManyWithoutUsuarioNestedInput
+  FirmanteAsignadoNomina?: Prisma.FirmanteAsignadoNominaUncheckedUpdateManyWithoutUsuarioNestedInput
+  HistorialEstadoNomina?: Prisma.HistorialEstadoNominaUncheckedUpdateManyWithoutUsuarioNestedInput
+  Incidencia?: Prisma.IncidenciaUncheckedUpdateManyWithoutUsuarioNestedInput
+  MovimientoEmpleado?: Prisma.MovimientoEmpleadoUncheckedUpdateManyWithoutUsuarioNestedInput
+  MovimientoFinanciero?: Prisma.MovimientoFinancieroUncheckedUpdateManyWithoutUsuarioNestedInput
+  NominaEncabezado?: Prisma.NominaEncabezadoUncheckedUpdateManyWithoutUsuarioNestedInput
+  PresupuestoAnual?: Prisma.PresupuestoAnualUncheckedUpdateManyWithoutUsuarioNestedInput
+  RegistroEnvioBoleta?: Prisma.RegistroEnvioBoletaUncheckedUpdateManyWithoutUsuarioNestedInput
+}
+
+export type UsuarioCreateWithoutFirmanteAsignadoNominaInput = {
+  Username: string
+  Contrasena: string
+  Clave?: string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
+  AuditoriaSession?: Prisma.AuditoriaSessionCreateNestedManyWithoutUsuarioInput
+  EstadisticaMensual?: Prisma.EstadisticaMensualCreateNestedManyWithoutUsuarioInput
+  FirmaNomina?: Prisma.FirmaNominaCreateNestedManyWithoutUsuarioInput
+  HistorialEstadoNomina?: Prisma.HistorialEstadoNominaCreateNestedManyWithoutUsuarioInput
+  Incidencia?: Prisma.IncidenciaCreateNestedManyWithoutUsuarioInput
+  MovimientoEmpleado?: Prisma.MovimientoEmpleadoCreateNestedManyWithoutUsuarioInput
+  MovimientoFinanciero?: Prisma.MovimientoFinancieroCreateNestedManyWithoutUsuarioInput
+  NominaEncabezado?: Prisma.NominaEncabezadoCreateNestedManyWithoutUsuarioInput
+  PresupuestoAnual?: Prisma.PresupuestoAnualCreateNestedManyWithoutUsuarioInput
+  RegistroEnvioBoleta?: Prisma.RegistroEnvioBoletaCreateNestedManyWithoutUsuarioInput
+  Empleado: Prisma.EmpleadoCreateNestedOneWithoutUsuarioInput
+  RolUsuario: Prisma.RolUsuarioCreateNestedOneWithoutUsuarioInput
+  Venta?: Prisma.VentaCreateNestedManyWithoutUsuarioInput
+}
+
+export type UsuarioUncheckedCreateWithoutFirmanteAsignadoNominaInput = {
+  IdUsuario?: number
+  Username: string
+  Contrasena: string
+  IdRol: number
+  IdEmpleado: number
+  Clave?: string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
+  AuditoriaSession?: Prisma.AuditoriaSessionUncheckedCreateNestedManyWithoutUsuarioInput
+  EstadisticaMensual?: Prisma.EstadisticaMensualUncheckedCreateNestedManyWithoutUsuarioInput
+  FirmaNomina?: Prisma.FirmaNominaUncheckedCreateNestedManyWithoutUsuarioInput
+  HistorialEstadoNomina?: Prisma.HistorialEstadoNominaUncheckedCreateNestedManyWithoutUsuarioInput
+  Incidencia?: Prisma.IncidenciaUncheckedCreateNestedManyWithoutUsuarioInput
+  MovimientoEmpleado?: Prisma.MovimientoEmpleadoUncheckedCreateNestedManyWithoutUsuarioInput
+  MovimientoFinanciero?: Prisma.MovimientoFinancieroUncheckedCreateNestedManyWithoutUsuarioInput
+  NominaEncabezado?: Prisma.NominaEncabezadoUncheckedCreateNestedManyWithoutUsuarioInput
+  PresupuestoAnual?: Prisma.PresupuestoAnualUncheckedCreateNestedManyWithoutUsuarioInput
+  RegistroEnvioBoleta?: Prisma.RegistroEnvioBoletaUncheckedCreateNestedManyWithoutUsuarioInput
+  Venta?: Prisma.VentaUncheckedCreateNestedManyWithoutUsuarioInput
+}
+
+export type UsuarioCreateOrConnectWithoutFirmanteAsignadoNominaInput = {
+  where: Prisma.UsuarioWhereUniqueInput
+  create: Prisma.XOR<Prisma.UsuarioCreateWithoutFirmanteAsignadoNominaInput, Prisma.UsuarioUncheckedCreateWithoutFirmanteAsignadoNominaInput>
+}
+
+export type UsuarioUpsertWithoutFirmanteAsignadoNominaInput = {
+  update: Prisma.XOR<Prisma.UsuarioUpdateWithoutFirmanteAsignadoNominaInput, Prisma.UsuarioUncheckedUpdateWithoutFirmanteAsignadoNominaInput>
+  create: Prisma.XOR<Prisma.UsuarioCreateWithoutFirmanteAsignadoNominaInput, Prisma.UsuarioUncheckedCreateWithoutFirmanteAsignadoNominaInput>
+  where?: Prisma.UsuarioWhereInput
+}
+
+export type UsuarioUpdateToOneWithWhereWithoutFirmanteAsignadoNominaInput = {
+  where?: Prisma.UsuarioWhereInput
+  data: Prisma.XOR<Prisma.UsuarioUpdateWithoutFirmanteAsignadoNominaInput, Prisma.UsuarioUncheckedUpdateWithoutFirmanteAsignadoNominaInput>
+}
+
+export type UsuarioUpdateWithoutFirmanteAsignadoNominaInput = {
+  Username?: Prisma.StringFieldUpdateOperationsInput | string
+  Contrasena?: Prisma.StringFieldUpdateOperationsInput | string
+  Clave?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  AuditoriaSession?: Prisma.AuditoriaSessionUpdateManyWithoutUsuarioNestedInput
+  EstadisticaMensual?: Prisma.EstadisticaMensualUpdateManyWithoutUsuarioNestedInput
+  FirmaNomina?: Prisma.FirmaNominaUpdateManyWithoutUsuarioNestedInput
+  HistorialEstadoNomina?: Prisma.HistorialEstadoNominaUpdateManyWithoutUsuarioNestedInput
+  Incidencia?: Prisma.IncidenciaUpdateManyWithoutUsuarioNestedInput
+  MovimientoEmpleado?: Prisma.MovimientoEmpleadoUpdateManyWithoutUsuarioNestedInput
+  MovimientoFinanciero?: Prisma.MovimientoFinancieroUpdateManyWithoutUsuarioNestedInput
+  NominaEncabezado?: Prisma.NominaEncabezadoUpdateManyWithoutUsuarioNestedInput
+  PresupuestoAnual?: Prisma.PresupuestoAnualUpdateManyWithoutUsuarioNestedInput
+  RegistroEnvioBoleta?: Prisma.RegistroEnvioBoletaUpdateManyWithoutUsuarioNestedInput
+  Empleado?: Prisma.EmpleadoUpdateOneRequiredWithoutUsuarioNestedInput
+  RolUsuario?: Prisma.RolUsuarioUpdateOneRequiredWithoutUsuarioNestedInput
+  Venta?: Prisma.VentaUpdateManyWithoutUsuarioNestedInput
+}
+
+export type UsuarioUncheckedUpdateWithoutFirmanteAsignadoNominaInput = {
+  IdUsuario?: Prisma.IntFieldUpdateOperationsInput | number
+  Username?: Prisma.StringFieldUpdateOperationsInput | string
+  Contrasena?: Prisma.StringFieldUpdateOperationsInput | string
+  IdRol?: Prisma.IntFieldUpdateOperationsInput | number
+  IdEmpleado?: Prisma.IntFieldUpdateOperationsInput | number
+  Clave?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  AuditoriaSession?: Prisma.AuditoriaSessionUncheckedUpdateManyWithoutUsuarioNestedInput
   EstadisticaMensual?: Prisma.EstadisticaMensualUncheckedUpdateManyWithoutUsuarioNestedInput
   FirmaNomina?: Prisma.FirmaNominaUncheckedUpdateManyWithoutUsuarioNestedInput
   HistorialEstadoNomina?: Prisma.HistorialEstadoNominaUncheckedUpdateManyWithoutUsuarioNestedInput
@@ -1823,6 +2058,109 @@ export type UsuarioUncheckedUpdateWithoutVentaInput = {
   NominaEncabezado?: Prisma.NominaEncabezadoUncheckedUpdateManyWithoutUsuarioNestedInput
   PresupuestoAnual?: Prisma.PresupuestoAnualUncheckedUpdateManyWithoutUsuarioNestedInput
   RegistroEnvioBoleta?: Prisma.RegistroEnvioBoletaUncheckedUpdateManyWithoutUsuarioNestedInput
+  Venta?: Prisma.VentaUncheckedUpdateManyWithoutUsuarioNestedInput
+}
+
+export type UsuarioCreateWithoutAuditoriaSessionInput = {
+  Username: string
+  Contrasena: string
+  Clave?: string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
+  EstadisticaMensual?: Prisma.EstadisticaMensualCreateNestedManyWithoutUsuarioInput
+  FirmaNomina?: Prisma.FirmaNominaCreateNestedManyWithoutUsuarioInput
+  FirmanteAsignadoNomina?: Prisma.FirmanteAsignadoNominaCreateNestedManyWithoutUsuarioInput
+  HistorialEstadoNomina?: Prisma.HistorialEstadoNominaCreateNestedManyWithoutUsuarioInput
+  Incidencia?: Prisma.IncidenciaCreateNestedManyWithoutUsuarioInput
+  MovimientoEmpleado?: Prisma.MovimientoEmpleadoCreateNestedManyWithoutUsuarioInput
+  MovimientoFinanciero?: Prisma.MovimientoFinancieroCreateNestedManyWithoutUsuarioInput
+  NominaEncabezado?: Prisma.NominaEncabezadoCreateNestedManyWithoutUsuarioInput
+  PresupuestoAnual?: Prisma.PresupuestoAnualCreateNestedManyWithoutUsuarioInput
+  RegistroEnvioBoleta?: Prisma.RegistroEnvioBoletaCreateNestedManyWithoutUsuarioInput
+  Empleado: Prisma.EmpleadoCreateNestedOneWithoutUsuarioInput
+  RolUsuario: Prisma.RolUsuarioCreateNestedOneWithoutUsuarioInput
+  Venta?: Prisma.VentaCreateNestedManyWithoutUsuarioInput
+}
+
+export type UsuarioUncheckedCreateWithoutAuditoriaSessionInput = {
+  IdUsuario?: number
+  Username: string
+  Contrasena: string
+  IdRol: number
+  IdEmpleado: number
+  Clave?: string | null
+  Activo?: boolean | null
+  FechaEliminacion?: Date | string | null
+  EstadisticaMensual?: Prisma.EstadisticaMensualUncheckedCreateNestedManyWithoutUsuarioInput
+  FirmaNomina?: Prisma.FirmaNominaUncheckedCreateNestedManyWithoutUsuarioInput
+  FirmanteAsignadoNomina?: Prisma.FirmanteAsignadoNominaUncheckedCreateNestedManyWithoutUsuarioInput
+  HistorialEstadoNomina?: Prisma.HistorialEstadoNominaUncheckedCreateNestedManyWithoutUsuarioInput
+  Incidencia?: Prisma.IncidenciaUncheckedCreateNestedManyWithoutUsuarioInput
+  MovimientoEmpleado?: Prisma.MovimientoEmpleadoUncheckedCreateNestedManyWithoutUsuarioInput
+  MovimientoFinanciero?: Prisma.MovimientoFinancieroUncheckedCreateNestedManyWithoutUsuarioInput
+  NominaEncabezado?: Prisma.NominaEncabezadoUncheckedCreateNestedManyWithoutUsuarioInput
+  PresupuestoAnual?: Prisma.PresupuestoAnualUncheckedCreateNestedManyWithoutUsuarioInput
+  RegistroEnvioBoleta?: Prisma.RegistroEnvioBoletaUncheckedCreateNestedManyWithoutUsuarioInput
+  Venta?: Prisma.VentaUncheckedCreateNestedManyWithoutUsuarioInput
+}
+
+export type UsuarioCreateOrConnectWithoutAuditoriaSessionInput = {
+  where: Prisma.UsuarioWhereUniqueInput
+  create: Prisma.XOR<Prisma.UsuarioCreateWithoutAuditoriaSessionInput, Prisma.UsuarioUncheckedCreateWithoutAuditoriaSessionInput>
+}
+
+export type UsuarioUpsertWithoutAuditoriaSessionInput = {
+  update: Prisma.XOR<Prisma.UsuarioUpdateWithoutAuditoriaSessionInput, Prisma.UsuarioUncheckedUpdateWithoutAuditoriaSessionInput>
+  create: Prisma.XOR<Prisma.UsuarioCreateWithoutAuditoriaSessionInput, Prisma.UsuarioUncheckedCreateWithoutAuditoriaSessionInput>
+  where?: Prisma.UsuarioWhereInput
+}
+
+export type UsuarioUpdateToOneWithWhereWithoutAuditoriaSessionInput = {
+  where?: Prisma.UsuarioWhereInput
+  data: Prisma.XOR<Prisma.UsuarioUpdateWithoutAuditoriaSessionInput, Prisma.UsuarioUncheckedUpdateWithoutAuditoriaSessionInput>
+}
+
+export type UsuarioUpdateWithoutAuditoriaSessionInput = {
+  Username?: Prisma.StringFieldUpdateOperationsInput | string
+  Contrasena?: Prisma.StringFieldUpdateOperationsInput | string
+  Clave?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  EstadisticaMensual?: Prisma.EstadisticaMensualUpdateManyWithoutUsuarioNestedInput
+  FirmaNomina?: Prisma.FirmaNominaUpdateManyWithoutUsuarioNestedInput
+  FirmanteAsignadoNomina?: Prisma.FirmanteAsignadoNominaUpdateManyWithoutUsuarioNestedInput
+  HistorialEstadoNomina?: Prisma.HistorialEstadoNominaUpdateManyWithoutUsuarioNestedInput
+  Incidencia?: Prisma.IncidenciaUpdateManyWithoutUsuarioNestedInput
+  MovimientoEmpleado?: Prisma.MovimientoEmpleadoUpdateManyWithoutUsuarioNestedInput
+  MovimientoFinanciero?: Prisma.MovimientoFinancieroUpdateManyWithoutUsuarioNestedInput
+  NominaEncabezado?: Prisma.NominaEncabezadoUpdateManyWithoutUsuarioNestedInput
+  PresupuestoAnual?: Prisma.PresupuestoAnualUpdateManyWithoutUsuarioNestedInput
+  RegistroEnvioBoleta?: Prisma.RegistroEnvioBoletaUpdateManyWithoutUsuarioNestedInput
+  Empleado?: Prisma.EmpleadoUpdateOneRequiredWithoutUsuarioNestedInput
+  RolUsuario?: Prisma.RolUsuarioUpdateOneRequiredWithoutUsuarioNestedInput
+  Venta?: Prisma.VentaUpdateManyWithoutUsuarioNestedInput
+}
+
+export type UsuarioUncheckedUpdateWithoutAuditoriaSessionInput = {
+  IdUsuario?: Prisma.IntFieldUpdateOperationsInput | number
+  Username?: Prisma.StringFieldUpdateOperationsInput | string
+  Contrasena?: Prisma.StringFieldUpdateOperationsInput | string
+  IdRol?: Prisma.IntFieldUpdateOperationsInput | number
+  IdEmpleado?: Prisma.IntFieldUpdateOperationsInput | number
+  Clave?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  EstadisticaMensual?: Prisma.EstadisticaMensualUncheckedUpdateManyWithoutUsuarioNestedInput
+  FirmaNomina?: Prisma.FirmaNominaUncheckedUpdateManyWithoutUsuarioNestedInput
+  FirmanteAsignadoNomina?: Prisma.FirmanteAsignadoNominaUncheckedUpdateManyWithoutUsuarioNestedInput
+  HistorialEstadoNomina?: Prisma.HistorialEstadoNominaUncheckedUpdateManyWithoutUsuarioNestedInput
+  Incidencia?: Prisma.IncidenciaUncheckedUpdateManyWithoutUsuarioNestedInput
+  MovimientoEmpleado?: Prisma.MovimientoEmpleadoUncheckedUpdateManyWithoutUsuarioNestedInput
+  MovimientoFinanciero?: Prisma.MovimientoFinancieroUncheckedUpdateManyWithoutUsuarioNestedInput
+  NominaEncabezado?: Prisma.NominaEncabezadoUncheckedUpdateManyWithoutUsuarioNestedInput
+  PresupuestoAnual?: Prisma.PresupuestoAnualUncheckedUpdateManyWithoutUsuarioNestedInput
+  RegistroEnvioBoleta?: Prisma.RegistroEnvioBoletaUncheckedUpdateManyWithoutUsuarioNestedInput
+  Venta?: Prisma.VentaUncheckedUpdateManyWithoutUsuarioNestedInput
 }
 
 export type UsuarioCreateManyEmpleadoInput = {
@@ -1840,8 +2178,10 @@ export type UsuarioUpdateWithoutEmpleadoInput = {
   Clave?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  AuditoriaSession?: Prisma.AuditoriaSessionUpdateManyWithoutUsuarioNestedInput
   EstadisticaMensual?: Prisma.EstadisticaMensualUpdateManyWithoutUsuarioNestedInput
   FirmaNomina?: Prisma.FirmaNominaUpdateManyWithoutUsuarioNestedInput
+  FirmanteAsignadoNomina?: Prisma.FirmanteAsignadoNominaUpdateManyWithoutUsuarioNestedInput
   HistorialEstadoNomina?: Prisma.HistorialEstadoNominaUpdateManyWithoutUsuarioNestedInput
   Incidencia?: Prisma.IncidenciaUpdateManyWithoutUsuarioNestedInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUpdateManyWithoutUsuarioNestedInput
@@ -1861,8 +2201,10 @@ export type UsuarioUncheckedUpdateWithoutEmpleadoInput = {
   Clave?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  AuditoriaSession?: Prisma.AuditoriaSessionUncheckedUpdateManyWithoutUsuarioNestedInput
   EstadisticaMensual?: Prisma.EstadisticaMensualUncheckedUpdateManyWithoutUsuarioNestedInput
   FirmaNomina?: Prisma.FirmaNominaUncheckedUpdateManyWithoutUsuarioNestedInput
+  FirmanteAsignadoNomina?: Prisma.FirmanteAsignadoNominaUncheckedUpdateManyWithoutUsuarioNestedInput
   HistorialEstadoNomina?: Prisma.HistorialEstadoNominaUncheckedUpdateManyWithoutUsuarioNestedInput
   Incidencia?: Prisma.IncidenciaUncheckedUpdateManyWithoutUsuarioNestedInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUncheckedUpdateManyWithoutUsuarioNestedInput
@@ -1898,8 +2240,10 @@ export type UsuarioUpdateWithoutRolUsuarioInput = {
   Clave?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  AuditoriaSession?: Prisma.AuditoriaSessionUpdateManyWithoutUsuarioNestedInput
   EstadisticaMensual?: Prisma.EstadisticaMensualUpdateManyWithoutUsuarioNestedInput
   FirmaNomina?: Prisma.FirmaNominaUpdateManyWithoutUsuarioNestedInput
+  FirmanteAsignadoNomina?: Prisma.FirmanteAsignadoNominaUpdateManyWithoutUsuarioNestedInput
   HistorialEstadoNomina?: Prisma.HistorialEstadoNominaUpdateManyWithoutUsuarioNestedInput
   Incidencia?: Prisma.IncidenciaUpdateManyWithoutUsuarioNestedInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUpdateManyWithoutUsuarioNestedInput
@@ -1919,8 +2263,10 @@ export type UsuarioUncheckedUpdateWithoutRolUsuarioInput = {
   Clave?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  AuditoriaSession?: Prisma.AuditoriaSessionUncheckedUpdateManyWithoutUsuarioNestedInput
   EstadisticaMensual?: Prisma.EstadisticaMensualUncheckedUpdateManyWithoutUsuarioNestedInput
   FirmaNomina?: Prisma.FirmaNominaUncheckedUpdateManyWithoutUsuarioNestedInput
+  FirmanteAsignadoNomina?: Prisma.FirmanteAsignadoNominaUncheckedUpdateManyWithoutUsuarioNestedInput
   HistorialEstadoNomina?: Prisma.HistorialEstadoNominaUncheckedUpdateManyWithoutUsuarioNestedInput
   Incidencia?: Prisma.IncidenciaUncheckedUpdateManyWithoutUsuarioNestedInput
   MovimientoEmpleado?: Prisma.MovimientoEmpleadoUncheckedUpdateManyWithoutUsuarioNestedInput
@@ -1947,8 +2293,10 @@ export type UsuarioUncheckedUpdateManyWithoutRolUsuarioInput = {
  */
 
 export type UsuarioCountOutputType = {
+  AuditoriaSession: number
   EstadisticaMensual: number
   FirmaNomina: number
+  FirmanteAsignadoNomina: number
   HistorialEstadoNomina: number
   Incidencia: number
   MovimientoEmpleado: number
@@ -1960,8 +2308,10 @@ export type UsuarioCountOutputType = {
 }
 
 export type UsuarioCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  AuditoriaSession?: boolean | UsuarioCountOutputTypeCountAuditoriaSessionArgs
   EstadisticaMensual?: boolean | UsuarioCountOutputTypeCountEstadisticaMensualArgs
   FirmaNomina?: boolean | UsuarioCountOutputTypeCountFirmaNominaArgs
+  FirmanteAsignadoNomina?: boolean | UsuarioCountOutputTypeCountFirmanteAsignadoNominaArgs
   HistorialEstadoNomina?: boolean | UsuarioCountOutputTypeCountHistorialEstadoNominaArgs
   Incidencia?: boolean | UsuarioCountOutputTypeCountIncidenciaArgs
   MovimientoEmpleado?: boolean | UsuarioCountOutputTypeCountMovimientoEmpleadoArgs
@@ -1985,6 +2335,13 @@ export type UsuarioCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Exte
 /**
  * UsuarioCountOutputType without action
  */
+export type UsuarioCountOutputTypeCountAuditoriaSessionArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AuditoriaSessionWhereInput
+}
+
+/**
+ * UsuarioCountOutputType without action
+ */
 export type UsuarioCountOutputTypeCountEstadisticaMensualArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.EstadisticaMensualWhereInput
 }
@@ -1994,6 +2351,13 @@ export type UsuarioCountOutputTypeCountEstadisticaMensualArgs<ExtArgs extends ru
  */
 export type UsuarioCountOutputTypeCountFirmaNominaArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.FirmaNominaWhereInput
+}
+
+/**
+ * UsuarioCountOutputType without action
+ */
+export type UsuarioCountOutputTypeCountFirmanteAsignadoNominaArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.FirmanteAsignadoNominaWhereInput
 }
 
 /**
@@ -2062,8 +2426,10 @@ export type UsuarioSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   Clave?: boolean
   Activo?: boolean
   FechaEliminacion?: boolean
+  AuditoriaSession?: boolean | Prisma.Usuario$AuditoriaSessionArgs<ExtArgs>
   EstadisticaMensual?: boolean | Prisma.Usuario$EstadisticaMensualArgs<ExtArgs>
   FirmaNomina?: boolean | Prisma.Usuario$FirmaNominaArgs<ExtArgs>
+  FirmanteAsignadoNomina?: boolean | Prisma.Usuario$FirmanteAsignadoNominaArgs<ExtArgs>
   HistorialEstadoNomina?: boolean | Prisma.Usuario$HistorialEstadoNominaArgs<ExtArgs>
   Incidencia?: boolean | Prisma.Usuario$IncidenciaArgs<ExtArgs>
   MovimientoEmpleado?: boolean | Prisma.Usuario$MovimientoEmpleadoArgs<ExtArgs>
@@ -2092,8 +2458,10 @@ export type UsuarioSelectScalar = {
 
 export type UsuarioOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"IdUsuario" | "Username" | "Contrasena" | "IdRol" | "IdEmpleado" | "Clave" | "Activo" | "FechaEliminacion", ExtArgs["result"]["usuario"]>
 export type UsuarioInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  AuditoriaSession?: boolean | Prisma.Usuario$AuditoriaSessionArgs<ExtArgs>
   EstadisticaMensual?: boolean | Prisma.Usuario$EstadisticaMensualArgs<ExtArgs>
   FirmaNomina?: boolean | Prisma.Usuario$FirmaNominaArgs<ExtArgs>
+  FirmanteAsignadoNomina?: boolean | Prisma.Usuario$FirmanteAsignadoNominaArgs<ExtArgs>
   HistorialEstadoNomina?: boolean | Prisma.Usuario$HistorialEstadoNominaArgs<ExtArgs>
   Incidencia?: boolean | Prisma.Usuario$IncidenciaArgs<ExtArgs>
   MovimientoEmpleado?: boolean | Prisma.Usuario$MovimientoEmpleadoArgs<ExtArgs>
@@ -2110,8 +2478,10 @@ export type UsuarioInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
 export type $UsuarioPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Usuario"
   objects: {
+    AuditoriaSession: Prisma.$AuditoriaSessionPayload<ExtArgs>[]
     EstadisticaMensual: Prisma.$EstadisticaMensualPayload<ExtArgs>[]
     FirmaNomina: Prisma.$FirmaNominaPayload<ExtArgs>[]
+    FirmanteAsignadoNomina: Prisma.$FirmanteAsignadoNominaPayload<ExtArgs>[]
     HistorialEstadoNomina: Prisma.$HistorialEstadoNominaPayload<ExtArgs>[]
     Incidencia: Prisma.$IncidenciaPayload<ExtArgs>[]
     MovimientoEmpleado: Prisma.$MovimientoEmpleadoPayload<ExtArgs>[]
@@ -2472,8 +2842,10 @@ readonly fields: UsuarioFieldRefs;
  */
 export interface Prisma__UsuarioClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  AuditoriaSession<T extends Prisma.Usuario$AuditoriaSessionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Usuario$AuditoriaSessionArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuditoriaSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   EstadisticaMensual<T extends Prisma.Usuario$EstadisticaMensualArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Usuario$EstadisticaMensualArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EstadisticaMensualPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   FirmaNomina<T extends Prisma.Usuario$FirmaNominaArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Usuario$FirmaNominaArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FirmaNominaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  FirmanteAsignadoNomina<T extends Prisma.Usuario$FirmanteAsignadoNominaArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Usuario$FirmanteAsignadoNominaArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FirmanteAsignadoNominaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   HistorialEstadoNomina<T extends Prisma.Usuario$HistorialEstadoNominaArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Usuario$HistorialEstadoNominaArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HistorialEstadoNominaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   Incidencia<T extends Prisma.Usuario$IncidenciaArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Usuario$IncidenciaArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$IncidenciaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   MovimientoEmpleado<T extends Prisma.Usuario$MovimientoEmpleadoArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Usuario$MovimientoEmpleadoArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MovimientoEmpleadoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -2868,6 +3240,30 @@ export type UsuarioDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
 }
 
 /**
+ * Usuario.AuditoriaSession
+ */
+export type Usuario$AuditoriaSessionArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AuditoriaSession
+   */
+  select?: Prisma.AuditoriaSessionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AuditoriaSession
+   */
+  omit?: Prisma.AuditoriaSessionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AuditoriaSessionInclude<ExtArgs> | null
+  where?: Prisma.AuditoriaSessionWhereInput
+  orderBy?: Prisma.AuditoriaSessionOrderByWithRelationInput | Prisma.AuditoriaSessionOrderByWithRelationInput[]
+  cursor?: Prisma.AuditoriaSessionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AuditoriaSessionScalarFieldEnum | Prisma.AuditoriaSessionScalarFieldEnum[]
+}
+
+/**
  * Usuario.EstadisticaMensual
  */
 export type Usuario$EstadisticaMensualArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2913,6 +3309,30 @@ export type Usuario$FirmaNominaArgs<ExtArgs extends runtime.Types.Extensions.Int
   take?: number
   skip?: number
   distinct?: Prisma.FirmaNominaScalarFieldEnum | Prisma.FirmaNominaScalarFieldEnum[]
+}
+
+/**
+ * Usuario.FirmanteAsignadoNomina
+ */
+export type Usuario$FirmanteAsignadoNominaArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the FirmanteAsignadoNomina
+   */
+  select?: Prisma.FirmanteAsignadoNominaSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the FirmanteAsignadoNomina
+   */
+  omit?: Prisma.FirmanteAsignadoNominaOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FirmanteAsignadoNominaInclude<ExtArgs> | null
+  where?: Prisma.FirmanteAsignadoNominaWhereInput
+  orderBy?: Prisma.FirmanteAsignadoNominaOrderByWithRelationInput | Prisma.FirmanteAsignadoNominaOrderByWithRelationInput[]
+  cursor?: Prisma.FirmanteAsignadoNominaWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.FirmanteAsignadoNominaScalarFieldEnum | Prisma.FirmanteAsignadoNominaScalarFieldEnum[]
 }
 
 /**

@@ -9,6 +9,24 @@ export interface FirmaNomina {
   Usuario?: { Username: string };
 }
 
+export interface FirmanteAsignado {
+  IdAsignacion: number;
+  IdNomina: number;
+  TipoFirmante: string;
+  Modo: 'ROL' | 'USUARIO';
+  RolRequerido?: string;
+  IdUsuarioAsignado?: number;
+  NotificarCorreo: boolean;
+  Activo: boolean;
+  Usuario?: {
+    IdUsuario: number;
+    Username: string;
+    IdEmpleado?: number;
+    RolUsuario?: { NombreRol: string };
+    Empleado?: { Nombres: string; Apellidos: string; CorreoPersonal?: string };
+  };
+}
+
 export interface Nomina {
   IdNomina: number;
   Mes: number;
@@ -24,6 +42,7 @@ export interface Nomina {
   EstadoNomina?: { NombreEstado: string };
   FirmaNomina?: FirmaNomina[];
   CuentaBancariaEmpresa?: { IdCuenta: number; NombreCuenta: string; NumeroCuenta: string; SaldoActual: number; Moneda?: string };
+  FirmanteAsignadoNomina?: FirmanteAsignado[];
   Activo?: boolean;
   FechaEliminacion?: Date;
   NominaDetalle?: NominaDetalle[];

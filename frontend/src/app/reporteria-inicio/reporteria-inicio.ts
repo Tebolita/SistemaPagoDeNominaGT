@@ -14,6 +14,7 @@ interface ModuleCard {
   route: string;
   status: 'active' | 'coming';
   color: string;
+  accent: string;
   features: string[];
 }
 
@@ -34,7 +35,7 @@ export class ReporteriaInicio {
       icon: 'pi pi-file-pdf',
       route: '/reporteria/reportes',
       status: 'active',
-      color: 'blue',
+      color: 'blue', accent: '#3b82f6',
       features: [
         'Exportar a PDF',
         'Reportes personalizados',
@@ -46,38 +47,38 @@ export class ReporteriaInicio {
       description: 'Visualiza estadísticas de salarios promedio, rangos y distribuciones por puesto.',
       icon: 'pi pi-chart-bar',
       route: '/reporteria/salarios',
-      status: 'coming',
-      color: 'teal',
+      status: 'active',
+      color: 'teal', accent: '#14b8a6',
       features: [
-        'Promedio por puesto',
-        'Distribución salarial',
-        'Comparativas anuales'
+        'Promedio y mediana salarial',
+        'Distribución por rangos',
+        'Análisis por departamento y puesto'
       ]
     },
     {
       title: 'Historiales',
-      description: 'Consulta historiales completos de empleados, cambios salariales y movimientos.',
+      description: 'Consulta historiales completos de salarios, nóminas, asistencias y vacaciones.',
       icon: 'pi pi-history',
       route: '/reporteria/historiales',
-      status: 'coming',
-      color: 'violet',
+      status: 'active',
+      color: 'violet', accent: '#8b5cf6',
       features: [
-        'Historial de cambios',
-        'Movimientos de personal',
-        'Archivos por año'
+        'Historial de salarios',
+        'Nóminas por período',
+        'Asistencias y vacaciones'
       ]
     },
     {
       title: 'Informes Ejecutivos',
-      description: 'Dashboards y resúmenes ejecutivos con indicadores clave del sistema de nómina.',
+      description: 'Dashboards con KPIs, gráficos de tendencias y análisis de la nómina.',
       icon: 'pi pi-chart-line',
       route: '/reporteria/ejecutivos',
-      status: 'coming',
-      color: 'orange',
+      status: 'active',
+      color: 'orange', accent: '#f97316',
       features: [
-        'KPIs del sistema',
+        'KPIs en tiempo real',
         'Gráficos interactivos',
-        'Descargar reportes'
+        'Tendencia de nómina'
       ]
     }
   ];

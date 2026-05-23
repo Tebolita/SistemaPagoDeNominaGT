@@ -1,1 +1,2 @@
-:host { display: block; min-height: 100%; background: #0f172a; }
+:host { display: block; }
+.inicio-hero { --orb1: #f97316; --orb2: #3b82f6; --orb3: #22c55e; }

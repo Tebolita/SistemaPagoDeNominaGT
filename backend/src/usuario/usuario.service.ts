@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException, UnauthorizedException } from '@nestjs/common';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -75,6 +75,7 @@ export class UsuarioService {
         IdRol: true,
         IdEmpleado: true,
         RolUsuario: { select: { NombreRol: true } },
+        Empleado: { select: { Nombres: true, Apellidos: true } },
       },
     });
 
@@ -117,6 +118,23 @@ export class UsuarioService {
       message: `Usuario actualizado correctamente.`,
       id: usuarioActualizado.IdUsuario,
     };
+  }
+
+  async cambiarPassword(id: number, passwordActual: string, passwordNueva: string, claveNueva?: string) {
+    const usuario = await this.prismaService.usuario.findUnique({
+      where: { IdUsuario: id },
+      select: { Contrasena: true, Clave: true },
+    });
+    if (!usuario) throw new NotFoundException('Usuario no encontrado');
+
+    const valido = await bcryptjs.compare(passwordActual, usuario.Contrasena);
+    if (!valido) throw new UnauthorizedException('La contraseña actual es incorrecta');
+
+    const data: any = { Contrasena: await bcryptjs.hash(passwordNueva, 12) };
+    if (claveNueva) data.Clave = await bcryptjs.hash(claveNueva, 12);
+
+    await this.prismaService.usuario.update({ where: { IdUsuario: id }, data });
+    return { message: 'Contraseña actualizada correctamente' };
   }
 
   // Eliminar un usuario

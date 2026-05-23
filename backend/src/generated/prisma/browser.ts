@@ -182,3 +182,48 @@ export type Usuario = Prisma.UsuarioModel
  * 
  */
 export type Venta = Prisma.VentaModel
+/**
+ * Model ConfigFirmanteNomina
+ * 
+ */
+export type ConfigFirmanteNomina = Prisma.ConfigFirmanteNominaModel
+/**
+ * Model FirmanteAsignadoNomina
+ * 
+ */
+export type FirmanteAsignadoNomina = Prisma.FirmanteAsignadoNominaModel
+/**
+ * Model Permiso
+ * 
+ */
+export type Permiso = Prisma.PermisoModel
+/**
+ * Model RolPermiso
+ * 
+ */
+export type RolPermiso = Prisma.RolPermisoModel
+/**
+ * Model AuditoriaSession
+ * 
+ */
+export type AuditoriaSession = Prisma.AuditoriaSessionModel
+/**
+ * Model ConfiguracionEmpresa
+ * 
+ */
+export type ConfiguracionEmpresa = Prisma.ConfiguracionEmpresaModel
+/**
+ * Model CuotaPrestamo
+ * 
+ */
+export type CuotaPrestamo = Prisma.CuotaPrestamoModel
+/**
+ * Model LiquidacionEmpleado
+ * 
+ */
+export type LiquidacionEmpleado = Prisma.LiquidacionEmpleadoModel
+/**
+ * Model PrestamoEmpleado
+ * 
+ */
+export type PrestamoEmpleado = Prisma.PrestamoEmpleadoModel

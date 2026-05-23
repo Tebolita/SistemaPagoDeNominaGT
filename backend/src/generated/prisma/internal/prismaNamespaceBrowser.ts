@@ -83,7 +83,16 @@ export const ModelName = {
   sysdiagrams: 'sysdiagrams',
   TipoMovimiento: 'TipoMovimiento',
   Usuario: 'Usuario',
-  Venta: 'Venta'
+  Venta: 'Venta',
+  ConfigFirmanteNomina: 'ConfigFirmanteNomina',
+  FirmanteAsignadoNomina: 'FirmanteAsignadoNomina',
+  Permiso: 'Permiso',
+  RolPermiso: 'RolPermiso',
+  AuditoriaSession: 'AuditoriaSession',
+  ConfiguracionEmpresa: 'ConfiguracionEmpresa',
+  CuotaPrestamo: 'CuotaPrestamo',
+  LiquidacionEmpleado: 'LiquidacionEmpleado',
+  PrestamoEmpleado: 'PrestamoEmpleado'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -175,7 +184,8 @@ export const DepartamentoScalarFieldEnum = {
   IdDepartamento: 'IdDepartamento',
   NombreDepartamento: 'NombreDepartamento',
   Activo: 'Activo',
-  FechaEliminacion: 'FechaEliminacion'
+  FechaEliminacion: 'FechaEliminacion',
+  Presupuesto: 'Presupuesto'
 } as const
 
 export type DepartamentoScalarFieldEnum = (typeof DepartamentoScalarFieldEnum)[keyof typeof DepartamentoScalarFieldEnum]
@@ -595,6 +605,134 @@ export const VentaScalarFieldEnum = {
 } as const
 
 export type VentaScalarFieldEnum = (typeof VentaScalarFieldEnum)[keyof typeof VentaScalarFieldEnum]
+
+
+export const ConfigFirmanteNominaScalarFieldEnum = {
+  IdConfig: 'IdConfig',
+  TipoFirmante: 'TipoFirmante',
+  Descripcion: 'Descripcion',
+  RolesPermitidos: 'RolesPermitidos',
+  IdEmpleadoRequerido: 'IdEmpleadoRequerido',
+  Activo: 'Activo',
+  FechaEliminacion: 'FechaEliminacion'
+} as const
+
+export type ConfigFirmanteNominaScalarFieldEnum = (typeof ConfigFirmanteNominaScalarFieldEnum)[keyof typeof ConfigFirmanteNominaScalarFieldEnum]
+
+
+export const FirmanteAsignadoNominaScalarFieldEnum = {
+  IdAsignacion: 'IdAsignacion',
+  IdNomina: 'IdNomina',
+  TipoFirmante: 'TipoFirmante',
+  Modo: 'Modo',
+  RolRequerido: 'RolRequerido',
+  IdUsuarioAsignado: 'IdUsuarioAsignado',
+  NotificarCorreo: 'NotificarCorreo',
+  Activo: 'Activo'
+} as const
+
+export type FirmanteAsignadoNominaScalarFieldEnum = (typeof FirmanteAsignadoNominaScalarFieldEnum)[keyof typeof FirmanteAsignadoNominaScalarFieldEnum]
+
+
+export const PermisoScalarFieldEnum = {
+  IdPermiso: 'IdPermiso',
+  Modulo: 'Modulo',
+  Accion: 'Accion',
+  Descripcion: 'Descripcion',
+  Activo: 'Activo'
+} as const
+
+export type PermisoScalarFieldEnum = (typeof PermisoScalarFieldEnum)[keyof typeof PermisoScalarFieldEnum]
+
+
+export const RolPermisoScalarFieldEnum = {
+  IdRolPermiso: 'IdRolPermiso',
+  IdRol: 'IdRol',
+  IdPermiso: 'IdPermiso'
+} as const
+
+export type RolPermisoScalarFieldEnum = (typeof RolPermisoScalarFieldEnum)[keyof typeof RolPermisoScalarFieldEnum]
+
+
+export const AuditoriaSessionScalarFieldEnum = {
+  IdAuditoria: 'IdAuditoria',
+  IdUsuario: 'IdUsuario',
+  Username: 'Username',
+  Accion: 'Accion',
+  FechaHora: 'FechaHora',
+  DireccionIP: 'DireccionIP',
+  UserAgent: 'UserAgent',
+  Exitoso: 'Exitoso',
+  Detalle: 'Detalle'
+} as const
+
+export type AuditoriaSessionScalarFieldEnum = (typeof AuditoriaSessionScalarFieldEnum)[keyof typeof AuditoriaSessionScalarFieldEnum]
+
+
+export const ConfiguracionEmpresaScalarFieldEnum = {
+  IdConfig: 'IdConfig',
+  NombreEmpresa: 'NombreEmpresa',
+  NIT: 'NIT',
+  Direccion: 'Direccion',
+  Telefono: 'Telefono',
+  CorreoEmpresa: 'CorreoEmpresa',
+  RegimenFiscal: 'RegimenFiscal',
+  Logo: 'Logo',
+  FechaActualizacion: 'FechaActualizacion'
+} as const
+
+export type ConfiguracionEmpresaScalarFieldEnum = (typeof ConfiguracionEmpresaScalarFieldEnum)[keyof typeof ConfiguracionEmpresaScalarFieldEnum]
+
+
+export const CuotaPrestamoScalarFieldEnum = {
+  IdCuota: 'IdCuota',
+  IdPrestamo: 'IdPrestamo',
+  NumeroCuota: 'NumeroCuota',
+  MontoCuota: 'MontoCuota',
+  FechaPago: 'FechaPago',
+  Estado: 'Estado'
+} as const
+
+export type CuotaPrestamoScalarFieldEnum = (typeof CuotaPrestamoScalarFieldEnum)[keyof typeof CuotaPrestamoScalarFieldEnum]
+
+
+export const LiquidacionEmpleadoScalarFieldEnum = {
+  IdLiquidacion: 'IdLiquidacion',
+  IdEmpleado: 'IdEmpleado',
+  FechaIngreso: 'FechaIngreso',
+  FechaLiquidacion: 'FechaLiquidacion',
+  MotivoSalida: 'MotivoSalida',
+  AniosServicio: 'AniosServicio',
+  SalarioBase: 'SalarioBase',
+  Indemnizacion: 'Indemnizacion',
+  VacacionesPendientes: 'VacacionesPendientes',
+  AguinaldoProporcional: 'AguinaldoProporcional',
+  Bono14Proporcional: 'Bono14Proporcional',
+  TotalLiquidacion: 'TotalLiquidacion',
+  Observaciones: 'Observaciones',
+  Estado: 'Estado',
+  Activo: 'Activo',
+  FechaEliminacion: 'FechaEliminacion'
+} as const
+
+export type LiquidacionEmpleadoScalarFieldEnum = (typeof LiquidacionEmpleadoScalarFieldEnum)[keyof typeof LiquidacionEmpleadoScalarFieldEnum]
+
+
+export const PrestamoEmpleadoScalarFieldEnum = {
+  IdPrestamo: 'IdPrestamo',
+  IdEmpleado: 'IdEmpleado',
+  MontoPrestamo: 'MontoPrestamo',
+  CuotaMensual: 'CuotaMensual',
+  TotalCuotas: 'TotalCuotas',
+  CuotasPagadas: 'CuotasPagadas',
+  Descripcion: 'Descripcion',
+  FechaAprobacion: 'FechaAprobacion',
+  Estado: 'Estado',
+  Activo: 'Activo',
+  FechaEliminacion: 'FechaEliminacion'
+} as const
+
+export type PrestamoEmpleadoScalarFieldEnum = (typeof PrestamoEmpleadoScalarFieldEnum)[keyof typeof PrestamoEmpleadoScalarFieldEnum]
 
 
 export const SortOrder = {

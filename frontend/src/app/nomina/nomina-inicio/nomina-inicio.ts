@@ -14,6 +14,7 @@ interface ModuleCard {
   route: string;
   status: 'active' | 'coming';
   color: string;
+  accent: string;
   features: string[];
 }
 
@@ -34,7 +35,7 @@ export class NominaInicio {
       icon: 'pi pi-file-edit',
       route: '/nomina/nominas',
       status: 'active',
-      color: 'blue',
+      color: 'blue', accent: '#3b82f6',
       features: [
         'Crear nueva nómina',
         'Cargar datos de empleados',
@@ -47,7 +48,7 @@ export class NominaInicio {
       icon: 'pi pi-tags',
       route: '/configuracion/estados-nomina',
       status: 'active',
-      color: 'teal',
+      color: 'teal', accent: '#14b8a6',
       features: [
         'Cambiar estado',
         'Ver historial',
@@ -59,8 +60,8 @@ export class NominaInicio {
       description: 'Visualiza y edita los detalles de cada empleado dentro de una nómina procesada.',
       icon: 'pi pi-list-check',
       route: '/nomina/detalles',
-      status: 'coming',
-      color: 'violet',
+      status: 'active',
+      color: 'violet', accent: '#8b5cf6',
       features: [
         'Sueldos y salarios',
         'Deducciones',
@@ -73,7 +74,7 @@ export class NominaInicio {
       icon: 'pi pi-chart-bar',
       route: '/reporteria/reportes',
       status: 'active',
-      color: 'orange',
+      color: 'orange', accent: '#f97316',
       features: [
         'Reportes de nómina',
         'Análisis de salarios',

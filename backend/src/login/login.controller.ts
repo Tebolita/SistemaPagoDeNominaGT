@@ -19,12 +19,10 @@ export class LoginController {
 
   @HttpCode(HttpStatus.OK)
   @Post('login')
-  signIn(@Body() singIn: ValidateLoginDto) {
-    return this.loginService.SignIn(
-      singIn.Username,
-      singIn.Contrasena,
-      singIn.Clave,
-    );
+  signIn(@Body() singIn: ValidateLoginDto, @Request() req) {
+    const ip        = req.headers['x-forwarded-for']?.split(',')[0]?.trim() ?? req.socket?.remoteAddress;
+    const userAgent = req.headers['user-agent'];
+    return this.loginService.SignIn(singIn.Username, singIn.Contrasena, singIn.Clave, ip, userAgent);
   }
 
   @ApiBearerAuth()
@@ -34,12 +32,13 @@ export class LoginController {
     return req.user;
   }
 
-  // NUEVO: Endpoint para cerrar sesión
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
   @Post('logout')
   @HttpCode(HttpStatus.OK)
-  logout() {
-    return this.loginService.logout();
+  logout(@Request() req) {
+    const ip        = req.headers['x-forwarded-for']?.split(',')[0]?.trim() ?? req.socket?.remoteAddress;
+    const userAgent = req.headers['user-agent'];
+    return this.loginService.logout(req.user.sub, req.user.username, ip, userAgent);
   }
 }

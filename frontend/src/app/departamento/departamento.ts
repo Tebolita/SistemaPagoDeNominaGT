@@ -5,10 +5,12 @@ import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
+import { InputNumberModule } from 'primeng/inputnumber';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { TagModule } from 'primeng/tag';
 import { TooltipModule } from 'primeng/tooltip';
+import { ProgressBarModule } from 'primeng/progressbar';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { DepartamentoService } from '../services/departamento.service';
 import { Departamento } from '../models/Departamento.model';
@@ -23,10 +25,12 @@ import { Departamento } from '../models/Departamento.model';
     TableModule,
     DialogModule,
     InputTextModule,
+    InputNumberModule,
     ToastModule,
     ConfirmDialogModule,
     TagModule,
     TooltipModule,
+    ProgressBarModule,
   ],
   providers: [MessageService, ConfirmationService],
   templateUrl: './departamento.html',
@@ -40,7 +44,7 @@ export class DepartamentoComponent implements OnInit {
   departamentos = signal<Departamento[]>([]);
   displayDialog = signal(false);
   isEditMode = signal(false);
-  form = { NombreDepartamento: '' };
+  form: { NombreDepartamento: string; Presupuesto: number | null } = { NombreDepartamento: '', Presupuesto: null };
   selectedDept: Departamento | null = null;
 
   ngOnInit() {
@@ -56,14 +60,14 @@ export class DepartamentoComponent implements OnInit {
 
   showDialog() {
     this.isEditMode.set(false);
-    this.form = { NombreDepartamento: '' };
+    this.form = { NombreDepartamento: '', Presupuesto: null };
     this.selectedDept = null;
     this.displayDialog.set(true);
   }
 
   editDepartamento(dept: Departamento) {
     this.isEditMode.set(true);
-    this.form = { NombreDepartamento: dept.NombreDepartamento };
+    this.form = { NombreDepartamento: dept.NombreDepartamento, Presupuesto: dept.Presupuesto ?? null };
     this.selectedDept = dept;
     this.displayDialog.set(true);
   }
@@ -74,8 +78,13 @@ export class DepartamentoComponent implements OnInit {
       return;
     }
 
+    const payload: Partial<Departamento> = {
+      NombreDepartamento: this.form.NombreDepartamento,
+      ...(this.form.Presupuesto !== null ? { Presupuesto: this.form.Presupuesto } : {}),
+    };
+
     if (this.isEditMode() && this.selectedDept) {
-      this.departamentoService.update(this.selectedDept.IdDepartamento, this.form).subscribe({
+      this.departamentoService.update(this.selectedDept.IdDepartamento, payload).subscribe({
         next: () => {
           this.messageService.add({ severity: 'success', summary: 'Actualizado', detail: 'Departamento actualizado' });
           this.displayDialog.set(false);
@@ -84,7 +93,7 @@ export class DepartamentoComponent implements OnInit {
         error: (err) => this.messageService.add({ severity: 'error', summary: 'Error', detail: err.message }),
       });
     } else {
-      this.departamentoService.create(this.form).subscribe({
+      this.departamentoService.create(payload).subscribe({
         next: () => {
           this.messageService.add({ severity: 'success', summary: 'Creado', detail: 'Departamento creado' });
           this.displayDialog.set(false);
@@ -110,5 +119,17 @@ export class DepartamentoComponent implements OnInit {
         });
       },
     });
+  }
+
+  getPorcentajeUso(dept: Departamento): number {
+    if (!dept.Presupuesto || dept.Presupuesto === 0) return 0;
+    return Math.min(100, Math.round(((dept.PresupuestoUsado ?? 0) / dept.Presupuesto) * 100));
+  }
+
+  getSeveridadPresupuesto(dept: Departamento): string {
+    const pct = this.getPorcentajeUso(dept);
+    if (pct >= 100) return 'danger';
+    if (pct >= 80) return 'warn';
+    return 'success';
   }
 }

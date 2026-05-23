@@ -33,6 +33,14 @@ export class NominaService {
       .pipe(catchError(this.errorService.handleError));
   }
 
+  getFirmantesAsignados(idNomina: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/${idNomina}/firmantes-asignados`).pipe(catchError(this.errorService.handleError));
+  }
+
+  asignarFirmantes(idNomina: number, asignaciones: any[]): Observable<any[]> {
+    return this.http.post<any[]>(`${this.apiUrl}/${idNomina}/firmantes-asignados`, { asignaciones }).pipe(catchError(this.errorService.handleError));
+  }
+
   getEliminadas(): Observable<Nomina[]> {
     return this.http
       .get<Nomina[]>(`${this.apiUrl}/eliminadas`)

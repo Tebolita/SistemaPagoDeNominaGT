@@ -1,0 +1,164 @@
+<p-toast></p-toast>
+
+<div class="eje-wrapper">
+
+  <!-- ── Cabecera ─────────────────────────────────────────────────── -->
+  <div class="eje-header">
+    <div>
+      <h1 class="eje-title">Informes Ejecutivos</h1>
+      <p class="eje-sub">Indicadores clave y análisis del sistema de nómina</p>
+    </div>
+    <p-button icon="pi pi-refresh" label="Actualizar" [outlined]="true" severity="secondary"
+      [loading]="loading()" (onClick)="cargar()"></p-button>
+  </div>
+
+  @if (loading() && !data()) {
+    <div class="eje-loading">
+      <i class="pi pi-spinner pi-spin text-3xl text-slate-500"></i>
+      <p class="text-slate-500 mt-3">Cargando datos...</p>
+    </div>
+  }
+
+  @if (data(); as d) {
+
+    <!-- ── KPIs fila RRHH ─────────────────────────────────────────── -->
+    <div class="kpi-grid">
+      <div class="kpi-card kpi-card--blue">
+        <div class="kpi-icon"><i class="pi pi-users"></i></div>
+        <div class="kpi-body">
+          <span class="kpi-value">{{ d.totalEmpleados ?? 0 }}</span>
+          <span class="kpi-label">Empleados</span>
+        </div>
+      </div>
+      <div class="kpi-card kpi-card--green">
+        <div class="kpi-icon"><i class="pi pi-dollar"></i></div>
+        <div class="kpi-body">
+          <span class="kpi-value">{{ d.empleadosConSalario ?? 0 }}</span>
+          <span class="kpi-label">Con salario activo</span>
+        </div>
+      </div>
+      <div class="kpi-card kpi-card--orange">
+        <div class="kpi-icon"><i class="pi pi-building"></i></div>
+        <div class="kpi-body">
+          <span class="kpi-value">{{ d.totalDepartamentos ?? 0 }}</span>
+          <span class="kpi-label">Departamentos</span>
+        </div>
+      </div>
+      <div class="kpi-card kpi-card--teal">
+        <div class="kpi-icon"><i class="pi pi-sun"></i></div>
+        <div class="kpi-body">
+          <span class="kpi-value">{{ d.totalVacaciones ?? 0 }}</span>
+          <span class="kpi-label">Vacaciones activas</span>
+        </div>
+      </div>
+      <div class="kpi-card kpi-card--sky">
+        <div class="kpi-icon"><i class="pi pi-clock"></i></div>
+        <div class="kpi-body">
+          <span class="kpi-value">{{ d.asistenciasMes ?? 0 }}</span>
+          <span class="kpi-label">Asistencias del mes</span>
+        </div>
+      </div>
+      <div class="kpi-card kpi-card--emerald">
+        <div class="kpi-icon"><i class="pi pi-money-bill"></i></div>
+        <div class="kpi-body">
+          <span class="kpi-value kpi-value--sm">Q {{ d.salarioPromedio | number:'1.0-0' }}</span>
+          <span class="kpi-label">Salario promedio</span>
+        </div>
+      </div>
+      <div class="kpi-card kpi-card--emerald">
+        <div class="kpi-icon"><i class="pi pi-chart-line"></i></div>
+        <div class="kpi-body">
+          <span class="kpi-value kpi-value--sm">Q {{ masaSalarialTotal | number:'1.0-0' }}</span>
+          <span class="kpi-label">Masa salarial total</span>
+        </div>
+      </div>
+      <div class="kpi-card kpi-card--pink">
+        <div class="kpi-icon"><i class="pi pi-shopping-cart"></i></div>
+        <div class="kpi-body">
+          <span class="kpi-value">{{ d.totalClientes ?? 0 }}</span>
+          <span class="kpi-label">Clientes</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Última nómina ─────────────────────────────────────────── -->
+    @if (d.ultimaNomina) {
+      <div class="ultima-nomina">
+        <div class="ultima-nomina-left">
+          <i class="pi pi-calculator text-sky-400"></i>
+          <span class="ultima-nomina-titulo">Última Nómina</span>
+          <p-tag [value]="d.ultimaNomina.Estado ?? '—'" severity="info"></p-tag>
+          <span class="ultima-nomina-periodo">{{ d.ultimaNomina.Mes }}/{{ d.ultimaNomina.Anio }}</span>
+        </div>
+        <div class="ultima-nomina-stats">
+          <div class="un-stat">
+            <span class="label">Empleados</span>
+            <span class="value">{{ d.ultimaNomina.TotalEmpleados }}</span>
+          </div>
+          <div class="un-stat">
+            <span class="label">Sueldos</span>
+            <span class="value text-slate-200">Q {{ d.ultimaNomina.TotalSueldos | number:'1.2-2' }}</span>
+          </div>
+          <div class="un-stat">
+            <span class="label">Descuentos</span>
+            <span class="value text-red-400">Q {{ d.ultimaNomina.TotalDescuentos | number:'1.2-2' }}</span>
+          </div>
+          <div class="un-stat un-stat--highlight">
+            <span class="label">Líquido Total</span>
+            <span class="value text-green-400">Q {{ d.ultimaNomina.TotalLiquido | number:'1.2-2' }}</span>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- ── Fila 1: Empleados + Masa salarial + Distribución ─────── -->
+    @if (chartEmpleados) {
+      <div class="chart-grid-3">
+        <div class="chart-card">
+          <div class="chart-title"><i class="pi pi-chart-bar text-blue-400"></i> Empleados por Departamento</div>
+          <div class="chart-body"><p-chart type="bar" [data]="chartEmpleados" [options]="chartNoLeg"></p-chart></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title"><i class="pi pi-chart-pie text-green-400"></i> Masa Salarial por Departamento</div>
+          <div class="chart-body"><p-chart type="doughnut" [data]="chartSalarios" [options]="chartDoughnut"></p-chart></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title"><i class="pi pi-chart-pie text-violet-400"></i> Distribución de Salarios</div>
+          <div class="chart-body"><p-chart type="doughnut" [data]="chartDistribucion" [options]="chartDoughnut"></p-chart></div>
+        </div>
+      </div>
+    }
+
+    <!-- ── Fila 2: Tendencia + Estados nómina ────────────────────── -->
+    @if (chartTendencia && chartTendencia.labels?.length > 0) {
+      <div class="chart-grid-3">
+        <div class="chart-card chart-card--wide">
+          <div class="chart-title"><i class="pi pi-chart-line text-sky-400"></i> Tendencia de Nómina</div>
+          <div class="chart-body chart-body--tall"><p-chart type="line" [data]="chartTendencia" [options]="chartBase"></p-chart></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title"><i class="pi pi-chart-pie text-yellow-400"></i> Nóminas por Estado</div>
+          <div class="chart-body"><p-chart type="doughnut" [data]="chartEstados" [options]="chartDoughnut"></p-chart></div>
+        </div>
+      </div>
+
+      <!-- ── Fila 3: Composición apilada ───────────────────────── -->
+      <div class="chart-card">
+        <div class="chart-title">
+          <i class="pi pi-chart-bar text-emerald-400"></i> Composición de Nómina por Período
+          <span class="chart-hint">verde = líquido · rojo = descuentos · barra total = bruto</span>
+        </div>
+        <div class="chart-body chart-body--tall"><p-chart type="bar" [data]="chartDescuentos" [options]="chartStacked"></p-chart></div>
+      </div>
+    }
+
+    @if (!d.tendenciaNomina?.length && !d.empleadosPorDepartamento?.length) {
+      <div class="eje-empty">
+        <i class="pi pi-chart-pie"></i>
+        <p>No hay suficientes datos para mostrar gráficos. Genera algunas nóminas primero.</p>
+      </div>
+    }
+
+  }
+
+</div>

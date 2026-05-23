@@ -14,6 +14,7 @@ interface ModuleCard {
   route: string;
   status: 'active' | 'coming';
   color: string;
+  accent: string;
   features: string[];
 }
 
@@ -34,7 +35,7 @@ export class ConfiguracionInicio {
       icon: 'pi pi-tags',
       route: '/configuracion/estados-nomina',
       status: 'active',
-      color: 'blue',
+      color: 'blue', accent: '#3b82f6',
       features: [
         'Crear estados',
         'Validar transiciones',
@@ -47,7 +48,7 @@ export class ConfiguracionInicio {
       icon: 'pi pi-sliders-h',
       route: '/configuracion/parametros',
       status: 'active',
-      color: 'teal',
+      color: 'teal', accent: '#14b8a6',
       features: [
         'Tasas de impuesto',
         'Límites salariales',
@@ -60,7 +61,7 @@ export class ConfiguracionInicio {
       icon: 'pi pi-building',
       route: '/configuracion/departamentos',
       status: 'active',
-      color: 'violet',
+      color: 'violet', accent: '#8b5cf6',
       features: [
         'Crear departamentos',
         'Jerarquía organizacional',
@@ -73,7 +74,7 @@ export class ConfiguracionInicio {
       icon: 'pi pi-briefcase',
       route: '/configuracion/puestos',
       status: 'active',
-      color: 'orange',
+      color: 'orange', accent: '#f97316',
       features: [
         'Definir puestos',
         'Salarios por puesto',
@@ -86,7 +87,7 @@ export class ConfiguracionInicio {
       icon: 'pi pi-calendar',
       route: '/configuracion/jornadas',
       status: 'active',
-      color: 'green',
+      color: 'green', accent: '#22c55e',
       features: [
         'Horarios de trabajo',
         'Días laborables',
@@ -99,7 +100,7 @@ export class ConfiguracionInicio {
       icon: 'pi pi-money-bill',
       route: '/configuracion/bancos',
       status: 'active',
-      color: 'red',
+      color: 'red', accent: '#ef4444',
       features: [
         'Datos bancarios',
         'Cuentas de empresa',

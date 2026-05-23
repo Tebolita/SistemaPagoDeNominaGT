@@ -91,6 +91,11 @@ export class CreateEmpleadoDto {
   @IsNumber()
   IdBanco?: number;
 
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsNumber()
+  IdDepartamento?: number;
+
   // Agregado: Opcional, cuenta del banco
   @ApiPropertyOptional()
   @IsOptional()

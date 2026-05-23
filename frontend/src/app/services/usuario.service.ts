@@ -57,4 +57,10 @@ export class UsuarioService {
             catchError(this.errorService.handleError)
         );
     }
+
+    CambiarPassword(id: number, body: { passwordActual: string; passwordNueva: string; claveNueva?: string }): Observable<any> {
+        return this.http.patch<any>(`${this.apiUrl}/${id}/cambiar-password`, body).pipe(
+            catchError(this.errorService.handleError)
+        );
+    }
 }

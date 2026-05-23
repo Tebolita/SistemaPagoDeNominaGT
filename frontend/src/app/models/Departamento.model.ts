@@ -3,4 +3,6 @@ export interface Departamento {
   NombreDepartamento: string;
   Activo: boolean;
   FechaEliminacion?: Date;
+  Presupuesto?: number | null;
+  PresupuestoUsado?: number;
 }

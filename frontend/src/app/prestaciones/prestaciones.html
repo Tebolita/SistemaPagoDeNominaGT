@@ -1,0 +1,139 @@
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
+
+<div class="prest-wrapper">
+
+  <!-- Cabecera -->
+  <div class="prest-header">
+    <div>
+      <h1 class="prest-title">Prestaciones Laborales</h1>
+      <p class="prest-sub">Calculadora de liquidación según el Código de Trabajo de Guatemala</p>
+    </div>
+  </div>
+
+  <div class="prest-layout">
+
+    <!-- ══ Calculadora ══════════════════════════════════════════════ -->
+    <div class="prest-calc-panel">
+      <div class="prest-panel-title"><i class="pi pi-calculator text-violet-400"></i> Calcular liquidación</div>
+
+      <div class="prest-form">
+        <div class="field-group">
+          <label>Empleado *</label>
+          <p-select
+            [options]="empleados()"
+            [(ngModel)]="form.idEmpleado"
+            [optionLabel]="'NombreCompleto'"
+            optionValue="IdEmpleado"
+            placeholder="Seleccionar empleado"
+            [filter]="true"
+            filterBy="NombreCompleto"
+            appendTo="body"
+          ></p-select>
+        </div>
+        <div class="field-group">
+          <label>Fecha de liquidación *</label>
+          <p-datepicker [(ngModel)]="form.fechaLiquidacion" dateFormat="dd/mm/yy" [showIcon]="true" appendTo="body"></p-datepicker>
+        </div>
+        <div class="field-group">
+          <label>Motivo de salida</label>
+          <p-select [options]="motivosSalida" [(ngModel)]="form.motivoSalida" optionLabel="label" optionValue="value"
+            placeholder="Seleccionar" appendTo="body"></p-select>
+        </div>
+        <div class="field-group">
+          <label>Días de vacaciones pendientes</label>
+          <p-inputNumber [(ngModel)]="form.diasVacacionesPendientes" [min]="0" [max]="365"
+            placeholder="0" styleClass="w-full" inputStyleClass="w-full"></p-inputNumber>
+        </div>
+        <div class="field-group">
+          <label>Observaciones</label>
+          <input pInputText [(ngModel)]="form.observaciones" placeholder="Notas adicionales..." class="w-full" />
+        </div>
+        <p-button label="Calcular" icon="pi pi-refresh" severity="info" class="w-full"
+          [loading]="calculando()" (onClick)="calcular()"></p-button>
+      </div>
+
+      <!-- Resultado del cálculo -->
+      @if (calculo(); as c) {
+        <div class="prest-resultado">
+          <div class="prest-result-header">
+            <span class="prest-result-empleado">{{ c.empleado }}</span>
+            <span class="prest-result-anios">{{ c.aniosServicio }} años de servicio</span>
+          </div>
+
+          <div class="prest-concepto-list">
+            <div class="prest-concepto">
+              <span>Indemnización ({{ Math.floor(c.aniosServicio) }} meses)</span>
+              <span class="text-slate-200 font-semibold">Q {{ c.indemnizacion | number:'1.2-2' }}</span>
+            </div>
+            <div class="prest-concepto">
+              <span>Vacaciones pendientes</span>
+              <span class="text-sky-400 font-semibold">Q {{ c.vacacionesPendientes | number:'1.2-2' }}</span>
+            </div>
+            <div class="prest-concepto">
+              <span>Aguinaldo proporcional</span>
+              <span class="text-green-400 font-semibold">Q {{ c.aguinaldoProporcional | number:'1.2-2' }}</span>
+            </div>
+            <div class="prest-concepto">
+              <span>Bono 14 proporcional</span>
+              <span class="text-yellow-400 font-semibold">Q {{ c.bono14Proporcional | number:'1.2-2' }}</span>
+            </div>
+          </div>
+
+          <div class="prest-total">
+            <span>TOTAL LIQUIDACIÓN</span>
+            <span class="prest-total-valor">Q {{ c.totalLiquidacion | number:'1.2-2' }}</span>
+          </div>
+
+          <div class="prest-salario-ref">
+            Salario base: Q {{ c.salarioBase | number:'1.2-2' }} · Período: {{ c.fechaIngreso | date:'dd/MM/yyyy' }} → {{ c.fechaLiquidacion | date:'dd/MM/yyyy' }}
+          </div>
+
+          <p-button label="Guardar liquidación" icon="pi pi-save" severity="success" class="w-full"
+            [loading]="guardando()" (onClick)="guardar()"></p-button>
+        </div>
+      }
+    </div>
+
+    <!-- ══ Historial ════════════════════════════════════════════════ -->
+    <div class="prest-historial">
+      <div class="prest-panel-title"><i class="pi pi-history text-slate-400"></i> Historial de liquidaciones</div>
+
+      <p-table [value]="historial()" [loading]="loading()" [paginator]="true" [rows]="8" [rowHover]="true"
+        emptyMessage="Sin liquidaciones registradas.">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Empleado</th>
+            <th>Fecha</th>
+            <th>Motivo</th>
+            <th class="text-right">Total</th>
+            <th>Estado</th>
+            <th style="width:80px"></th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-liq>
+          <tr>
+            <td>
+              <div class="emp-cell">
+                <div class="emp-avatar">{{ liq.Empleado?.Nombres?.[0] ?? '?' }}</div>
+                <span class="text-sm font-medium text-slate-200">{{ liq.Empleado?.Nombres }} {{ liq.Empleado?.Apellidos }}</span>
+              </div>
+            </td>
+            <td class="text-sm text-slate-400">{{ liq.FechaLiquidacion | date:'dd/MM/yyyy' }}</td>
+            <td class="text-sm text-slate-400">{{ liq.MotivoSalida ?? '—' }}</td>
+            <td class="text-right font-bold text-green-400">Q {{ liq.TotalLiquidacion | number:'1.2-2' }}</td>
+            <td>
+              <p-tag [value]="liq.Estado" [severity]="liq.Estado === 'PAGADA' ? 'success' : 'warn'"></p-tag>
+            </td>
+            <td class="text-center">
+              @if (liq.Estado !== 'PAGADA') {
+                <p-button icon="pi pi-check" [rounded]="true" [text]="true" severity="success" pTooltip="Marcar pagada" (onClick)="marcarPagada(liq)"></p-button>
+              }
+              <p-button icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger" pTooltip="Eliminar" (onClick)="eliminar(liq)"></p-button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</div>

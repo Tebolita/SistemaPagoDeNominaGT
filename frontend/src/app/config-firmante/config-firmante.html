@@ -1,0 +1,188 @@
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
+
+<div class="flex flex-col gap-5 p-4 min-h-screen">
+
+  <!-- ── Cabecera ──────────────────────────────────────────────────── -->
+  <div class="flex justify-between items-center flex-wrap gap-3">
+    <div>
+      <h1 class="text-2xl font-bold text-white">Firmantes de Nómina</h1>
+      <p class="text-sm text-slate-400 mt-1">
+        Configura qué roles o empleados pueden firmar cada tipo de autorización.
+      </p>
+    </div>
+    <p-button label="Nuevo Tipo de Firmante" icon="pi pi-plus" severity="success" (onClick)="openNew()"></p-button>
+  </div>
+
+  <!-- ── Info ──────────────────────────────────────────────────────── -->
+  <div class="bg-blue-950 border border-blue-800 rounded-xl p-4 text-sm text-blue-300 flex flex-col gap-2">
+    <div class="font-semibold flex items-center gap-2"><i class="pi pi-info-circle"></i> Cómo funciona</div>
+    <ul class="list-disc pl-5 space-y-1 text-blue-200 text-xs">
+      <li>Cada tipo de firmante (ej. <code class="bg-blue-900 px-1 rounded">JEFE_AREA</code>) requiere una firma para aprobar la nómina.</li>
+      <li>Puedes configurar <strong>roles permitidos</strong> (cualquier usuario con ese rol puede firmar) o un <strong>empleado específico</strong> requerido.</li>
+      <li>Si se especifica un empleado, solo él puede firmar ese tipo — sin importar su rol.</li>
+      <li>La nómina se auto-aprueba cuando <strong>todos los tipos activos</strong> han sido firmados.</li>
+    </ul>
+  </div>
+
+  <!-- ── Tabla ─────────────────────────────────────────────────────── -->
+  <p-table [value]="configs()" [loading]="loading" [rowHover]="true"
+    emptyMessage="No hay tipos de firmante configurados.">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Tipo de Firmante</th>
+        <th>Descripción</th>
+        <th>Autorización</th>
+        <th style="width:80px">Acciones</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-c>
+      <tr>
+        <td>
+          <span class="font-mono text-sm font-bold text-slate-200 bg-slate-700 px-2 py-0.5 rounded">
+            {{ c.TipoFirmante }}
+          </span>
+        </td>
+        <td class="text-sm text-slate-400">{{ c.Descripcion || '—' }}</td>
+        <td>
+          @if (c.IdEmpleadoRequerido) {
+            <div class="flex items-center gap-2">
+              <div class="w-7 h-7 rounded-full bg-violet-700 flex items-center justify-center text-xs font-bold text-white flex-shrink-0">
+                {{ getEmpleadoNombre(c.IdEmpleadoRequerido)[0] }}
+              </div>
+              <div>
+                <div class="text-sm font-semibold text-violet-300">Empleado específico</div>
+                <div class="text-xs text-slate-400">{{ getEmpleadoNombre(c.IdEmpleadoRequerido) }}</div>
+              </div>
+            </div>
+          } @else {
+            <div class="flex flex-col gap-1">
+              <span class="text-xs text-slate-500 uppercase tracking-wide">Roles permitidos</span>
+              <div class="flex flex-wrap gap-1">
+                @for (rol of getRolesChips(c); track rol) {
+                  <span class="text-xs bg-slate-700 text-slate-300 border border-slate-600 px-2 py-0.5 rounded-full">{{ rol }}</span>
+                }
+                @if (getRolesChips(c).length === 0) {
+                  <span class="text-xs text-amber-400">Sin restricción configurada</span>
+                }
+              </div>
+            </div>
+          }
+        </td>
+        <td>
+          <p-button icon="pi pi-pencil" [rounded]="true" [text]="true" severity="warn"
+            pTooltip="Editar" tooltipPosition="top" (onClick)="openEdit(c)"></p-button>
+          <p-button icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger"
+            pTooltip="Eliminar" tooltipPosition="top" (onClick)="delete(c)"></p-button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<!-- ── Diálogo ────────────────────────────────────────────────────── -->
+<p-dialog [header]="isEdit ? 'Editar Firmante' : 'Nuevo Tipo de Firmante'"
+  [(visible)]="dialog" [modal]="true"
+  [style]="{ width: '100%', maxWidth: '560px' }" [draggable]="false" [resizable]="false">
+
+  <div class="flex flex-col gap-5 pt-2">
+
+    <!-- Nombre -->
+    <div class="field-group">
+      <label>Tipo de Firmante *</label>
+      <input pInputText [(ngModel)]="form.TipoFirmante" placeholder="Ej: JEFE_AREA, GERENTE_FINANCIERO"
+        class="w-full font-mono" [disabled]="isEdit" />
+      <p class="text-xs text-slate-500 mt-1">Se almacena en MAYÚSCULAS con guiones bajos.</p>
+    </div>
+
+    <!-- Descripción -->
+    <div class="field-group">
+      <label>Descripción</label>
+      <input pInputText [(ngModel)]="form.Descripcion" placeholder="Descripción del rol de firmante"
+        class="w-full" />
+    </div>
+
+    <!-- Modo de autorización -->
+    <div class="bg-slate-800 border border-slate-700 rounded-lg p-4 flex flex-col gap-4">
+      <p class="text-xs font-semibold text-slate-400 uppercase tracking-wide">Modo de autorización</p>
+
+      <!-- Toggle entre roles y empleado -->
+      <div class="flex gap-3">
+        <button type="button"
+          class="flex-1 py-2 px-3 rounded-lg text-sm font-medium border transition-colors"
+          [ngClass]="!form.usarEmpleado
+            ? 'bg-blue-900 border-blue-600 text-blue-200'
+            : 'bg-slate-900 border-slate-700 text-slate-400 hover:border-slate-500'"
+          (click)="form.usarEmpleado = false; form.IdEmpleadoRequerido = null">
+          <i class="pi pi-users mr-2"></i>Por roles
+        </button>
+        <button type="button"
+          class="flex-1 py-2 px-3 rounded-lg text-sm font-medium border transition-colors"
+          [ngClass]="form.usarEmpleado
+            ? 'bg-violet-900 border-violet-600 text-violet-200'
+            : 'bg-slate-900 border-slate-700 text-slate-400 hover:border-slate-500'"
+          (click)="form.usarEmpleado = true; form.rolesSeleccionados = []">
+          <i class="pi pi-user mr-2"></i>Empleado específico
+        </button>
+      </div>
+
+      <!-- Selección de roles -->
+      @if (!form.usarEmpleado) {
+        <div>
+          <p class="text-xs text-slate-500 mb-2">Selecciona los roles que pueden firmar como este tipo:</p>
+          <div class="flex flex-wrap gap-2">
+            @for (rol of rolesDisponibles; track rol) {
+              <button type="button"
+                class="text-xs px-3 py-1.5 rounded-full border font-medium transition-colors"
+                [ngClass]="isRolSelected(rol)
+                  ? 'bg-blue-800 border-blue-500 text-blue-200'
+                  : 'bg-slate-900 border-slate-600 text-slate-400 hover:border-slate-400'"
+                (click)="toggleRol(rol)">
+                @if (isRolSelected(rol)) { <i class="pi pi-check text-xs mr-1"></i> }
+                {{ rol }}
+              </button>
+            }
+          </div>
+          @if (form.rolesSeleccionados.length > 0) {
+            <p class="text-xs text-blue-400 mt-2">
+              {{ form.rolesSeleccionados.length }} rol{{ form.rolesSeleccionados.length !== 1 ? 'es' : '' }} seleccionado{{ form.rolesSeleccionados.length !== 1 ? 's' : '' }}
+            </p>
+          }
+        </div>
+      }
+
+      <!-- Selección de empleado -->
+      @if (form.usarEmpleado) {
+        <div class="field-group">
+          <label>Empleado requerido *</label>
+          <p-select [options]="empleados()" [(ngModel)]="form.IdEmpleadoRequerido"
+            optionLabel="NombreCompleto" optionValue="IdEmpleado"
+            placeholder="Buscar empleado..." [filter]="true" filterBy="NombreCompleto,DPI"
+            class="w-full" appendTo="body">
+            <ng-template pTemplate="item" let-emp>
+              <div class="flex items-center gap-2">
+                <div class="w-7 h-7 rounded-full bg-slate-700 flex items-center justify-center text-xs font-bold text-slate-300 flex-shrink-0">
+                  {{ emp.Nombres[0] }}{{ emp.Apellidos[0] }}
+                </div>
+                <div>
+                  <div class="text-sm">{{ emp.Nombres }} {{ emp.Apellidos }}</div>
+                  <div class="text-xs text-slate-500">{{ emp.Puesto?.NombrePuesto || 'Sin puesto' }}</div>
+                </div>
+              </div>
+            </ng-template>
+          </p-select>
+          <p class="text-xs text-violet-400 mt-1">
+            Solo este empleado podrá firmar como <strong>{{ form.TipoFirmante || 'este tipo' }}</strong>, sin importar su rol.
+          </p>
+        </div>
+      }
+    </div>
+  </div>
+
+  <ng-template #footer>
+    <div class="flex justify-end gap-2">
+      <p-button label="Cancelar" severity="secondary" [outlined]="true" (onClick)="dialog = false"></p-button>
+      <p-button label="Guardar" icon="pi pi-check" severity="success" [loading]="saving" (onClick)="save()"></p-button>
+    </div>
+  </ng-template>
+</p-dialog>

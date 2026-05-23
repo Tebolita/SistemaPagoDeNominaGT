@@ -1,0 +1,328 @@
+<p-toast></p-toast>
+
+<div class="nd-layout">
+
+  <!-- ══ Panel izquierdo: lista de nóminas ══════════════════════════ -->
+  <aside class="nd-sidebar">
+
+    <div class="nd-sidebar-header">
+      <h2 class="nd-sidebar-title">Nóminas</h2>
+      <p class="nd-sidebar-sub">{{ nominas().length }} generadas</p>
+    </div>
+
+    <!-- Filtros -->
+    <div class="nd-sidebar-filters">
+      <input
+        class="nd-search"
+        type="text"
+        [value]="busqueda()"
+        (input)="busqueda.set($any($event.target).value)"
+        placeholder="Buscar período..."
+      />
+      <p-select
+        [options]="[{ label: 'Todos los años', value: null }, ...anios]"
+        [ngModel]="filtroAnio()"
+        (ngModelChange)="filtroAnio.set($event)"
+        optionLabel="label"
+        optionValue="value"
+        appendTo="body"
+        styleClass="nd-year-select"
+      ></p-select>
+    </div>
+
+    <!-- Lista -->
+    <div class="nd-nomina-list">
+      @if (loading()) {
+        <div class="nd-list-empty"><i class="pi pi-spinner pi-spin"></i></div>
+      } @else if (nominasFiltradas().length === 0) {
+        <div class="nd-list-empty">Sin resultados</div>
+      }
+
+      @for (nom of nominasFiltradas(); track nom.IdNomina) {
+        <button
+          class="nd-nomina-item"
+          [class.nd-nomina-item--active]="nominaActual()?.IdNomina === nom.IdNomina"
+          (click)="seleccionarNomina(nom)"
+        >
+          <div class="nd-nomina-period">
+            <span class="nd-nomina-mes">{{ getMesCorto(nom.Mes) }}</span>
+            <span class="nd-nomina-anio">{{ nom.Anio }}</span>
+          </div>
+          <div class="nd-nomina-info">
+            <span class="nd-nomina-tipo">{{ nom.TipoNomina ?? 'GENERAL' }}</span>
+            <p-tag
+              [value]="nom.EstadoNomina?.NombreEstado ?? '—'"
+              [severity]="getSeverityEstado(nom.EstadoNomina?.NombreEstado)"
+              styleClass="nd-estado-tag"
+            ></p-tag>
+          </div>
+          <div class="nd-nomina-empleados">
+            {{ nom.NominaDetalle?.length ?? '—' }} emp.
+          </div>
+        </button>
+      }
+    </div>
+  </aside>
+
+  <!-- ══ Panel derecho: detalle ════════════════════════════════════ -->
+  <main class="nd-main">
+
+    @if (!nominaActual() && !loadingDetalle()) {
+      <div class="nd-empty-state">
+        <i class="pi pi-list-check nd-empty-icon"></i>
+        <h3>Selecciona una nómina</h3>
+        <p>Elige una nómina de la lista para ver el detalle de cada empleado.</p>
+      </div>
+    }
+
+    @if (loadingDetalle()) {
+      <div class="nd-empty-state">
+        <i class="pi pi-spinner pi-spin nd-empty-icon"></i>
+        <p>Cargando detalle...</p>
+      </div>
+    }
+
+    @if (nominaActual(); as nom) {
+
+      <!-- Cabecera de la nómina -->
+      <div class="nd-detail-header">
+        <div class="nd-detail-header-left">
+          <div class="nd-period-badge">
+            <i class="pi pi-calendar-clock"></i>
+            {{ getMesPeriodo(nom.Mes) }} {{ nom.Anio }}
+          </div>
+          <div class="nd-detail-tags">
+            <p-tag [value]="nom.EstadoNomina?.NombreEstado ?? '—'" [severity]="getSeverityEstado(nom.EstadoNomina?.NombreEstado)"></p-tag>
+            <p-tag [value]="nom.TipoNomina ?? 'GENERAL'" severity="secondary"></p-tag>
+            @if (nom.CuentaBancariaEmpresa) {
+              <span class="nd-cuenta">
+                <i class="pi pi-building-columns"></i>
+                {{ nom.CuentaBancariaEmpresa.NombreCuenta }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!-- Botones de descarga -->
+        <div class="nd-actions">
+          <p-button icon="pi pi-file-excel" label="General" severity="success" size="small" [outlined]="true"
+            pTooltip="Excel general" (onClick)="descargar('general')"></p-button>
+          <p-button icon="pi pi-file-excel" label="IGSS" severity="warn" size="small" [outlined]="true"
+            pTooltip="Reporte IGSS" (onClick)="descargar('igss')"></p-button>
+          <p-button icon="pi pi-file-excel" label="ISR" severity="info" size="small" [outlined]="true"
+            pTooltip="Reporte ISR" (onClick)="descargar('isr')"></p-button>
+        </div>
+      </div>
+
+      <!-- Tarjetas de totales -->
+      <div class="nd-totals-grid">
+        <div class="nd-total-card nd-total-card--emp">
+          <i class="pi pi-users"></i>
+          <span class="nd-total-value">{{ totales().empleados }}</span>
+          <span class="nd-total-label">Empleados</span>
+        </div>
+        <div class="nd-total-card nd-total-card--sueldo">
+          <i class="pi pi-money-bill"></i>
+          <span class="nd-total-value">Q {{ totales().sueldos | number:'1.2-2' }}</span>
+          <span class="nd-total-label">Sueldos</span>
+        </div>
+        <div class="nd-total-card nd-total-card--bonif">
+          <i class="pi pi-plus-circle"></i>
+          <span class="nd-total-value">Q {{ (totales().bonificaciones + totales().otrosIngresos) | number:'1.2-2' }}</span>
+          <span class="nd-total-label">Ingresos extra</span>
+        </div>
+        <div class="nd-total-card nd-total-card--desc">
+          <i class="pi pi-minus-circle"></i>
+          <span class="nd-total-value">Q {{ (totales().igss + totales().isr + totales().otrosDesc) | number:'1.2-2' }}</span>
+          <span class="nd-total-label">Descuentos</span>
+        </div>
+        <div class="nd-total-card nd-total-card--liquido">
+          <i class="pi pi-check-circle"></i>
+          <span class="nd-total-value">Q {{ totales().liquido | number:'1.2-2' }}</span>
+          <span class="nd-total-label">Líquido Total</span>
+        </div>
+      </div>
+
+      <!-- Firmas -->
+      @if (nom.FirmaNomina && nom.FirmaNomina.length > 0) {
+        <div class="nd-firmas">
+          <span class="nd-firmas-title"><i class="pi pi-pen-to-square"></i> Firmas</span>
+          @for (firma of nom.FirmaNomina; track firma.IdFirma) {
+            <div class="nd-firma-chip">
+              <i class="pi pi-check text-green-400"></i>
+              <span>{{ firma.TipoFirmante }}</span>
+              <span class="nd-firma-user">{{ firma.Usuario?.Username }}</span>
+              <span class="nd-firma-fecha">{{ firma.FechaFirma | date:'dd/MM HH:mm' }}</span>
+            </div>
+          }
+        </div>
+      }
+
+      <!-- Tabla de detalle -->
+      <p-table
+        [value]="nom.NominaDetalle ?? []"
+        [loading]="loadingDetalle()"
+        [paginator]="(nom.NominaDetalle?.length ?? 0) > 10"
+        [rows]="10"
+        [rowHover]="true"
+        emptyMessage="Sin detalle disponible."
+        styleClass="nd-table"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Empleado</th>
+            <th class="text-right">Días</th>
+            <th class="text-right">Sueldo Base</th>
+            <th class="text-right">Bonif.</th>
+            <th class="text-right">Otros Ing.</th>
+            <th class="text-right text-red-400">IGSS</th>
+            <th class="text-right text-red-400">ISR</th>
+            <th class="text-right text-red-400">Otros Desc.</th>
+            <th class="text-right text-green-400">Líquido</th>
+            <th style="width:50px"></th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-det>
+          <tr>
+            <td>
+              <div class="nd-emp-cell">
+                <div class="nd-emp-avatar">{{ det.Empleado?.Nombres?.[0] ?? '?' }}</div>
+                <div class="nd-emp-info">
+                  <span class="nd-emp-name">{{ det.Empleado?.Nombres }} {{ det.Empleado?.Apellidos }}</span>
+                  <span class="nd-emp-dpi">{{ det.Empleado?.DPI }}</span>
+                </div>
+              </div>
+            </td>
+            <td class="text-right text-sm text-slate-400">{{ det.DiasLaborados ?? '—' }}</td>
+            <td class="text-right font-semibold text-slate-200">Q {{ det.SueldoBase | number:'1.2-2' }}</td>
+            <td class="text-right text-sm text-green-400">Q {{ (det.BonificacionIncentivo ?? 0) | number:'1.2-2' }}</td>
+            <td class="text-right text-sm text-sky-400">Q {{ (det.OtrosIngresos ?? 0) | number:'1.2-2' }}</td>
+            <td class="text-right text-sm text-red-400">Q {{ (det.DescuentoIGSS ?? 0) | number:'1.2-2' }}</td>
+            <td class="text-right text-sm text-red-400">Q {{ (det.DescuentoISR ?? 0) | number:'1.2-2' }}</td>
+            <td class="text-right text-sm text-orange-400">Q {{ (det.OtrosDescuentos ?? 0) | number:'1.2-2' }}</td>
+            <td class="text-right font-bold text-green-400">Q {{ (det.LiquidoRecibir ?? 0) | number:'1.2-2' }}</td>
+            <td class="text-center">
+              <p-button icon="pi pi-receipt" [rounded]="true" [text]="true" size="small"
+                severity="secondary" pTooltip="Ver boleta" (onClick)="abrirBoleta(det)"></p-button>
+            </td>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="footer">
+          <tr class="nd-footer-row">
+            <td class="font-bold text-slate-200">TOTALES</td>
+            <td></td>
+            <td class="text-right font-bold text-slate-200">Q {{ totales().sueldos | number:'1.2-2' }}</td>
+            <td class="text-right font-bold text-green-400">Q {{ totales().bonificaciones | number:'1.2-2' }}</td>
+            <td class="text-right font-bold text-sky-400">Q {{ totales().otrosIngresos | number:'1.2-2' }}</td>
+            <td class="text-right font-bold text-red-400">Q {{ totales().igss | number:'1.2-2' }}</td>
+            <td class="text-right font-bold text-red-400">Q {{ totales().isr | number:'1.2-2' }}</td>
+            <td class="text-right font-bold text-orange-400">Q {{ totales().otrosDesc | number:'1.2-2' }}</td>
+            <td class="text-right font-bold text-green-300 text-base">Q {{ totales().liquido | number:'1.2-2' }}</td>
+            <td></td>
+          </tr>
+        </ng-template>
+      </p-table>
+    }
+  </main>
+</div>
+
+<!-- ══ Diálogo: Boleta de pago ════════════════════════════════════ -->
+<p-dialog
+  [visible]="mostrarBoleta()"
+  (visibleChange)="mostrarBoleta.set($event)"
+  header="Boleta de Pago"
+  [modal]="true"
+  [style]="{ width: '480px', maxWidth: '95vw' }"
+  [resizable]="false"
+>
+  @if (boletaEmpleado(); as b) {
+    @if (nominaActual(); as nom) {
+      <div class="boleta">
+        <!-- Encabezado -->
+        <div class="boleta-header">
+          <div class="boleta-logo"><i class="pi pi-building"></i></div>
+          <div>
+            <div class="boleta-empresa">Sistema de Nómina</div>
+            <div class="boleta-periodo">Período: {{ getMesPeriodo(nom.Mes) }} {{ nom.Anio }}</div>
+          </div>
+        </div>
+
+        <!-- Empleado -->
+        <div class="boleta-empleado">
+          <div class="boleta-avatar">{{ b.Empleado?.Nombres?.[0] ?? '?' }}</div>
+          <div>
+            <div class="boleta-emp-name">{{ b.Empleado?.Nombres }} {{ b.Empleado?.Apellidos }}</div>
+            <div class="boleta-emp-dpi">DPI: {{ b.Empleado?.DPI }} · NIT: {{ b.Empleado?.NIT }}</div>
+          </div>
+        </div>
+
+        <!-- Ingresos -->
+        <div class="boleta-section">
+          <div class="boleta-section-title text-green-400"><i class="pi pi-plus-circle"></i> Ingresos</div>
+          <div class="boleta-row">
+            <span>Sueldo Base</span>
+            <span class="text-slate-200">Q {{ b.SueldoBase | number:'1.2-2' }}</span>
+          </div>
+          @if ((b.BonificacionIncentivo ?? 0) > 0) {
+            <div class="boleta-row">
+              <span>Bonificación Incentivo</span>
+              <span class="text-green-400">Q {{ b.BonificacionIncentivo | number:'1.2-2' }}</span>
+            </div>
+          }
+          @if ((b.OtrosIngresos ?? 0) > 0) {
+            <div class="boleta-row">
+              <span>Otros Ingresos</span>
+              <span class="text-sky-400">Q {{ b.OtrosIngresos | number:'1.2-2' }}</span>
+            </div>
+          }
+          <div class="boleta-row boleta-row--subtotal">
+            <span>Total Ingresos</span>
+            <span>Q {{ ((b.SueldoBase) + (b.BonificacionIncentivo ?? 0) + (b.OtrosIngresos ?? 0)) | number:'1.2-2' }}</span>
+          </div>
+        </div>
+
+        <!-- Descuentos -->
+        <div class="boleta-section">
+          <div class="boleta-section-title text-red-400"><i class="pi pi-minus-circle"></i> Descuentos</div>
+          @if ((b.DescuentoIGSS ?? 0) > 0) {
+            <div class="boleta-row">
+              <span>IGSS (4.83%)</span>
+              <span class="text-red-400">- Q {{ b.DescuentoIGSS | number:'1.2-2' }}</span>
+            </div>
+          }
+          @if ((b.DescuentoISR ?? 0) > 0) {
+            <div class="boleta-row">
+              <span>ISR</span>
+              <span class="text-red-400">- Q {{ b.DescuentoISR | number:'1.2-2' }}</span>
+            </div>
+          }
+          @if ((b.OtrosDescuentos ?? 0) > 0) {
+            <div class="boleta-row">
+              <span>Otros Descuentos</span>
+              <span class="text-orange-400">- Q {{ b.OtrosDescuentos | number:'1.2-2' }}</span>
+            </div>
+          }
+          <div class="boleta-row boleta-row--subtotal">
+            <span>Total Descuentos</span>
+            <span>Q {{ ((b.DescuentoIGSS ?? 0) + (b.DescuentoISR ?? 0) + (b.OtrosDescuentos ?? 0)) | number:'1.2-2' }}</span>
+          </div>
+        </div>
+
+        <!-- Líquido -->
+        <div class="boleta-liquido">
+          <span>LÍQUIDO A RECIBIR</span>
+          <span class="boleta-liquido-valor">Q {{ b.LiquidoRecibir | number:'1.2-2' }}</span>
+        </div>
+
+        @if (b.DiasLaborados) {
+          <div class="boleta-dias">Días laborados: <strong>{{ b.DiasLaborados }}</strong></div>
+        }
+      </div>
+    }
+  }
+  <ng-template pTemplate="footer">
+    <p-button label="Cerrar" icon="pi pi-times" [text]="true" severity="secondary" (onClick)="mostrarBoleta.set(false)"></p-button>
+  </ng-template>
+</p-dialog>

@@ -28,10 +28,12 @@ export type AggregateDepartamento = {
 
 export type DepartamentoAvgAggregateOutputType = {
   IdDepartamento: number | null
+  Presupuesto: runtime.Decimal | null
 }
 
 export type DepartamentoSumAggregateOutputType = {
   IdDepartamento: number | null
+  Presupuesto: runtime.Decimal | null
 }
 
 export type DepartamentoMinAggregateOutputType = {
@@ -39,6 +41,7 @@ export type DepartamentoMinAggregateOutputType = {
   NombreDepartamento: string | null
   Activo: boolean | null
   FechaEliminacion: Date | null
+  Presupuesto: runtime.Decimal | null
 }
 
 export type DepartamentoMaxAggregateOutputType = {
@@ -46,6 +49,7 @@ export type DepartamentoMaxAggregateOutputType = {
   NombreDepartamento: string | null
   Activo: boolean | null
   FechaEliminacion: Date | null
+  Presupuesto: runtime.Decimal | null
 }
 
 export type DepartamentoCountAggregateOutputType = {
@@ -53,16 +57,19 @@ export type DepartamentoCountAggregateOutputType = {
   NombreDepartamento: number
   Activo: number
   FechaEliminacion: number
+  Presupuesto: number
   _all: number
 }
 
 
 export type DepartamentoAvgAggregateInputType = {
   IdDepartamento?: true
+  Presupuesto?: true
 }
 
 export type DepartamentoSumAggregateInputType = {
   IdDepartamento?: true
+  Presupuesto?: true
 }
 
 export type DepartamentoMinAggregateInputType = {
@@ -70,6 +77,7 @@ export type DepartamentoMinAggregateInputType = {
   NombreDepartamento?: true
   Activo?: true
   FechaEliminacion?: true
+  Presupuesto?: true
 }
 
 export type DepartamentoMaxAggregateInputType = {
@@ -77,6 +85,7 @@ export type DepartamentoMaxAggregateInputType = {
   NombreDepartamento?: true
   Activo?: true
   FechaEliminacion?: true
+  Presupuesto?: true
 }
 
 export type DepartamentoCountAggregateInputType = {
@@ -84,6 +93,7 @@ export type DepartamentoCountAggregateInputType = {
   NombreDepartamento?: true
   Activo?: true
   FechaEliminacion?: true
+  Presupuesto?: true
   _all?: true
 }
 
@@ -178,6 +188,7 @@ export type DepartamentoGroupByOutputType = {
   NombreDepartamento: string
   Activo: boolean | null
   FechaEliminacion: Date | null
+  Presupuesto: runtime.Decimal | null
   _count: DepartamentoCountAggregateOutputType | null
   _avg: DepartamentoAvgAggregateOutputType | null
   _sum: DepartamentoSumAggregateOutputType | null
@@ -208,6 +219,7 @@ export type DepartamentoWhereInput = {
   NombreDepartamento?: Prisma.StringFilter<"Departamento"> | string
   Activo?: Prisma.BoolNullableFilter<"Departamento"> | boolean | null
   FechaEliminacion?: Prisma.DateTimeNullableFilter<"Departamento"> | Date | string | null
+  Presupuesto?: Prisma.DecimalNullableFilter<"Departamento"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   Empleado?: Prisma.EmpleadoListRelationFilter
   ParametroGlobal?: Prisma.ParametroGlobalListRelationFilter
   Puesto?: Prisma.PuestoListRelationFilter
@@ -218,6 +230,7 @@ export type DepartamentoOrderByWithRelationInput = {
   NombreDepartamento?: Prisma.SortOrder
   Activo?: Prisma.SortOrderInput | Prisma.SortOrder
   FechaEliminacion?: Prisma.SortOrderInput | Prisma.SortOrder
+  Presupuesto?: Prisma.SortOrderInput | Prisma.SortOrder
   Empleado?: Prisma.EmpleadoOrderByRelationAggregateInput
   ParametroGlobal?: Prisma.ParametroGlobalOrderByRelationAggregateInput
   Puesto?: Prisma.PuestoOrderByRelationAggregateInput
@@ -231,6 +244,7 @@ export type DepartamentoWhereUniqueInput = Prisma.AtLeast<{
   NombreDepartamento?: Prisma.StringFilter<"Departamento"> | string
   Activo?: Prisma.BoolNullableFilter<"Departamento"> | boolean | null
   FechaEliminacion?: Prisma.DateTimeNullableFilter<"Departamento"> | Date | string | null
+  Presupuesto?: Prisma.DecimalNullableFilter<"Departamento"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   Empleado?: Prisma.EmpleadoListRelationFilter
   ParametroGlobal?: Prisma.ParametroGlobalListRelationFilter
   Puesto?: Prisma.PuestoListRelationFilter
@@ -241,6 +255,7 @@ export type DepartamentoOrderByWithAggregationInput = {
   NombreDepartamento?: Prisma.SortOrder
   Activo?: Prisma.SortOrderInput | Prisma.SortOrder
   FechaEliminacion?: Prisma.SortOrderInput | Prisma.SortOrder
+  Presupuesto?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.DepartamentoCountOrderByAggregateInput
   _avg?: Prisma.DepartamentoAvgOrderByAggregateInput
   _max?: Prisma.DepartamentoMaxOrderByAggregateInput
@@ -256,12 +271,14 @@ export type DepartamentoScalarWhereWithAggregatesInput = {
   NombreDepartamento?: Prisma.StringWithAggregatesFilter<"Departamento"> | string
   Activo?: Prisma.BoolNullableWithAggregatesFilter<"Departamento"> | boolean | null
   FechaEliminacion?: Prisma.DateTimeNullableWithAggregatesFilter<"Departamento"> | Date | string | null
+  Presupuesto?: Prisma.DecimalNullableWithAggregatesFilter<"Departamento"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type DepartamentoCreateInput = {
   NombreDepartamento: string
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  Presupuesto?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   Empleado?: Prisma.EmpleadoCreateNestedManyWithoutDepartamentoInput
   ParametroGlobal?: Prisma.ParametroGlobalCreateNestedManyWithoutDepartamentoInput
   Puesto?: Prisma.PuestoCreateNestedManyWithoutDepartamentoInput
@@ -272,6 +289,7 @@ export type DepartamentoUncheckedCreateInput = {
   NombreDepartamento: string
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  Presupuesto?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   Empleado?: Prisma.EmpleadoUncheckedCreateNestedManyWithoutDepartamentoInput
   ParametroGlobal?: Prisma.ParametroGlobalUncheckedCreateNestedManyWithoutDepartamentoInput
   Puesto?: Prisma.PuestoUncheckedCreateNestedManyWithoutDepartamentoInput
@@ -281,6 +299,7 @@ export type DepartamentoUpdateInput = {
   NombreDepartamento?: Prisma.StringFieldUpdateOperationsInput | string
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Presupuesto?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   Empleado?: Prisma.EmpleadoUpdateManyWithoutDepartamentoNestedInput
   ParametroGlobal?: Prisma.ParametroGlobalUpdateManyWithoutDepartamentoNestedInput
   Puesto?: Prisma.PuestoUpdateManyWithoutDepartamentoNestedInput
@@ -291,6 +310,7 @@ export type DepartamentoUncheckedUpdateInput = {
   NombreDepartamento?: Prisma.StringFieldUpdateOperationsInput | string
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Presupuesto?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   Empleado?: Prisma.EmpleadoUncheckedUpdateManyWithoutDepartamentoNestedInput
   ParametroGlobal?: Prisma.ParametroGlobalUncheckedUpdateManyWithoutDepartamentoNestedInput
   Puesto?: Prisma.PuestoUncheckedUpdateManyWithoutDepartamentoNestedInput
@@ -300,12 +320,14 @@ export type DepartamentoCreateManyInput = {
   NombreDepartamento: string
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  Presupuesto?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type DepartamentoUpdateManyMutationInput = {
   NombreDepartamento?: Prisma.StringFieldUpdateOperationsInput | string
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Presupuesto?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type DepartamentoUncheckedUpdateManyInput = {
@@ -313,6 +335,7 @@ export type DepartamentoUncheckedUpdateManyInput = {
   NombreDepartamento?: Prisma.StringFieldUpdateOperationsInput | string
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Presupuesto?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type DepartamentoCountOrderByAggregateInput = {
@@ -320,10 +343,12 @@ export type DepartamentoCountOrderByAggregateInput = {
   NombreDepartamento?: Prisma.SortOrder
   Activo?: Prisma.SortOrder
   FechaEliminacion?: Prisma.SortOrder
+  Presupuesto?: Prisma.SortOrder
 }
 
 export type DepartamentoAvgOrderByAggregateInput = {
   IdDepartamento?: Prisma.SortOrder
+  Presupuesto?: Prisma.SortOrder
 }
 
 export type DepartamentoMaxOrderByAggregateInput = {
@@ -331,6 +356,7 @@ export type DepartamentoMaxOrderByAggregateInput = {
   NombreDepartamento?: Prisma.SortOrder
   Activo?: Prisma.SortOrder
   FechaEliminacion?: Prisma.SortOrder
+  Presupuesto?: Prisma.SortOrder
 }
 
 export type DepartamentoMinOrderByAggregateInput = {
@@ -338,10 +364,12 @@ export type DepartamentoMinOrderByAggregateInput = {
   NombreDepartamento?: Prisma.SortOrder
   Activo?: Prisma.SortOrder
   FechaEliminacion?: Prisma.SortOrder
+  Presupuesto?: Prisma.SortOrder
 }
 
 export type DepartamentoSumOrderByAggregateInput = {
   IdDepartamento?: Prisma.SortOrder
+  Presupuesto?: Prisma.SortOrder
 }
 
 export type DepartamentoNullableScalarRelationFilter = {
@@ -404,6 +432,7 @@ export type DepartamentoCreateWithoutEmpleadoInput = {
   NombreDepartamento: string
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  Presupuesto?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   ParametroGlobal?: Prisma.ParametroGlobalCreateNestedManyWithoutDepartamentoInput
   Puesto?: Prisma.PuestoCreateNestedManyWithoutDepartamentoInput
 }
@@ -413,6 +442,7 @@ export type DepartamentoUncheckedCreateWithoutEmpleadoInput = {
   NombreDepartamento: string
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  Presupuesto?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   ParametroGlobal?: Prisma.ParametroGlobalUncheckedCreateNestedManyWithoutDepartamentoInput
   Puesto?: Prisma.PuestoUncheckedCreateNestedManyWithoutDepartamentoInput
 }
@@ -437,6 +467,7 @@ export type DepartamentoUpdateWithoutEmpleadoInput = {
   NombreDepartamento?: Prisma.StringFieldUpdateOperationsInput | string
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Presupuesto?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   ParametroGlobal?: Prisma.ParametroGlobalUpdateManyWithoutDepartamentoNestedInput
   Puesto?: Prisma.PuestoUpdateManyWithoutDepartamentoNestedInput
 }
@@ -446,6 +477,7 @@ export type DepartamentoUncheckedUpdateWithoutEmpleadoInput = {
   NombreDepartamento?: Prisma.StringFieldUpdateOperationsInput | string
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Presupuesto?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   ParametroGlobal?: Prisma.ParametroGlobalUncheckedUpdateManyWithoutDepartamentoNestedInput
   Puesto?: Prisma.PuestoUncheckedUpdateManyWithoutDepartamentoNestedInput
 }
@@ -454,6 +486,7 @@ export type DepartamentoCreateWithoutParametroGlobalInput = {
   NombreDepartamento: string
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  Presupuesto?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   Empleado?: Prisma.EmpleadoCreateNestedManyWithoutDepartamentoInput
   Puesto?: Prisma.PuestoCreateNestedManyWithoutDepartamentoInput
 }
@@ -463,6 +496,7 @@ export type DepartamentoUncheckedCreateWithoutParametroGlobalInput = {
   NombreDepartamento: string
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  Presupuesto?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   Empleado?: Prisma.EmpleadoUncheckedCreateNestedManyWithoutDepartamentoInput
   Puesto?: Prisma.PuestoUncheckedCreateNestedManyWithoutDepartamentoInput
 }
@@ -487,6 +521,7 @@ export type DepartamentoUpdateWithoutParametroGlobalInput = {
   NombreDepartamento?: Prisma.StringFieldUpdateOperationsInput | string
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Presupuesto?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   Empleado?: Prisma.EmpleadoUpdateManyWithoutDepartamentoNestedInput
   Puesto?: Prisma.PuestoUpdateManyWithoutDepartamentoNestedInput
 }
@@ -496,6 +531,7 @@ export type DepartamentoUncheckedUpdateWithoutParametroGlobalInput = {
   NombreDepartamento?: Prisma.StringFieldUpdateOperationsInput | string
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Presupuesto?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   Empleado?: Prisma.EmpleadoUncheckedUpdateManyWithoutDepartamentoNestedInput
   Puesto?: Prisma.PuestoUncheckedUpdateManyWithoutDepartamentoNestedInput
 }
@@ -504,6 +540,7 @@ export type DepartamentoCreateWithoutPuestoInput = {
   NombreDepartamento: string
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  Presupuesto?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   Empleado?: Prisma.EmpleadoCreateNestedManyWithoutDepartamentoInput
   ParametroGlobal?: Prisma.ParametroGlobalCreateNestedManyWithoutDepartamentoInput
 }
@@ -513,6 +550,7 @@ export type DepartamentoUncheckedCreateWithoutPuestoInput = {
   NombreDepartamento: string
   Activo?: boolean | null
   FechaEliminacion?: Date | string | null
+  Presupuesto?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   Empleado?: Prisma.EmpleadoUncheckedCreateNestedManyWithoutDepartamentoInput
   ParametroGlobal?: Prisma.ParametroGlobalUncheckedCreateNestedManyWithoutDepartamentoInput
 }
@@ -537,6 +575,7 @@ export type DepartamentoUpdateWithoutPuestoInput = {
   NombreDepartamento?: Prisma.StringFieldUpdateOperationsInput | string
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Presupuesto?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   Empleado?: Prisma.EmpleadoUpdateManyWithoutDepartamentoNestedInput
   ParametroGlobal?: Prisma.ParametroGlobalUpdateManyWithoutDepartamentoNestedInput
 }
@@ -546,6 +585,7 @@ export type DepartamentoUncheckedUpdateWithoutPuestoInput = {
   NombreDepartamento?: Prisma.StringFieldUpdateOperationsInput | string
   Activo?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   FechaEliminacion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  Presupuesto?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   Empleado?: Prisma.EmpleadoUncheckedUpdateManyWithoutDepartamentoNestedInput
   ParametroGlobal?: Prisma.ParametroGlobalUncheckedUpdateManyWithoutDepartamentoNestedInput
 }
@@ -604,6 +644,7 @@ export type DepartamentoSelect<ExtArgs extends runtime.Types.Extensions.Internal
   NombreDepartamento?: boolean
   Activo?: boolean
   FechaEliminacion?: boolean
+  Presupuesto?: boolean
   Empleado?: boolean | Prisma.Departamento$EmpleadoArgs<ExtArgs>
   ParametroGlobal?: boolean | Prisma.Departamento$ParametroGlobalArgs<ExtArgs>
   Puesto?: boolean | Prisma.Departamento$PuestoArgs<ExtArgs>
@@ -617,9 +658,10 @@ export type DepartamentoSelectScalar = {
   NombreDepartamento?: boolean
   Activo?: boolean
   FechaEliminacion?: boolean
+  Presupuesto?: boolean
 }
 
-export type DepartamentoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"IdDepartamento" | "NombreDepartamento" | "Activo" | "FechaEliminacion", ExtArgs["result"]["departamento"]>
+export type DepartamentoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"IdDepartamento" | "NombreDepartamento" | "Activo" | "FechaEliminacion" | "Presupuesto", ExtArgs["result"]["departamento"]>
 export type DepartamentoInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   Empleado?: boolean | Prisma.Departamento$EmpleadoArgs<ExtArgs>
   ParametroGlobal?: boolean | Prisma.Departamento$ParametroGlobalArgs<ExtArgs>
@@ -639,6 +681,7 @@ export type $DepartamentoPayload<ExtArgs extends runtime.Types.Extensions.Intern
     NombreDepartamento: string
     Activo: boolean | null
     FechaEliminacion: Date | null
+    Presupuesto: runtime.Decimal | null
   }, ExtArgs["result"]["departamento"]>
   composites: {}
 }
@@ -1015,6 +1058,7 @@ export interface DepartamentoFieldRefs {
   readonly NombreDepartamento: Prisma.FieldRef<"Departamento", 'String'>
   readonly Activo: Prisma.FieldRef<"Departamento", 'Boolean'>
   readonly FechaEliminacion: Prisma.FieldRef<"Departamento", 'DateTime'>
+  readonly Presupuesto: Prisma.FieldRef<"Departamento", 'Decimal'>
 }
     
 

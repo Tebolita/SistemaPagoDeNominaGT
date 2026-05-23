@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateSalarioDto } from './dto/create-salario.dto';
 import { UpdateSalarioDto } from './dto/update-salario.dto';
@@ -6,6 +6,46 @@ import { UpdateSalarioDto } from './dto/update-salario.dto';
 @Injectable()
 export class SalarioService {
   constructor(private prismaService: PrismaService) {}
+
+  private async verificarPresupuestoDepartamento(
+    idDepartamento: number,
+    idEmpleado: number,
+    salarioNuevo: number,
+  ): Promise<void> {
+    const dept = await this.prismaService.departamento.findUnique({
+      where: { IdDepartamento: idDepartamento },
+      select: { Presupuesto: true, NombreDepartamento: true },
+    });
+
+    if (!dept || dept.Presupuesto === null) return;
+
+    const presupuesto = parseFloat(dept.Presupuesto.toString());
+
+    // Sumar salarios activos de todos los empleados del departamento EXCEPTO este
+    const empleados = await this.prismaService.empleado.findMany({
+      where: { IdDepartamento: idDepartamento, NOT: { Activo: false }, IdEmpleado: { not: idEmpleado } },
+      select: { IdEmpleado: true },
+    });
+
+    let usado = 0;
+    if (empleados.length > 0) {
+      const ids = empleados.map((e) => e.IdEmpleado);
+      const result = await this.prismaService.salario.aggregate({
+        _sum: { SalarioBase: true },
+        where: { IdEmpleado: { in: ids }, NOT: { Activo: false } },
+      });
+      usado = parseFloat(result._sum.SalarioBase?.toString() ?? '0');
+    }
+
+    if (usado + salarioNuevo > presupuesto) {
+      const disponible = Math.max(0, presupuesto - usado);
+      throw new BadRequestException(
+        `Presupuesto insuficiente en "${dept.NombreDepartamento}". ` +
+          `Presupuesto: Q${presupuesto.toFixed(2)}, Usado: Q${usado.toFixed(2)}, Disponible: Q${disponible.toFixed(2)}. ` +
+          `El salario ingresado (Q${salarioNuevo.toFixed(2)}) supera el monto disponible.`,
+      );
+    }
+  }
 
   async create(createSalarioDto: CreateSalarioDto) {
     const { IdEmpleado, SalarioBase, FechaInicioVigencia, FechaFinVigencia } =
@@ -19,6 +59,15 @@ export class SalarioService {
     if (!empleado) {
       throw new NotFoundException(
         `Empleado con ID ${IdEmpleado} no encontrado`,
+      );
+    }
+
+    // Verificar presupuesto del departamento si el empleado tiene uno asignado
+    if (empleado.IdDepartamento) {
+      await this.verificarPresupuestoDepartamento(
+        empleado.IdDepartamento,
+        Number(IdEmpleado),
+        Number(SalarioBase),
       );
     }
 

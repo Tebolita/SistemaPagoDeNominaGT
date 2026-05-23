@@ -1,0 +1,165 @@
+<p-toast></p-toast>
+
+<div class="sal-wrapper">
+
+  <!-- ── Cabecera ─────────────────────────────────────────────────── -->
+  <div class="sal-header">
+    <div>
+      <h1 class="sal-title">Análisis de Salarios</h1>
+      <p class="sal-sub">Estadísticas, distribución y comparativas salariales de la plantilla activa</p>
+    </div>
+    <p-button icon="pi pi-refresh" label="Actualizar" [outlined]="true" severity="secondary"
+      [loading]="loading()" (onClick)="cargar()"></p-button>
+  </div>
+
+  <!-- ── KPIs ──────────────────────────────────────────────────────── -->
+  <div class="kpi-grid">
+    <div class="kpi-card kpi-card--blue">
+      <div class="kpi-icon"><i class="pi pi-users"></i></div>
+      <div class="kpi-body">
+        <span class="kpi-value">{{ kpis().cantidad }}</span>
+        <span class="kpi-label">Empleados con salario activo</span>
+      </div>
+    </div>
+    <div class="kpi-card kpi-card--green">
+      <div class="kpi-icon"><i class="pi pi-dollar"></i></div>
+      <div class="kpi-body">
+        <span class="kpi-value kpi-value--sm">Q {{ kpis().promedio | number:'1.2-2' }}</span>
+        <span class="kpi-label">Salario promedio</span>
+      </div>
+    </div>
+    <div class="kpi-card kpi-card--teal">
+      <div class="kpi-icon"><i class="pi pi-chart-line"></i></div>
+      <div class="kpi-body">
+        <span class="kpi-value kpi-value--sm">Q {{ kpis().mediana | number:'1.2-2' }}</span>
+        <span class="kpi-label">Mediana salarial</span>
+      </div>
+    </div>
+    <div class="kpi-card kpi-card--emerald">
+      <div class="kpi-icon"><i class="pi pi-arrow-up"></i></div>
+      <div class="kpi-body">
+        <span class="kpi-value kpi-value--sm">Q {{ kpis().maximo | number:'1.2-2' }}</span>
+        <span class="kpi-label">Salario máximo</span>
+      </div>
+    </div>
+    <div class="kpi-card kpi-card--orange">
+      <div class="kpi-icon"><i class="pi pi-arrow-down"></i></div>
+      <div class="kpi-body">
+        <span class="kpi-value kpi-value--sm">Q {{ kpis().minimo | number:'1.2-2' }}</span>
+        <span class="kpi-label">Salario mínimo</span>
+      </div>
+    </div>
+    <div class="kpi-card kpi-card--violet">
+      <div class="kpi-icon"><i class="pi pi-money-bill"></i></div>
+      <div class="kpi-body">
+        <span class="kpi-value kpi-value--sm">Q {{ kpis().total | number:'1.0-0' }}</span>
+        <span class="kpi-label">Masa salarial total</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Gráficos fila 1 ───────────────────────────────────────────── -->
+  @if (chartDeptBar) {
+    <div class="chart-grid">
+
+      <div class="chart-card chart-card--wide">
+        <div class="chart-title"><i class="pi pi-chart-bar text-blue-400"></i> Masa Salarial por Departamento</div>
+        <div class="chart-body"><p-chart type="bar" [data]="chartDeptBar" [options]="chartBase"></p-chart></div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-title"><i class="pi pi-chart-bar text-amber-400"></i> Distribución por Rango Salarial</div>
+        <div class="chart-body"><p-chart type="bar" [data]="chartRangos" [options]="chartBase"></p-chart></div>
+      </div>
+
+    </div>
+
+    <div class="chart-card">
+      <div class="chart-title"><i class="pi pi-chart-bar text-teal-400"></i> Salario Promedio por Puesto</div>
+      <div class="chart-body chart-body--tall"><p-chart type="bar" [data]="chartPuestoBar" [options]="chartBase"></p-chart></div>
+    </div>
+  }
+
+  <!-- ── Filtros de tabla ──────────────────────────────────────────── -->
+  <div class="sal-filters">
+    <div class="filter-item filter-item--wide">
+      <label>Buscar empleado o puesto</label>
+      <input
+        class="filter-input"
+        type="text"
+        [value]="busqueda()"
+        (input)="busqueda.set($any($event.target).value)"
+        placeholder="Nombre, puesto..."
+      />
+    </div>
+    <div class="filter-item">
+      <label>Departamento</label>
+      <p-select
+        [options]="departamentosOpciones()"
+        [ngModel]="filtroDept()"
+        (ngModelChange)="filtroDept.set($event)"
+        optionLabel="label"
+        optionValue="value"
+        appendTo="body"
+      ></p-select>
+    </div>
+    <div class="filter-summary">
+      <i class="pi pi-users text-slate-500"></i>
+      <span>{{ salariosDisplay().length }} empleado{{ salariosDisplay().length !== 1 ? 's' : '' }}</span>
+    </div>
+  </div>
+
+  <!-- ── Tabla de salarios vigentes ───────────────────────────────── -->
+  <p-table
+    [value]="salariosDisplay()"
+    [loading]="loading()"
+    [paginator]="true"
+    [rows]="15"
+    [rowHover]="true"
+    emptyMessage="No hay registros que coincidan con el filtro."
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="NombreEmpleado">Empleado <p-sortIcon field="NombreEmpleado"></p-sortIcon></th>
+        <th>Puesto</th>
+        <th>Departamento</th>
+        <th pSortableColumn="SalarioBase" class="text-right">Salario Base <p-sortIcon field="SalarioBase"></p-sortIcon></th>
+        <th class="text-right">vs. Promedio</th>
+        <th>Rango</th>
+        <th>Vigencia</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-sal>
+      <tr>
+        <td>
+          <div class="emp-cell">
+            <div class="emp-avatar">{{ sal.NombreEmpleado?.[0] ?? '?' }}</div>
+            <span class="emp-name">{{ sal.NombreEmpleado }}</span>
+          </div>
+        </td>
+        <td class="text-sm text-slate-300">{{ sal.Puesto ?? '—' }}</td>
+        <td class="text-sm text-slate-400">{{ sal.Departamento ?? '—' }}</td>
+        <td class="text-right font-semibold text-green-400">Q {{ sal.SalarioBase | number:'1.2-2' }}</td>
+        <td class="text-right">
+          <span [class]="getDiffPct(sal.SalarioBase) >= 0 ? 'diff diff--pos' : 'diff diff--neg'">
+            {{ getDiffPct(sal.SalarioBase) >= 0 ? '+' : '' }}{{ getDiffPct(sal.SalarioBase) | number:'1.1-1' }}%
+          </span>
+        </td>
+        <td>
+          <p-tag [severity]="getSalarioBadge(sal.SalarioBase)" [value]="getSalarioRango(sal.SalarioBase)"></p-tag>
+        </td>
+        <td class="text-xs text-slate-400">
+          Desde {{ sal.FechaInicioVigencia | date:'dd/MM/yyyy' }}
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="summary">
+      <div class="table-footer">
+        <span>Total masa salarial (filtro): <strong class="text-green-400">Q {{ totalFiltrado() | number:'1.2-2' }}</strong></span>
+      </div>
+    </ng-template>
+  </p-table>
+
+</div>

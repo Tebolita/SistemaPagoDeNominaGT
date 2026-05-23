@@ -204,6 +204,16 @@
             tooltipPosition="top"
           ></p-button>
           <p-button
+            icon="pi pi-users"
+            [rounded]="true"
+            [text]="true"
+            (onClick)="abrirConfigFirmantes(nomina)"
+            [disabled]="$any(nomina.EstadoNomina)?.EsFinal"
+            severity="secondary"
+            pTooltip="Configurar firmantes"
+            tooltipPosition="top"
+          ></p-button>
+          <p-button
             icon="pi pi-pen-to-square"
             [rounded]="true"
             [text]="true"
@@ -548,26 +558,31 @@
     </div>
 
     <div class="bg-blue-950 p-3 rounded border border-blue-800">
-      <div class="text-sm font-bold text-blue-300 mb-2">Estado de Firmas (se requieren 2 para aprobar)</div>
-      <div class="flex gap-4">
-        <div class="flex items-center gap-2">
-          <span
-            class="inline-flex items-center justify-center w-7 h-7 rounded-full text-sm font-bold border"
-            [ngClass]="firmaPresente(nominaSeleccionada!, 'JEFE_AREA') ? 'bg-green-900 border-green-500 text-green-300' : 'bg-slate-700 border-slate-500 text-slate-400'"
-          >J</span>
-          <span class="text-sm text-slate-300">Jefe de Área</span>
-          <span *ngIf="firmaPresente(nominaSeleccionada!, 'JEFE_AREA')" class="text-xs text-green-400 font-medium">Firmado</span>
-          <span *ngIf="!firmaPresente(nominaSeleccionada!, 'JEFE_AREA')" class="text-xs text-slate-500">Pendiente</span>
-        </div>
-        <div class="flex items-center gap-2">
-          <span
-            class="inline-flex items-center justify-center w-7 h-7 rounded-full text-sm font-bold border"
-            [ngClass]="firmaPresente(nominaSeleccionada!, 'ENCARGADO') ? 'bg-green-900 border-green-500 text-green-300' : 'bg-slate-700 border-slate-500 text-slate-400'"
-          >E</span>
-          <span class="text-sm text-slate-300">Encargado</span>
-          <span *ngIf="firmaPresente(nominaSeleccionada!, 'ENCARGADO')" class="text-xs text-green-400 font-medium">Firmado</span>
-          <span *ngIf="!firmaPresente(nominaSeleccionada!, 'ENCARGADO')" class="text-xs text-slate-500">Pendiente</span>
-        </div>
+      <div class="text-sm font-bold text-blue-300 mb-2">
+        Estado de Firmas (se requieren {{ configsFirmante().length || 2 }} para aprobar)
+      </div>
+      <div class="flex flex-col gap-2">
+        @for (cfg of configsFirmante().length > 0 ? configsFirmante() : [{TipoFirmante:'JEFE_AREA',Descripcion:'Jefe de Área'},{TipoFirmante:'ENCARGADO',Descripcion:'Encargado'}]; track cfg.TipoFirmante) {
+          <div class="flex items-center gap-2">
+            <span class="inline-flex items-center justify-center w-7 h-7 rounded-full text-xs font-bold border"
+              [ngClass]="firmaPresente(nominaSeleccionada!, cfg.TipoFirmante) ? 'bg-green-900 border-green-500 text-green-300' : 'bg-slate-700 border-slate-500 text-slate-400'">
+              {{ cfg.TipoFirmante[0] }}
+            </span>
+            <div class="flex flex-col">
+              <span class="text-sm text-slate-300">{{ $any(cfg).Descripcion || cfg.TipoFirmante }}</span>
+              @if (nominaSeleccionada && getFirmanteAsignado(nominaSeleccionada, cfg.TipoFirmante); as asig) {
+                <span class="text-xs text-violet-400 flex items-center gap-1">
+                  <i class="pi pi-user text-xs"></i>
+                  Asignado: {{ asig.Modo === 'USUARIO' ? getNombreUsuario(asig.IdUsuarioAsignado ?? null) : 'Rol ' + asig.RolRequerido }}
+                </span>
+              } @else {
+                <span class="text-xs text-slate-600">Puede firmar: {{ getRequisitoFirmante(cfg.TipoFirmante) }}</span>
+              }
+            </div>
+            <span *ngIf="firmaPresente(nominaSeleccionada!, cfg.TipoFirmante)" class="text-xs text-green-400 font-medium ml-auto">✓ Firmado</span>
+            <span *ngIf="!firmaPresente(nominaSeleccionada!, cfg.TipoFirmante)" class="text-xs text-slate-500 ml-auto">Pendiente</span>
+          </div>
+        }
       </div>
       <div *ngIf="firmasNomina().length > 0" class="mt-2 border-t border-blue-800 pt-2">
         <div *ngFor="let f of firmasNomina()" class="text-xs text-slate-400">
@@ -589,7 +604,17 @@
           placeholder="Seleccionar tipo de firma"
           class="w-full"
           appendTo="body"
-        ></p-select>
+        >
+          <ng-template pTemplate="item" let-t>
+            <div class="flex flex-col gap-0.5">
+              <span class="font-semibold text-sm text-slate-200">{{ t.label }}</span>
+              <span class="text-xs text-slate-500 flex items-center gap-1">
+                <i class="pi pi-shield text-xs text-blue-400"></i>
+                Puede firmar: {{ t.requisito }}
+              </span>
+            </div>
+          </ng-template>
+        </p-select>
       </div>
       <div class="mt-3">
         <label class="block text-sm font-medium mb-2">Comentarios (opcional)</label>
@@ -1062,6 +1087,137 @@
         (onClick)="displayPersonalizada.set(false)"></p-button>
       <p-button label="Generar Nómina Personalizada" icon="pi pi-check" severity="success"
         (onClick)="confirmarNominaPersonalizada()"></p-button>
+    </div>
+  </ng-template>
+</p-dialog>
+
+<!-- ─── Diálogo: Configurar Firmantes por Nómina ─────────────────────────── -->
+<p-dialog
+  [visible]="displayFirmantesDialog()"
+  (visibleChange)="displayFirmantesDialog.set($event)"
+  [header]="'Firmantes — ' + getMesLabel(nominaParaFirmantes?.Mes ?? 1) + ' ' + (nominaParaFirmantes?.Anio ?? '')"
+  [modal]="true"
+  [style]="{ width: '100%', maxWidth: '680px' }"
+  [breakpoints]="{ '768px': '95vw' }"
+  [draggable]="false" [resizable]="false"
+>
+  <div class="flex flex-col gap-2 pt-2">
+
+    <!-- Info -->
+    <div class="bg-blue-950 border border-blue-800 rounded-lg p-3 text-xs text-blue-300 mb-2">
+      <i class="pi pi-info-circle mr-1"></i>
+      Configura para esta nómina quién debe firmar cada tipo. Puedes asignar por <strong>rol</strong>
+      (cualquier usuario con ese rol) o un <strong>usuario específico</strong> con notificación por correo.
+    </div>
+
+    <!-- Un bloque por tipo de firmante -->
+    @for (f of firmantesConfig; track f.TipoFirmante; let i = $index) {
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-4 flex flex-col gap-3">
+
+        <!-- Encabezado del tipo -->
+        <div class="flex items-center justify-between">
+          <div>
+            <span class="font-mono text-sm font-bold text-slate-200 bg-slate-700 px-2 py-0.5 rounded">{{ f.TipoFirmante }}</span>
+            <span class="text-xs text-slate-500 ml-2">{{ f.Descripcion }}</span>
+          </div>
+          <!-- Badge de firma ya registrada -->
+          @if (getFirmanteAsignado(nominaParaFirmantes!, f.TipoFirmante)) {
+            @if (firmaPresente(nominaParaFirmantes!, f.TipoFirmante)) {
+              <span class="text-xs bg-green-900 text-green-300 border border-green-700 px-2 py-0.5 rounded-full">✓ Ya firmado</span>
+            } @else {
+              <span class="text-xs bg-amber-900 text-amber-300 border border-amber-700 px-2 py-0.5 rounded-full">Pendiente</span>
+            }
+          }
+        </div>
+
+        <!-- Toggle ROL / USUARIO -->
+        <div class="flex gap-2">
+          <button type="button"
+            class="flex-1 py-1.5 px-3 rounded-lg text-xs font-medium border transition-colors"
+            [ngClass]="f.Modo === 'ROL'
+              ? 'bg-blue-900 border-blue-600 text-blue-200'
+              : 'bg-slate-900 border-slate-600 text-slate-400 hover:border-slate-500'"
+            (click)="f.Modo = 'ROL'; f.IdUsuarioAsignado = null">
+            <i class="pi pi-users mr-1"></i>Por rol
+          </button>
+          <button type="button"
+            class="flex-1 py-1.5 px-3 rounded-lg text-xs font-medium border transition-colors"
+            [ngClass]="f.Modo === 'USUARIO'
+              ? 'bg-violet-900 border-violet-600 text-violet-200'
+              : 'bg-slate-900 border-slate-600 text-slate-400 hover:border-slate-500'"
+            (click)="f.Modo = 'USUARIO'; f.RolRequerido = ''">
+            <i class="pi pi-user mr-1"></i>Usuario específico
+          </button>
+        </div>
+
+        <!-- Selección según modo -->
+        @if (f.Modo === 'ROL') {
+          <div class="field-group">
+            <label>Rol requerido</label>
+            <p-select [options]="ROLES_SISTEMA" [(ngModel)]="f.RolRequerido"
+              placeholder="Seleccionar rol" class="w-full" appendTo="body"></p-select>
+          </div>
+        } @else {
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div class="field-group">
+              <label>Usuario asignado *</label>
+              <p-select [options]="usuarios()" [(ngModel)]="f.IdUsuarioAsignado"
+                optionLabel="Username" optionValue="IdUsuario"
+                placeholder="Buscar usuario..." [filter]="true"
+                class="w-full" appendTo="body">
+                <ng-template pTemplate="item" let-u>
+                  <div class="flex items-center gap-2">
+                    <div class="w-6 h-6 rounded-full bg-slate-700 flex items-center justify-center text-xs font-bold text-slate-300 flex-shrink-0">
+                      {{ u.Username[0]?.toUpperCase() }}
+                    </div>
+                    <div>
+                      <div class="text-sm">{{ u.Username }}</div>
+                      <div class="text-xs text-slate-500">{{ u.RolUsuario?.NombreRol }}</div>
+                    </div>
+                  </div>
+                </ng-template>
+              </p-select>
+            </div>
+            <div class="flex items-end pb-0.5">
+              <div class="flex items-start gap-2 cursor-pointer w-full"
+                (click)="f.NotificarCorreo = !f.NotificarCorreo">
+                <div class="mt-0.5 w-9 h-5 rounded-full transition-colors flex-shrink-0 flex items-center px-0.5"
+                  [ngClass]="f.NotificarCorreo ? 'bg-green-600' : 'bg-slate-600'">
+                  <div class="w-4 h-4 bg-white rounded-full shadow transition-transform"
+                    [ngClass]="f.NotificarCorreo ? 'translate-x-4' : 'translate-x-0'"></div>
+                </div>
+                <div>
+                  <div class="text-xs font-medium text-slate-300">Notificar por correo</div>
+                  <div class="text-xs text-slate-500">Enviar email al guardar</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          @if (f.IdUsuarioAsignado && f.NotificarCorreo) {
+            <div class="text-xs text-green-400 flex items-center gap-1 bg-green-950 border border-green-800 rounded px-3 py-1.5">
+              <i class="pi pi-envelope text-xs"></i>
+              Se enviará un correo a <strong>{{ getNombreUsuario(f.IdUsuarioAsignado) }}</strong> notificando que debe firmar esta nómina.
+            </div>
+          }
+        }
+      </div>
+    }
+
+    @if (firmantesConfig.length === 0) {
+      <div class="text-center py-8 text-slate-500 text-sm">
+        <i class="pi pi-info-circle text-2xl block mb-2"></i>
+        No hay tipos de firmante configurados. Ve a <strong>Configuración → Firmantes Nómina</strong> para agregarlos.
+      </div>
+    }
+  </div>
+
+  <ng-template #footer>
+    <div class="flex justify-end gap-2">
+      <p-button label="Cancelar" severity="secondary" [outlined]="true"
+        (onClick)="displayFirmantesDialog.set(false)"></p-button>
+      <p-button label="Guardar y Notificar" icon="pi pi-save" severity="success"
+        [disabled]="firmantesConfig.length === 0"
+        (onClick)="guardarFirmantes()"></p-button>
     </div>
   </ng-template>
 </p-dialog>

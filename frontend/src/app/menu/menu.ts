@@ -9,6 +9,7 @@ import { Divider } from 'primeng/divider';
 import { RouterModule, Router, NavigationStart, NavigationEnd } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { LoginService } from '../services/login.service';
+import { ConfigEmpresaService, ConfigEmpresa } from '../services/config-empresa.service';
 
 @Component({
   selector: 'app-menu',
@@ -27,8 +28,11 @@ export class MenuPrincipal implements OnInit, OnDestroy {
   role     = signal('');
   initials = signal('U');
 
-  private authService    = inject(LoginService);
-  readonly router        = inject(Router);
+  private authService      = inject(LoginService);
+  private configEmpresaSvc = inject(ConfigEmpresaService);
+  readonly router          = inject(Router);
+
+  empresa = signal<ConfigEmpresa | null>(null);
   private routerSub!: Subscription;
   private savedScroll    = 0;
 
@@ -37,6 +41,10 @@ export class MenuPrincipal implements OnInit, OnDestroy {
     this.buildMenu();
     this.buildAvatarMenu();
     this.watchNavigation();
+    this.configEmpresaSvc.get().subscribe({
+      next: (data) => this.empresa.set(data),
+      error: () => {},
+    });
   }
 
   ngOnDestroy() {
@@ -114,8 +122,11 @@ export class MenuPrincipal implements OnInit, OnDestroy {
       {
         label: 'Reportería',
         items: [
-          { label: 'Inicio',   icon: 'pi pi-home',     routerLink: '/reporteria/inicio'   },
-          { label: 'Reportes', icon: 'pi pi-chart-bar', routerLink: '/reporteria/reportes' },
+          { label: 'Inicio',             icon: 'pi pi-home',       routerLink: '/reporteria/inicio'      },
+          { label: 'Reportes',           icon: 'pi pi-chart-bar',  routerLink: '/reporteria/reportes'    },
+          { label: 'Análisis de Salarios', icon: 'pi pi-dollar',     routerLink: '/reporteria/salarios'    },
+          { label: 'Historiales',          icon: 'pi pi-history',    routerLink: '/reporteria/historiales' },
+          { label: 'Informes Ejecutivos',  icon: 'pi pi-chart-line', routerLink: '/reporteria/ejecutivos'  },
         ],
       },
 
@@ -123,9 +134,11 @@ export class MenuPrincipal implements OnInit, OnDestroy {
       ...(this.isAdmin ? [{
         label: 'Seguridad',
         items: [
-          { label: 'Inicio',   icon: 'pi pi-home',  routerLink: '/seguridad/inicio'   },
-          { label: 'Usuarios', icon: 'pi pi-user',  routerLink: '/seguridad/usuarios' },
-          { label: 'Roles',    icon: 'pi pi-users', routerLink: '/seguridad/roles'    },
+          { label: 'Inicio',     icon: 'pi pi-home',       routerLink: '/seguridad/inicio'     },
+          { label: 'Usuarios',   icon: 'pi pi-user',       routerLink: '/seguridad/usuarios'   },
+          { label: 'Roles',      icon: 'pi pi-shield',     routerLink: '/seguridad/roles'      },
+          { label: 'Auditoría',  icon: 'pi pi-list-check', routerLink: '/seguridad/auditoria'  },
+          { label: 'Mi Perfil',  icon: 'pi pi-id-card',    routerLink: '/seguridad/perfil'     },
         ],
       }] : []),
 
@@ -134,9 +147,11 @@ export class MenuPrincipal implements OnInit, OnDestroy {
         label: 'Recursos Humanos',
         items: [
           { label: 'Inicio',      icon: 'pi pi-home',  routerLink: '/recursoshumanos/inicio'      },
-          { label: 'Empleados',   icon: 'pi pi-user',  routerLink: '/recursoshumanos/empleados'   },
-          { label: 'Vacaciones',  icon: 'pi pi-sun',   routerLink: '/recursoshumanos/vacaciones'  },
-          { label: 'Asistencias', icon: 'pi pi-clock', routerLink: '/recursoshumanos/asistencias' },
+          { label: 'Empleados',    icon: 'pi pi-user',          routerLink: '/recursoshumanos/empleados'    },
+          { label: 'Vacaciones',   icon: 'pi pi-sun',           routerLink: '/recursoshumanos/vacaciones'   },
+          { label: 'Asistencias',  icon: 'pi pi-clock',         routerLink: '/recursoshumanos/asistencias'  },
+          { label: 'Prestaciones', icon: 'pi pi-calculator',    routerLink: '/recursoshumanos/prestaciones' },
+          { label: 'Préstamos',    icon: 'pi pi-credit-card',   routerLink: '/recursoshumanos/prestamos'    },
         ],
       }] : []),
 
@@ -151,6 +166,8 @@ export class MenuPrincipal implements OnInit, OnDestroy {
           { label: 'Bancos',              icon: 'pi pi-money-bill', routerLink: '/configuracion/bancos'         },
           { label: 'Parámetros Globales', icon: 'pi pi-sliders-h',  routerLink: '/configuracion/parametros'     },
           { label: 'Estados de Nómina',   icon: 'pi pi-tags',       routerLink: '/configuracion/estados-nomina' },
+          { label: 'Firmantes Nómina',    icon: 'pi pi-pen-to-square', routerLink: '/configuracion/firmantes' },
+          { label: 'Datos de Empresa',    icon: 'pi pi-building',      routerLink: '/configuracion/empresa'   },
         ],
       }] : []),
 
@@ -158,8 +175,9 @@ export class MenuPrincipal implements OnInit, OnDestroy {
       ...(this.isGerente ? [{
         label: 'Nómina',
         items: [
-          { label: 'Inicio',         icon: 'pi pi-home',       routerLink: '/nomina/inicio'  },
-          { label: 'Generar Nómina', icon: 'pi pi-calculator', routerLink: '/nomina/nominas' },
+          { label: 'Inicio',         icon: 'pi pi-home',         routerLink: '/nomina/inicio'   },
+          { label: 'Generar Nómina', icon: 'pi pi-calculator',  routerLink: '/nomina/nominas'  },
+          { label: 'Detalle Nómina', icon: 'pi pi-list-check',  routerLink: '/nomina/detalles' },
         ],
       }] : []),
 

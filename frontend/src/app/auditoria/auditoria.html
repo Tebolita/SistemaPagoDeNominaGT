@@ -1,0 +1,162 @@
+<p-toast></p-toast>
+
+<div class="aud-wrapper">
+
+  <!-- ── Cabecera ────────────────────────────────────────────────────── -->
+  <div class="aud-header">
+    <div>
+      <h1 class="aud-title">Auditoría de Sesiones</h1>
+      <p class="aud-sub">Registro histórico de accesos y actividad en el sistema</p>
+    </div>
+    <p-button icon="pi pi-refresh" label="Actualizar" severity="secondary" [outlined]="true"
+      [loading]="loading()" (onClick)="cargar()"></p-button>
+  </div>
+
+  <!-- ── Tarjetas de resumen ─────────────────────────────────────────── -->
+  @if (resumen(); as r) {
+    <div class="aud-stats">
+      <div class="stat-card stat-card--green">
+        <div class="stat-icon"><i class="pi pi-sign-in"></i></div>
+        <div>
+          <span class="stat-value">{{ r.totalHoy }}</span>
+          <span class="stat-label">Logins hoy</span>
+        </div>
+      </div>
+      <div class="stat-card stat-card--red">
+        <div class="stat-icon"><i class="pi pi-exclamation-triangle"></i></div>
+        <div>
+          <span class="stat-value">{{ r.fallidosHoy }}</span>
+          <span class="stat-label">Intentos fallidos hoy</span>
+        </div>
+      </div>
+      <div class="stat-card stat-card--blue">
+        <div class="stat-icon"><i class="pi pi-calendar"></i></div>
+        <div>
+          <span class="stat-value">{{ r.totalSemana }}</span>
+          <span class="stat-label">Logins esta semana</span>
+        </div>
+      </div>
+      @if (r.ultimoLogin) {
+        <div class="stat-card stat-card--slate">
+          <div class="stat-icon"><i class="pi pi-user"></i></div>
+          <div>
+            <span class="stat-value stat-value--sm">{{ r.ultimoLogin.Username }}</span>
+            <span class="stat-label">Último acceso — {{ r.ultimoLogin.FechaHora | date:'dd/MM HH:mm' }}</span>
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- ── Filtros ─────────────────────────────────────────────────────── -->
+  <div class="aud-filters">
+    <div class="filter-group">
+      <label>Desde</label>
+      <p-datepicker [(ngModel)]="filtros.fechaDesde" dateFormat="dd/mm/yy"
+        [showIcon]="true" appendTo="body" placeholder="Fecha inicio"></p-datepicker>
+    </div>
+    <div class="filter-group">
+      <label>Hasta</label>
+      <p-datepicker [(ngModel)]="filtros.fechaHasta" dateFormat="dd/mm/yy"
+        [showIcon]="true" appendTo="body" placeholder="Fecha fin"></p-datepicker>
+    </div>
+    <div class="filter-group">
+      <label>Acción</label>
+      <p-select [options]="accionOpciones" [(ngModel)]="filtros.accion"
+        optionLabel="label" optionValue="value" appendTo="body"></p-select>
+    </div>
+    <div class="filter-group">
+      <label>Estado</label>
+      <p-select [options]="exitosoOpciones" [(ngModel)]="filtros.exitoso"
+        optionLabel="label" optionValue="value" appendTo="body"></p-select>
+    </div>
+    <div class="filter-group filter-group--wide">
+      <label>Usuario</label>
+      <input pInputText [(ngModel)]="filtros.username" placeholder="Buscar por usuario..." />
+    </div>
+    <div class="filter-actions">
+      <p-button icon="pi pi-search" label="Buscar" severity="primary" (onClick)="aplicarFiltros()"></p-button>
+      <p-button icon="pi pi-times" severity="secondary" [outlined]="true"
+        pTooltip="Limpiar filtros" (onClick)="limpiarFiltros()"></p-button>
+    </div>
+  </div>
+
+  <!-- ── Tabla ───────────────────────────────────────────────────────── -->
+  <p-table
+    [value]="registros()"
+    [loading]="loading()"
+    [lazy]="true"
+    [totalRecords]="total()"
+    [rows]="limit"
+    [paginator]="true"
+    (onPage)="onPageChange($event)"
+    [rowHover]="true"
+    emptyMessage="No se encontraron registros."
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width:160px">Fecha y Hora</th>
+        <th style="width:120px">Acción</th>
+        <th>Usuario</th>
+        <th style="width:100px">Rol</th>
+        <th style="width:130px">Dirección IP</th>
+        <th style="width:100px">Navegador</th>
+        <th style="width:80px">Estado</th>
+        <th>Detalle</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-reg>
+      <tr>
+        <td class="text-sm font-mono text-slate-300">
+          {{ reg.FechaHora | date:'dd/MM/yyyy HH:mm:ss' }}
+        </td>
+
+        <td>
+          <p-tag
+            [value]="getLabelAccion(reg.Accion)"
+            [severity]="getSeverityAccion(reg.Accion)"
+            [icon]="getIconAccion(reg.Accion)"
+          ></p-tag>
+        </td>
+
+        <td>
+          <div class="flex items-center gap-2">
+            <div class="user-avatar">{{ reg.Username[0]?.toUpperCase() }}</div>
+            <span class="font-mono text-sm text-slate-200">{{ reg.Username }}</span>
+          </div>
+        </td>
+
+        <td>
+          <span class="text-xs text-slate-400">
+            {{ reg.Usuario?.RolUsuario?.NombreRol ?? '—' }}
+          </span>
+        </td>
+
+        <td>
+          <span class="font-mono text-xs text-slate-400">{{ reg.DireccionIP ?? '—' }}</span>
+        </td>
+
+        <td>
+          <span class="text-xs text-slate-400">{{ formatUA(reg.UserAgent) }}</span>
+        </td>
+
+        <td>
+          <p-tag
+            [value]="reg.Exitoso ? 'OK' : 'Error'"
+            [severity]="reg.Exitoso ? 'success' : 'danger'"
+          ></p-tag>
+        </td>
+
+        <td>
+          <span class="text-xs text-slate-500">{{ reg.Detalle ?? '—' }}</span>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="summary">
+      <span class="text-xs text-slate-500">{{ total() }} registros en total</span>
+    </ng-template>
+  </p-table>
+
+</div>
