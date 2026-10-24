@@ -3,12 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, catchError } from 'rxjs';
 import { JornadaLaboral } from '../models/JornadaLaboral.model';
 import { ErrorService } from './error.service';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class JornadaLaboralService {
-  private apiUrl = 'http://localhost:4000/api/jornada-laboral';
+  private apiUrl = `${environment.apiUrl}/jornada-laboral`;
   private http = inject(HttpClient);
   private errorService = inject(ErrorService);
 

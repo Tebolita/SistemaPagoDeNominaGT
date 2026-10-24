@@ -40,7 +40,7 @@
 
 :host ::ng-deep .p-datatable .p-datatable-emptymessage > td {
   background: #1e293b !important;
-  color: #64748b !important;
+  color: #94a3b8 !important;
 }
 
 /* ── Diálogos ──────────────────────────────────────────────────────── */
@@ -101,7 +101,7 @@
 
 :host ::ng-deep .p-inputtext::placeholder,
 :host ::ng-deep textarea::placeholder {
-  color: #475569 !important;
+  color: #94a3b8 !important;
 }
 
 /* ── Select / Dropdown ─────────────────────────────────────────────── */

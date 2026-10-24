@@ -11,12 +11,14 @@ import {
 import { LoginService } from './login.service';
 import { ValidateLoginDto } from './dto/validate-login.dto';
 import { AuthGuard } from './login.guard';
+import { Public } from './public.decorator';
 import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('login')
 export class LoginController {
   constructor(private readonly loginService: LoginService) {}
 
+  @Public()
   @HttpCode(HttpStatus.OK)
   @Post('login')
   signIn(@Body() singIn: ValidateLoginDto, @Request() req) {

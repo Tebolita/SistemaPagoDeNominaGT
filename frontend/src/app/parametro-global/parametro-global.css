@@ -39,7 +39,7 @@
 
 :host ::ng-deep .p-datatable .p-datatable-emptymessage > td {
   background: #1e293b !important;
-  color: #64748b !important;
+  color: #94a3b8 !important;
 }
 
 /* ── Paginador ──────────────────────────────────────────────────────── */
@@ -109,7 +109,7 @@
 }
 
 :host ::ng-deep .p-inputtext::placeholder {
-  color: #475569 !important;
+  color: #94a3b8 !important;
 }
 
 :host ::ng-deep .p-inputnumber input {
@@ -157,7 +157,7 @@
   font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: #64748b;
+  color: #94a3b8;
   font-weight: 600;
   margin-bottom: 0.25rem;
 }

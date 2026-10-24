@@ -3,10 +3,11 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, catchError } from 'rxjs';
 import { ConfigFirmanteNomina } from '../models/ConfigFirmante.model';
 import { ErrorService } from './error.service';
+import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class ConfigFirmanteService {
-  private apiUrl = 'http://localhost:4000/api/config-firmante';
+  private apiUrl = `${environment.apiUrl}/config-firmante`;
   private http = inject(HttpClient);
   private errorService = inject(ErrorService);
 

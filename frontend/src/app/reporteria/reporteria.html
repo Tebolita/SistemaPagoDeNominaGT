@@ -184,19 +184,19 @@
           </div>
           <div class="flex flex-wrap gap-6 text-sm">
             <div>
-              <div class="text-xs text-slate-500">Período</div>
+              <div class="text-xs text-slate-400">Período</div>
               <div class="font-semibold text-white">{{ resumen()?.ultimaNomina?.Mes }}/{{ resumen()?.ultimaNomina?.Anio }}</div>
             </div>
             <div>
-              <div class="text-xs text-slate-500">Empleados</div>
+              <div class="text-xs text-slate-400">Empleados</div>
               <div class="font-semibold text-white">{{ resumen()?.ultimaNomina?.TotalEmpleados }}</div>
             </div>
             <div>
-              <div class="text-xs text-slate-500">Líquido</div>
+              <div class="text-xs text-slate-400">Líquido</div>
               <div class="font-semibold text-green-400">Q {{ resumen()?.ultimaNomina?.TotalLiquido | number:'1.2-2' }}</div>
             </div>
             <div>
-              <div class="text-xs text-slate-500">Descuentos</div>
+              <div class="text-xs text-slate-400">Descuentos</div>
               <div class="font-semibold text-red-400">Q {{ resumen()?.ultimaNomina?.TotalDescuentos | number:'1.2-2' }}</div>
             </div>
           </div>
@@ -257,7 +257,7 @@
         <div class="chart-title">
           <i class="pi pi-chart-bar text-emerald-400"></i>
           Composición de Nómina por Período
-          <span class="text-slate-500 font-normal text-xs ml-2">— barra total = sueldo bruto · verde = líquido · rojo = descuentos</span>
+          <span class="text-slate-400 font-normal text-xs ml-2">— barra total = sueldo bruto · verde = líquido · rojo = descuentos</span>
         </div>
         <div style="height: 220px;">
           <p-chart type="bar" [data]="chartDescuentos" [options]="chartOptionsStacked"></p-chart>
@@ -266,7 +266,7 @@
     }
 
     @if (!resumen() && !loading()) {
-      <div class="text-center text-slate-500 py-8">
+      <div class="text-center text-slate-400 py-8">
         <i class="pi pi-chart-pie text-3xl mb-2 block"></i>
         Cargando resumen...
       </div>
@@ -295,7 +295,7 @@
         </ng-template>
         <ng-template pTemplate="body" let-emp>
           <tr>
-            <td class="text-slate-500 text-xs">{{ emp.IdEmpleado }}</td>
+            <td class="text-slate-400 text-xs">{{ emp.IdEmpleado }}</td>
             <td class="font-medium text-slate-100">{{ emp.Nombres }} {{ emp.Apellidos }}</td>
             <td class="font-mono text-xs">{{ emp.DPI }}</td>
             <td class="text-slate-400 text-xs">{{ emp.CorreoPersonal }}</td>
@@ -389,7 +389,7 @@
   <!-- ══════════════════════════════════════════════════════════════ -->
   @if (selectedReporte() === 'nomina') {
     @if (nominas().length === 0 && !loading()) {
-      <div class="content-card p-8 text-center text-slate-500">
+      <div class="content-card p-8 text-center text-slate-400">
         <i class="pi pi-calculator text-3xl mb-2 block"></i>
         No hay nóminas para el período seleccionado.
       </div>
@@ -407,7 +407,7 @@
               </span>
               <p-tag [value]="nomina.Estado" severity="info"></p-tag>
             </div>
-            <div class="text-xs text-slate-500 mt-1">
+            <div class="text-xs text-slate-400 mt-1">
               {{ nomina.TotalEmpleados }} empleado{{ nomina.TotalEmpleados !== 1 ? 's' : '' }}
             </div>
           </div>
@@ -415,19 +415,19 @@
           <!-- Totales de la nómina -->
           <div class="flex flex-wrap gap-4 text-sm">
             <div class="text-center">
-              <div class="text-xs text-slate-500">Sueldos</div>
+              <div class="text-xs text-slate-400">Sueldos</div>
               <div class="font-semibold text-white">Q {{ nomina.TotalSueldos | number:'1.2-2' }}</div>
             </div>
             <div class="text-center">
-              <div class="text-xs text-slate-500">Bonificaciones</div>
+              <div class="text-xs text-slate-400">Bonificaciones</div>
               <div class="font-semibold text-green-400">Q {{ nomina.TotalBonificaciones | number:'1.2-2' }}</div>
             </div>
             <div class="text-center">
-              <div class="text-xs text-slate-500">Descuentos</div>
+              <div class="text-xs text-slate-400">Descuentos</div>
               <div class="font-semibold text-red-400">Q {{ nomina.TotalDescuentos | number:'1.2-2' }}</div>
             </div>
             <div class="text-center border-l border-slate-600 pl-4">
-              <div class="text-xs text-slate-500">Líquido Total</div>
+              <div class="text-xs text-slate-400">Líquido Total</div>
               <div class="font-bold text-green-400 text-base">Q {{ nomina.TotalLiquido | number:'1.2-2' }}</div>
             </div>
           </div>

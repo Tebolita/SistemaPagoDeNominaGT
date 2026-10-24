@@ -58,11 +58,11 @@
           </div>
         </td>
         <td class="text-slate-400 text-sm">
-          <i class="pi pi-calendar mr-1 text-slate-500"></i>
+          <i class="pi pi-calendar mr-1 text-slate-400"></i>
           {{ v.FechaInicio | date:'dd/MM/yyyy' }}
         </td>
         <td class="text-slate-400 text-sm">
-          <i class="pi pi-calendar mr-1 text-slate-500"></i>
+          <i class="pi pi-calendar mr-1 text-slate-400"></i>
           {{ v.FechaFin | date:'dd/MM/yyyy' }}
         </td>
         <td>
@@ -79,7 +79,7 @@
           </span>
         </td>
         <td>
-          <p-button
+          <p-button ariaLabel="Editar"
             icon="pi pi-pencil"
             [rounded]="true" [text]="true"
             severity="warn"
@@ -87,7 +87,7 @@
             tooltipPosition="top"
             (onClick)="editVacacion(v)"
           ></p-button>
-          <p-button
+          <p-button ariaLabel="Eliminar"
             icon="pi pi-trash"
             [rounded]="true" [text]="true"
             severity="danger"
@@ -124,6 +124,7 @@
           filterBy="nombreCompleto"
           appendTo="body"
           class="w-full"
+          (onChange)="cargarSaldo($event.value)"
         ></p-select>
         @if (submitted && !vacacion.IdEmpleado) {
           <small class="text-red-400 text-xs">El empleado es requerido.</small>
@@ -159,6 +160,31 @@
         </div>
       </div>
 
+      @if (saldo) {
+        <div class="grid grid-cols-3 gap-2 text-center bg-slate-800 border border-slate-600 rounded-lg p-3">
+          <div>
+            <div class="text-xs text-slate-400">Antigüedad</div>
+            <div class="font-semibold text-slate-200">{{ saldo.aniosServicio }} año{{ saldo.aniosServicio === 1 ? '' : 's' }}</div>
+          </div>
+          <div>
+            <div class="text-xs text-slate-400">Ganados / gozados</div>
+            <div class="font-semibold text-slate-200">{{ saldo.diasGanados }} / {{ saldo.diasGozados }}</div>
+          </div>
+          <div>
+            <div class="text-xs text-slate-400">Disponibles</div>
+            <div class="font-semibold" [class.text-green-400]="saldo.diasDisponibles > 0" [class.text-red-400]="saldo.diasDisponibles <= 0">
+              {{ saldo.diasDisponibles }}
+            </div>
+          </div>
+          @if (diasSolicitados > 0) {
+            <div class="col-span-3 text-xs" [class.text-red-400]="!vacacion.IdIncidencia && diasSolicitados > saldo.diasDisponibles" [class.text-slate-400]="vacacion.IdIncidencia || diasSolicitados <= saldo.diasDisponibles">
+              Solicita {{ diasSolicitados }} día{{ diasSolicitados === 1 ? '' : 's' }}.
+              @if (saldo.aniosServicio === 0) { Aún no cumple su primer año de servicio ({{ saldo.proximoAniversario | date:'dd/MM/yyyy' }}). }
+            </div>
+          }
+        </div>
+      }
+
       <div class="flex items-start gap-3 bg-slate-800 border border-slate-600 rounded-lg p-3">
         <p-checkbox
           [(ngModel)]="vacacion.ConGoceSueldo"
@@ -169,7 +195,7 @@
           <label for="goceSueldo" class="font-medium text-slate-200 cursor-pointer">
             Con Goce de Sueldo
           </label>
-          <p class="text-xs text-slate-500 mt-0.5">
+          <p class="text-xs text-slate-400 mt-0.5">
             Marca si el empleado recibirá su salario durante las vacaciones.
           </p>
         </div>
@@ -180,6 +206,6 @@
 
   <ng-template pTemplate="footer">
     <p-button label="Cancelar" icon="pi pi-times" [text]="true" severity="secondary" (onClick)="hideDialog()"></p-button>
-    <p-button label="Guardar" icon="pi pi-check" severity="success" (onClick)="saveVacacion()"></p-button>
+    <p-button label="Guardar" icon="pi pi-check" severity="success" [loading]="guardando" (onClick)="saveVacacion()"></p-button>
   </ng-template>
 </p-dialog>

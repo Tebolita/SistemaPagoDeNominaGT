@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { JwtService } from '@nestjs/jwt';
 import { UsuarioController } from './usuario.controller';
 import { UsuarioService } from './usuario.service';
 
@@ -8,13 +9,17 @@ describe('UsuarioController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [UsuarioController],
-      providers: [UsuarioService],
+      providers: [
+        { provide: UsuarioService, useValue: {} },
+        // El AuthGuard del controlador necesita JwtService
+        { provide: JwtService, useValue: {} },
+      ],
     }).compile();
 
     controller = module.get<UsuarioController>(UsuarioController);
   });
 
-  it('should be defined', () => {
+  it('se crea con su servicio inyectado', () => {
     expect(controller).toBeDefined();
   });
 });

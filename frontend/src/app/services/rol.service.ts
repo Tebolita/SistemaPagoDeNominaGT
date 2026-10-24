@@ -3,12 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { catchError, Observable } from 'rxjs';
 import { RolInterface, Permiso, PermisosAgrupados } from '../models/Rol.model';
 import { ErrorService } from './error.service';
+import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class RolService {
   private http = inject(HttpClient);
   private errorService = inject(ErrorService);
-  private apiUrl = 'http://localhost:4000/api/roles';
+  private apiUrl = `${environment.apiUrl}/roles`;
 
   getRoles(): Observable<RolInterface[]> {
     return this.http.get<RolInterface[]>(this.apiUrl).pipe(catchError(this.errorService.handleError));

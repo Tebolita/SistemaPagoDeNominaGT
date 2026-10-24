@@ -2,13 +2,14 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { SalarioResponse, SalarioRequest, SalarioResponseCUD } from '../models/Salario.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SalarioService {
   private http = inject(HttpClient);
-  private apiUrl =  'http://localhost:4000/api/salario';
+  private apiUrl =  `${environment.apiUrl}/salario`;
 
   create(data: SalarioRequest): Observable<SalarioResponseCUD> {
     return this.http.post<SalarioResponseCUD>(this.apiUrl, data);

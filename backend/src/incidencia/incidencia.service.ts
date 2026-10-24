@@ -2,6 +2,10 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateIncidenciaDto } from './dto/create-incidencia.dto';
 import { UpdateIncidenciaDto } from './dto/update-incidencia.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import {
+  registrarDescuentoVacaciones,
+  validarSolicitudVacaciones,
+} from 'src/control-vacacion/saldo-vacaciones';
 
 @Injectable()
 export class IncidenciaService {
@@ -10,64 +14,28 @@ export class IncidenciaService {
   async create(createIncidenciaDto: CreateIncidenciaDto) {
     // Usamos transacción para crear la incidencia y el control de vacaciones
     return await this.prisma.$transaction(async (tx) => {
-      // 1. Crear la incidencia
+      // Vacaciones: validar fechas, traslapes y saldo antes de registrar
+      const esVacacion = createIncidenciaDto.TipoIncidencia === 'Vacaciones';
+      const dias = esVacacion
+        ? await validarSolicitudVacaciones(
+            tx,
+            createIncidenciaDto.IdEmpleado,
+            new Date(createIncidenciaDto.FechaInicio),
+            new Date(createIncidenciaDto.FechaFin),
+          )
+        : 0;
+
       const incidencia = await tx.incidencia.create({
-        data: createIncidenciaDto,
+        data: { ...createIncidenciaDto, Activo: true },
       });
 
-      // 2. Si es de tipo Vacaciones, crear ControlVacacion y DetalleControlVacacion
-      if (createIncidenciaDto.TipoIncidencia === 'Vacaciones') {
-        const anioActual = new Date().getFullYear();
-
-        // 2a. Buscar o crear el ControlVacacion del empleado para el año actual
-        let controlVacacion = await tx.controlVacacion.findFirst({
-          where: {
-            IdEmpleado: createIncidenciaDto.IdEmpleado,
-            AnioCorriente: anioActual,
-            Activo: true,
-          },
-        });
-
-        if (!controlVacacion) {
-          // Crear nuevo control de vacaciones para el año
-          controlVacacion = await tx.controlVacacion.create({
-            data: {
-              IdEmpleado: createIncidenciaDto.IdEmpleado,
-              AnioCorriente: anioActual,
-              DiasGanados: 15, // Días mínimos legales en Guatemala
-              DiasGozados: 0,
-              Activo: true,
-            },
-          });
-        }
-
-        // 2b. Calcular los días de vacaciones (diferencia entre fechas)
-        const fechaInicio = new Date(createIncidenciaDto.FechaInicio);
-        const fechaFin = new Date(createIncidenciaDto.FechaFin);
-        const diasDescontados =
-          Math.ceil(
-            (fechaFin.getTime() - fechaInicio.getTime()) /
-              (1000 * 60 * 60 * 24),
-          ) + 1; // +1 para incluir el día inicial
-
-        // 2c. Crear el detalle de control de vacaciones
-        await tx.detalleControlVacacion.create({
-          data: {
-            IdControlVacacion: controlVacacion.IdControlVacacion,
-            IdIncidencia: incidencia.IdIncidencia,
-            DiasDescontados: diasDescontados,
-            Activo: true,
-          },
-        });
-
-        // 2d. Actualizar los días gozados en ControlVacacion
-        await tx.controlVacacion.update({
-          where: { IdControlVacacion: controlVacacion.IdControlVacacion },
-          data: {
-            DiasGozados:
-              Number(controlVacacion.DiasGozados || 0) + diasDescontados,
-          },
-        });
+      if (esVacacion) {
+        await registrarDescuentoVacaciones(
+          tx,
+          createIncidenciaDto.IdEmpleado,
+          incidencia.IdIncidencia,
+          dias,
+        );
       }
 
       return incidencia;
@@ -140,25 +108,19 @@ export class IncidenciaService {
         data: dataToUpdate,
       });
 
-      // 2. Si es Vacaciones y se modificaron las fechas, actualizar ControlVacacion
+      // 2. Si es Vacaciones y cambiaron las fechas, revalidar y ajustar el descuento
       if (
         incidenciaActual.TipoIncidencia === 'Vacaciones' &&
         (dataToUpdate.FechaInicio || dataToUpdate.FechaFin)
       ) {
-        const fechaInicio = dataToUpdate.FechaInicio
-          ? new Date(dataToUpdate.FechaInicio)
-          : new Date(incidenciaActual.FechaInicio);
-        const fechaFin = dataToUpdate.FechaFin
-          ? new Date(dataToUpdate.FechaFin)
-          : new Date(incidenciaActual.FechaFin);
+        const nuevosDiasDescontados = await validarSolicitudVacaciones(
+          tx,
+          incidenciaActual.IdEmpleado,
+          new Date(incidenciaActualizada.FechaInicio),
+          new Date(incidenciaActualizada.FechaFin),
+          id,
+        );
 
-        const nuevosDiasDescontados =
-          Math.ceil(
-            (fechaFin.getTime() - fechaInicio.getTime()) /
-              (1000 * 60 * 60 * 24),
-          ) + 1;
-
-        // Obtener el detalle actual para ajustar los días
         const detalleActual = await tx.detalleControlVacacion.findFirst({
           where: { IdIncidencia: id, Activo: true },
         });
@@ -167,26 +129,23 @@ export class IncidenciaService {
           const diferenciaDias =
             nuevosDiasDescontados - Number(detalleActual.DiasDescontados || 0);
 
-          // Actualizar el detalle
           await tx.detalleControlVacacion.update({
             where: { IdDetalleVacacion: detalleActual.IdDetalleVacacion },
             data: { DiasDescontados: nuevosDiasDescontados },
           });
 
-          // Actualizar los días gozados en ControlVacacion
-          const controlVacacion = await tx.controlVacacion.findUnique({
+          await tx.controlVacacion.update({
             where: { IdControlVacacion: detalleActual.IdControlVacacion },
+            data: { DiasGozados: { increment: diferenciaDias } },
           });
-
-          if (controlVacacion) {
-            await tx.controlVacacion.update({
-              where: { IdControlVacacion: controlVacacion.IdControlVacacion },
-              data: {
-                DiasGozados:
-                  Number(controlVacacion.DiasGozados || 0) + diferenciaDias,
-              },
-            });
-          }
+        } else {
+          // Vacaciones registradas sin descuento (datos antiguos): se registra ahora
+          await registrarDescuentoVacaciones(
+            tx,
+            incidenciaActual.IdEmpleado,
+            id,
+            nuevosDiasDescontados,
+          );
         }
       }
 

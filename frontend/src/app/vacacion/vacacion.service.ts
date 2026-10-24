@@ -3,9 +3,21 @@ import { HttpClient } from '@angular/common/http';
 import { catchError, Observable } from 'rxjs';
 import { IncidenciaVacacion } from '../models/Vacacion.model';
 import { ErrorService } from '../services/error.service';
+import { environment } from '../../environments/environment';
 
 // Aquí define la URL de tu API
-const API_URL = 'http://localhost:4000/api/incidencia'; 
+const API_URL = `${environment.apiUrl}/incidencia`; 
+const API_CONTROL_URL = `${environment.apiUrl}/control-vacacion`;
+
+// Saldo calculado por el backend según la antigüedad del empleado
+export interface SaldoVacaciones {
+  fechaIngreso: string;
+  aniosServicio: number;
+  diasGanados: number;
+  diasGozados: number;
+  diasDisponibles: number;
+  proximoAniversario: string;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -33,6 +45,12 @@ export class VacacionesService {
 
   updateVacacion(id: number, vacacion: IncidenciaVacacion): Observable<IncidenciaVacacion> {
     return this.http.patch<IncidenciaVacacion>(`${API_URL}/${id}`, vacacion).pipe(
+      catchError(this.errorService.handleError)
+    );
+  }
+
+  getSaldo(idEmpleado: number): Observable<SaldoVacaciones> {
+    return this.http.get<SaldoVacaciones>(`${API_CONTROL_URL}/saldo/${idEmpleado}`).pipe(
       catchError(this.errorService.handleError)
     );
   }

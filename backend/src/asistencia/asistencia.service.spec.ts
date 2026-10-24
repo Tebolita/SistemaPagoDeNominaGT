@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { AsistenciaService } from './asistencia.service';
 
 describe('AsistenciaService', () => {
@@ -6,13 +7,13 @@ describe('AsistenciaService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [AsistenciaService],
+      providers: [AsistenciaService, { provide: PrismaService, useValue: {} }],
     }).compile();
 
     service = module.get<AsistenciaService>(AsistenciaService);
   });
 
-  it('should be defined', () => {
+  it('se crea con PrismaService inyectado', () => {
     expect(service).toBeDefined();
   });
 });

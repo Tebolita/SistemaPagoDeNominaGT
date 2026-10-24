@@ -21,6 +21,7 @@ export class UsuarioService {
         Contrasena: true,
         Clave: true,
         IdUsuario: true,
+        Activo: true,
         RolUsuario: { select: { NombreRol: true } },
       },
     });
@@ -35,6 +36,7 @@ export class UsuarioService {
         ...createUsuarioDto,
         Contrasena: await bcryptjs.hash(createUsuarioDto.Contrasena, 12),
         Clave: await bcryptjs.hash(createUsuarioDto.Clave, 12),
+        Activo: true,
       },
     });
 
@@ -52,6 +54,8 @@ export class UsuarioService {
   // Obtener todos los usuarios (Sin contraseñas)
   async findAll() {
     return await this.prismaService.usuario.findMany({
+      // Los usuarios dados de baja no se listan (Activo null se considera activo)
+      where: { NOT: { Activo: false } },
       select: {
         IdUsuario: true,
         Username: true,
@@ -140,11 +144,12 @@ export class UsuarioService {
   // Eliminar un usuario
   async remove(id: number) {
     // Validamos que exista
-    const usuario = await this.findById(id);
+    await this.findById(id);
 
+    // Baja lógica explícita: repetir la operación no reactiva al usuario
     const usuarioEliminado = await this.prismaService.usuario.update({
       where: { IdUsuario: id },
-      data: { Activo: !usuario.Activo },
+      data: { Activo: false, FechaEliminacion: new Date() },
     });
 
     return {

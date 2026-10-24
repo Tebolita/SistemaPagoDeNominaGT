@@ -3,12 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, catchError } from 'rxjs';
 import { Departamento } from '../models/Departamento.model';
 import { ErrorService } from './error.service';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DepartamentoService {
-  private apiUrl = 'http://localhost:4000/api/departamento';
+  private apiUrl = `${environment.apiUrl}/departamento`;
   private http = inject(HttpClient);
   private errorService = inject(ErrorService);
 

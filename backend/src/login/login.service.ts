@@ -33,6 +33,20 @@ export class LoginService {
       throw new UnauthorizedException('Tu usuario no es valido');
     }
 
+    // Un usuario dado de baja no puede iniciar sesión (Activo null se considera activo)
+    if (user.Activo === false) {
+      await this.auditoria.registrar({
+        idUsuario: user.IdUsuario,
+        username:  user.Username,
+        accion:    'LOGIN_FALLIDO',
+        ip,
+        userAgent,
+        exitoso:   false,
+        detalle:   'Usuario dado de baja',
+      });
+      throw new UnauthorizedException('Tu usuario no es valido');
+    }
+
     const isPasswordValid = await bcryptjs.compare(contrasena, user.Contrasena);
     const isClaveValid    = await bcryptjs.compare(clave.toString(), user.Clave!);
 

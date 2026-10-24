@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateControlVacacionDto } from './dto/create-control-vacacion.dto';
 import { UpdateControlVacacionDto } from './dto/update-control-vacacion.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { calcularSaldoVacaciones } from './saldo-vacaciones';
 
 @Injectable()
 export class ControlVacacionService {
@@ -24,6 +25,10 @@ export class ControlVacacionService {
     if (!control)
       throw new NotFoundException(`Control de vacaciones #${id} no encontrado`);
     return control;
+  }
+
+  async saldo(idEmpleado: number) {
+    return calcularSaldoVacaciones(this.prisma, idEmpleado);
   }
 
   // Obtiene los saldos de vacaciones de un empleado específico

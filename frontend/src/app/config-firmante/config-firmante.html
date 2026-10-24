@@ -57,7 +57,7 @@
             </div>
           } @else {
             <div class="flex flex-col gap-1">
-              <span class="text-xs text-slate-500 uppercase tracking-wide">Roles permitidos</span>
+              <span class="text-xs text-slate-400 uppercase tracking-wide">Roles permitidos</span>
               <div class="flex flex-wrap gap-1">
                 @for (rol of getRolesChips(c); track rol) {
                   <span class="text-xs bg-slate-700 text-slate-300 border border-slate-600 px-2 py-0.5 rounded-full">{{ rol }}</span>
@@ -70,9 +70,9 @@
           }
         </td>
         <td>
-          <p-button icon="pi pi-pencil" [rounded]="true" [text]="true" severity="warn"
+          <p-button ariaLabel="Editar" icon="pi pi-pencil" [rounded]="true" [text]="true" severity="warn"
             pTooltip="Editar" tooltipPosition="top" (onClick)="openEdit(c)"></p-button>
-          <p-button icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger"
+          <p-button ariaLabel="Eliminar" icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger"
             pTooltip="Eliminar" tooltipPosition="top" (onClick)="delete(c)"></p-button>
         </td>
       </tr>
@@ -92,7 +92,7 @@
       <label>Tipo de Firmante *</label>
       <input pInputText [(ngModel)]="form.TipoFirmante" placeholder="Ej: JEFE_AREA, GERENTE_FINANCIERO"
         class="w-full font-mono" [disabled]="isEdit" />
-      <p class="text-xs text-slate-500 mt-1">Se almacena en MAYÚSCULAS con guiones bajos.</p>
+      <p class="text-xs text-slate-400 mt-1">Se almacena en MAYÚSCULAS con guiones bajos.</p>
     </div>
 
     <!-- Descripción -->
@@ -129,7 +129,7 @@
       <!-- Selección de roles -->
       @if (!form.usarEmpleado) {
         <div>
-          <p class="text-xs text-slate-500 mb-2">Selecciona los roles que pueden firmar como este tipo:</p>
+          <p class="text-xs text-slate-400 mb-2">Selecciona los roles que pueden firmar como este tipo:</p>
           <div class="flex flex-wrap gap-2">
             @for (rol of rolesDisponibles; track rol) {
               <button type="button"
@@ -166,7 +166,7 @@
                 </div>
                 <div>
                   <div class="text-sm">{{ emp.Nombres }} {{ emp.Apellidos }}</div>
-                  <div class="text-xs text-slate-500">{{ emp.Puesto?.NombrePuesto || 'Sin puesto' }}</div>
+                  <div class="text-xs text-slate-400">{{ emp.Puesto?.NombrePuesto || 'Sin puesto' }}</div>
                 </div>
               </div>
             </ng-template>

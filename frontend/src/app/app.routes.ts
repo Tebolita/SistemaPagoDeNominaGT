@@ -39,12 +39,9 @@ import { PrestacionesComponent } from './prestaciones/prestaciones';
 import { PrestamosComponent } from './prestamos/prestamos';
 import { authGuard } from './auth.guard';
 import { roleGuard } from './role.guard';
+import { ROLES_NOMINA, ROLES_RRHH, ROLES_SEGURIDAD, ROLES_VENTAS_FINANZAS } from './roles-acceso';
 
-// ── Roles reutilizables ──────────────────────────────────────────────
-const ADMIN_ROLES      = ['ADMINISTRADOR', 'ADMIN'];
-const RRHH_ROLES       = ['ADMINISTRADOR', 'ADMIN', 'RRHH', 'RECURSOS HUMANOS'];
-const GERENTE_ROLES    = ['ADMINISTRADOR', 'ADMIN', 'GERENTE', 'RRHH', 'RECURSOS HUMANOS'];
-const FINANZAS_ROLES   = ['ADMINISTRADOR', 'ADMIN', 'GERENTE'];
+// Roles por módulo: definidos en roles-acceso.ts, compartidos con el menú lateral
 
 export const routes: Routes = [
     { path: '', redirectTo: 'home/inicio', pathMatch: 'full' },
@@ -64,7 +61,7 @@ export const routes: Routes = [
         path: 'recursoshumanos',
         component: Home,
         canActivate: [authGuard, roleGuard],
-        data: { roles: RRHH_ROLES },
+        data: { roles: ROLES_RRHH },
         children: [
             { path: 'inicio',      component: RecursosHumanos },
             { path: 'empleados',   component: Empleado        },
@@ -80,7 +77,7 @@ export const routes: Routes = [
         path: 'seguridad',
         component: Home,
         canActivate: [authGuard, roleGuard],
-        data: { roles: ADMIN_ROLES },
+        data: { roles: ROLES_SEGURIDAD },
         children: [
             { path: 'inicio',     component: Seguridad          },
             { path: 'usuarios',   component: Usuario            },
@@ -95,7 +92,7 @@ export const routes: Routes = [
         path: 'configuracion',
         component: Home,
         canActivate: [authGuard, roleGuard],
-        data: { roles: RRHH_ROLES },
+        data: { roles: ROLES_RRHH },
         children: [
             { path: 'inicio',         component: ConfiguracionInicio   },
             { path: 'departamentos',  component: DepartamentoComponent },
@@ -114,7 +111,7 @@ export const routes: Routes = [
         path: 'nomina',
         component: Home,
         canActivate: [authGuard, roleGuard],
-        data: { roles: GERENTE_ROLES },
+        data: { roles: ROLES_NOMINA },
         children: [
             { path: 'inicio',    component: NominaInicio        },
             { path: 'nominas',   component: NominaComponent     },
@@ -128,7 +125,7 @@ export const routes: Routes = [
         path: 'ventas',
         component: Home,
         canActivate: [authGuard, roleGuard],
-        data: { roles: FINANZAS_ROLES },
+        data: { roles: ROLES_VENTAS_FINANZAS },
         children: [
             { path: 'inicio',     component: VentaInicioComponent      },
             { path: 'clientes',   component: ClienteComponent          },
@@ -142,7 +139,7 @@ export const routes: Routes = [
         path: 'finanzas',
         component: Home,
         canActivate: [authGuard, roleGuard],
-        data: { roles: FINANZAS_ROLES },
+        data: { roles: ROLES_VENTAS_FINANZAS },
         children: [
             { path: 'inicio',       component: FinanzasInicioComponent      },
             { path: 'cuentas',      component: CuentaBancariaComponent      },

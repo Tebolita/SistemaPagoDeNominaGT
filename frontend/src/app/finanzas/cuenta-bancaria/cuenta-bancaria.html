@@ -24,7 +24,7 @@
               <span class="text-xs bg-slate-700 text-slate-300 px-2 py-0.5 rounded font-mono">{{ c.Moneda || 'GTQ' }}</span>
             </div>
             <div class="font-bold text-slate-100 text-sm">{{ c.NombreCuenta }}</div>
-            <div class="font-mono text-xs text-slate-500">{{ c.NumeroCuenta }}</div>
+            <div class="font-mono text-xs text-slate-400">{{ c.NumeroCuenta }}</div>
             <div class="text-xl font-bold mt-1" [ngClass]="Number(c.SaldoActual) >= 0 ? 'text-green-400' : 'text-red-400'">
               Q {{ Number(c.SaldoActual) | number:'1.2-2' }}
             </div>
@@ -71,12 +71,12 @@
         </td>
         <td>
           @if (c.Activo) {
-            <p-button icon="pi pi-pencil" [rounded]="true" [text]="true" severity="info"
+            <p-button ariaLabel="Editar" icon="pi pi-pencil" [rounded]="true" [text]="true" severity="info"
               pTooltip="Editar" tooltipPosition="top" (onClick)="editCuenta(c)"></p-button>
-            <p-button icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger"
+            <p-button ariaLabel="Desactivar" icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger"
               pTooltip="Desactivar" tooltipPosition="top" (onClick)="deleteCuenta(c)"></p-button>
           } @else {
-            <p-button icon="pi pi-refresh" [rounded]="true" [text]="true" severity="success"
+            <p-button ariaLabel="Reactivar" icon="pi pi-refresh" [rounded]="true" [text]="true" severity="success"
               pTooltip="Reactivar" tooltipPosition="top" (onClick)="reactivateCuenta(c)"></p-button>
           }
         </td>

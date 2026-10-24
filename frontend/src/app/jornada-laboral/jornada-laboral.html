@@ -34,7 +34,7 @@
           ></p-tag>
         </td>
         <td>
-          <p-button
+          <p-button ariaLabel="Editar"
             icon="pi pi-pencil"
             [rounded]="true"
             [text]="true"
@@ -43,7 +43,7 @@
             pTooltip="Editar"
             tooltipPosition="top"
           ></p-button>
-          <p-button
+          <p-button ariaLabel="Eliminar"
             icon="pi pi-trash"
             [rounded]="true"
             [text]="true"
@@ -76,7 +76,7 @@
     </div>
     <div>
       <label class="block text-sm font-medium mb-2">Horas Semanales</label>
-      <p-inputNumber [(ngModel)]="form.HorasSemanales" [min]="1" [max]="168" [minFractionDigits]="0" [maxFractionDigits]="2" class="w-full" [required]="true"></p-inputNumber>
+      <p-inputNumber [(ngModel)]="form.HorasSemanales" [min]="1" [max]="99.99" [minFractionDigits]="0" [maxFractionDigits]="2" class="w-full" [required]="true"></p-inputNumber>
     </div>
   </div>
   <ng-template pTemplate="footer">

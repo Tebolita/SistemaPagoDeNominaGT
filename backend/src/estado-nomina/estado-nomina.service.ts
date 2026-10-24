@@ -39,7 +39,9 @@ export class EstadoNominaService {
       where: { IdEstadoNomina: id },
     });
     if (!estado) {
-      throw new NotFoundException(`Estado de nómina con ID ${id} no encontrado`);
+      throw new NotFoundException(
+        `Estado de nómina con ID ${id} no encontrado`,
+      );
     }
     return estado;
   }
@@ -64,7 +66,8 @@ export class EstadoNominaService {
 
   /**
    * Devuelve los estados disponibles para una nómina:
-   * - Si el estado actual es EsFinal → ninguno
+   * - Si el estado actual es de cancelación → ninguno
+   * - Si es final de pago (p. ej. PAGADO) → solo los estados de cancelación (con reversión del pago)
    * - De lo contrario:
    *   1. Todos los estados con Orden = (mínimo Orden activo > actual)
    *   2. Más cualquier estado con EsCancelacion = true (cancelación disponible siempre)
@@ -81,34 +84,48 @@ export class EstadoNominaService {
 
     const estadoActual = nomina.EstadoNomina;
 
-    // Sin estado asignado: devolver todos los del primer nivel
+    // Sin estado asignado: solo el primer nivel del flujo (p. ej. BORRADOR), nunca un salto a PAGADO
     if (!estadoActual) {
       const todos = await this.prisma.estadoNomina.findMany({
         where: { Activo: true },
         orderBy: { Orden: 'asc' },
       });
-      return todos.filter(e => this.puedeCambiarAEstado(e, userRole));
+      const primerOrden = todos.find((e) => !e.EsCancelacion && !e.EsFinal)?.Orden;
+      return todos
+        .filter((e) => e.Orden === primerOrden && !e.EsCancelacion && !e.EsFinal)
+        .filter((e) => this.puedeCambiarAEstado(e, userRole));
     }
 
-    // Estado final → no hay más transiciones
-    if (estadoActual.EsFinal) return [];
+    // Una nómina cancelada ya no cambia de estado
+    if (estadoActual.EsCancelacion) return [];
 
     const todosActivos = await this.prisma.estadoNomina.findMany({
       where: { Activo: true },
       orderBy: { Orden: 'asc' },
     });
 
+    // Final de pago: solo puede cancelarse (el cambio revierte el egreso)
+    if (estadoActual.EsFinal) {
+      return todosActivos
+        .filter(
+          (e) =>
+            e.EsCancelacion && e.IdEstadoNomina !== estadoActual.IdEstadoNomina,
+        )
+        .filter((e) => this.puedeCambiarAEstado(e, userRole));
+    }
+
     // Siguiente nivel: mínimo Orden mayor al actual, excluyendo EsCancelacion y EsFinal libres
     const siguienteOrden = todosActivos
-      .filter(e => e.Orden > estadoActual.Orden && !e.EsCancelacion)
+      .filter((e) => e.Orden > estadoActual.Orden && !e.EsCancelacion)
       .sort((a, b) => a.Orden - b.Orden)[0]?.Orden;
 
-    const disponibles = todosActivos.filter(e =>
-      (siguienteOrden !== undefined && e.Orden === siguienteOrden) ||
-      (e.EsCancelacion && e.IdEstadoNomina !== estadoActual.IdEstadoNomina),
+    const disponibles = todosActivos.filter(
+      (e) =>
+        (siguienteOrden !== undefined && e.Orden === siguienteOrden) ||
+        (e.EsCancelacion && e.IdEstadoNomina !== estadoActual.IdEstadoNomina),
     );
 
-    return disponibles.filter(e => this.puedeCambiarAEstado(e, userRole));
+    return disponibles.filter((e) => this.puedeCambiarAEstado(e, userRole));
   }
 
   // ── Cambio de estado ──────────────────────────────────────────────────────
@@ -118,7 +135,8 @@ export class EstadoNominaService {
     idUsuario: number,
     userRole?: string,
   ) {
-    const { IdNomina, IdEstadoNuevo, Comentarios, NumeroBoleta, IdCuenta } = cambiarEstadoDto;
+    const { IdNomina, IdEstadoNuevo, Comentarios, NumeroBoleta, IdCuenta } =
+      cambiarEstadoDto;
 
     const nomina = await this.prisma.nominaEncabezado.findUnique({
       where: { IdNomina },
@@ -132,107 +150,159 @@ export class EstadoNominaService {
     const estadoNuevo = await this.findOne(IdEstadoNuevo);
 
     if (!this.puedeCambiarAEstado(estadoNuevo, userRole)) {
-      throw new ForbiddenException('No tiene permisos para cambiar al estado solicitado');
-    }
-
-    // Validar que la transición sea válida según la lógica de Orden
-    if (nomina.EstadoNomina) {
-      const estadosDisponibles = await this.getEstadosDisponibles(IdNomina, userRole);
-      const estaDisponible = estadosDisponibles.some(e => e.IdEstadoNomina === IdEstadoNuevo);
-      if (!estaDisponible) {
-        throw new BadRequestException('Transición de estado no permitida');
-      }
-    }
-
-    // ── Lógica especial: PAGADO ───────────────────────────────────────────
-    if (estadoNuevo.EsFinal && !estadoNuevo.EsCancelacion) {
-      if (!NumeroBoleta?.trim()) {
-        throw new BadRequestException(
-          'El número de boleta o transacción es requerido para registrar el pago',
-        );
-      }
-
-      const idCuentaFinal = IdCuenta ?? nomina.IdCuenta;
-      if (!idCuentaFinal) {
-        throw new BadRequestException(
-          'Debe seleccionar una cuenta bancaria desde la cual se descontará el pago de la nómina',
-        );
-      }
-
-      const nominaConDetalles = await this.prisma.nominaEncabezado.findUnique({
-        where: { IdNomina },
-        include: {
-          NominaDetalle: { where: { Activo: true } },
-          CuentaBancariaEmpresa: true,
-        },
-      });
-
-      const totalPago = (nominaConDetalles?.NominaDetalle ?? []).reduce(
-        (sum, d) => sum + parseFloat(d.LiquidoRecibir?.toString() ?? '0'),
-        0,
+      throw new ForbiddenException(
+        'No tiene permisos para cambiar al estado solicitado',
       );
+    }
 
-      const cuenta =
-        IdCuenta && IdCuenta !== nomina.IdCuenta
-          ? await this.prisma.cuentaBancariaEmpresa.findUnique({ where: { IdCuenta } })
-          : nominaConDetalles?.CuentaBancariaEmpresa;
+    // Validar la transición siempre, también cuando la nómina aún no tiene estado
+    const estadosDisponibles = await this.getEstadosDisponibles(
+      IdNomina,
+      userRole,
+    );
+    const estaDisponible = estadosDisponibles.some(
+      (e) => e.IdEstadoNomina === IdEstadoNuevo,
+    );
+    if (!estaDisponible) {
+      const desde = nomina.EstadoNomina?.NombreEstado ?? 'sin estado';
+      const permitidos = estadosDisponibles.map((e) => e.NombreEstado).join(', ') || 'ninguno';
+      throw new BadRequestException(
+        `Transición no permitida de ${desde} a ${estadoNuevo.NombreEstado}. Estados permitidos: ${permitidos}`,
+      );
+    }
 
-      if (!cuenta) throw new BadRequestException('Cuenta bancaria no encontrada');
+    const cancelaPagada = !!(
+      estadoNuevo.EsCancelacion && nomina.EstadoNomina?.EsFinal
+    );
+    if (cancelaPagada && !Comentarios?.trim()) {
+      throw new BadRequestException(
+        'Indica el motivo para cancelar una nómina que ya fue pagada',
+      );
+    }
 
-      const saldoActual = parseFloat(cuenta.SaldoActual?.toString() ?? '0');
-      if (saldoActual < totalPago) {
-        throw new BadRequestException(
-          `Saldo insuficiente en "${cuenta.NombreCuenta}". ` +
-          `Disponible: Q ${saldoActual.toFixed(2)}, Total nómina: Q ${totalPago.toFixed(2)}`,
+    // Pago, reversión, historial y cambio de estado ocurren juntos o no ocurren
+    return this.prisma.$transaction(async (tx) => {
+      // ── Lógica especial: PAGADO ───────────────────────────────────────────
+      if (estadoNuevo.EsFinal && !estadoNuevo.EsCancelacion) {
+        if (!NumeroBoleta?.trim()) {
+          throw new BadRequestException(
+            'El número de boleta o transacción es requerido para registrar el pago',
+          );
+        }
+
+        const idCuentaFinal = IdCuenta ?? nomina.IdCuenta;
+        if (!idCuentaFinal) {
+          throw new BadRequestException(
+            'Debe seleccionar una cuenta bancaria desde la cual se descontará el pago de la nómina',
+          );
+        }
+
+        const nominaConDetalles = await this.prisma.nominaEncabezado.findUnique(
+          {
+            where: { IdNomina },
+            include: {
+              NominaDetalle: { where: { Activo: true } },
+              CuentaBancariaEmpresa: true,
+            },
+          },
         );
+
+        const totalPago = (nominaConDetalles?.NominaDetalle ?? []).reduce(
+          (sum, d) => sum + parseFloat(d.LiquidoRecibir?.toString() ?? '0'),
+          0,
+        );
+
+        const cuenta =
+          IdCuenta && IdCuenta !== nomina.IdCuenta
+            ? await this.prisma.cuentaBancariaEmpresa.findUnique({
+                where: { IdCuenta },
+              })
+            : nominaConDetalles?.CuentaBancariaEmpresa;
+
+        if (!cuenta)
+          throw new BadRequestException('Cuenta bancaria no encontrada');
+
+        const saldoActual = parseFloat(cuenta.SaldoActual?.toString() ?? '0');
+        if (saldoActual < totalPago) {
+          throw new BadRequestException(
+            `Saldo insuficiente en "${cuenta.NombreCuenta}". ` +
+              `Disponible: Q ${saldoActual.toFixed(2)}, Total nómina: Q ${totalPago.toFixed(2)}`,
+          );
+        }
+
+        await tx.cuentaBancariaEmpresa.update({
+          where: { IdCuenta: idCuentaFinal },
+          data: { SaldoActual: { decrement: totalPago } },
+        });
+
+        await tx.movimientoFinanciero.create({
+          data: {
+            IdCuenta: idCuentaFinal,
+            TipoMovimiento: 'EGRESO',
+            Categoria: 'NOMINA',
+            Subcategoria: 'PAGO_NOMINA',
+            Monto: totalPago,
+            FechaMovimiento: new Date(),
+            Referencia: NumeroBoleta.trim(),
+            IdUsuarioRegistra: idUsuario,
+            IdNomina,
+            Notas: `Pago nómina ${String(nomina.Mes).padStart(2, '0')}/${nomina.Anio} — Boleta: ${NumeroBoleta.trim()}`,
+            Activo: true,
+          },
+        });
       }
 
-      await this.prisma.cuentaBancariaEmpresa.update({
-        where: { IdCuenta: idCuentaFinal },
-        data: { SaldoActual: { decrement: totalPago } },
-      });
+      // ── Cancelación de una nómina pagada: devolver el egreso a la cuenta ─
+      if (estadoNuevo.EsCancelacion) {
+        const egresos = await tx.movimientoFinanciero.findMany({
+          where: { IdNomina, TipoMovimiento: 'EGRESO', Activo: true },
+        });
 
-      await this.prisma.movimientoFinanciero.create({
+        for (const egreso of egresos) {
+          await tx.cuentaBancariaEmpresa.update({
+            where: { IdCuenta: egreso.IdCuenta },
+            data: { SaldoActual: { increment: Number(egreso.Monto) } },
+          });
+          await tx.movimientoFinanciero.update({
+            where: { IdMovimiento: egreso.IdMovimiento },
+            data: {
+              Activo: false,
+              FechaEliminacion: new Date(),
+              Notas:
+                `${egreso.Notas ?? ''} — Revertido por cancelación: ${Comentarios?.trim() ?? ''}`.slice(
+                  0,
+                  500,
+                ),
+            },
+          });
+        }
+      }
+
+      // ── Historial ─────────────────────────────────────────────────────────
+      await tx.historialEstadoNomina.create({
         data: {
-          IdCuenta: idCuentaFinal,
-          TipoMovimiento: 'EGRESO',
-          Categoria: 'NOMINA',
-          Subcategoria: 'PAGO_NOMINA',
-          Monto: totalPago,
-          FechaMovimiento: new Date(),
-          Referencia: NumeroBoleta.trim(),
-          IdUsuarioRegistra: idUsuario,
           IdNomina,
-          Notas: `Pago nómina ${String(nomina.Mes).padStart(2, '0')}/${nomina.Anio} — Boleta: ${NumeroBoleta.trim()}`,
+          IdEstadoAnterior: nomina.IdEstadoActual,
+          IdEstadoNuevo,
+          IdUsuarioCambio: idUsuario,
+          FechaCambio: new Date(),
+          Comentarios,
           Activo: true,
         },
       });
-    }
 
-    // ── Historial ─────────────────────────────────────────────────────────
-    await this.prisma.historialEstadoNomina.create({
-      data: {
-        IdNomina,
-        IdEstadoAnterior: nomina.IdEstadoActual,
-        IdEstadoNuevo,
-        IdUsuarioCambio: idUsuario,
-        FechaCambio: new Date(),
-        Comentarios,
-        Activo: true,
-      },
-    });
+      const updateData: any = {
+        IdEstadoActual: IdEstadoNuevo,
+        Estado: estadoNuevo.NombreEstado,
+      };
+      if (NumeroBoleta?.trim()) updateData.NumeroBoleta = NumeroBoleta.trim();
+      if (IdCuenta) updateData.IdCuenta = IdCuenta;
 
-    const updateData: any = {
-      IdEstadoActual: IdEstadoNuevo,
-      Estado: estadoNuevo.NombreEstado,
-    };
-    if (NumeroBoleta?.trim()) updateData.NumeroBoleta = NumeroBoleta.trim();
-    if (IdCuenta) updateData.IdCuenta = IdCuenta;
-
-    return this.prisma.nominaEncabezado.update({
-      where: { IdNomina },
-      data: updateData,
-      include: { EstadoNomina: true },
+      return tx.nominaEncabezado.update({
+        where: { IdNomina },
+        data: updateData,
+        include: { EstadoNomina: true },
+      });
     });
   }
 
@@ -260,6 +330,12 @@ export class EstadoNominaService {
     if (!estado.RequiereAprobacion) return true;
     if (!userRole) return false;
     const r = userRole.trim().toUpperCase().replace(/\s+/g, '_');
-    return ['ADMINISTRADOR', 'ADMIN', 'GERENTE', 'RRHH', 'RECURSOS_HUMANOS'].includes(r);
+    return [
+      'ADMINISTRADOR',
+      'ADMIN',
+      'GERENTE',
+      'RRHH',
+      'RECURSOS_HUMANOS',
+    ].includes(r);
   }
 }

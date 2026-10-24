@@ -20,19 +20,19 @@
   <!-- ── Barra de empleados (scroll horizontal) ────────────────────── -->
   <div class="emp-strip-wrapper">
     <div class="emp-strip-search">
-      <i class="pi pi-search text-slate-500"></i>
+      <i class="pi pi-search text-slate-400"></i>
       <input
         type="text"
         [value]="busqueda()"
         (input)="busqueda.set($any($event.target).value)"
         placeholder="Buscar empleado..."
-        class="bg-transparent text-slate-300 outline-none text-sm w-full placeholder:text-slate-600"
+        class="bg-transparent text-slate-300 outline-none text-sm w-full placeholder:text-slate-400"
       />
     </div>
 
     <div class="emp-strip">
       @if (empleadosFiltrados.length === 0) {
-        <span class="text-slate-500 text-sm self-center px-4">Sin resultados</span>
+        <span class="text-slate-400 text-sm self-center px-4">Sin resultados</span>
       }
       @for (user of empleadosFiltrados; track user.IdEmpleado) {
         <button
@@ -88,7 +88,7 @@
             (onClick)="onUpdateUser()"
             pTooltip="Guardar cambios"
           ></p-button>
-          <p-button
+          <p-button [ariaLabel]="emp.Activo ? 'Dar de baja' : 'Reactivar'"
             [icon]="emp.Activo ? 'pi pi-user-minus' : 'pi pi-user-plus'"
             [severity]="emp.Activo ? 'danger' : 'success'"
             [outlined]="true"
@@ -271,7 +271,7 @@
                   <td>{{ sal.FechaFinVigencia ? (sal.FechaFinVigencia | date:'dd/MM/yyyy') : 'Actual' }}</td>
                   <td><p-tag [value]="sal.Activo ? 'Activo' : 'Inactivo'" [severity]="sal.Activo ? 'success' : 'secondary'"></p-tag></td>
                   <td>
-                    <p-button [icon]="sal.Activo ? 'pi pi-times' : 'pi pi-check'"
+                    <p-button [ariaLabel]="sal.Activo ? 'Desactivar salario' : 'Activar salario'" [icon]="sal.Activo ? 'pi pi-times' : 'pi pi-check'"
                       [severity]="sal.Activo ? 'danger' : 'success'" [rounded]="true" [text]="true"
                       (onClick)="toggleSalario(sal)" [disabled]="loading()"></p-button>
                   </td>
@@ -295,11 +295,11 @@
               <ng-template pTemplate="body" let-v>
                 <tr>
                   <td class="text-sm">
-                    <i class="pi pi-calendar mr-1 text-slate-500"></i>
+                    <i class="pi pi-calendar mr-1 text-slate-400"></i>
                     {{ v.FechaInicio | date:'dd/MM/yyyy' }}
                   </td>
                   <td class="text-sm">
-                    <i class="pi pi-calendar mr-1 text-slate-500"></i>
+                    <i class="pi pi-calendar mr-1 text-slate-400"></i>
                     {{ v.FechaFin | date:'dd/MM/yyyy' }}
                   </td>
                   <td>
@@ -340,7 +340,7 @@
                   </td>
                   <td>
                     @if (a.HorasExtra > 0) { <p-tag severity="info" [value]="'+' + a.HorasExtra + ' hrs'"></p-tag> }
-                    @else { <span class="text-slate-500">0</span> }
+                    @else { <span class="text-slate-400">0</span> }
                   </td>
                 </tr>
               </ng-template>
@@ -352,7 +352,7 @@
     </div>
   } @else {
     <div class="empty-state">
-      <i class="pi pi-users text-4xl text-slate-600 mb-3"></i>
+      <i class="pi pi-users text-4xl text-slate-400 mb-3"></i>
       <p class="text-slate-400">Selecciona un empleado para ver sus detalles</p>
     </div>
   }

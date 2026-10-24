@@ -5,7 +5,7 @@
     <ng-template #start>
       <span class="menu-logo inline-flex items-center gap-2 px-3 py-3">
         @if (empresa()?.Logo) {
-          <img [src]="empresa()!.Logo" width="40" height="40" class="block rounded-lg object-contain"
+          <img [src]="empresa()!.Logo" [alt]="'Logo de ' + (empresa()?.NombreEmpresa || 'la empresa')" width="40" height="40" class="block rounded-lg object-contain"
             style="max-width:40px;max-height:40px;" (error)="empresa.set({ ...empresa()!, Logo: '' })" />
         } @else {
           <div class="menu-logo-fallback"><i class="pi pi-building-columns"></i></div>
@@ -49,7 +49,7 @@
               />
             </div>
 
-            <i class="pi pi-ellipsis-v text-slate-500 flex-shrink-0 text-xs"></i>
+            <i class="pi pi-ellipsis-v text-slate-400 flex-shrink-0 text-xs"></i>
           </div>
         </button>
       </div>

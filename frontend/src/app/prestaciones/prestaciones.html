@@ -127,9 +127,9 @@
             </td>
             <td class="text-center">
               @if (liq.Estado !== 'PAGADA') {
-                <p-button icon="pi pi-check" [rounded]="true" [text]="true" severity="success" pTooltip="Marcar pagada" (onClick)="marcarPagada(liq)"></p-button>
+                <p-button ariaLabel="Marcar pagada" icon="pi pi-check" [rounded]="true" [text]="true" severity="success" pTooltip="Marcar pagada" (onClick)="marcarPagada(liq)"></p-button>
               }
-              <p-button icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger" pTooltip="Eliminar" (onClick)="eliminar(liq)"></p-button>
+              <p-button ariaLabel="Eliminar" icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger" pTooltip="Eliminar" (onClick)="eliminar(liq)"></p-button>
             </td>
           </tr>
         </ng-template>

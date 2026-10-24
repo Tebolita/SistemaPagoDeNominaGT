@@ -10,6 +10,7 @@ import { RouterModule, Router, NavigationStart, NavigationEnd } from '@angular/r
 import { Subscription } from 'rxjs';
 import { LoginService } from '../services/login.service';
 import { ConfigEmpresaService, ConfigEmpresa } from '../services/config-empresa.service';
+import { ROLES_NOMINA, ROLES_RRHH, ROLES_SEGURIDAD, ROLES_VENTAS_FINANZAS, tieneRol } from '../roles-acceso';
 
 @Component({
   selector: 'app-menu',
@@ -101,16 +102,11 @@ export class MenuPrincipal implements OnInit, OnDestroy {
     return 'secondary';
   }
 
-  // Mismo criterio que roleGuard en app.routes.ts
-  private hasRole(allowed: string[]): boolean {
-    const r = this.role().trim().toUpperCase().replace(/\s+/g, '_');
-    return allowed.some(a => a.toUpperCase().replace(/\s+/g, '_') === r);
-  }
-
-  private get isAdmin()    { return this.hasRole(['ADMINISTRADOR', 'ADMIN']); }
-  private get isRRHH()     { return this.hasRole(['ADMINISTRADOR', 'ADMIN', 'RRHH', 'RECURSOS_HUMANOS', 'RECURSOS HUMANOS']); }
-  private get isGerente()  { return this.hasRole(['ADMINISTRADOR', 'ADMIN', 'GERENTE', 'RRHH', 'RECURSOS_HUMANOS', 'RECURSOS HUMANOS']); }
-  private get isFinanzas() { return this.hasRole(['ADMINISTRADOR', 'ADMIN', 'GERENTE']); }
+  // Mismas listas que usan las rutas (roles-acceso.ts), para que menú y roleGuard coincidan
+  private get accesoSeguridad()        { return tieneRol(this.role(), ROLES_SEGURIDAD); }
+  private get accesoRRHH()             { return tieneRol(this.role(), ROLES_RRHH); }
+  private get accesoNomina()           { return tieneRol(this.role(), ROLES_NOMINA); }
+  private get accesoVentasFinanzas()   { return tieneRol(this.role(), ROLES_VENTAS_FINANZAS); }
 
   private buildMenu() {
     const menu: MenuItem[] = [
@@ -131,7 +127,7 @@ export class MenuPrincipal implements OnInit, OnDestroy {
       },
 
       // Seguridad — solo ADMIN
-      ...(this.isAdmin ? [{
+      ...(this.accesoSeguridad ? [{
         label: 'Seguridad',
         items: [
           { label: 'Inicio',     icon: 'pi pi-home',       routerLink: '/seguridad/inicio'     },
@@ -143,7 +139,7 @@ export class MenuPrincipal implements OnInit, OnDestroy {
       }] : []),
 
       // Recursos Humanos — ADMIN + RRHH
-      ...(this.isRRHH ? [{
+      ...(this.accesoRRHH ? [{
         label: 'Recursos Humanos',
         items: [
           { label: 'Inicio',      icon: 'pi pi-home',  routerLink: '/recursoshumanos/inicio'      },
@@ -156,7 +152,7 @@ export class MenuPrincipal implements OnInit, OnDestroy {
       }] : []),
 
       // Configuración — ADMIN + RRHH
-      ...(this.isRRHH ? [{
+      ...(this.accesoRRHH ? [{
         label: 'Configuración',
         items: [
           { label: 'Inicio',              icon: 'pi pi-home',       routerLink: '/configuracion/inicio'         },
@@ -172,7 +168,7 @@ export class MenuPrincipal implements OnInit, OnDestroy {
       }] : []),
 
       // Nómina — ADMIN + RRHH + GERENTE
-      ...(this.isGerente ? [{
+      ...(this.accesoNomina ? [{
         label: 'Nómina',
         items: [
           { label: 'Inicio',         icon: 'pi pi-home',         routerLink: '/nomina/inicio'   },
@@ -182,7 +178,7 @@ export class MenuPrincipal implements OnInit, OnDestroy {
       }] : []),
 
       // Ventas — ADMIN + GERENTE
-      ...(this.isFinanzas ? [{
+      ...(this.accesoVentasFinanzas ? [{
         label: 'Ventas',
         items: [
           { label: 'Inicio',              icon: 'pi pi-home',          routerLink: '/ventas/inicio'    },
@@ -193,7 +189,7 @@ export class MenuPrincipal implements OnInit, OnDestroy {
       }] : []),
 
       // Finanzas — ADMIN + GERENTE
-      ...(this.isFinanzas ? [{
+      ...(this.accesoVentasFinanzas ? [{
         label: 'Finanzas',
         items: [
           { label: 'Inicio',            icon: 'pi pi-home',                   routerLink: '/finanzas/inicio'      },

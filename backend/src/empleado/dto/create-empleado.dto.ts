@@ -8,6 +8,8 @@ import {
   IsOptional,
   MaxLength,
   IsNumberString,
+  Matches,
+  ValidateIf,
 } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
@@ -96,10 +98,14 @@ export class CreateEmpleadoDto {
   @IsNumber()
   IdDepartamento?: number;
 
-  // Agregado: Opcional, cuenta del banco
-  @ApiPropertyOptional()
-  @IsOptional()
+  // Agregado: Opcional, cuenta del banco. Vacía se permite; si viene, solo números y guiones
+  @ApiPropertyOptional({ description: 'Solo números y guiones, p. ej. 3020-012345-6' })
+  @ValidateIf((o) => o.CuentaBancaria !== undefined && o.CuentaBancaria !== null && o.CuentaBancaria !== '')
   @IsString()
+  @MaxLength(50)
+  @Matches(/^\d+(-\d+)*$/, {
+    message: 'La cuenta bancaria solo puede contener números y guiones',
+  })
   CuentaBancaria?: string;
 
   @ApiPropertyOptional()

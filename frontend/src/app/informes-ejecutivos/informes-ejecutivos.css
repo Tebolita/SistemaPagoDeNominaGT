@@ -24,7 +24,7 @@
   margin: 0 0 4px;
 }
 
-.eje-sub { font-size: 0.85rem; color: #475569; margin: 0; }
+.eje-sub { font-size: 0.85rem; color: #94a3b8; margin: 0; }
 
 .eje-loading, .eje-empty {
   display: flex;
@@ -32,7 +32,7 @@
   align-items: center;
   justify-content: center;
   padding: 5rem 2rem;
-  color: #475569;
+  color: #94a3b8;
   text-align: center;
 }
 
@@ -98,7 +98,7 @@
 
 .kpi-label {
   font-size: 0.7rem;
-  color: #64748b;
+  color: #94a3b8;
   margin-top: 4px;
   white-space: nowrap;
   overflow: hidden;
@@ -134,7 +134,7 @@
 
 .ultima-nomina-periodo {
   font-size: 0.8rem;
-  color: #64748b;
+  color: #94a3b8;
   font-family: monospace;
 }
 
@@ -145,7 +145,7 @@
 }
 
 .un-stat { display: flex; flex-direction: column; align-items: flex-end; }
-.un-stat .label { font-size: 0.68rem; color: #475569; text-transform: uppercase; letter-spacing: 0.04em; }
+.un-stat .label { font-size: 0.68rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.04em; }
 .un-stat .value { font-size: 0.9rem; font-weight: 600; color: #f1f5f9; }
 .un-stat--highlight { border-left: 1px solid #1e3254; padding-left: 2rem; }
 
@@ -183,7 +183,7 @@
 
 .chart-hint {
   font-size: 0.68rem;
-  color: #475569;
+  color: #94a3b8;
   font-weight: 400;
   text-transform: none;
   letter-spacing: 0;

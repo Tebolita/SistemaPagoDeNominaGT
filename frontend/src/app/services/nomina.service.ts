@@ -3,12 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, catchError } from 'rxjs';
 import { FirmaNomina, Nomina, NominaCalculo, NominaMasivaResultado } from '../models/Nomina.model';
 import { ErrorService } from './error.service';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class NominaService {
-  private apiUrl = 'http://localhost:4000/api/nomina';
+  private apiUrl = `${environment.apiUrl}/nomina`;
 
   constructor(
     private http: HttpClient,

@@ -81,7 +81,7 @@ export class JornadaLaboralComponent implements OnInit {
     const horasDiarias = Number(this.form.HorasDiarias);
     const horasSemanales = Number(this.form.HorasSemanales);
 
-    if (!this.form.NombreJornada || isNaN(horasDiarias) || isNaN(horasSemanales) || horasDiarias < 1 || horasDiarias > 24 || horasSemanales < 1 || horasSemanales > 168) {
+    if (!this.form.NombreJornada || isNaN(horasDiarias) || isNaN(horasSemanales) || horasDiarias < 1 || horasDiarias > 24 || horasSemanales < 1 || horasSemanales > 99.99) {
       this.messageService.add({ severity: 'warn', summary: 'Validación', detail: 'Completa todos los campos con valores válidos' });
       return;
     }

@@ -62,7 +62,7 @@
               <td class="text-sm text-slate-400">{{ sal.FechaInicioVigencia | date:'dd/MM/yyyy' }}</td>
               <td class="text-sm text-slate-400">
                 @if (sal.FechaFinVigencia) { {{ sal.FechaFinVigencia | date:'dd/MM/yyyy' }} }
-                @else { <span class="text-slate-600">—</span> }
+                @else { <span class="text-slate-400">—</span> }
               </td>
               <td>
                 @if (!sal.FechaFinVigencia) {
@@ -209,7 +209,7 @@
               <td class="text-right text-slate-300">{{ a.DiasConSalida }}</td>
               <td class="text-right font-semibold text-orange-400">
                 @if (a.TotalHorasExtra > 0) { {{ a.TotalHorasExtra | number:'1.2-2' }} hrs }
-                @else { <span class="text-slate-600">—</span> }
+                @else { <span class="text-slate-400">—</span> }
               </td>
             </tr>
           </ng-template>

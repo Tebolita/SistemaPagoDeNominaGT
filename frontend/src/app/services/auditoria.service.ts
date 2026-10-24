@@ -3,10 +3,11 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, catchError } from 'rxjs';
 import { AuditoriaResponse, AuditoriaResumen } from '../models/Auditoria.model';
 import { ErrorService } from './error.service';
+import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class AuditoriaService {
-  private apiUrl = 'http://localhost:4000/api/auditoria';
+  private apiUrl = `${environment.apiUrl}/auditoria`;
   private http   = inject(HttpClient);
   private errorService = inject(ErrorService);
 

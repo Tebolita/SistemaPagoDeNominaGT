@@ -3,12 +3,13 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, catchError } from 'rxjs';
 import { MovimientoFinanciero, BalanceInfo } from '../models/MovimientoFinanciero.model';
 import { ErrorService } from './error.service';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MovimientoFinancieroService {
-  private apiUrl = 'http://localhost:4000/api/movimiento-financiero';
+  private apiUrl = `${environment.apiUrl}/movimiento-financiero`;
   private http = inject(HttpClient);
   private errorService = inject(ErrorService);
 
@@ -41,6 +42,22 @@ export class MovimientoFinancieroService {
     return this.http.get<MovimientoFinanciero[]>(this.apiUrl, { params }).pipe(
       catchError(this.errorService.handleError)
     );
+  }
+
+  // Página del listado con los mismos filtros (el servidor ordena del más reciente al más antiguo)
+  getPaginado(
+    page: number,
+    limit: number,
+    idCuenta?: number,
+    tipoMovimiento?: string,
+  ): Observable<{ total: number; page: number; limit: number; registros: MovimientoFinanciero[] }> {
+    let params = new HttpParams().set('page', page).set('limit', limit);
+    if (idCuenta) params = params.set('idCuenta', idCuenta.toString());
+    if (tipoMovimiento) params = params.set('tipoMovimiento', tipoMovimiento);
+
+    return this.http
+      .get<{ total: number; page: number; limit: number; registros: MovimientoFinanciero[] }>(this.apiUrl, { params })
+      .pipe(catchError(this.errorService.handleError));
   }
 
   getBalance(idCuenta: number): Observable<BalanceInfo> {

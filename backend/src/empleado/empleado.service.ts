@@ -1,4 +1,4 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import { Injectable, BadRequestException, ConflictException } from '@nestjs/common';
 import { CreateEmpleadoDto } from './dto/create-empleado.dto';
 import { UpdateEmpleadoDto } from './dto/update-empleado.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -7,19 +7,47 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class EmpleadoService {
   constructor(private prismaService: PrismaService) {}
 
+  // Rechaza DPI o NIT ya registrados en otro empleado, indicando el campo repetido
+  private async verificarDuplicados(dpi?: string, nit?: string, excludeIdEmpleado?: number) {
+    const excluir = excludeIdEmpleado ? { IdEmpleado: { not: excludeIdEmpleado } } : {};
+
+    if (dpi) {
+      const conDpi = await this.prismaService.empleado.findFirst({
+        where: { DPI: dpi, ...excluir },
+        select: { IdEmpleado: true },
+      });
+      if (conDpi) throw new ConflictException(`Ya existe un empleado con el DPI ${dpi}.`);
+    }
+
+    if (nit) {
+      const conNit = await this.prismaService.empleado.findFirst({
+        where: { NIT: nit, ...excluir },
+        select: { IdEmpleado: true },
+      });
+      if (conNit) throw new ConflictException(`Ya existe un empleado con el NIT ${nit}.`);
+    }
+  }
+
   async create(createEmpleadoDto: CreateEmpleadoDto) {
+    await this.verificarDuplicados(createEmpleadoDto.DPI, createEmpleadoDto.NIT);
+
     const {
       IdPuesto,
       IdJornada,
       IdBanco,
+      IdDepartamento,
       CuentaBancaria,
       Estado,
+      FechaIngresa,
       ...dataToCreate
     } = createEmpleadoDto as any;
 
     const nuevoEmpleado = await this.prismaService.empleado.create({
       data: {
         ...dataToCreate,
+
+        // Prisma exige FechaIngresa (el DEFAULT de la BD no está en el schema)
+        FechaIngresa: FechaIngresa ?? new Date(),
 
         ...(Estado !== undefined && { Activo: Estado }),
 
@@ -31,6 +59,9 @@ export class EmpleadoService {
           JornadaLaboral: { connect: { IdJornada: Number(IdJornada) } },
         }),
         ...(IdBanco && { Banco: { connect: { IdBanco: Number(IdBanco) } } }),
+        ...(IdDepartamento && {
+          Departamento: { connect: { IdDepartamento: Number(IdDepartamento) } },
+        }),
         ...(CuentaBancaria !== undefined && { CuentaBancaria }),
       },
       select: {
@@ -96,6 +127,13 @@ export class EmpleadoService {
 
   async update(id: number, updateEmpleadoDto: UpdateEmpleadoDto) {
     const empleadoActual = await this.findOne(id);
+
+    // Solo se valida lo que cambia, para no bloquear la edición de registros antiguos
+    await this.verificarDuplicados(
+      updateEmpleadoDto.DPI !== empleadoActual?.DPI ? updateEmpleadoDto.DPI : undefined,
+      updateEmpleadoDto.NIT !== empleadoActual?.NIT ? updateEmpleadoDto.NIT : undefined,
+      id,
+    );
 
     const {
       IdEmpleado,

@@ -48,7 +48,7 @@
             <div class="emp-avatar">{{ p.Empleado?.Nombres?.[0] ?? '?' }}</div>
             <div>
               <div class="text-sm font-medium text-slate-200">{{ p.Empleado?.Nombres }} {{ p.Empleado?.Apellidos }}</div>
-              @if (p.Descripcion) { <div class="text-xs text-slate-500">{{ p.Descripcion }}</div> }
+              @if (p.Descripcion) { <div class="text-xs text-slate-400">{{ p.Descripcion }}</div> }
             </div>
           </div>
         </td>
@@ -68,10 +68,10 @@
         <td class="text-sm text-slate-400">{{ p.FechaAprobacion | date:'dd/MM/yyyy' }}</td>
         <td><p-tag [value]="p.Estado" [severity]="getSeveridadEstado(p.Estado)"></p-tag></td>
         <td class="text-center">
-          <p-button icon="pi pi-list" [rounded]="true" [text]="true" severity="info"
+          <p-button ariaLabel="Ver cuotas" icon="pi pi-list" [rounded]="true" [text]="true" severity="info"
             pTooltip="Ver cuotas" (onClick)="verCuotas(p)"></p-button>
           @if (p.Estado === 'ACTIVO') {
-            <p-button icon="pi pi-ban" [rounded]="true" [text]="true" severity="danger"
+            <p-button ariaLabel="Cancelar" icon="pi pi-ban" [rounded]="true" [text]="true" severity="danger"
               pTooltip="Cancelar" (onClick)="cancelarPrestamo(p)"></p-button>
           }
         </td>
@@ -165,7 +165,7 @@
               @if (c.Estado === 'PAGADO') {
                 <div class="flex items-center gap-2">
                   <p-tag value="Pagado" severity="success"></p-tag>
-                  <span class="text-xs text-slate-500">{{ c.FechaPago | date:'dd/MM/yy' }}</span>
+                  <span class="text-xs text-slate-400">{{ c.FechaPago | date:'dd/MM/yy' }}</span>
                 </div>
               } @else {
                 <p-tag value="Pendiente" severity="warn"></p-tag>

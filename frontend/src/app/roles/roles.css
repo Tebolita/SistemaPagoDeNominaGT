@@ -10,7 +10,7 @@
 :host ::ng-deep .p-datatable .p-datatable-tbody > tr { background: #1e293b !important; color: #e2e8f0 !important; border-color: #334155 !important; transition: background 0.12s; }
 :host ::ng-deep .p-datatable .p-datatable-tbody > tr:hover { background: #253347 !important; }
 :host ::ng-deep .p-datatable .p-datatable-tbody > tr > td { border-color: #334155 !important; color: #e2e8f0 !important; }
-:host ::ng-deep .p-datatable .p-datatable-emptymessage > td { background: #1e293b !important; color: #64748b !important; }
+:host ::ng-deep .p-datatable .p-datatable-emptymessage > td { background: #1e293b !important; color: #94a3b8 !important; }
 :host ::ng-deep .p-paginator { background: #0f172a !important; border-color: #334155 !important; color: #94a3b8 !important; }
 :host ::ng-deep .p-paginator .p-paginator-page.p-highlight { background: #3b82f6 !important; color: #fff !important; }
 
@@ -49,7 +49,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: #475569;
+  color: #94a3b8;
   padding: 0.25rem 0.75rem 0.5rem;
   margin-bottom: 0.25rem;
 }
@@ -119,7 +119,7 @@
   border-radius: 999px;
   padding: 1px 6px;
   flex-shrink: 0;
-  color: #64748b;
+  color: #94a3b8;
 }
 .badge--completo { background: rgba(52,211,153,0.15); border-color: #34d399; color: #6ee7b7; }
 .badge--parcial  { background: rgba(251,191,36,0.15);  border-color: #fbbf24; color: #fde68a; }
@@ -183,7 +183,7 @@
 
 .panel-modulo-sub {
   font-size: 0.72rem;
-  color: #64748b;
+  color: #94a3b8;
   margin: 2px 0 0;
 }
 
@@ -225,7 +225,7 @@
   cursor: pointer;
   text-align: left;
   transition: all 0.15s;
-  color: #64748b;
+  color: #94a3b8;
   width: 100%;
 }
 
@@ -266,7 +266,7 @@
   font-size: 0.9rem;
   flex-shrink: 0;
   margin-top: 1px;
-  color: #475569;
+  color: #94a3b8;
   transition: color 0.15s;
 }
 
@@ -295,13 +295,13 @@
 
 .chip-desc {
   font-size: 0.68rem;
-  color: #475569;
+  color: #94a3b8;
   line-height: 1.3;
   transition: color 0.15s;
 }
 
 .accion-chip--active .chip-desc {
-  color: #64748b;
+  color: #94a3b8;
 }
 
 /* Counter en footer */

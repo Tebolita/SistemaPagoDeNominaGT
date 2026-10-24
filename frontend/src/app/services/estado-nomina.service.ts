@@ -3,12 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, catchError } from 'rxjs';
 import { EstadoNomina, HistorialEstadoNomina, CambiarEstadoNominaDto } from '../models/EstadoNomina.model';
 import { ErrorService } from './error.service';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class EstadoNominaService {
-  private apiUrl = 'http://localhost:4000/api/estado-nomina';
+  private apiUrl = `${environment.apiUrl}/estado-nomina`;
 
   constructor(
     private http: HttpClient,

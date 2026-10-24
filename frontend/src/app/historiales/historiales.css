@@ -26,25 +26,25 @@
 
 .hist-sub {
   font-size: 0.85rem;
-  color: #475569;
+  color: #94a3b8;
   margin: 0;
 }
 
 /* Tabs */
 :host ::ng-deep .p-tabs { background: transparent !important; }
 :host ::ng-deep .p-tablist { background: #131f35 !important; border-color: #1e3254 !important; border-radius: 10px 10px 0 0; }
-:host ::ng-deep .p-tab { color: #64748b !important; }
+:host ::ng-deep .p-tab { color: #94a3b8 !important; }
 :host ::ng-deep .p-tab.p-tab-active { color: #60a5fa !important; border-bottom-color: #3b82f6 !important; }
 :host ::ng-deep .p-tabpanels { background: #131f35 !important; border: 1px solid #1e3254 !important; border-top: none; border-radius: 0 0 10px 10px; padding: 1.25rem; }
 
 /* Table */
 :host ::ng-deep .p-datatable { background: #0f1f35 !important; border-radius: 8px; overflow: hidden; border: 1px solid #1e3254 !important; }
-:host ::ng-deep .p-datatable .p-datatable-thead > tr > th { background: #0a1628 !important; color: #475569 !important; border-color: #1e3254 !important; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; padding: 0.7rem 1rem; }
+:host ::ng-deep .p-datatable .p-datatable-thead > tr > th { background: #0a1628 !important; color: #94a3b8 !important; border-color: #1e3254 !important; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; padding: 0.7rem 1rem; }
 :host ::ng-deep .p-datatable .p-datatable-tbody > tr { background: #0f1f35 !important; border-color: #1e3254 !important; transition: background 0.1s; }
 :host ::ng-deep .p-datatable .p-datatable-tbody > tr:hover { background: #162840 !important; }
 :host ::ng-deep .p-datatable .p-datatable-tbody > tr > td { border-color: #1e3254 !important; color: #e2e8f0 !important; padding: 0.65rem 1rem; }
-:host ::ng-deep .p-datatable .p-datatable-emptymessage > td { background: #0f1f35 !important; color: #475569 !important; text-align: center; padding: 3rem !important; }
-:host ::ng-deep .p-paginator { background: #0a1628 !important; border-color: #1e3254 !important; color: #64748b !important; }
+:host ::ng-deep .p-datatable .p-datatable-emptymessage > td { background: #0f1f35 !important; color: #94a3b8 !important; text-align: center; padding: 3rem !important; }
+:host ::ng-deep .p-paginator { background: #0a1628 !important; border-color: #1e3254 !important; color: #94a3b8 !important; }
 :host ::ng-deep .p-paginator .p-paginator-page.p-highlight { background: #2563eb !important; color: #fff !important; }
 
 /* Acciones de tab */
@@ -74,12 +74,12 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #475569;
+  color: #94a3b8;
 }
 
 .filter-hint {
   font-size: 0.78rem;
-  color: #475569;
+  color: #94a3b8;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -151,7 +151,7 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #475569;
+  color: #94a3b8;
   background: #1e3254;
   padding: 2px 8px;
   border-radius: 999px;
@@ -171,7 +171,7 @@
 
 .nomina-total-item .label {
   font-size: 0.68rem;
-  color: #475569;
+  color: #94a3b8;
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
@@ -190,7 +190,7 @@
 .empty-state {
   text-align: center;
   padding: 4rem 2rem;
-  color: #475569;
+  color: #94a3b8;
 }
 
 .empty-state i {

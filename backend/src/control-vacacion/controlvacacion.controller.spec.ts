@@ -1,22 +1,25 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ControlvacacionController } from './control-vacacion.controller';
-import { ControlvacacionService } from './control-vacacion.service';
+import { JwtService } from '@nestjs/jwt';
+import { ControlVacacionController } from './control-vacacion.controller';
+import { ControlVacacionService } from './control-vacacion.service';
 
-describe('ControlvacacionController', () => {
-  let controller: ControlvacacionController;
+describe('ControlVacacionController', () => {
+  let controller: ControlVacacionController;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [ControlvacacionController],
-      providers: [ControlvacacionService],
+      controllers: [ControlVacacionController],
+      providers: [
+        { provide: ControlVacacionService, useValue: {} },
+        // El AuthGuard del controlador necesita JwtService
+        { provide: JwtService, useValue: {} },
+      ],
     }).compile();
 
-    controller = module.get<ControlvacacionController>(
-      ControlvacacionController,
-    );
+    controller = module.get<ControlVacacionController>(ControlVacacionController);
   });
 
-  it('should be defined', () => {
+  it('se crea con su servicio inyectado', () => {
     expect(controller).toBeDefined();
   });
 });

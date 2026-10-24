@@ -3,12 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, catchError } from 'rxjs';
 import { ParametroGlobal } from '../models/ParametroGlobal.model';
 import { ErrorService } from './error.service';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ParametroGlobalService {
-  private apiUrl = 'http://localhost:4000/api/parametro-global';
+  private apiUrl = `${environment.apiUrl}/parametro-global`;
   private http = inject(HttpClient);
   private errorService = inject(ErrorService);
 

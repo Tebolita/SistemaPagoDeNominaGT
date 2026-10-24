@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, catchError } from 'rxjs';
 import { ErrorService } from './error.service';
+import { environment } from '../../environments/environment';
 
 export interface Prestamo {
   IdPrestamo: number;
@@ -29,7 +30,7 @@ export interface Cuota {
 
 @Injectable({ providedIn: 'root' })
 export class PrestamoService {
-  private apiUrl = 'http://localhost:4000/api/prestamo';
+  private apiUrl = `${environment.apiUrl}/prestamo`;
   private http = inject(HttpClient);
   private errorService = inject(ErrorService);
 

@@ -18,7 +18,7 @@
 }
 
 .sal-title { font-size: 1.5rem; font-weight: 800; color: #f1f5f9; margin: 0 0 4px; }
-.sal-sub   { font-size: 0.85rem; color: #475569; margin: 0; }
+.sal-sub   { font-size: 0.85rem; color: #94a3b8; margin: 0; }
 
 /* ── KPIs ───────────────────────────────────────────────────────── */
 .kpi-grid {
@@ -65,7 +65,7 @@
 .kpi-body { display: flex; flex-direction: column; min-width: 0; }
 .kpi-value { font-size: 1.75rem; font-weight: 800; color: #f1f5f9; line-height: 1; }
 .kpi-value--sm { font-size: 1.2rem; }
-.kpi-label { font-size: 0.7rem; color: #64748b; margin-top: 4px; }
+.kpi-label { font-size: 0.7rem; color: #94a3b8; margin-top: 4px; }
 
 /* ── Charts ─────────────────────────────────────────────────────── */
 .chart-grid {
@@ -118,7 +118,7 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #475569;
+  color: #94a3b8;
 }
 
 .filter-input {
@@ -138,18 +138,18 @@
   align-items: center;
   gap: 0.4rem;
   font-size: 0.8rem;
-  color: #64748b;
+  color: #94a3b8;
   padding-bottom: 2px;
 }
 
 /* ── Tabla ───────────────────────────────────────────────────────── */
 :host ::ng-deep .p-datatable { background: #131f35 !important; border-radius: 12px; overflow: hidden; border: 1px solid #1e3254 !important; }
-:host ::ng-deep .p-datatable .p-datatable-thead > tr > th { background: #0a1628 !important; color: #475569 !important; border-color: #1e3254 !important; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; padding: 0.7rem 1rem; }
+:host ::ng-deep .p-datatable .p-datatable-thead > tr > th { background: #0a1628 !important; color: #94a3b8 !important; border-color: #1e3254 !important; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; padding: 0.7rem 1rem; }
 :host ::ng-deep .p-datatable .p-datatable-tbody > tr { background: #131f35 !important; border-color: #1e3254 !important; transition: background 0.1s; }
 :host ::ng-deep .p-datatable .p-datatable-tbody > tr:hover { background: #1a2b45 !important; }
 :host ::ng-deep .p-datatable .p-datatable-tbody > tr > td { border-color: #1e3254 !important; color: #e2e8f0 !important; padding: 0.65rem 1rem; }
-:host ::ng-deep .p-datatable .p-datatable-emptymessage > td { background: #131f35 !important; color: #475569 !important; text-align: center; padding: 3rem !important; }
-:host ::ng-deep .p-paginator { background: #0a1628 !important; border-color: #1e3254 !important; color: #64748b !important; }
+:host ::ng-deep .p-datatable .p-datatable-emptymessage > td { background: #131f35 !important; color: #94a3b8 !important; text-align: center; padding: 3rem !important; }
+:host ::ng-deep .p-paginator { background: #0a1628 !important; border-color: #1e3254 !important; color: #94a3b8 !important; }
 :host ::ng-deep .p-paginator .p-paginator-page.p-highlight { background: #2563eb !important; color: #fff !important; }
 :host ::ng-deep .p-datatable .p-datatable-tfoot > tr > td { background: #0a1628 !important; border-color: #1e3254 !important; padding: 0.6rem 1rem; }
 
@@ -166,4 +166,4 @@
 .diff--pos { color: #4ade80; background: rgba(34,197,94,0.1); }
 .diff--neg { color: #f87171; background: rgba(239,68,68,0.1); }
 
-.table-footer { font-size: 0.82rem; color: #64748b; }
+.table-footer { font-size: 0.82rem; color: #94a3b8; }

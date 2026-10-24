@@ -754,12 +754,29 @@ export class NominaComponent implements OnInit {
     return !!(estado?.EsFinal && !estado?.EsCancelacion);
   }
 
+  // Cancelar una nómina pagada devuelve el monto a la cuenta: requiere motivo
+  esCancelacionDePagada(): boolean {
+    const estado = this.estadosDisponibles().find(
+      (e) => e.IdEstadoNomina === this.cambioEstadoForm.IdEstadoNuevo,
+    );
+    return !!(estado?.EsCancelacion && (this.nominaSeleccionada?.EstadoNomina as any)?.EsFinal);
+  }
+
   confirmarCambioEstado() {
     if (!this.nominaSeleccionada || !this.cambioEstadoForm.IdEstadoNuevo) {
       this.messageService.add({
         severity: 'warn',
         summary: 'Validación',
         detail: 'Selecciona un estado nuevo',
+      });
+      return;
+    }
+
+    if (this.esCancelacionDePagada() && !this.cambioEstadoForm.Comentarios?.trim()) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Validación',
+        detail: 'Indica el motivo para cancelar una nómina que ya fue pagada',
       });
       return;
     }
@@ -830,7 +847,9 @@ export class NominaComponent implements OnInit {
   isCambioEstadoPermisible(nomina: Nomina): boolean {
     const estado = nomina.EstadoNomina as any;
     if (!estado) return true;
-    if (estado.EsFinal) return false;
+    // Una nómina pagada (final, no cancelada) aún puede cancelarse con reversión del pago
+    if (estado.EsCancelacion) return false;
+    if (estado.EsFinal) return true;
     if (estado.RequiereAprobacion) return this.isApprovalRole(this.userRole());
     return true;
   }

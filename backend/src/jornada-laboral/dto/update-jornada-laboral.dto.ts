@@ -33,12 +33,12 @@ export class UpdateJornadaLaboralDto extends PartialType(
   HorasDiarias?: number;
 
   @ApiPropertyOptional({
-    description: 'Horas semanales de trabajo',
+    description: 'Horas semanales de trabajo (máximo 99.99, límite de la columna Decimal(4,2))',
     example: 40,
   })
   @IsOptional()
   @IsNumber()
   @Min(1)
-  @Max(168)
+  @Max(99.99, { message: 'Las horas semanales no pueden ser mayores a 99.99' })
   HorasSemanales?: number;
 }

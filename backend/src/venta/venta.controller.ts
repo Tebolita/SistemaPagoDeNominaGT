@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query, ParseIntPipe, Put, UseGuards, Request } from '@nestjs/common';
 import { VentaService } from './venta.service';
 import { CreateVentaDto, UpdateVentaDto } from './dto/venta.dto';
+import { leerPaginacion } from 'src/common/paginacion';
 import { AuthGuard } from '../login/login.guard';
 
 @Controller('venta')
@@ -19,9 +20,13 @@ export class VentaController {
     @Query('fechaFin') fechaFin?: string,
     @Query('estadoPago') estadoPago?: string,
     @Query('idCliente') idCliente?: string,
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
   ) {
     const clienteId = idCliente ? parseInt(idCliente) : undefined;
-    return this.ventaService.findAll(fechaInicio, fechaFin, estadoPago, clienteId);
+    return this.ventaService.findAll(
+      fechaInicio, fechaFin, estadoPago, clienteId, leerPaginacion(page, limit),
+    );
   }
 
   @Get(':id')

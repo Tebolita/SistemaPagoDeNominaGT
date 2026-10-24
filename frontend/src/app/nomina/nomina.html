@@ -76,7 +76,7 @@
       <p-button label="Limpiar" icon="pi pi-times" severity="secondary" size="small"
         [outlined]="true" (onClick)="limpiarFiltros()"></p-button>
     }
-    <span class="text-xs text-slate-500 self-end mb-1 ml-auto">
+    <span class="text-xs text-slate-400 self-end mb-1 ml-auto">
       {{ totalFiltradas.cantidad }} nómina{{ totalFiltradas.cantidad !== 1 ? 's' : '' }} encontradas
     </span>
   </div>
@@ -85,32 +85,32 @@
   @if (nominasFiltradas.length > 0) {
     <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
       <div class="bg-slate-800 border border-slate-700 rounded-xl p-3">
-        <div class="text-xs text-slate-500 uppercase tracking-wide mb-1">Total nóminas</div>
+        <div class="text-xs text-slate-400 uppercase tracking-wide mb-1">Total nóminas</div>
         <div class="text-2xl font-bold text-white">{{ totalFiltradas.cantidad }}</div>
         @if (filtroAnio || filtroMes) {
-          <div class="text-xs text-slate-500 mt-0.5">
+          <div class="text-xs text-slate-400 mt-0.5">
             {{ filtroMes ? getMesLabel(filtroMes) : 'Todos los meses' }}
             {{ filtroAnio ? filtroAnio : '' }}
           </div>
         }
       </div>
       <div class="bg-slate-800 border border-slate-700 rounded-xl p-3">
-        <div class="text-xs text-slate-500 uppercase tracking-wide mb-1">Personalizadas</div>
+        <div class="text-xs text-slate-400 uppercase tracking-wide mb-1">Personalizadas</div>
         <div class="flex items-end gap-3">
           <span class="text-xl font-bold text-blue-400">
-            {{ contarPorTipo('GENERAL') }} <span class="text-xs text-slate-500 font-normal">general</span>
+            {{ contarPorTipo('GENERAL') }} <span class="text-xs text-slate-400 font-normal">general</span>
           </span>
           <span class="text-xl font-bold text-violet-400">
-            {{ contarPorTipo('PERSONALIZADA') }} <span class="text-xs text-slate-500 font-normal">personalizadas</span>
+            {{ contarPorTipo('PERSONALIZADA') }} <span class="text-xs text-slate-400 font-normal">personalizadas</span>
           </span>
         </div>
       </div>
       <div class="bg-slate-800 border border-slate-700 rounded-xl p-3">
-        <div class="text-xs text-slate-500 uppercase tracking-wide mb-1">Masa Salarial</div>
+        <div class="text-xs text-slate-400 uppercase tracking-wide mb-1">Masa Salarial</div>
         <div class="text-lg font-bold text-slate-200">Q {{ totalFiltradas.salario | number:'1.2-2' }}</div>
       </div>
       <div class="bg-slate-800 border border-blue-700 border-l-4 rounded-xl p-3">
-        <div class="text-xs text-slate-500 uppercase tracking-wide mb-1">Total Líquido</div>
+        <div class="text-xs text-slate-400 uppercase tracking-wide mb-1">Total Líquido</div>
         <div class="text-lg font-bold text-green-400">Q {{ totalFiltradas.liquido | number:'1.2-2' }}</div>
       </div>
     </div>
@@ -152,13 +152,13 @@
           <span *ngIf="nomina.CuentaBancariaEmpresa" class="text-xs text-cyan-300 font-medium">
             {{ nomina.CuentaBancariaEmpresa.NombreCuenta }}
           </span>
-          <span *ngIf="!nomina.CuentaBancariaEmpresa" class="text-slate-500 text-xs">—</span>
+          <span *ngIf="!nomina.CuentaBancariaEmpresa" class="text-slate-400 text-xs">—</span>
         </td>
         <td>
           <span *ngIf="nomina.NumeroBoleta" class="font-mono text-xs bg-slate-700 text-green-300 px-2 py-1 rounded border border-slate-600">
             {{ nomina.NumeroBoleta }}
           </span>
-          <span *ngIf="!nomina.NumeroBoleta" class="text-slate-500 text-xs">—</span>
+          <span *ngIf="!nomina.NumeroBoleta" class="text-slate-400 text-xs">—</span>
         </td>
         <td>
           <div class="flex items-center gap-2">
@@ -184,7 +184,7 @@
           ></p-tag>
         </td>
         <td>
-          <p-button
+          <p-button ariaLabel="Ver Detalles"
             icon="pi pi-eye"
             [rounded]="true"
             [text]="true"
@@ -193,7 +193,7 @@
             pTooltip="Ver Detalles"
             tooltipPosition="top"
           ></p-button>
-          <p-button
+          <p-button ariaLabel="Firmar Nómina"
             icon="pi pi-verified"
             [rounded]="true"
             [text]="true"
@@ -203,7 +203,7 @@
             pTooltip="Firmar Nómina"
             tooltipPosition="top"
           ></p-button>
-          <p-button
+          <p-button ariaLabel="Configurar firmantes"
             icon="pi pi-users"
             [rounded]="true"
             [text]="true"
@@ -213,7 +213,7 @@
             pTooltip="Configurar firmantes"
             tooltipPosition="top"
           ></p-button>
-          <p-button
+          <p-button ariaLabel="Cambiar Estado"
             icon="pi pi-pen-to-square"
             [rounded]="true"
             [text]="true"
@@ -223,7 +223,7 @@
             pTooltip="Cambiar Estado"
             tooltipPosition="top"
           ></p-button>
-          <p-button
+          <p-button ariaLabel="Ver Historial"
             icon="pi pi-history"
             [rounded]="true"
             [text]="true"
@@ -232,7 +232,7 @@
             pTooltip="Ver Historial"
             tooltipPosition="top"
           ></p-button>
-          <p-button
+          <p-button ariaLabel="Eliminar"
             icon="pi pi-trash"
             [rounded]="true"
             [text]="true"
@@ -242,7 +242,7 @@
             tooltipPosition="top"
           ></p-button>
 
-          <p-button
+          <p-button ariaLabel="Enviar boleta por correo"
             icon="pi pi-envelope"
             [rounded]="true"
             [text]="true"
@@ -253,9 +253,9 @@
             tooltipPosition="top"
           ></p-button>
 
-          <span class="mx-1 text-slate-600">|</span>
+          <span class="mx-1 text-slate-400">|</span>
 
-          <p-button
+          <p-button ariaLabel="Excel — Planilla General"
             icon="pi pi-file-excel"
             [rounded]="true"
             [text]="true"
@@ -264,7 +264,7 @@
             pTooltip="Excel — Planilla General"
             tooltipPosition="top"
           ></p-button>
-          <p-button
+          <p-button ariaLabel="Excel — Planilla IGSS"
             icon="pi pi-building"
             [rounded]="true"
             [text]="true"
@@ -273,7 +273,7 @@
             pTooltip="Excel — Planilla IGSS"
             tooltipPosition="top"
           ></p-button>
-          <p-button
+          <p-button ariaLabel="Excel — Planilla ISR (SAT)"
             icon="pi pi-receipt"
             [rounded]="true"
             [text]="true"
@@ -287,7 +287,7 @@
     </ng-template>
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="9" class="text-center text-slate-500 py-6">No hay nóminas registradas</td>
+        <td colspan="9" class="text-center text-slate-400 py-6">No hay nóminas registradas</td>
       </tr>
     </ng-template>
   </p-table>
@@ -297,8 +297,8 @@
       <!-- ── Panel: Eliminadas ───────────────────────────────────────────── -->
       <p-tabpanel value="eliminadas">
         @if (nominasEliminadas().length === 0) {
-          <div class="flex flex-col items-center justify-center py-16 gap-3 text-slate-500">
-            <i class="pi pi-trash text-5xl text-slate-600"></i>
+          <div class="flex flex-col items-center justify-center py-16 gap-3 text-slate-400">
+            <i class="pi pi-trash text-5xl text-slate-400"></i>
             <p class="text-sm">No hay nóminas eliminadas</p>
           </div>
         } @else {
@@ -336,9 +336,9 @@
                 <td>
                   <p-tag [value]="getEstadoNombre(nomina)" [severity]="getEstadoSeverity(nomina)"></p-tag>
                 </td>
-                <td class="text-xs text-slate-500">{{ nomina.FechaEliminacion | date:'dd/MM/yyyy HH:mm' }}</td>
+                <td class="text-xs text-slate-400">{{ nomina.FechaEliminacion | date:'dd/MM/yyyy HH:mm' }}</td>
                 <td>
-                  <p-button icon="pi pi-refresh" [rounded]="true" [text]="true" severity="success"
+                  <p-button ariaLabel="Restaurar nómina" icon="pi pi-refresh" [rounded]="true" [text]="true" severity="success"
                     pTooltip="Restaurar nómina" tooltipPosition="top"
                     (onClick)="restaurarNomina(nomina)"></p-button>
                 </td>
@@ -576,11 +576,11 @@
                   Asignado: {{ asig.Modo === 'USUARIO' ? getNombreUsuario(asig.IdUsuarioAsignado ?? null) : 'Rol ' + asig.RolRequerido }}
                 </span>
               } @else {
-                <span class="text-xs text-slate-600">Puede firmar: {{ getRequisitoFirmante(cfg.TipoFirmante) }}</span>
+                <span class="text-xs text-slate-400">Puede firmar: {{ getRequisitoFirmante(cfg.TipoFirmante) }}</span>
               }
             </div>
             <span *ngIf="firmaPresente(nominaSeleccionada!, cfg.TipoFirmante)" class="text-xs text-green-400 font-medium ml-auto">✓ Firmado</span>
-            <span *ngIf="!firmaPresente(nominaSeleccionada!, cfg.TipoFirmante)" class="text-xs text-slate-500 ml-auto">Pendiente</span>
+            <span *ngIf="!firmaPresente(nominaSeleccionada!, cfg.TipoFirmante)" class="text-xs text-slate-400 ml-auto">Pendiente</span>
           </div>
         }
       </div>
@@ -608,7 +608,7 @@
           <ng-template pTemplate="item" let-t>
             <div class="flex flex-col gap-0.5">
               <span class="font-semibold text-sm text-slate-200">{{ t.label }}</span>
-              <span class="text-xs text-slate-500 flex items-center gap-1">
+              <span class="text-xs text-slate-400 flex items-center gap-1">
                 <i class="pi pi-shield text-xs text-blue-400"></i>
                 Puede firmar: {{ t.requisito }}
               </span>
@@ -628,7 +628,7 @@
         ></textarea>
       </div>
     </div>
-    <div *ngIf="getTiposFirmanteDisponibles().length === 0" class="text-center text-slate-500 py-2">
+    <div *ngIf="getTiposFirmanteDisponibles().length === 0" class="text-center text-slate-400 py-2">
       Esta nómina ya tiene todas las firmas registradas.
     </div>
   </div>
@@ -677,7 +677,7 @@
       <div *ngIf="nominaSeleccionada?.CuentaBancariaEmpresa" class="border-b pb-2">
         <div class="text-sm text-slate-400">Cuenta de Pago</div>
         <div class="font-bold text-cyan-300">{{ nominaSeleccionada?.CuentaBancariaEmpresa?.NombreCuenta }}</div>
-        <div class="text-xs text-slate-500 font-mono">{{ nominaSeleccionada?.CuentaBancariaEmpresa?.NumeroCuenta }}</div>
+        <div class="text-xs text-slate-400 font-mono">{{ nominaSeleccionada?.CuentaBancariaEmpresa?.NumeroCuenta }}</div>
       </div>
       <div *ngIf="nominaSeleccionada?.NumeroBoleta" class="border-b pb-2">
         <div class="text-sm text-slate-400">No. Boleta / Transacción</div>
@@ -708,7 +708,7 @@
           <td>
             @if (detalle.OtrosIngresos > 0) {
               <span class="text-amber-400 font-mono">Q {{ detalle.OtrosIngresos | number:'1.2-2' }}</span>
-            } @else { <span class="text-slate-600">—</span> }
+            } @else { <span class="text-slate-400">—</span> }
           </td>
           <td>Q {{ detalle.DescuentoIGSS | number: '1.2-2' }}</td>
           <td>Q {{ detalle.DescuentoISR | number: '1.2-2' }}</td>
@@ -718,7 +718,7 @@
       </ng-template>
     </p-table>
   </div>
-  <div *ngIf="!nominaSeleccionada?.NominaDetalle?.length" class="text-center text-slate-500 py-6">
+  <div *ngIf="!nominaSeleccionada?.NominaDetalle?.length" class="text-center text-slate-400 py-6">
     No hay detalles disponibles
   </div>
 </p-dialog>
@@ -805,11 +805,18 @@
     </div>
 
     <div>
-      <label class="block text-sm font-medium mb-2">Comentarios</label>
+      <label class="block text-sm font-medium mb-2">
+        {{ esCancelacionDePagada() ? 'Motivo de la cancelación *' : 'Comentarios' }}
+      </label>
+      @if (esCancelacionDePagada()) {
+        <small class="block text-amber-400 mb-2">
+          La nómina ya fue pagada: al cancelarla se devolverá el monto a la cuenta bancaria.
+        </small>
+      }
       <textarea
         pInputTextarea
         [(ngModel)]="cambioEstadoForm.Comentarios"
-        placeholder="Comentarios opcionales"
+        [placeholder]="esCancelacionDePagada() ? 'Motivo obligatorio' : 'Comentarios opcionales'"
         class="w-full"
         rows="3"
         maxlength="500"
@@ -869,7 +876,7 @@
     </ng-template>
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="5" class="text-center text-slate-500">No hay historial de cambios</td>
+        <td colspan="5" class="text-center text-slate-400">No hay historial de cambios</td>
       </tr>
     </ng-template>
   </p-table>
@@ -926,7 +933,7 @@
           </span>
         }
       </label>
-      <p class="text-xs text-slate-500 mb-2">Selecciona los empleados que recibirán esta nómina personalizada.</p>
+      <p class="text-xs text-slate-400 mb-2">Selecciona los empleados que recibirán esta nómina personalizada.</p>
       <p-multiselect
         [options]="empleados()"
         [(ngModel)]="formPersonalizada.idEmpleados"
@@ -948,7 +955,7 @@
             </div>
             <div>
               <div class="text-sm text-slate-200">{{ emp.Nombres }} {{ emp.Apellidos }}</div>
-              <div class="text-xs text-slate-500">{{ emp.Puesto?.NombrePuesto || 'Sin puesto' }}</div>
+              <div class="text-xs text-slate-400">{{ emp.Puesto?.NombrePuesto || 'Sin puesto' }}</div>
             </div>
           </div>
         </ng-template>
@@ -967,7 +974,7 @@
           </span>
         }
       </label>
-      <p class="text-xs text-slate-500 mb-2">
+      <p class="text-xs text-slate-400 mb-2">
         Solo parámetros de tipo INGRESO y DESCUENTO. Si un parámetro tiene filtros configurados, solo se aplicará a los empleados que cumplan esos filtros.
       </p>
       <p-multiselect
@@ -1008,7 +1015,7 @@
     <!-- Opciones de generación -->
     <div class="bg-slate-800 border border-slate-700 rounded-lg p-4 flex flex-col gap-3">
       <p class="text-xs font-semibold text-slate-400 uppercase tracking-wide flex items-center gap-2">
-        <i class="pi pi-cog text-slate-500"></i> Opciones
+        <i class="pi pi-cog text-slate-400"></i> Opciones
       </p>
 
       <!-- Toggle incluir salario -->
@@ -1022,7 +1029,7 @@
           <div class="text-sm font-medium text-slate-200">
             {{ formPersonalizada.incluirSalarioBase ? 'Incluir salario base' : 'Solo parámetros seleccionados' }}
           </div>
-          <p class="text-xs text-slate-500 mt-0.5">
+          <p class="text-xs text-slate-400 mt-0.5">
             @if (formPersonalizada.incluirSalarioBase) {
               El SueldoBase del empleado se suma al líquido. Los parámetros se aplican encima del salario.
             } @else {
@@ -1034,7 +1041,7 @@
       </div>
 
       <!-- Nota sobre múltiples nóminas -->
-      <div class="flex items-start gap-2 text-xs text-slate-500 border-t border-slate-700 pt-3">
+      <div class="flex items-start gap-2 text-xs text-slate-400 border-t border-slate-700 pt-3">
         <i class="pi pi-info-circle text-blue-400 mt-0.5"></i>
         <span>
           Las nóminas personalizadas <strong class="text-slate-400">no tienen restricción de duplicado</strong> por mes.
@@ -1049,19 +1056,19 @@
         <div class="text-xs font-semibold text-slate-400 uppercase tracking-wide">Resumen de la nómina</div>
         <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-sm">
           <div>
-            <div class="text-slate-500 text-xs">Período</div>
+            <div class="text-slate-400 text-xs">Período</div>
             <div class="text-white font-semibold">{{ getMesLabel(formPersonalizada.Mes) }} {{ formPersonalizada.Anio }}</div>
           </div>
           <div>
-            <div class="text-slate-500 text-xs">Empleados</div>
+            <div class="text-slate-400 text-xs">Empleados</div>
             <div class="text-blue-400 font-bold">{{ formPersonalizada.idEmpleados.length }}</div>
           </div>
           <div>
-            <div class="text-slate-500 text-xs">Parámetros</div>
+            <div class="text-slate-400 text-xs">Parámetros</div>
             <div class="text-violet-400 font-bold">{{ formPersonalizada.idParametros.length }}</div>
           </div>
           <div>
-            <div class="text-slate-500 text-xs">Modo</div>
+            <div class="text-slate-400 text-xs">Modo</div>
             <div class="font-semibold text-xs" [ngClass]="formPersonalizada.incluirSalarioBase ? 'text-blue-400' : 'text-amber-400'">
               {{ formPersonalizada.incluirSalarioBase ? 'Con salario base' : 'Solo parámetros' }}
             </div>
@@ -1118,7 +1125,7 @@
         <div class="flex items-center justify-between">
           <div>
             <span class="font-mono text-sm font-bold text-slate-200 bg-slate-700 px-2 py-0.5 rounded">{{ f.TipoFirmante }}</span>
-            <span class="text-xs text-slate-500 ml-2">{{ f.Descripcion }}</span>
+            <span class="text-xs text-slate-400 ml-2">{{ f.Descripcion }}</span>
           </div>
           <!-- Badge de firma ya registrada -->
           @if (getFirmanteAsignado(nominaParaFirmantes!, f.TipoFirmante)) {
@@ -1172,7 +1179,7 @@
                     </div>
                     <div>
                       <div class="text-sm">{{ u.Username }}</div>
-                      <div class="text-xs text-slate-500">{{ u.RolUsuario?.NombreRol }}</div>
+                      <div class="text-xs text-slate-400">{{ u.RolUsuario?.NombreRol }}</div>
                     </div>
                   </div>
                 </ng-template>
@@ -1188,7 +1195,7 @@
                 </div>
                 <div>
                   <div class="text-xs font-medium text-slate-300">Notificar por correo</div>
-                  <div class="text-xs text-slate-500">Enviar email al guardar</div>
+                  <div class="text-xs text-slate-400">Enviar email al guardar</div>
                 </div>
               </div>
             </div>
@@ -1204,7 +1211,7 @@
     }
 
     @if (firmantesConfig.length === 0) {
-      <div class="text-center py-8 text-slate-500 text-sm">
+      <div class="text-center py-8 text-slate-400 text-sm">
         <i class="pi pi-info-circle text-2xl block mb-2"></i>
         No hay tipos de firmante configurados. Ve a <strong>Configuración → Firmantes Nómina</strong> para agregarlos.
       </div>

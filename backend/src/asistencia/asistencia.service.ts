@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateAsistenciaDto } from './dto/create-asistencia.dto';
 import { UpdateAsistenciaDto } from './dto/update-asistencia.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { Paginacion } from 'src/common/paginacion';
 
 @Injectable()
 export class AsistenciaService {
@@ -13,10 +14,24 @@ export class AsistenciaService {
     });
   }
 
-  async findAll() {
-    return await this.prisma.asistencia.findMany({
-      include: { Empleado: true }, // Útil para ver el nombre del empleado
-    });
+  async findAll(paginacion?: Paginacion) {
+    if (!paginacion) {
+      return await this.prisma.asistencia.findMany({
+        include: { Empleado: true }, // Útil para ver el nombre del empleado
+      });
+    }
+
+    // Paginado en el servidor: la tabla crece con un registro por empleado y día
+    const [total, registros] = await Promise.all([
+      this.prisma.asistencia.count(),
+      this.prisma.asistencia.findMany({
+        include: { Empleado: true },
+        orderBy: [{ Fecha: 'desc' }, { IdAsistencia: 'desc' }],
+        skip: paginacion.skip,
+        take: paginacion.limit,
+      }),
+    ]);
+    return { total, page: paginacion.page, limit: paginacion.limit, registros };
   }
 
   async findOne(id: number) {

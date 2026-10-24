@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { ControlVacacionService } from './control-vacacion.service';
 import { CreateControlVacacionDto } from './dto/create-control-vacacion.dto';
@@ -30,6 +31,12 @@ export class ControlVacacionController {
   @Get()
   findAll() {
     return this.controlVacacionService.findAll();
+  }
+
+  // Saldo según antigüedad: 15 días por año de servicio cumplido, menos los días gozados
+  @Get('saldo/:idEmpleado')
+  saldo(@Param('idEmpleado', ParseIntPipe) idEmpleado: number) {
+    return this.controlVacacionService.saldo(idEmpleado);
   }
 
   // Ruta extra para obtener las bolsas de vacaciones de un empleado

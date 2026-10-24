@@ -3,11 +3,12 @@ import { HttpClient } from '@angular/common/http';
 import { catchError, Observable, throwError } from 'rxjs';
 import { AsistenciaInterface } from '../models/Asistencias.model';
 import { ErrorService } from './error.service';
+import { environment } from '../../environments/environment';
 @Injectable({
   providedIn: 'root'
 })
 export class AsistenciaService {
-  private apiUrl = 'http://localhost:4000/api/asistencia'; 
+  private apiUrl = `${environment.apiUrl}/asistencia`; 
 
   constructor(
     private http: HttpClient, 
@@ -15,6 +16,13 @@ export class AsistenciaService {
 
   getAsistencias(): Observable<AsistenciaInterface[]> {
     return this.http.get<AsistenciaInterface[]>(this.apiUrl).pipe(catchError(this.errorService.handleError));
+  }
+
+  // Página del listado (el servidor ordena del registro más reciente al más antiguo)
+  getAsistenciasPaginadas(page: number, limit: number): Observable<{ total: number; page: number; limit: number; registros: AsistenciaInterface[] }> {
+    return this.http
+      .get<{ total: number; page: number; limit: number; registros: AsistenciaInterface[] }>(this.apiUrl, { params: { page, limit } })
+      .pipe(catchError(this.errorService.handleError));
   }
 
   createAsistencia(asistencia: AsistenciaInterface): Observable<AsistenciaInterface> {

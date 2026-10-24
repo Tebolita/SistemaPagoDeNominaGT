@@ -62,9 +62,9 @@
           ></p-tag>
         </td>
         <td>
-          <p-button icon="pi pi-pencil" [rounded]="true" [text]="true" severity="warn"
+          <p-button ariaLabel="Editar" icon="pi pi-pencil" [rounded]="true" [text]="true" severity="warn"
             pTooltip="Editar" tooltipPosition="top" (onClick)="editProducto(p)"></p-button>
-          <p-button icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger"
+          <p-button ariaLabel="Eliminar" icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger"
             pTooltip="Eliminar" tooltipPosition="top" (onClick)="deleteProducto(p)"></p-button>
         </td>
       </tr>
@@ -121,7 +121,7 @@
       </div>
 
       <div class="flex flex-col gap-1">
-        <label>Costo Unitario (Q) <span class="text-slate-500 text-xs font-normal">opcional</span></label>
+        <label>Costo Unitario (Q) <span class="text-slate-400 text-xs font-normal">opcional</span></label>
         <p-inputNumber
           [(ngModel)]="productoForm.CostoUnitario"
           [minFractionDigits]="2"

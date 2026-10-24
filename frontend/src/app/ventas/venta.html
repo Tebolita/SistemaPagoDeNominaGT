@@ -59,26 +59,26 @@
           <p-tag [value]="v.EstadoPago" [severity]="getEstadoSeverity(v.EstadoPago)"></p-tag>
         </td>
         <td>
-          <p-button icon="pi pi-eye" [rounded]="true" [text]="true" severity="info"
+          <p-button ariaLabel="Ver detalle" icon="pi pi-eye" [rounded]="true" [text]="true" severity="info"
             pTooltip="Ver detalle" tooltipPosition="top" (onClick)="openDetalles(v)"></p-button>
 
-          <p-button icon="pi pi-envelope" [rounded]="true" [text]="true" severity="info"
+          <p-button ariaLabel="Enviar factura por correo" icon="pi pi-envelope" [rounded]="true" [text]="true" severity="info"
             pTooltip="Enviar factura por correo" tooltipPosition="top"
             [loading]="enviandoCorreo === v.IdVenta"
             [disabled]="!v.Cliente?.Correo"
             (onClick)="enviarFactura(v)"></p-button>
 
           @if (v.EstadoPago === 'PENDIENTE' || v.EstadoPago === 'VENCIDO') {
-            <p-button icon="pi pi-dollar" [rounded]="true" [text]="true" severity="success"
+            <p-button ariaLabel="Registrar cobro" icon="pi pi-dollar" [rounded]="true" [text]="true" severity="success"
               pTooltip="Registrar cobro" tooltipPosition="top" (onClick)="abrirPago(v)"></p-button>
           }
 
           @if (v.EstadoPago !== 'CANCELADO') {
-            <p-button icon="pi pi-ban" [rounded]="true" [text]="true" severity="warn"
+            <p-button ariaLabel="Cancelar venta" icon="pi pi-ban" [rounded]="true" [text]="true" severity="warn"
               pTooltip="Cancelar venta" tooltipPosition="top" (onClick)="cancelarVenta(v)"></p-button>
           }
 
-          <p-button icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger"
+          <p-button ariaLabel="Eliminar" icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger"
             pTooltip="Eliminar" tooltipPosition="top" (onClick)="eliminarVenta(v)"></p-button>
         </td>
       </tr>
@@ -195,7 +195,7 @@
               <td>Q {{ d.Descuento | number:'1.2-2' }}</td>
               <td class="font-semibold text-green-400">Q {{ getSubtotalDetalle(d) | number:'1.2-2' }}</td>
               <td>
-                <p-button icon="pi pi-times" [rounded]="true" [text]="true" severity="danger"
+                <p-button ariaLabel="Quitar producto de la orden" icon="pi pi-times" [rounded]="true" [text]="true" severity="danger"
                   size="small" (onClick)="removeDetalle(i)"></p-button>
               </td>
             </tr>
@@ -246,7 +246,7 @@
             </div>
           </ng-template>
         </p-select>
-        <p class="text-xs text-slate-500 mt-1">El total se acreditará automáticamente al saldo de esta cuenta.</p>
+        <p class="text-xs text-slate-400 mt-1">El total se acreditará automáticamente al saldo de esta cuenta.</p>
       </div>
     </div>
   }

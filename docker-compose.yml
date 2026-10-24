@@ -1,0 +1,46 @@
+# Entorno completo del Sistema de Nómina GT: SQL Server + backend (NestJS) + frontend (Angular/nginx).
+#
+# Uso:
+#   1. Copiar .env.docker.example como .env (en esta misma carpeta) y completar los valores.
+#   2. docker compose up -d --build
+#   3. La primera vez, desde la carpeta backend del equipo anfitrión, crear el esquema en la base vacía
+#      (la imagen de producción no incluye el CLI de Prisma):
+#        DATABASE_URL="sqlserver://localhost:1433;database=NominaGT;user=sa;password=...;encrypt=true;trustServerCertificate=true;" npx prisma db push
+#      ejecutar database_extension.sql y las migraciones migracion_*.sql, y cargar los datos iniciales
+#      (roles, estados de nómina, parámetros globales y usuario administrador).
+#   4. Abrir http://localhost:8080
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: ${MSSQL_SA_PASSWORD}
+    ports:
+      - "1433:1433"
+    volumes:
+      - datos-sqlserver:/var/opt/mssql
+
+  backend:
+    build: ./backend
+    depends_on:
+      - sqlserver
+    environment:
+      DATABASE_URL: "sqlserver://sqlserver:1433;database=${DB_NAME};user=sa;password=${MSSQL_SA_PASSWORD};encrypt=true;trustServerCertificate=true;"
+      SECRET_KEY: ${SECRET_KEY}
+      BREVO_KEY: ${BREVO_KEY}
+      BREVO_SENDER_EMAIL: ${BREVO_SENDER_EMAIL}
+      BREVO_SENDER_NAME: ${BREVO_SENDER_NAME}
+      CORS_ORIGIN: "http://localhost:8080"
+      PORT: "4000"
+    ports:
+      - "4000:4000"
+
+  frontend:
+    build: ./frontend
+    depends_on:
+      - backend
+    ports:
+      - "8080:80"
+
+volumes:
+  datos-sqlserver:

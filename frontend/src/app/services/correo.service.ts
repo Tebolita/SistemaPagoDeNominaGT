@@ -2,10 +2,11 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, catchError } from 'rxjs';
 import { ErrorService } from './error.service';
+import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class CorreoService {
-  private apiUrl = 'http://localhost:4000/api/correo';
+  private apiUrl = `${environment.apiUrl}/correo`;
   private http = inject(HttpClient);
   private errorService = inject(ErrorService);
 

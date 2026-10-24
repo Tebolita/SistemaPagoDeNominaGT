@@ -3,12 +3,13 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, catchError } from 'rxjs';
 import { CuentaBancariaEmpresa } from '../models/CuentaBancariaEmpresa.model';
 import { ErrorService } from './error.service';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CuentaBancariaEmpresaService {
-  private apiUrl = 'http://localhost:4000/api/cuenta-bancaria-empresa';
+  private apiUrl = `${environment.apiUrl}/cuenta-bancaria-empresa`;
   private http = inject(HttpClient);
   private errorService = inject(ErrorService);
 

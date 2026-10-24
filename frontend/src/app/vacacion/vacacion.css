@@ -28,7 +28,7 @@
 }
 :host ::ng-deep .p-datatable .p-datatable-tbody > tr:hover { background: #253347 !important; }
 :host ::ng-deep .p-datatable .p-datatable-tbody > tr > td { border-color: #334155 !important; color: #e2e8f0 !important; }
-:host ::ng-deep .p-datatable .p-datatable-emptymessage > td { background: #1e293b !important; color: #64748b !important; }
+:host ::ng-deep .p-datatable .p-datatable-emptymessage > td { background: #1e293b !important; color: #94a3b8 !important; }
 :host ::ng-deep .p-paginator { background: #0f172a !important; border-color: #334155 !important; color: #94a3b8 !important; }
 :host ::ng-deep .p-paginator .p-paginator-page.p-highlight { background: #3b82f6 !important; color: #fff !important; }
 
@@ -60,7 +60,7 @@
   min-width: 110px;
 }
 .stat-value { display: block; font-size: 1.75rem; font-weight: 700; color: #f1f5f9; }
-.stat-label { display: block; margin-top: 0.2rem; font-size: 0.8rem; color: #64748b; }
+.stat-label { display: block; margin-top: 0.2rem; font-size: 0.8rem; color: #94a3b8; }
 
 /* ── Badge de goce ───────────────────────────────────────────────── */
 .goce-badge {

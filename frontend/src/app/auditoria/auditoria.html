@@ -76,7 +76,7 @@
     </div>
     <div class="filter-actions">
       <p-button icon="pi pi-search" label="Buscar" severity="primary" (onClick)="aplicarFiltros()"></p-button>
-      <p-button icon="pi pi-times" severity="secondary" [outlined]="true"
+      <p-button ariaLabel="Limpiar filtros" icon="pi pi-times" severity="secondary" [outlined]="true"
         pTooltip="Limpiar filtros" (onClick)="limpiarFiltros()"></p-button>
     </div>
   </div>
@@ -149,13 +149,13 @@
         </td>
 
         <td>
-          <span class="text-xs text-slate-500">{{ reg.Detalle ?? '—' }}</span>
+          <span class="text-xs text-slate-400">{{ reg.Detalle ?? '—' }}</span>
         </td>
       </tr>
     </ng-template>
 
     <ng-template pTemplate="summary">
-      <span class="text-xs text-slate-500">{{ total() }} registros en total</span>
+      <span class="text-xs text-slate-400">{{ total() }} registros en total</span>
     </ng-template>
   </p-table>
 

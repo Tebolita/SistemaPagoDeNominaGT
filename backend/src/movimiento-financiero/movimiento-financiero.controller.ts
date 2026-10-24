@@ -1,5 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query, ParseIntPipe } from '@nestjs/common';
 import { MovimientoFinancieroService } from './movimiento-financiero.service';
+import { leerPaginacion } from 'src/common/paginacion';
 import { CreateMovimientoFinancieroDto, UpdateMovimientoFinancieroDto } from './dto/movimiento-financiero.dto';
 
 @Controller('movimiento-financiero')
@@ -18,10 +19,14 @@ export class MovimientoFinancieroController {
     @Query('fechaInicio') fechaInicio?: string,
     @Query('fechaFin') fechaFin?: string,
     @Query('activo') activo?: string,
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
   ) {
     const idCuentaNum = idCuenta ? parseInt(idCuenta) : undefined;
     const activoBoolean = activo ? activo === 'true' : undefined;
-    return this.movimientoService.findAll(idCuentaNum, tipoMovimiento, fechaInicio, fechaFin, activoBoolean);
+    return this.movimientoService.findAll(
+      idCuentaNum, tipoMovimiento, fechaInicio, fechaFin, activoBoolean, leerPaginacion(page, limit),
+    );
   }
 
   @Get('balance/:idCuenta')

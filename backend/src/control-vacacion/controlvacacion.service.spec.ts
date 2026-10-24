@@ -1,18 +1,19 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ControlvacacionService } from './control-vacacion.service';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { ControlVacacionService } from './control-vacacion.service';
 
-describe('ControlvacacionService', () => {
-  let service: ControlvacacionService;
+describe('ControlVacacionService', () => {
+  let service: ControlVacacionService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [ControlvacacionService],
+      providers: [ControlVacacionService, { provide: PrismaService, useValue: {} }],
     }).compile();
 
-    service = module.get<ControlvacacionService>(ControlvacacionService);
+    service = module.get<ControlVacacionService>(ControlVacacionService);
   });
 
-  it('should be defined', () => {
+  it('se crea con PrismaService inyectado', () => {
     expect(service).toBeDefined();
   });
 });

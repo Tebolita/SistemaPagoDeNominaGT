@@ -3,12 +3,13 @@ import { HttpClient } from "@angular/common/http";
 import { catchError, Observable } from "rxjs";
 import { EmpleadoResponse, EmpleadoResponseCUD, EmpleadoRequest } from "../models/Empleado.model";
 import { ErrorService } from "./error.service";
+import { environment } from '../../environments/environment';
 
 @Injectable({
     providedIn: 'root'
 })
 export class EmpleadoService {
-    private apiUrl = 'http://localhost:4000/api/empleado';
+    private apiUrl = `${environment.apiUrl}/empleado`;
 
     constructor(
         private http: HttpClient, 

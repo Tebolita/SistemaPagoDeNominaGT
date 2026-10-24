@@ -26,7 +26,7 @@
 
     <ng-template pTemplate="body" let-rol>
       <tr>
-        <td class="text-slate-500 text-sm">{{ rol.IdRol }}</td>
+        <td class="text-slate-400 text-sm">{{ rol.IdRol }}</td>
 
         <td>
           <span class="font-mono font-semibold text-sm text-slate-200">{{ rol.NombreRol }}</span>
@@ -42,7 +42,7 @@
               }
             </div>
           } @else {
-            <span class="text-slate-500 text-sm italic">Sin permisos asignados</span>
+            <span class="text-slate-400 text-sm italic">Sin permisos asignados</span>
           }
         </td>
 
@@ -51,7 +51,7 @@
         </td>
 
         <td class="text-center">
-          <p-button
+          <p-button ariaLabel="Gestionar permisos"
             icon="pi pi-lock"
             [rounded]="true" [text]="true"
             severity="info"
@@ -59,7 +59,7 @@
             tooltipPosition="top"
             (onClick)="abrirPermisos(rol)"
           ></p-button>
-          <p-button
+          <p-button ariaLabel="Editar nombre"
             icon="pi pi-pencil"
             [rounded]="true" [text]="true"
             severity="warn"
@@ -67,7 +67,7 @@
             tooltipPosition="top"
             (onClick)="editarRol(rol)"
           ></p-button>
-          <p-button
+          <p-button [ariaLabel]="rol.Activo ? 'Desactivar' : 'Activar'"
             [icon]="rol.Activo ? 'pi pi-ban' : 'pi pi-check'"
             [rounded]="true" [text]="true"
             severity="danger"
@@ -81,7 +81,7 @@
 
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="5" class="text-center text-slate-500 py-6">No se encontraron roles registrados.</td>
+        <td colspan="5" class="text-center text-slate-400 py-6">No se encontraron roles registrados.</td>
       </tr>
     </ng-template>
   </p-table>
@@ -107,7 +107,7 @@
         class="w-full font-mono"
         autofocus
       />
-      <small class="text-slate-500">Se guardará en mayúsculas. Luego asigna los permisos desde la tabla.</small>
+      <small class="text-slate-400">Se guardará en mayúsculas. Luego asigna los permisos desde la tabla.</small>
     </div>
   </div>
   <ng-template pTemplate="footer">
@@ -215,8 +215,8 @@
 
       @if (modulosOrdenados().length === 0) {
         <div class="panel-empty">
-          <i class="pi pi-spinner pi-spin text-2xl text-slate-500"></i>
-          <p class="text-slate-500 text-sm mt-2">Cargando permisos...</p>
+          <i class="pi pi-spinner pi-spin text-2xl text-slate-400"></i>
+          <p class="text-slate-400 text-sm mt-2">Cargando permisos...</p>
         </div>
       }
     </main>

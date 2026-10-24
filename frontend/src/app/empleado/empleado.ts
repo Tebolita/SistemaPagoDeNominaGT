@@ -265,6 +265,13 @@ export class Empleado implements OnInit {
 
   // --- LÓGICA DEL CRUD ---
 
+  readonly MSG_CUENTA_INVALIDA = 'La cuenta bancaria solo puede contener números y guiones';
+
+  // Misma regla que el backend: vacía o solo números separados por guiones
+  private cuentaBancariaValida(cuenta?: string | null): boolean {
+    return !cuenta || /^\d+(-\d+)*$/.test(cuenta.trim());
+  }
+
   onCreateUser() {
     this.errorDialog.set('');
     this.nuevoEmpleado.set({ Genero: false, Activo: true }); // Valores por defecto
@@ -287,6 +294,11 @@ export class Empleado implements OnInit {
       return;
     }
 
+    if (!this.cuentaBancariaValida(empData.CuentaBancaria)) {
+      this.errorDialog.set(this.MSG_CUENTA_INVALIDA);
+      return;
+    }
+
     this.loading.set(true);
     this.errorDialog.set('');
 
@@ -302,7 +314,8 @@ export class Empleado implements OnInit {
         this.cargarEmpleados();
       },
       error: (err) => {
-        this.errorDialog.set(err.error?.message || 'Ocurrió un error al guardar el empleado.');
+        // ErrorService ya entrega el mensaje del backend en err.message
+        this.errorDialog.set(err.message || 'Ocurrió un error al guardar el empleado.');
         this.loading.set(false);
       }
     });
@@ -384,6 +397,11 @@ export class Empleado implements OnInit {
   onUpdateUser() {
     const userToUpdate = this.selectedUser();
     if (!userToUpdate) return;
+
+    if (!this.cuentaBancariaValida(userToUpdate.CuentaBancaria)) {
+      this.messageService.add({ severity: 'warn', summary: 'Validación', detail: this.MSG_CUENTA_INVALIDA });
+      return;
+    }
 
     this.loading.set(true);
     this.messageResponsive.set('');

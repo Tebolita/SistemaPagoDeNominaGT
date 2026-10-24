@@ -104,7 +104,7 @@
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #475569;
+  color: #94a3b8;
 }
 
 /* ── Ítem de menú ────────────────────────────────────────────────── */
@@ -127,7 +127,7 @@
 
 .menu-icon {
   font-size: 0.85rem;
-  color: #64748b;
+  color: #94a3b8;
   transition: color 0.15s;
   width: 16px;
   text-align: center;

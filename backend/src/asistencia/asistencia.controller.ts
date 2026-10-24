@@ -1,4 +1,5 @@
 import {
+  Query,
   Controller,
   Get,
   Post,
@@ -9,6 +10,8 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AsistenciaService } from './asistencia.service';
+import { leerPaginacion } from 'src/common/paginacion';
+
 import { CreateAsistenciaDto } from './dto/create-asistencia.dto';
 import { UpdateAsistenciaDto } from './dto/update-asistencia.dto';
 import { AuthGuard } from 'src/login/login.guard';
@@ -25,9 +28,10 @@ export class AsistenciaController {
     return this.asistenciaService.create(createAsistenciaDto);
   }
 
+  // ?page=1&limit=50 devuelve { total, page, limit, registros }; sin page, el arreglo completo
   @Get()
-  findAll() {
-    return this.asistenciaService.findAll();
+  findAll(@Query('page') page?: string, @Query('limit') limit?: string) {
+    return this.asistenciaService.findAll(leerPaginacion(page, limit));
   }
 
   @Get(':idAsistencia')

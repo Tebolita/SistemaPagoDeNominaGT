@@ -359,7 +359,7 @@ CREATE TABLE [dbo].[Venta] (
     [Descuento] DECIMAL(18,2) DEFAULT 0,
     [Impuestos] DECIMAL(18,2) DEFAULT 0,
     [Total] DECIMAL(18,2) NOT NULL,
-    [EstadoPago] VARCHAR(20) CHECK ([EstadoPago] IN ('PENDIENTE', 'PAGADO', 'CANCELADO')),
+    [EstadoPago] VARCHAR(20) CHECK ([EstadoPago] IN ('PENDIENTE', 'PAGADO', 'CANCELADO', 'VENCIDO')),
     [FechaVencimiento] DATETIME NULL,
     [IdUsuarioRegistra] INT NOT NULL,
     [Notas] VARCHAR(500),

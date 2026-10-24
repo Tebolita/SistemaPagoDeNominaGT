@@ -1,7 +1,15 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+  Logger,
+  OnModuleDestroy,
+  OnModuleInit,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateVentaDto, UpdateVentaDto } from './dto/venta.dto';
 import { Prisma } from 'src/generated/prisma/client';
+import { Paginacion } from 'src/common/paginacion';
 
 const VENTA_INCLUDE = {
   DetalleVenta: {
@@ -15,8 +23,53 @@ const VENTA_INCLUDE = {
 };
 
 @Injectable()
-export class VentaService {
+export class VentaService implements OnModuleInit, OnModuleDestroy {
+  private readonly logger = new Logger(VentaService.name);
+  private temporizadorVencidas?: NodeJS.Timeout;
+
   constructor(private prisma: PrismaService) {}
+
+  // Revisión periódica para que reportes y tableros también vean las órdenes vencidas
+  onModuleInit() {
+    this.temporizadorVencidas = setInterval(() => this.actualizarVencidas(), 60 * 60 * 1000);
+    this.temporizadorVencidas.unref();
+  }
+
+  onModuleDestroy() {
+    if (this.temporizadorVencidas) clearInterval(this.temporizadorVencidas);
+  }
+
+  /**
+   * Pasa a VENCIDO las órdenes PENDIENTE cuya fecha límite ya pasó.
+   * Una orden vence al terminar el día de su fecha límite (hora de Guatemala, UTC-6).
+   */
+  async marcarVencidas(): Promise<number> {
+    const MS_DIA = 24 * 60 * 60 * 1000;
+    const DESFASE_GT = 6 * 60 * 60 * 1000;
+    const ahora = Date.now();
+    const inicioHoyGT = new Date(ahora - ((ahora - DESFASE_GT) % MS_DIA));
+
+    const { count } = await this.prisma.venta.updateMany({
+      where: {
+        EstadoPago: 'PENDIENTE',
+        NOT: { Activo: false },
+        FechaVencimiento: { lt: inicioHoyGT },
+      },
+      data: { EstadoPago: 'VENCIDO' },
+    });
+    if (count > 0) this.logger.log(`${count} venta(s) pasaron a VENCIDO`);
+    return count;
+  }
+
+  // Igual que marcarVencidas, pero un fallo (p. ej. falta migracion_d12_venta_vencido.sql
+  // en la base de datos) solo se registra y no impide consultar las ventas
+  private async actualizarVencidas() {
+    try {
+      await this.marcarVencidas();
+    } catch (e) {
+      this.logger.error(`No se pudieron marcar ventas vencidas: ${(e as Error).message}`);
+    }
+  }
 
   async create(createVentaDto: CreateVentaDto, idUsuario: number) {
     if (createVentaDto.IdCliente) {
@@ -86,7 +139,14 @@ export class VentaService {
     });
   }
 
-  async findAll(fechaInicio?: string, fechaFin?: string, estadoPago?: string, idCliente?: number) {
+  async findAll(
+    fechaInicio?: string,
+    fechaFin?: string,
+    estadoPago?: string,
+    idCliente?: number,
+    paginacion?: Paginacion,
+  ) {
+    await this.actualizarVencidas();
     const where: Prisma.VentaWhereInput = { Activo: true };
 
     if (fechaInicio && fechaFin) {
@@ -95,14 +155,26 @@ export class VentaService {
     if (estadoPago) where.EstadoPago = estadoPago;
     if (idCliente) where.IdCliente = idCliente;
 
-    return this.prisma.venta.findMany({
-      where,
-      include: VENTA_INCLUDE,
-      orderBy: { FechaVenta: 'desc' },
-    });
+    const orderBy = [{ FechaVenta: 'desc' as const }, { IdVenta: 'desc' as const }];
+    if (!paginacion) {
+      return this.prisma.venta.findMany({ where, include: VENTA_INCLUDE, orderBy });
+    }
+
+    const [total, registros] = await Promise.all([
+      this.prisma.venta.count({ where }),
+      this.prisma.venta.findMany({
+        where,
+        include: VENTA_INCLUDE,
+        orderBy,
+        skip: paginacion.skip,
+        take: paginacion.limit,
+      }),
+    ]);
+    return { total, page: paginacion.page, limit: paginacion.limit, registros };
   }
 
   async findOne(id: number) {
+    await this.actualizarVencidas();
     const venta = await this.prisma.venta.findUnique({
       where: { IdVenta: id },
       include: VENTA_INCLUDE,

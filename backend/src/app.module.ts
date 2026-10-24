@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
+import { APP_GUARD } from '@nestjs/core';
 import { LoginModule } from './login/login.module';
+import { AuthGuard } from './login/login.guard';
 import { PrismaService } from './prisma/prisma.service';
 import { UsuarioModule } from './usuario/usuario.module';
 import { EmpleadoModule } from './empleado/empleado.module';
@@ -63,6 +65,10 @@ import { PrestamoModule } from './prestamo/prestamo.module';
     PrestamoModule,
   ],
   controllers: [],
-  providers: [PrismaService],
+  providers: [
+    PrismaService,
+    // Toda la API exige token salvo las rutas marcadas con @Public()
+    { provide: APP_GUARD, useClass: AuthGuard },
+  ],
 })
 export class AppModule {}

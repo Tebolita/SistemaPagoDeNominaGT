@@ -116,32 +116,12 @@ export class ParametroGlobalComponent implements OnInit {
     ISR_TASA_1: {
       tipo: 'DESCUENTO',
       unidad: '%',
-      descripcion: 'ISR Tramo 1 — primeros Q141,600 sobre la base exenta',
+      descripcion: 'ISR tramo 1 (SAT): tasa sobre la renta imponible anual hasta el límite del tramo (5%)',
     },
     ISR_TASA_2: {
       tipo: 'DESCUENTO',
       unidad: '%',
-      descripcion: 'ISR Tramo 2 — siguientes Q93,400',
-    },
-    ISR_TASA_3: {
-      tipo: 'DESCUENTO',
-      unidad: '%',
-      descripcion: 'ISR Tramo 3 — siguientes Q141,000',
-    },
-    ISR_TASA_4: {
-      tipo: 'DESCUENTO',
-      unidad: '%',
-      descripcion: 'ISR Tramo 4 — siguientes Q376,000',
-    },
-    ISR_TASA_5: {
-      tipo: 'DESCUENTO',
-      unidad: '%',
-      descripcion: 'ISR Tramo 5 — siguientes Q752,000',
-    },
-    ISR_TASA_6: {
-      tipo: 'DESCUENTO',
-      unidad: '%',
-      descripcion: 'ISR Tramo 6 — excedente de Q1,504,000',
+      descripcion: 'ISR tramo 2 (SAT): tasa sobre el excedente del límite del tramo 1 (7%)',
     },
     IRTRA_PORCENTAJE: {
       tipo: 'DESCUENTO',
@@ -173,7 +153,12 @@ export class ParametroGlobalComponent implements OnInit {
     ISR_BASE_ANUAL: {
       tipo: 'REFERENCIA',
       unidad: 'Q',
-      descripcion: 'Renta anual exenta; el ISR aplica solo sobre el excedente de este monto',
+      descripcion: 'Deducción anual sin comprobación (Q48,000); además se restan las cuotas IGSS del año',
+    },
+    ISR_LIMITE_TRAMO_1: {
+      tipo: 'REFERENCIA',
+      unidad: 'Q',
+      descripcion: 'Renta imponible anual hasta la que aplica la tasa del tramo 1 (Q300,000)',
     },
   };
 

@@ -30,7 +30,7 @@
                 [ngClass]="estado.EsCancelacion ? 'border-red-700 bg-red-950' : 'border-slate-600 bg-slate-900'">
                 <p-tag [value]="estado.NombreEstado" [severity]="getColorSeverity(estado.Color)"
                   styleClass="text-xs font-mono"></p-tag>
-                <div class="text-xs text-slate-500 mt-1">Orden {{ estado.Orden }}</div>
+                <div class="text-xs text-slate-400 mt-1">Orden {{ estado.Orden }}</div>
                 @if (estado.EsFinal) {
                   <div class="text-xs text-orange-400 mt-0.5 flex items-center gap-1">
                     <i class="pi pi-lock text-xs"></i> Final
@@ -47,7 +47,7 @@
 
           @if (!last) {
             <div class="flex items-center self-center">
-              <i class="pi pi-arrow-right text-slate-500 text-sm"></i>
+              <i class="pi pi-arrow-right text-slate-400 text-sm"></i>
             </div>
           }
         }
@@ -106,7 +106,7 @@
               <span class="text-xs bg-red-900 text-red-300 border border-red-700 px-1.5 py-0.5 rounded">Cancelación</span>
             }
             @if (!estado.EsFinal && !estado.EsCancelacion) {
-              <span class="text-xs text-slate-500">—</span>
+              <span class="text-xs text-slate-400">—</span>
             }
           </div>
         </td>
@@ -120,9 +120,9 @@
           <p-tag [value]="estado.Activo ? 'Activo' : 'Inactivo'" [severity]="getEstadoSeverity(estado.Activo)"></p-tag>
         </td>
         <td>
-          <p-button icon="pi pi-pencil" [rounded]="true" [text]="true" severity="warn"
+          <p-button ariaLabel="Editar" icon="pi pi-pencil" [rounded]="true" [text]="true" severity="warn"
             pTooltip="Editar" tooltipPosition="top" (onClick)="showDialog(estado)"></p-button>
-          <p-button icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger"
+          <p-button ariaLabel="Eliminar" icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger"
             pTooltip="Eliminar" tooltipPosition="top" (onClick)="deleteEstado(estado)"></p-button>
         </td>
       </tr>
@@ -144,14 +144,14 @@
         <label class="block text-sm font-medium mb-2 text-slate-300">Nombre del Estado *</label>
         <input pInputText [(ngModel)]="form.NombreEstado" placeholder="Ej: EN_REVISION"
           class="w-full font-mono" maxlength="50" />
-        <p class="text-xs text-slate-500 mt-1">Usa MAYÚSCULAS y guiones bajos.</p>
+        <p class="text-xs text-slate-400 mt-1">Usa MAYÚSCULAS y guiones bajos.</p>
       </div>
 
       <div>
         <label class="block text-sm font-medium mb-2 text-slate-300">Orden *</label>
         <p-inputNumber [(ngModel)]="form.Orden" [min]="0" [max]="100"
           placeholder="1 = primero" class="w-full"></p-inputNumber>
-        <p class="text-xs text-slate-500 mt-1">Estados con mismo Orden aparecen juntos.</p>
+        <p class="text-xs text-slate-400 mt-1">Estados con mismo Orden aparecen juntos.</p>
       </div>
 
       <div>
@@ -175,7 +175,7 @@
         <p-checkbox [(ngModel)]="form.RequiereAprobacion" [binary]="true" inputId="req"></p-checkbox>
         <div>
           <label for="req" class="text-sm font-medium text-slate-200 cursor-pointer">Requiere rol especial</label>
-          <p class="text-xs text-slate-500 mt-0.5">Solo ADMIN, GERENTE, RRHH pueden transicionar a este estado.</p>
+          <p class="text-xs text-slate-400 mt-0.5">Solo ADMIN, GERENTE, RRHH pueden transicionar a este estado.</p>
         </div>
       </div>
 
@@ -183,7 +183,7 @@
         <p-checkbox [(ngModel)]="form.EsFinal" [binary]="true" inputId="final"></p-checkbox>
         <div>
           <label for="final" class="text-sm font-medium text-orange-300 cursor-pointer">Estado final</label>
-          <p class="text-xs text-slate-500 mt-0.5">No permite más transiciones de salida (ej: PAGADO).</p>
+          <p class="text-xs text-slate-400 mt-0.5">No permite más transiciones de salida (ej: PAGADO).</p>
         </div>
       </div>
 
@@ -191,7 +191,7 @@
         <p-checkbox [(ngModel)]="form.EsCancelacion" [binary]="true" inputId="cancel"></p-checkbox>
         <div>
           <label for="cancel" class="text-sm font-medium text-red-300 cursor-pointer">Estado de cancelación</label>
-          <p class="text-xs text-slate-500 mt-0.5">Disponible desde cualquier estado activo (ej: CANCELADO).</p>
+          <p class="text-xs text-slate-400 mt-0.5">Disponible desde cualquier estado activo (ej: CANCELADO).</p>
         </div>
       </div>
 

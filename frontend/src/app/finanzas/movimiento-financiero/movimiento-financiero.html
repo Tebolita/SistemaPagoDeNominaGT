@@ -26,11 +26,15 @@
         [(ngModel)]="filtroTipo" placeholder="Todos" [showClear]="true"
         appendTo="body" class="w-40"></p-select>
     </div>
-    <p-button label="Filtrar" icon="pi pi-filter" severity="secondary" (onClick)="loadMovimientos()"></p-button>
+    <p-button label="Filtrar" icon="pi pi-filter" severity="secondary" (onClick)="filtrar()"></p-button>
   </div>
 
   <!-- ── Tabla ──────────────────────────────────────────────────────────────── -->
   <p-table [value]="movimientos" [loading]="loading" dataKey="IdMovimiento" [rowHover]="true"
+    [lazy]="true" [paginator]="true" [rows]="filasPorPagina" [first]="primerRegistro"
+    [totalRecords]="totalMovimientos" (onLazyLoad)="onLazyLoad($event)"
+    [rowsPerPageOptions]="[10, 25, 50]" [showCurrentPageReport]="true"
+    currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} movimientos"
     emptyMessage="No hay movimientos registrados.">
     <ng-template pTemplate="header">
       <tr>
@@ -54,7 +58,7 @@
         </td>
         <td class="text-sm text-slate-300">
           {{ m.Categoria }}
-          @if (m.Subcategoria) { <span class="text-slate-500"> · {{ m.Subcategoria }}</span> }
+          @if (m.Subcategoria) { <span class="text-slate-400"> · {{ m.Subcategoria }}</span> }
         </td>
         <td class="font-mono text-xs text-slate-400">{{ m.Referencia || m.Notas || '—' }}</td>
         <td class="font-bold font-mono"
@@ -62,7 +66,12 @@
           {{ m.TipoMovimiento === 'INGRESO' ? '+' : '−' }} Q {{ m.Monto | number:'1.2-2' }}
         </td>
         <td>
-          <p-button icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger"
+          @if (esEditable(m)) {
+            <p-button ariaLabel="Editar" icon="pi pi-pencil" [rounded]="true" [text]="true" severity="warn"
+              pTooltip="Editar" tooltipPosition="top"
+              (onClick)="editMovimiento(m)"></p-button>
+          }
+          <p-button ariaLabel="Eliminar" icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger"
             pTooltip="Eliminar" tooltipPosition="top"
             (onClick)="deleteMovimiento(m)"></p-button>
         </td>
@@ -72,7 +81,7 @@
 </div>
 
 <!-- ── Diálogo: Nuevo Movimiento ─────────────────────────────────────────── -->
-<p-dialog header="Nuevo Movimiento" [(visible)]="movimientoDialog" [modal]="true"
+<p-dialog [header]="idMovimientoEditando ? 'Editar Movimiento' : 'Nuevo Movimiento'" [(visible)]="movimientoDialog" [modal]="true"
   [style]="{ width: '100%', maxWidth: '620px' }" [breakpoints]="{ '768px': '95vw' }"
   [draggable]="false" [resizable]="false">
 

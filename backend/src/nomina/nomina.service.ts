@@ -161,13 +161,19 @@ export class NominaService {
       throw new NotFoundException(`Nómina con ID ${id} no encontrada`);
     }
 
+    // El estado solo cambia por el flujo de estados, que valida la transición, registra el
+    // historial y aplica el pago o su reversión
+    if (updateNominaDto.Estado !== undefined || updateNominaDto.IdEstadoActual !== undefined) {
+      throw new BadRequestException(
+        'El estado de la nómina no se edita directamente; use POST /api/estado-nomina/cambiar-estado',
+      );
+    }
+
     const data: any = {
       Mes: updateNominaDto.Mes,
       Anio: updateNominaDto.Anio,
       Quincena: updateNominaDto.Quincena,
-      Estado: updateNominaDto.Estado,
       IdUsuarioGerente: updateNominaDto.IdUsuarioGerente,
-      IdEstadoActual: updateNominaDto.IdEstadoActual,
       Activo: updateNominaDto.Activo,
     };
 
@@ -310,11 +316,10 @@ export class NominaService {
       throw new BadRequestException('El salario base debe ser mayor a cero');
     }
 
-    const parametros = await this.prisma.parametroGlobal.findMany({
-      where: { Activo: true },
-    });
+    const parametros = await this.validarParametrosObligatorios();
 
-    // Devuelve el valor del parámetro solo si el empleado cumple los filtros configurados
+    // Devuelve el valor del parámetro solo si el empleado cumple los filtros configurados.
+    // Un parámetro opcional ausente vale 0; los obligatorios ya se validaron arriba.
     const getParam = (nombre: string): number => {
       const param = parametros.find((p) => p.NombreParametro === nombre);
       if (!param) return 0;
@@ -325,11 +330,8 @@ export class NominaService {
     const igssEmpleado = getParam('IGSS_EMPLEADO') / 100;
     const isrTasa1 = getParam('ISR_TASA_1') / 100;
     const isrTasa2 = getParam('ISR_TASA_2') / 100;
-    const isrTasa3 = getParam('ISR_TASA_3') / 100;
-    const isrTasa4 = getParam('ISR_TASA_4') / 100;
-    const isrTasa5 = getParam('ISR_TASA_5') / 100;
-    const isrTasa6 = getParam('ISR_TASA_6') / 100;
-    const isrBaseAnual = getParam('ISR_BASE_ANUAL');
+    const isrLimiteTramo1 = getParam('ISR_LIMITE_TRAMO_1');
+    const isrDeduccionAnual = getParam('ISR_BASE_ANUAL');
     const bono14Porcentaje = getParam('BONO_14_PORCENTAJE') / 100;
     const aguinaldoPorcentaje = getParam('AGUINALDO_PORCENTAJE') / 100;
     const bonoProd = getParam('BONO_PRODUCTIVIDAD');
@@ -340,39 +342,20 @@ export class NominaService {
 
     const salarioMensual = salarioBase;
     const descuentoIGSS = salarioMensual * igssEmpleado;
+    // ── ISR asalariados (Decreto 10-2012, arts. 72 y 73) ──────────────────
+    // Renta imponible anual = salario anual − deducción sin comprobación − cuotas IGSS del año.
+    // Bono 14, aguinaldo y bonificación incentivo son rentas exentas y no se incluyen.
+    // Tramo 1: tasa 1 hasta el límite; tramo 2: importe fijo del tramo 1 + tasa 2 sobre el excedente.
     const salarioAnualizado = salarioMensual * 12;
-    let isr = 0;
-
-    if (salarioAnualizado > isrBaseAnual) {
-      const exceso1 = Math.min(salarioAnualizado - isrBaseAnual, 141600);
-      const exceso2 = Math.min(
-        Math.max(salarioAnualizado - isrBaseAnual - 141600, 0),
-        93400,
-      );
-      const exceso3 = Math.min(
-        Math.max(salarioAnualizado - isrBaseAnual - 235000, 0),
-        141000,
-      );
-      const exceso4 = Math.min(
-        Math.max(salarioAnualizado - isrBaseAnual - 376000, 0),
-        376000,
-      );
-      const exceso5 = Math.min(
-        Math.max(salarioAnualizado - isrBaseAnual - 752000, 0),
-        752000,
-      );
-      const exceso6 = Math.max(salarioAnualizado - isrBaseAnual - 1504000, 0);
-
-      isr =
-        exceso1 * isrTasa1 +
-        exceso2 * isrTasa2 +
-        exceso3 * isrTasa3 +
-        exceso4 * isrTasa4 +
-        exceso5 * isrTasa5 +
-        exceso6 * isrTasa6;
-
-      isr = isr / 12;
-    }
+    const rentaImponible = Math.max(
+      0,
+      salarioAnualizado - isrDeduccionAnual - descuentoIGSS * 12,
+    );
+    const isrAnual =
+      rentaImponible <= isrLimiteTramo1
+        ? rentaImponible * isrTasa1
+        : isrLimiteTramo1 * isrTasa1 + (rentaImponible - isrLimiteTramo1) * isrTasa2;
+    const isr = isrAnual / 12;
 
     const descuentoIRTRA = salarioMensual * irtra;
     const descuentoINTECAP = salarioMensual * intecap;
@@ -695,6 +678,9 @@ export class NominaService {
       );
     }
 
+    // Validar antes de crear el encabezado para no dejar una nómina vacía si faltan parámetros
+    await this.validarParametrosObligatorios();
+
     const estadoGeneradaId = await this.getEstadoBorradorId();
     const nominaEncabezado = await this.prisma.nominaEncabezado.create({
       data: {
@@ -915,6 +901,38 @@ export class NominaService {
   }
 
   // ─── Helpers ──────────────────────────────────────────────────────────────
+
+  // Parámetros sin los cuales el cálculo de nómina sería incorrecto
+  private static readonly PARAMETROS_OBLIGATORIOS = [
+    'IGSS_EMPLEADO',
+    'ISR_BASE_ANUAL',
+    'ISR_TASA_1',
+    'ISR_TASA_2',
+    'ISR_LIMITE_TRAMO_1',
+    'BONO_14_PORCENTAJE',
+    'AGUINALDO_PORCENTAJE',
+    'IRTRA_PORCENTAJE',
+    'INTECAP_PORCENTAJE',
+    'HORAS_EXTRA_PORCENTAJE',
+  ];
+
+  // Devuelve los parámetros activos; falla si falta alguno obligatorio en lugar de tratarlo como cero
+  private async validarParametrosObligatorios() {
+    const parametros = await this.prisma.parametroGlobal.findMany({
+      where: { Activo: true },
+    });
+
+    const faltantes = NominaService.PARAMETROS_OBLIGATORIOS.filter(
+      (nombre) => !parametros.some((p) => p.NombreParametro === nombre),
+    );
+    if (faltantes.length > 0) {
+      throw new BadRequestException(
+        `Faltan parámetros globales obligatorios para calcular la nómina: ${faltantes.join(', ')}`,
+      );
+    }
+
+    return parametros;
+  }
 
   private empleadoMatcheFiltro(
     empleado: { Genero: boolean; IdDepartamento: number | null; IdPuesto: number; IdJornada: number },

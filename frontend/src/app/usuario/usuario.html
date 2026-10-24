@@ -27,8 +27,8 @@
                 <td>{{ obtenerNombreEmpleado(usuario.IdEmpleado) }}</td>
                 <td>{{ obtenerNombreRol(usuario.IdRol) }}</td>
                 <td class="text-center">
-                    <p-button icon="pi pi-pencil" class="me-2" [rounded]="true" [outlined]="true" severity="info" (onClick)="editarUsuario(usuario)" title="Editar usuario"></p-button>
-                    <p-button icon="pi pi-trash" [rounded]="true" [outlined]="true" severity="danger" (onClick)="eliminarUsuario(usuario)" title="Eliminar usuario"></p-button>
+                    <p-button ariaLabel="Editar usuario" icon="pi pi-pencil" class="me-2" [rounded]="true" [outlined]="true" severity="info" (onClick)="editarUsuario(usuario)" title="Editar usuario"></p-button>
+                    <p-button ariaLabel="Eliminar usuario" icon="pi pi-trash" [rounded]="true" [outlined]="true" severity="danger" (onClick)="eliminarUsuario(usuario)" title="Eliminar usuario"></p-button>
                 </td>
             </tr>
         </ng-template>

@@ -31,7 +31,7 @@
         @if (usuario()) {
           <div class="perfil-info-row">
             <span class="perfil-info-label">ID Usuario</span>
-            <span class="perfil-info-value text-slate-500 font-mono">#{{ usuario()?.IdUsuario }}</span>
+            <span class="perfil-info-value text-slate-400 font-mono">#{{ usuario()?.IdUsuario }}</span>
           </div>
         }
       </div>
@@ -64,7 +64,7 @@
           <label>Nueva clave numérica (opcional)</label>
           <input pInputText type="password" [(ngModel)]="form.claveNueva"
             placeholder="Dejar vacío para no cambiar" class="w-full" />
-          <small class="text-slate-500">La clave numérica se usa junto con la contraseña para iniciar sesión.</small>
+          <small class="text-slate-400">La clave numérica se usa junto con la contraseña para iniciar sesión.</small>
         </div>
 
         <p-button label="Guardar cambios" icon="pi pi-save" severity="success" class="w-full"

@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, catchError } from 'rxjs';
 import { ErrorService } from './error.service';
+import { environment } from '../../environments/environment';
 
 export interface ConfigEmpresa {
   IdConfig?: number;
@@ -17,7 +18,7 @@ export interface ConfigEmpresa {
 
 @Injectable({ providedIn: 'root' })
 export class ConfigEmpresaService {
-  private apiUrl = 'http://localhost:4000/api/config-empresa';
+  private apiUrl = `${environment.apiUrl}/config-empresa`;
   private http   = inject(HttpClient);
   private errorService = inject(ErrorService);
 

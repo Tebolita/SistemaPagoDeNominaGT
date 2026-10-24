@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common'; 
 import { FormsModule } from '@angular/forms';   
 
-import { TableModule } from 'primeng/table';
+import { TableModule, TableLazyLoadEvent } from 'primeng/table';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
@@ -46,6 +46,11 @@ import { EmpleadoService } from '../services/empleado.service';
 export class Asistencia implements OnInit, OnDestroy {
     asistenciaDialog: boolean = false;
     asistencias: AsistenciaInterface[] = [];
+    // Paginación en el servidor
+    totalAsistencias = 0;
+    filasPorPagina = 10;
+    paginaActual = 1;
+    cargandoTabla = false;
     asistencia!: AsistenciaInterface;
     empleados: any[] = []; 
     submitted: boolean = false;
@@ -61,7 +66,7 @@ export class Asistencia implements OnInit, OnDestroy {
     ) {}
 
     ngOnInit() {
-        this.loadAsistencias();
+        // La primera página la pide la tabla (onLazyLoad) al iniciarse
         this.cargarEmpleados();
     }
 
@@ -70,13 +75,30 @@ export class Asistencia implements OnInit, OnDestroy {
         this.destroy$.complete();
     }
 
+    // Carga la página actual; la tabla la invoca al iniciar y al cambiar de página
     loadAsistencias() {
-        this.asistenciaService.getAsistencias()
+        this.cargandoTabla = true;
+        this.asistenciaService.getAsistenciasPaginadas(this.paginaActual, this.filasPorPagina)
         .pipe(takeUntil(this.destroy$))
-        .subscribe((data) => {
-            this.asistencias = data;
-            this.cdr.detectChanges();
+        .subscribe({
+            next: (data) => {
+                this.asistencias = data.registros;
+                this.totalAsistencias = data.total;
+                this.cargandoTabla = false;
+                this.cdr.detectChanges();
+            },
+            error: (err) => {
+                this.cargandoTabla = false;
+                this.messageService.add({ severity: 'error', summary: 'Error', detail: err.message });
+                this.cdr.detectChanges();
+            },
         });
+    }
+
+    onLazyLoad(event: TableLazyLoadEvent) {
+        this.filasPorPagina = event.rows ?? this.filasPorPagina;
+        this.paginaActual = Math.floor((event.first ?? 0) / this.filasPorPagina) + 1;
+        this.loadAsistencias();
     }
 
     cargarEmpleados(): void {
