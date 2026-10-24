@@ -5,3 +5,4 @@ backups/
 # Pruebas de rendimiento: reportes generados y credenciales locales
 tests/performance/resultados/
 tests/performance/.env.rendimiento
+.DS_Store
