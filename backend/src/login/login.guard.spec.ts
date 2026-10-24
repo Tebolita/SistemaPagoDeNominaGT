@@ -1,4 +1,4 @@
-import { UnauthorizedException } from '@nestjs/common';
+import { ForbiddenException, UnauthorizedException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AuthGuard } from './login.guard';
 
@@ -8,8 +8,8 @@ describe('AuthGuard', () => {
   let reflector: Reflector;
   let guard: AuthGuard;
 
-  const contexto = (headers: Record<string, string> = {}) => {
-    const request: any = { headers };
+  const contexto = (headers: Record<string, string> = {}, method = 'GET') => {
+    const request: any = { headers, method };
     return {
       request,
       ctx: {
@@ -61,5 +61,35 @@ describe('AuthGuard', () => {
 
     const { ctx } = contexto({ authorization: 'Basic dXN1YXJpbzpjbGF2ZQ==' });
     await expect(guard.canActivate(ctx)).rejects.toThrow(UnauthorizedException);
+  });
+
+  // Sesión por cookie httpOnly (ISO 25010 – Seguridad)
+  describe('cookie de sesión', () => {
+    beforeEach(() => {
+      jest.spyOn(reflector, 'getAllAndOverride').mockReturnValue(undefined);
+      jwt.verifyAsync.mockResolvedValue({ sub: 1, username: 'admin', role: 'ADMIN' });
+    });
+
+    it('acepta el token desde la cookie access_token en una lectura', async () => {
+      const { ctx, request } = contexto({ cookie: 'tema=oscuro; access_token=tok-cookie' });
+      await expect(guard.canActivate(ctx)).resolves.toBe(true);
+      expect(jwt.verifyAsync).toHaveBeenCalledWith('tok-cookie');
+      expect(request.user.sub).toBe(1);
+    });
+
+    it('rechaza una escritura por cookie sin la cabecera anti-CSRF', async () => {
+      const { ctx } = contexto({ cookie: 'access_token=tok-cookie' }, 'POST');
+      await expect(guard.canActivate(ctx)).rejects.toThrow(ForbiddenException);
+    });
+
+    it('acepta una escritura por cookie con X-Requested-With', async () => {
+      const { ctx } = contexto({ cookie: 'access_token=tok-cookie', 'x-requested-with': 'XMLHttpRequest' }, 'PATCH');
+      await expect(guard.canActivate(ctx)).resolves.toBe(true);
+    });
+
+    it('con Bearer no exige la cabecera anti-CSRF (clientes de API)', async () => {
+      const { ctx } = contexto({ authorization: 'Bearer tok' }, 'DELETE');
+      await expect(guard.canActivate(ctx)).resolves.toBe(true);
+    });
   });
 });

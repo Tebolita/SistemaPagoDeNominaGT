@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EstadoNomina } from './estado-nomina';
+import { EstadoNominaComponent } from './estado-nomina';
 
 describe('EstadoNomina', () => {
-  let component: EstadoNomina;
-  let fixture: ComponentFixture<EstadoNomina>;
+  let component: EstadoNominaComponent;
+  let fixture: ComponentFixture<EstadoNominaComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [EstadoNomina],
+      imports: [EstadoNominaComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(EstadoNomina);
+    fixture = TestBed.createComponent(EstadoNominaComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

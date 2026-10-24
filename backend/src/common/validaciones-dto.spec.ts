@@ -1,6 +1,7 @@
 import { plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
 import { CreateEmpleadoDto } from 'src/empleado/dto/create-empleado.dto';
+import { CreateUsuarioDto } from 'src/usuario/dto/create-usuario.dto';
 import { CreateJornadaLaboralDto } from 'src/jornada-laboral/dto/create-jornada-laboral.dto';
 import { UpdateJornadaLaboralDto } from 'src/jornada-laboral/dto/update-jornada-laboral.dto';
 
@@ -50,5 +51,16 @@ describe('Validaciones de entrada', () => {
         );
       },
     );
+  });
+
+  // Seguridad: política de contraseñas al crear usuarios
+  describe('CreateUsuarioDto.Contrasena', () => {
+    const usuario = (Contrasena: string) => ({ Username: 'ana', Contrasena, Clave: '1234', IdRol: 1, IdEmpleado: 1 });
+    it('acepta una contraseña robusta', async () => {
+      expect(await errores(CreateUsuarioDto, usuario('Correcta.1'))).toEqual([]);
+    });
+    it.each(['123456', 'password', 'Password1'])('rechaza la contraseña débil %s', async (c) => {
+      expect((await errores(CreateUsuarioDto, usuario(c))).length).toBeGreaterThan(0);
+    });
   });
 });

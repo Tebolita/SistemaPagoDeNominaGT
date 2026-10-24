@@ -15,7 +15,10 @@ import { CreateRolDto } from './dto/create-rol.dto';
 import { UpdateRolDto } from './dto/update-rol.dto';
 import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { AuthGuard } from 'src/login/login.guard';
+import { Roles, ROLES_SEGURIDAD } from 'src/common/roles';
 
+// Catálogo de roles: cualquier usuario autenticado lo lee (RRHH lo usa en Empleados);
+// crear, editar o borrar roles es exclusivo de Seguridad.
 @ApiTags('Roles')
 @ApiBearerAuth()
 @UseGuards(AuthGuard)
@@ -23,6 +26,7 @@ import { AuthGuard } from 'src/login/login.guard';
 export class RolController {
   constructor(private readonly rolService: RolService) {}
 
+  @Roles(...ROLES_SEGURIDAD)
   @Post()
   create(@Body() createRolDto: CreateRolDto) {
     return this.rolService.create(createRolDto);
@@ -49,6 +53,7 @@ export class RolController {
     return this.rolService.getPermisosRol(id);
   }
 
+  @Roles(...ROLES_SEGURIDAD)
   @Put(':id/permisos')
   asignarPermisos(
     @Param('id', ParseIntPipe) id: number,
@@ -57,6 +62,7 @@ export class RolController {
     return this.rolService.asignarPermisos(id, body.idPermisos);
   }
 
+  @Roles(...ROLES_SEGURIDAD)
   @Patch(':id')
   update(
     @Param('id', ParseIntPipe) id: number,
@@ -65,6 +71,7 @@ export class RolController {
     return this.rolService.update(id, updateRolDto);
   }
 
+  @Roles(...ROLES_SEGURIDAD)
   @Delete(':id')
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.rolService.remove(id);

@@ -13,6 +13,7 @@ import { CreateDetalleControlVacacionDto } from './dto/create-detalle-control-va
 import { UpdateDetalleControlVacacionDto } from './dto/update-detalle-control-vacacion.dto';
 import { AuthGuard } from 'src/login/login.guard';
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { Roles, ROLES_RRHH } from 'src/common/roles';
 
 @ApiBearerAuth()
 @UseGuards(AuthGuard)
@@ -22,6 +23,7 @@ export class DetalleControlVacacionController {
     private readonly detalleControlVacacionService: DetalleControlVacacionService,
   ) {}
 
+  @Roles(...ROLES_RRHH)
   @Post('CrearDetalleControlVacacion')
   create(
     @Body() createDetalleControlVacacionDto: CreateDetalleControlVacacionDto,
@@ -53,6 +55,7 @@ export class DetalleControlVacacionController {
     return this.detalleControlVacacionService.findOne(+idDetalleVacacion);
   }
 
+  @Roles(...ROLES_RRHH)
   @Patch(':id')
   update(
     @Param('id') id: string,
@@ -64,6 +67,7 @@ export class DetalleControlVacacionController {
     );
   }
 
+  @Roles(...ROLES_RRHH)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.detalleControlVacacionService.remove(+id);

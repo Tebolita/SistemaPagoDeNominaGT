@@ -18,6 +18,8 @@ model Asistencia {
   Activo           Boolean?
   FechaEliminacion DateTime? @db.DateTime
   Empleado         Empleado  @relation(fields: [IdEmpleado], references: [IdEmpleado], onUpdate: NoAction, map: "FK_Asistencia_Empleado")
+
+  @@index([IdEmpleado, Fecha], map: "IX_Asistencia_Empleado_Fecha")
 }
 
 model Banco {
@@ -325,6 +327,9 @@ model NominaDetalle {
   Empleado              Empleado              @relation(fields: [IdEmpleado], references: [IdEmpleado], onUpdate: NoAction, map: "FK_Detalle_Empleado")
   NominaEncabezado      NominaEncabezado      @relation(fields: [IdNomina], references: [IdNomina], onUpdate: NoAction, map: "FK_Detalle_Nomina")
   RegistroEnvioBoleta   RegistroEnvioBoleta[]
+
+  @@index([IdNomina], map: "IX_NominaDetalle_IdNomina")
+  @@index([IdEmpleado], map: "IX_NominaDetalle_IdEmpleado")
 }
 
 model NominaEncabezado {
@@ -349,6 +354,9 @@ model NominaEncabezado {
   CuentaBancariaEmpresa  CuentaBancariaEmpresa?   @relation(fields: [IdCuenta], references: [IdCuenta], onDelete: NoAction, onUpdate: NoAction, map: "FK_NominaEncabezado_Cuenta")
   EstadoNomina           EstadoNomina?            @relation(fields: [IdEstadoActual], references: [IdEstadoNomina], onDelete: NoAction, onUpdate: NoAction, map: "FK_NominaEncabezado_Estado")
   Usuario                Usuario?                 @relation(fields: [IdUsuarioGerente], references: [IdUsuario], onDelete: NoAction, onUpdate: NoAction, map: "FK_Planilla_Gerente")
+
+  @@index([Anio, Mes], map: "IX_NominaEncabezado_AnioMes")
+  @@index([IdEstadoActual], map: "IX_NominaEncabezado_Estado")
 }
 
 model ParametroGlobal {
@@ -450,6 +458,8 @@ model Salario {
   Activo              Boolean?
   FechaEliminacion    DateTime? @db.DateTime
   Empleado            Empleado  @relation(fields: [IdEmpleado], references: [IdEmpleado], onUpdate: NoAction, map: "FK_Historico_Empleado")
+
+  @@index([IdEmpleado, Activo], map: "IX_Salario_Empleado_Activo")
 }
 
 model sysdiagrams {
@@ -582,6 +592,9 @@ model AuditoriaSession {
   Exitoso     Boolean
   Detalle     String?  @db.VarChar(200)
   Usuario     Usuario? @relation(fields: [IdUsuario], references: [IdUsuario], onDelete: NoAction, onUpdate: NoAction, map: "FK_Auditoria_Usuario")
+
+  @@index([FechaHora], map: "IX_AuditoriaSession_FechaHora")
+  @@index([IdUsuario], map: "IX_AuditoriaSession_IdUsuario")
 }
 
 model ConfiguracionEmpresa {

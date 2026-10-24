@@ -9,7 +9,7 @@ export class MovimientoFinancieroService {
   constructor(private prisma: PrismaService) {}
 
   // Registrar el movimiento y ajustar el saldo ocurren juntos o no ocurren
-  async create(createMovimientoDto: CreateMovimientoFinancieroDto) {
+  async create(createMovimientoDto: CreateMovimientoFinancieroDto & { IdUsuarioRegistra: number }) {
     return this.prisma.$transaction(async (tx) => {
       const movimiento = await tx.movimientoFinanciero.create({
         data: {
@@ -19,7 +19,7 @@ export class MovimientoFinancieroService {
         },
         include: {
           CuentaBancariaEmpresa: { include: { Banco: true } },
-          Usuario: true,
+          Usuario: { select: { IdUsuario: true, Username: true } }, // nunca Contrasena/Clave
           Venta: true,
           NominaEncabezado: true,
         },
@@ -66,7 +66,7 @@ export class MovimientoFinancieroService {
         CuentaBancariaEmpresa: {
           include: { Banco: true },
         },
-        Usuario: true,
+        Usuario: { select: { IdUsuario: true, Username: true } }, // nunca Contrasena/Clave
         Venta: true,
         NominaEncabezado: true,
       },
@@ -91,7 +91,7 @@ export class MovimientoFinancieroService {
         CuentaBancariaEmpresa: {
           include: { Banco: true },
         },
-        Usuario: true,
+        Usuario: { select: { IdUsuario: true, Username: true } }, // nunca Contrasena/Clave
         Venta: true,
         NominaEncabezado: true,
       },
@@ -131,7 +131,7 @@ export class MovimientoFinancieroService {
         },
         include: {
           CuentaBancariaEmpresa: { include: { Banco: true } },
-          Usuario: true,
+          Usuario: { select: { IdUsuario: true, Username: true } }, // nunca Contrasena/Clave
           Venta: true,
           NominaEncabezado: true,
         },

@@ -17,6 +17,7 @@ import { CreateNominaDto } from './dto/create-nomina.dto';
 import { UpdateNominaDto } from './dto/update-nomina.dto';
 import { AuthGuard } from '../login/login.guard';
 import { ExportService } from '../export/export.service';
+import type { RequestConUsuario } from 'src/common/request-con-usuario';
 
 @Controller('nomina')
 @UseGuards(AuthGuard)
@@ -27,7 +28,7 @@ export class NominaController {
   ) {}
 
   @Post()
-  create(@Request() req: any, @Body() createNominaDto: CreateNominaDto) {
+  create(@Request() req: RequestConUsuario, @Body() createNominaDto: CreateNominaDto) {
     return this.nominaService.create(createNominaDto, req.user?.sub);
   }
 
@@ -38,7 +39,7 @@ export class NominaController {
 
   @Post('generar')
   generarNomina(
-    @Request() req: any,
+    @Request() req: RequestConUsuario,
     @Body() body: { idEmpleado: number; salarioBase: number; mes?: number; anio?: number; idCuenta?: number },
   ) {
     return this.nominaService.crearNominaConDetalles(
@@ -53,7 +54,7 @@ export class NominaController {
 
   @Post('generar-personalizada')
   generarPersonalizada(
-    @Request() req: any,
+    @Request() req: RequestConUsuario,
     @Body() body: {
       idEmpleados: number[];
       idParametros: number[];
@@ -76,7 +77,7 @@ export class NominaController {
 
   @Post('generar-masiva')
   generarNominaMasiva(
-    @Request() req: any,
+    @Request() req: RequestConUsuario,
     @Body() body: { mes?: number; anio?: number; idCuenta?: number },
   ) {
     return this.nominaService.generarNominaMasiva(req.user?.sub, body.mes, body.anio, body.idCuenta);
@@ -104,7 +105,7 @@ export class NominaController {
 
   @Post(':id/firmantes-asignados')
   asignarFirmantes(
-    @Request() req: any,
+    @Request() req: RequestConUsuario,
     @Param('id', ParseIntPipe) id: number,
     @Body() body: { asignaciones: any[] },
   ) {
@@ -128,14 +129,14 @@ export class NominaController {
 
   @Post(':id/firmar')
   firmarNomina(
-    @Request() req: any,
+    @Request() req: RequestConUsuario,
     @Param('id', ParseIntPipe) id: number,
     @Body() body: { tipoFirmante: string; comentarios?: string },
   ) {
     return this.nominaService.firmarNomina(
       id,
       body.tipoFirmante,
-      req.user?.sub,
+      req.user!.sub, // el AuthGuard global garantiza el usuario
       body.comentarios,
     );
   }

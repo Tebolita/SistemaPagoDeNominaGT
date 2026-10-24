@@ -4,6 +4,15 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { IsInt, IsNumber, IsString, IsOptional, Min } from 'class-validator';
 import { Transform } from 'class-transformer';
 
+/** Divide un monto en cuotas iguales a dos decimales; la última cuota ajusta los centavos. */
+export function calcularCuotas(monto: number, totalCuotas: number): number[] {
+  const centavos = Math.round(monto * 100);
+  const base = Math.floor(centavos / totalCuotas);
+  return Array.from({ length: totalCuotas }, (_, i) =>
+    (i === totalCuotas - 1 ? centavos - base * (totalCuotas - 1) : base) / 100,
+  );
+}
+
 export class CreatePrestamoDto {
   @IsInt() @Min(1)
   @Transform(({ value }) => parseInt(value))
@@ -48,11 +57,12 @@ export class PrestamoService {
       },
     });
 
-    // Generar cuotas
-    const cuotas = Array.from({ length: dto.totalCuotas }, (_, i) => ({
+    // Generar cuotas: la última absorbe la diferencia de redondeo para que la suma sea exacta
+    // (Q1,000 en 3 cuotas = 333.33 + 333.33 + 333.34, no 999.99)
+    const cuotas = calcularCuotas(dto.montoPrestamo, dto.totalCuotas).map((monto, i) => ({
       IdPrestamo:  prestamo.IdPrestamo,
       NumeroCuota: i + 1,
-      MontoCuota:  cuotaMensual,
+      MontoCuota:  monto,
       Estado:      'PENDIENTE',
     }));
     await this.prisma.cuotaPrestamo.createMany({ data: cuotas });

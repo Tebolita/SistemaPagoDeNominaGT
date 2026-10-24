@@ -1,12 +1,23 @@
-import { Injectable, NotFoundException, BadRequestException, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  NotFoundException,
+  BadRequestException,
+  UnauthorizedException,
+  ForbiddenException,
+} from '@nestjs/common';
+import { ROLES_SEGURIDAD, tieneRol } from 'src/common/roles';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CorreoService } from '../correo/correo.service';
 import * as bcryptjs from 'bcryptjs';
+import { esContrasenaSegura, MENSAJE_CONTRASENA } from 'src/common/politica-contrasena';
 
 @Injectable()
 export class UsuarioService {
+  private readonly logger = new Logger(UsuarioService.name);
+
   constructor(
     private prismaService: PrismaService,
     private correoService: CorreoService,
@@ -43,7 +54,7 @@ export class UsuarioService {
     // Enviar credenciales por correo (no bloquea la respuesta si falla)
     this.correoService
       .enviarCredencialesUsuario(createUsuarioDto.Username, plainPassword, createUsuarioDto.IdEmpleado)
-      .catch(err => console.warn('Correo de credenciales no enviado:', err?.message));
+      .catch(err => this.logger.warn(`Correo de credenciales no enviado: ${err?.message}`));
 
     return {
       message: `Se creó el usuario ${nuevoUsuario.Username} correctamente.`,
@@ -90,6 +101,33 @@ export class UsuarioService {
     return usuario;
   }
 
+  /**
+   * Un usuario sin rol de Seguridad (RRHH) solo puede cambiar el rol de una cuenta, nunca el de
+   * un administrador ni asignar un rol de administrador (evita la escalada de privilegios).
+   */
+  async validarCambioDeRolPorRrhh(id: number, cambios: UpdateUsuarioDto) {
+    const campos = Object.entries(cambios)
+      .filter(([, v]) => v !== undefined)
+      .map(([k]) => k);
+    if (campos.some((c) => c !== 'IdRol')) {
+      throw new ForbiddenException('Solo Seguridad puede modificar datos de acceso del usuario');
+    }
+    const actual = await this.findById(id);
+    if (tieneRol(actual.RolUsuario?.NombreRol, ROLES_SEGURIDAD)) {
+      throw new ForbiddenException('No puedes modificar una cuenta de administrador');
+    }
+    if (cambios.IdRol !== undefined) {
+      const nuevo = await this.prismaService.rolUsuario.findUnique({
+        where: { IdRol: cambios.IdRol },
+        select: { NombreRol: true },
+      });
+      if (!nuevo) throw new NotFoundException(`El rol con ID ${cambios.IdRol} no existe.`);
+      if (tieneRol(nuevo.NombreRol, ROLES_SEGURIDAD)) {
+        throw new ForbiddenException('Solo Seguridad puede asignar el rol de administrador');
+      }
+    }
+  }
+
   // Actualizar un usuario
   async update(id: number, updateUsuarioDto: UpdateUsuarioDto) {
     // Validamos que exista
@@ -130,6 +168,8 @@ export class UsuarioService {
       select: { Contrasena: true, Clave: true },
     });
     if (!usuario) throw new NotFoundException('Usuario no encontrado');
+
+    if (!esContrasenaSegura(passwordNueva)) throw new BadRequestException(MENSAJE_CONTRASENA);
 
     const valido = await bcryptjs.compare(passwordActual, usuario.Contrasena);
     if (!valido) throw new UnauthorizedException('La contraseña actual es incorrecta');

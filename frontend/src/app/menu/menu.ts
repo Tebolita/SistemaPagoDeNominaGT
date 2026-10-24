@@ -11,6 +11,7 @@ import { Subscription } from 'rxjs';
 import { LoginService } from '../services/login.service';
 import { ConfigEmpresaService, ConfigEmpresa } from '../services/config-empresa.service';
 import { ROLES_NOMINA, ROLES_RRHH, ROLES_SEGURIDAD, ROLES_VENTAS_FINANZAS, tieneRol } from '../roles-acceso';
+import { limpiarSesion } from '../sesion';
 
 @Component({
   selector: 'app-menu',
@@ -216,13 +217,11 @@ export class MenuPrincipal implements OnInit, OnDestroy {
   }
 
   onSalir(): void {
-    this.authService.logout().subscribe({
-      next: () => {
-        localStorage.removeItem('access_token');
-        localStorage.removeItem('user_role');
-        localStorage.removeItem('username');
-        this.router.navigate(['/login']);
-      },
-    });
+    // El backend borra la cookie; la sesión local se limpia aunque la llamada falle
+    const salir = () => {
+      limpiarSesion();
+      this.router.navigate(['/login']);
+    };
+    this.authService.logout().subscribe({ next: salir, error: salir });
   }
 }

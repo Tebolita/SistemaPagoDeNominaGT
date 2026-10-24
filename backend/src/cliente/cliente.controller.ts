@@ -1,7 +1,9 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query, ParseIntPipe } from '@nestjs/common';
 import { ClienteService } from './cliente.service';
 import { CreateClienteDto, UpdateClienteDto } from './dto/cliente.dto';
+import { Roles, ROLES_VENTAS_FINANZAS } from 'src/common/roles';
 
+@Roles(...ROLES_VENTAS_FINANZAS)
 @Controller('cliente')
 export class ClienteController {
   constructor(private readonly clienteService: ClienteService) {}

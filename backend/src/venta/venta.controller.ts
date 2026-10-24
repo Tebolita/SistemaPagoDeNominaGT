@@ -3,14 +3,17 @@ import { VentaService } from './venta.service';
 import { CreateVentaDto, UpdateVentaDto } from './dto/venta.dto';
 import { leerPaginacion } from 'src/common/paginacion';
 import { AuthGuard } from '../login/login.guard';
+import { Roles, ROLES_VENTAS_FINANZAS } from 'src/common/roles';
+import type { RequestConUsuario } from 'src/common/request-con-usuario';
 
+@Roles(...ROLES_VENTAS_FINANZAS)
 @Controller('venta')
 @UseGuards(AuthGuard)
 export class VentaController {
   constructor(private readonly ventaService: VentaService) {}
 
   @Post()
-  create(@Request() req: any, @Body() createVentaDto: CreateVentaDto) {
+  create(@Request() req: RequestConUsuario, @Body() createVentaDto: CreateVentaDto) {
     return this.ventaService.create(createVentaDto, req.user?.sub ?? 1);
   }
 
@@ -41,7 +44,7 @@ export class VentaController {
 
   @Put(':id/estado-pago')
   updateEstadoPago(
-    @Request() req: any,
+    @Request() req: RequestConUsuario,
     @Param('id', ParseIntPipe) id: number,
     @Body() body: { estadoPago: string; IdCuenta?: number },
   ) {

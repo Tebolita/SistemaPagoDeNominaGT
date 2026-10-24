@@ -13,6 +13,7 @@ import { CreateIncidenciaDto } from './dto/create-incidencia.dto';
 import { UpdateIncidenciaDto } from './dto/update-incidencia.dto';
 import { AuthGuard } from 'src/login/login.guard';
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { Roles, ROLES_RRHH } from 'src/common/roles';
 
 @ApiBearerAuth()
 @UseGuards(AuthGuard)
@@ -20,6 +21,7 @@ import { ApiBearerAuth } from '@nestjs/swagger';
 export class IncidenciaController {
   constructor(private readonly incidenciaService: IncidenciaService) {}
 
+  @Roles(...ROLES_RRHH)
   @Post('CrearIncidencia')
   create(@Body() createIncidenciaDto: CreateIncidenciaDto) {
     return this.incidenciaService.create(createIncidenciaDto);
@@ -41,6 +43,7 @@ export class IncidenciaController {
     return this.incidenciaService.findOne(+idIncidencia);
   }
 
+  @Roles(...ROLES_RRHH)
   @Patch(':id')
   update(
     @Param('id') id: string,
@@ -49,6 +52,7 @@ export class IncidenciaController {
     return this.incidenciaService.update(+id, updateIncidenciaDto);
   }
 
+  @Roles(...ROLES_RRHH)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.incidenciaService.remove(+id);

@@ -80,3 +80,5 @@ class BasePage:
 
     def limpiar_sesion(self):
         self.driver.execute_script("window.localStorage.clear();")
+        # La sesión real está en la cookie httpOnly access_token
+        self.driver.delete_all_cookies()

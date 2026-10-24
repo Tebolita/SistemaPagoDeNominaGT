@@ -59,11 +59,11 @@ def sin_sesion(driver):
 
 @pytest.fixture
 def sesion(driver):
-    """Garantiza que haya una sesión iniciada; solo hace login por UI si no hay token."""
+    """Garantiza que haya una sesión iniciada; solo hace login por UI si no hay sesión vigente."""
     pagina = LoginPage(driver)
     if not driver.current_url.startswith(config.FRONT_URL):
         pagina.ir_a("/login")
-    if not pagina.local_storage("access_token"):
+    if not pagina.local_storage("sesion_expira"):
         if config.TOKEN:
             _sesion_con_token(driver)
         else:
@@ -74,20 +74,26 @@ def sesion(driver):
 
 
 def _sesion_con_token(driver):
-    """Guarda en el navegador lo mismo que guarda el login a partir del token (NOMINA_TOKEN)."""
+    """Reproduce lo que deja el login a partir del token (NOMINA_TOKEN).
+
+    El JWT ya no vive en localStorage: va en la cookie access_token (path /api) y el navegador
+    solo guarda los datos de la interfaz y la vigencia de la sesión.
+    """
     import base64
     import json
 
     cuerpo = config.TOKEN.split(".")[1]
     datos = json.loads(base64.urlsafe_b64decode(cuerpo + "=" * (-len(cuerpo) % 4)))
+    # Las cookies no distinguen puerto: la de localhost:4200 también viaja a localhost:4000/api
+    driver.add_cookie({"name": "access_token", "value": config.TOKEN, "path": "/api"})
     driver.execute_script(
         """
-        localStorage.setItem('access_token', arguments[0]);
-        localStorage.setItem('user_role', arguments[1] || '');
-        localStorage.setItem('username', arguments[2] || '');
-        localStorage.setItem('id_usuario', String(arguments[3] || ''));
+        localStorage.setItem('user_role', arguments[0] || '');
+        localStorage.setItem('username', arguments[1] || '');
+        localStorage.setItem('id_usuario', String(arguments[2] || ''));
+        localStorage.setItem('sesion_expira', String((arguments[3] || 0) * 1000));
         """,
-        config.TOKEN, datos.get("role"), datos.get("username"), datos.get("sub"),
+        datos.get("role"), datos.get("username"), datos.get("sub"), datos.get("exp"),
     )
 
 

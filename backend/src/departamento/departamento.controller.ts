@@ -12,11 +12,13 @@ import { DepartamentoService } from './departamento.service';
 import { CreateDepartamentoDto } from './dto/create-departamento.dto';
 import { UpdateDepartamentoDto } from './dto/update-departamento.dto';
 import { AuthGuard } from '../login/login.guard';
+import { Roles, ROLES_RRHH } from 'src/common/roles';
 
 @Controller('departamento')
 export class DepartamentoController {
   constructor(private readonly departamentoService: DepartamentoService) {}
 
+  @Roles(...ROLES_RRHH)
   @Post()
   @UseGuards(AuthGuard)
   create(@Body() createDepartamentoDto: CreateDepartamentoDto) {
@@ -35,6 +37,7 @@ export class DepartamentoController {
     return this.departamentoService.findOne(+id);
   }
 
+  @Roles(...ROLES_RRHH)
   @Patch(':id')
   @UseGuards(AuthGuard)
   update(
@@ -44,6 +47,7 @@ export class DepartamentoController {
     return this.departamentoService.update(+id, updateDepartamentoDto);
   }
 
+  @Roles(...ROLES_RRHH)
   @Delete(':id')
   @UseGuards(AuthGuard)
   remove(@Param('id') id: string) {

@@ -1,2 +1,7 @@
 # Variables de docker-compose (usar .env.docker.example como plantilla)
 .env
+# Copias de seguridad de la base de datos (scripts/backup-bd.sh)
+backups/
+# Pruebas de rendimiento: reportes generados y credenciales locales
+tests/performance/resultados/
+tests/performance/.env.rendimiento

@@ -5,6 +5,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { UsuarioModule } from 'src/usuario/usuario.module';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from './constants';
+import { IntentosLoginService } from './intentos-login.service';
 import { AuditoriaModule } from 'src/auditoria/auditoria.module';
 
 @Module({
@@ -18,6 +19,6 @@ import { AuditoriaModule } from 'src/auditoria/auditoria.module';
     }),
   ],
   controllers: [LoginController],
-  providers: [LoginService, PrismaService],
+  providers: [LoginService, PrismaService, IntentosLoginService],
 })
 export class LoginModule {}

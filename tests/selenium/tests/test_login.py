@@ -38,7 +38,7 @@ def test_solo_usuario_muestra_error(sin_sesion: LoginPage):
 def test_contrasena_incorrecta_muestra_error(sin_sesion: LoginPage):
     sin_sesion.ingresar(contrasena="contrasena_incorrecta_123")
     sin_sesion.esperar_error("Contraseña o usuario incorrecto")
-    assert sin_sesion.local_storage("access_token") is None
+    assert sin_sesion.local_storage("sesion_expira") is None
 
 
 @pytest.mark.negativo
@@ -53,7 +53,7 @@ def test_clave_no_numerica_no_inicia_sesion(sin_sesion: LoginPage):
     sin_sesion.ingresar(clave="abc")
     sin_sesion.esperar_error()
     assert "/login" in sin_sesion.url
-    assert sin_sesion.local_storage("access_token") is None
+    assert sin_sesion.local_storage("sesion_expira") is None
 
 
 @pytest.mark.smoke
@@ -65,7 +65,10 @@ def test_login_exitoso_redirige_al_inicio(sin_sesion: LoginPage):
 def test_login_guarda_datos_de_sesion(sin_sesion: LoginPage):
     sin_sesion.ingresar()
     sin_sesion.esperar_url("/home/inicio")
-    assert sin_sesion.local_storage("access_token")
+    assert sin_sesion.local_storage("sesion_expira")
+    # Seguridad: el JWT viaja en una cookie httpOnly y nunca queda al alcance de JavaScript
+    assert sin_sesion.local_storage("access_token") is None
+    assert "access_token" not in sin_sesion.driver.execute_script("return document.cookie;")
     assert sin_sesion.local_storage("user_role")
     assert sin_sesion.local_storage("username").lower() == config.USUARIO.lower()
     assert sin_sesion.local_storage("id_usuario")
@@ -77,4 +80,4 @@ def test_cerrar_sesion_desde_menu(sesion):
     menu.ir_a("/home/inicio")
     menu.cerrar_sesion()
     menu.esperar_url("/login")
-    assert menu.local_storage("access_token") is None
+    assert menu.local_storage("sesion_expira") is None

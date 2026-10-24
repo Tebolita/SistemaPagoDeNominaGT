@@ -45,11 +45,14 @@ ng serve
 
 ```env
 DATABASE_URL="sqlserver://servidor;database=nombre;user=usuario;password=clave;trustServerCertificate=true"
-JWT_SECRET="secreto_jwt"
+SECRET_KEY="clave_aleatoria_larga_para_firmar_jwt"   # obligatoria: el backend no arranca sin ella
 BREVO_KEY="tu_api_key_brevo"
 BREVO_SENDER_EMAIL="no-reply@tudominio.com"   # opcional
 BREVO_SENDER_NAME="Nómina GT"                  # opcional
 PORT=4000
+CORS_ORIGIN="http://localhost:4200"
+THROTTLE_LIMIT=300        # opcional: peticiones por minuto y por IP
+SWAGGER_ENABLED=false     # opcional: en producción Swagger queda oculto salvo que sea "true"
 ```
 
 ---
@@ -580,4 +583,34 @@ Correo:
 
 ---
 
-*Actualizado: Mayo 2026 · Versión 3.0*
+## Endurecimiento ISO/IEC 25010 (Octubre 2026)
+
+| Característica | Medida | Dónde |
+|---|---|---|
+| Seguridad | Autorización por rol en el backend (`@Roles` + `RolesGuard`), misma matriz que el frontend; RRHH solo reasigna roles no administrativos | `backend/src/common/roles.ts`, `usuario/` |
+| Seguridad | Sesión en cookie `httpOnly` + `SameSite=Strict` (el JWT ya no está en `localStorage`) y cabecera anti-CSRF `X-Requested-With` | `common/sesion-cookie.ts`, `login.guard.ts`, `frontend/src/app/sesion.ts` |
+| Seguridad | `helmet`, límite de peticiones por IP (300/min) y de logins (10/min), bloqueo 15 min tras 5 fallos | `main.ts`, `app.module.ts`, `login/` |
+| Seguridad | Política de contraseñas; cambio de contraseña solo propio o admin; movimientos sin hashes de usuario y con el usuario tomado del token | `common/politica-contrasena.ts`, `movimiento-financiero/` |
+| Seguridad | Swagger oculto en producción; puerto 4000 y SQL Server no expuestos a la red | `main.ts`, `docker-compose.yml` |
+| Fiabilidad | `GET /api/health`, healthchecks Docker, `restart: unless-stopped`, backups verificados | `health/`, `scripts/backup-bd.sh` |
+| Eficiencia | Rutas del frontend con carga diferida (bundle inicial de 2.19 MB a 829 KB), índices, gzip/caché en nginx, suite k6 | `app.routes.ts`, `migracion_r01_indices_desempeno.sql`, `tests/performance/` |
+| Mantenibilidad | Cálculo de ISR y horas extra en funciones puras; specs del frontend reparados; umbral de cobertura en Jest | `nomina/calculos-nomina.ts`, `backend/package.json` |
+| Portabilidad | `package-lock.json` del frontend sincronizado (`npm ci` funciona); inicialización de BD en un paso con seed | `scripts/init-db.sh`, `scripts/sql/seed_inicial.sql` |
+
+### Variables nuevas
+
+| Variable | Defecto | Uso |
+|---|---|---|
+| `THROTTLE_LIMIT` | 300 | Peticiones por minuto y por IP |
+| `LOGIN_THROTTLE_LIMIT` | 10 | Intentos de login por minuto y por IP (subirlo para suites Selenium/Robot) |
+| `COOKIE_SECURE` | false | `true` cuando el sitio se sirva por HTTPS |
+| `SWAGGER_ENABLED` | — | `true` para publicar Swagger aunque `NODE_ENV=production` |
+| `ADMIN_USER`, `ADMIN_PASSWORD`, `ADMIN_CLAVE`, `ADMIN_EMAIL` | — | Administrador inicial que crea `scripts/init-db.sh` |
+
+### Pruebas de rendimiento
+
+Ver `tests/performance/README.md`: `./tests/performance/ejecutar.sh carga` (macOS/Linux) o `.\tests\performance\ejecutar.ps1 carga` (Windows).
+
+---
+
+*Actualizado: Octubre 2026 · Versión 3.0*

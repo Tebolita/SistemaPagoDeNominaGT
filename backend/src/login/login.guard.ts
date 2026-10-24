@@ -1,6 +1,7 @@
 import {
   CanActivate,
   ExecutionContext,
+  ForbiddenException,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -8,6 +9,12 @@ import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { IS_PUBLIC_KEY } from './public.decorator';
+import {
+  CABECERA_ANTI_CSRF,
+  COOKIE_SESION,
+  leerCookie,
+  METODOS_SEGUROS,
+} from 'src/common/sesion-cookie';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -27,16 +34,19 @@ export class AuthGuard implements CanActivate {
     }
 
     const request = context.switchToHttp().getRequest();
-    const token = this.extractTokenFromHeader(request);
+    // 1) Authorization: Bearer (clientes de API, pruebas automatizadas)  2) cookie httpOnly (navegador)
+    const tokenCabecera = this.extractTokenFromHeader(request);
+    const token = tokenCabecera ?? leerCookie(request, COOKIE_SESION);
     if (!token) {
       throw new UnauthorizedException();
     }
+    // Defensa CSRF: con sesión por cookie, una petición que modifica datos debe traer una cabecera
+    // que un formulario de otro sitio no puede añadir sin pasar por CORS
+    if (!tokenCabecera && !METODOS_SEGUROS.has(request.method) && !request.headers?.[CABECERA_ANTI_CSRF]) {
+      throw new ForbiddenException('Falta la cabecera X-Requested-With');
+    }
     try {
-      // 💡 Here the JWT secret key that's used for verifying the payload
-      // is the key that was passed in the JwtModule
       const payload = await this.jwtService.verifyAsync(token);
-      // 💡 We're assigning the payload to the request object here
-      // so that we can access it in our route handlers
       request['user'] = payload;
     } catch {
       throw new UnauthorizedException();
@@ -45,7 +55,7 @@ export class AuthGuard implements CanActivate {
   }
 
   private extractTokenFromHeader(request: Request): string | undefined {
-    const [type, token] = request.headers.authorization?.split(' ') ?? [];
+    const [type, token] = request.headers?.authorization?.split(' ') ?? [];
     return type === 'Bearer' ? token : undefined;
   }
 }

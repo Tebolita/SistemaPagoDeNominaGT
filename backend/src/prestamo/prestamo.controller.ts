@@ -2,6 +2,7 @@ import { Controller, Get, Post, Patch, Delete, Body, Param, ParseIntPipe, Query,
 import { PrestamoService, CreatePrestamoDto } from './prestamo.service';
 import { AuthGuard } from 'src/login/login.guard';
 import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
+import { Roles, ROLES_RRHH } from 'src/common/roles';
 
 @ApiTags('Préstamos')
 @ApiBearerAuth()
@@ -10,6 +11,7 @@ import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 export class PrestamoController {
   constructor(private readonly svc: PrestamoService) {}
 
+  @Roles(...ROLES_RRHH)
   @Post()
   create(@Body() dto: CreatePrestamoDto) { return this.svc.create(dto); }
 
@@ -21,9 +23,11 @@ export class PrestamoController {
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) { return this.svc.findOne(id); }
 
+  @Roles(...ROLES_RRHH)
   @Patch('cuota/:idCuota/pagar')
   pagarCuota(@Param('idCuota', ParseIntPipe) idCuota: number) { return this.svc.pagarCuota(idCuota); }
 
+  @Roles(...ROLES_RRHH)
   @Delete(':id')
   cancelar(@Param('id', ParseIntPipe) id: number) { return this.svc.cancelar(id); }
 }

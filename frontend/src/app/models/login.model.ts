@@ -5,6 +5,7 @@ export interface LoginRequest {
 }
 
 export interface LoginResponse {
+  /** También llega en una cookie httpOnly; el frontend no lo guarda. */
   access_token: string;
   username?: string;
   role?: string;

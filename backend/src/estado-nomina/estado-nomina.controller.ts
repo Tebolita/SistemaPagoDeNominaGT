@@ -17,6 +17,8 @@ import { CreateEstadoNominaDto } from './dto/create-estado-nomina.dto';
 import { UpdateEstadoNominaDto } from './dto/update-estado-nomina.dto';
 import { CambiarEstadoNominaDto } from './dto/cambiar-estado-nomina.dto';
 import { AuthGuard } from '../login/login.guard';
+import { Roles, ROLES_RRHH } from 'src/common/roles';
+import type { RequestConUsuario } from 'src/common/request-con-usuario';
 
 @Controller('estado-nomina')
 @UseGuards(AuthGuard)
@@ -24,6 +26,7 @@ export class EstadoNominaController {
   constructor(private readonly estadoNominaService: EstadoNominaService) {}
 
   // CRUD básico para estados
+  @Roles(...ROLES_RRHH)
   @Post()
   create(@Body() createEstadoNominaDto: CreateEstadoNominaDto) {
     return this.estadoNominaService.create(createEstadoNominaDto);
@@ -39,6 +42,7 @@ export class EstadoNominaController {
     return this.estadoNominaService.findOne(id);
   }
 
+  @Roles(...ROLES_RRHH)
   @Patch(':id')
   update(
     @Param('id', ParseIntPipe) id: number,
@@ -47,6 +51,7 @@ export class EstadoNominaController {
     return this.estadoNominaService.update(id, updateEstadoNominaDto);
   }
 
+  @Roles(...ROLES_RRHH)
   @Delete(':id')
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.estadoNominaService.remove(id);
@@ -55,7 +60,7 @@ export class EstadoNominaController {
   // Endpoints específicos para flujo de estados
   @Post('cambiar-estado')
   cambiarEstadoNomina(
-    @Request() req: any,
+    @Request() req: RequestConUsuario,
     @Body() cambiarEstadoDto: CambiarEstadoNominaDto,
   ) {
     const idUsuario = req.user?.sub;
@@ -77,7 +82,7 @@ export class EstadoNominaController {
 
   @Get('disponibles/:idNomina')
   getEstadosDisponibles(
-    @Request() req: any,
+    @Request() req: RequestConUsuario,
     @Param('idNomina', ParseIntPipe) idNomina: number,
   ) {
     const role = req.user?.role;

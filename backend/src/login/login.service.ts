@@ -3,6 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { UsuarioService } from 'src/usuario/usuario.service';
 import { AuditoriaService } from 'src/auditoria/auditoria.service';
 import * as bcryptjs from 'bcryptjs';
+import { IntentosLoginService } from './intentos-login.service';
 
 @Injectable()
 export class LoginService {
@@ -10,6 +11,7 @@ export class LoginService {
     private userService: UsuarioService,
     private jwtService: JwtService,
     private auditoria: AuditoriaService,
+    private intentos: IntentosLoginService = new IntentosLoginService(),
   ) {}
 
   async SignIn(
@@ -19,6 +21,8 @@ export class LoginService {
     ip?: string,
     userAgent?: string,
   ): Promise<any> {
+    // Cuenta bloqueada por intentos fallidos: se corta antes de tocar la BD (HTTP 429)
+    this.intentos.verificar(username);
     const user = await this.userService.findOne(username);
 
     if (!user) {
@@ -30,6 +34,7 @@ export class LoginService {
         exitoso: false,
         detalle: 'Usuario no encontrado',
       });
+      this.intentos.registrarFallo(username);
       throw new UnauthorizedException('Tu usuario no es valido');
     }
 
@@ -44,6 +49,7 @@ export class LoginService {
         exitoso:   false,
         detalle:   'Usuario dado de baja',
       });
+      this.intentos.registrarFallo(username);
       throw new UnauthorizedException('Tu usuario no es valido');
     }
 
@@ -60,9 +66,11 @@ export class LoginService {
         exitoso:   false,
         detalle:   'Contraseña o clave incorrecta',
       });
+      this.intentos.registrarFallo(username);
       throw new UnauthorizedException('Contraseña o usuario incorrecto');
     }
 
+    this.intentos.registrarExito(username);
     await this.auditoria.registrar({
       idUsuario: user.IdUsuario,
       username:  user.Username,

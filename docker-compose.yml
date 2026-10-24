@@ -3,27 +3,36 @@
 # Uso:
 #   1. Copiar .env.docker.example como .env (en esta misma carpeta) y completar los valores.
 #   2. docker compose up -d --build
-#   3. La primera vez, desde la carpeta backend del equipo anfitrión, crear el esquema en la base vacía
-#      (la imagen de producción no incluye el CLI de Prisma):
-#        DATABASE_URL="sqlserver://localhost:1433;database=NominaGT;user=sa;password=...;encrypt=true;trustServerCertificate=true;" npx prisma db push
-#      ejecutar database_extension.sql y las migraciones migracion_*.sql, y cargar los datos iniciales
-#      (roles, estados de nómina, parámetros globales y usuario administrador).
+#   3. La primera vez: ./scripts/init-db.sh  (crea la base, aplica el esquema Prisma, carga roles,
+#      estados, parámetros y el administrador ADMIN_USER, y aplica las migraciones migracion_*.sql).
+#      Copias de seguridad: ./scripts/backup-bd.sh  /  ./scripts/restore-bd.sh <archivo.bak>
 #   4. Abrir http://localhost:8080
 services:
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
+    restart: unless-stopped
     environment:
       ACCEPT_EULA: "Y"
       MSSQL_SA_PASSWORD: ${MSSQL_SA_PASSWORD}
+    # Solo accesible desde la máquina anfitriona (no expuesto a la red)
     ports:
-      - "1433:1433"
+      - "127.0.0.1:1433:1433"
     volumes:
       - datos-sqlserver:/var/opt/mssql
+      - ./backups:/var/opt/mssql/backup
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -C -S localhost -U sa -P \"$$MSSQL_SA_PASSWORD\" -Q 'SELECT 1' || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
 
   backend:
     build: ./backend
+    restart: unless-stopped
     depends_on:
-      - sqlserver
+      sqlserver:
+        condition: service_healthy
     environment:
       DATABASE_URL: "sqlserver://sqlserver:1433;database=${DB_NAME};user=sa;password=${MSSQL_SA_PASSWORD};encrypt=true;trustServerCertificate=true;"
       SECRET_KEY: ${SECRET_KEY}
@@ -32,13 +41,34 @@ services:
       BREVO_SENDER_NAME: ${BREVO_SENDER_NAME}
       CORS_ORIGIN: "http://localhost:8080"
       PORT: "4000"
-    ports:
-      - "4000:4000"
+      NODE_ENV: production
+      THROTTLE_LIMIT: ${THROTTLE_LIMIT:-300}
+      LOGIN_THROTTLE_LIMIT: ${LOGIN_THROTTLE_LIMIT:-10}
+      # true cuando el sitio se sirva por HTTPS (la cookie de sesión pasa a ser Secure)
+      COOKIE_SECURE: ${COOKIE_SECURE:-false}
+    # La API se consume a través de nginx (/api); no se publica el puerto 4000
+    expose:
+      - "4000"
+
+  # Inicializa la base de datos (esquema Prisma). Se ejecuta a demanda: scripts/init-db.sh
+  db-esquema:
+    profiles: ["init"]
+    build:
+      context: ./backend
+      target: build
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: "sqlserver://sqlserver:1433;database=${DB_NAME};user=sa;password=${MSSQL_SA_PASSWORD};encrypt=true;trustServerCertificate=true;"
+    command: ["npx", "prisma", "db", "push"]
 
   frontend:
     build: ./frontend
+    restart: unless-stopped
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
     ports:
       - "8080:80"
 

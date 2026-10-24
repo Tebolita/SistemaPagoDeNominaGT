@@ -1,7 +1,10 @@
 import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 import { LoginModule } from './login/login.module';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { AuthGuard } from './login/login.guard';
+import { RolesGuard } from './common/roles';
+import { HealthModule } from './health/health.module';
 import { PrismaService } from './prisma/prisma.service';
 import { UsuarioModule } from './usuario/usuario.module';
 import { EmpleadoModule } from './empleado/empleado.module';
@@ -34,6 +37,9 @@ import { PrestamoModule } from './prestamo/prestamo.module';
 
 @Module({
   imports: [
+    // Límite global de peticiones por IP (el login tiene uno más estricto)
+    ThrottlerModule.forRoot([{ ttl: 60000, limit: Number(process.env.THROTTLE_LIMIT ?? 300) }]),
+    HealthModule,
     LoginModule,
     UsuarioModule,
     EmpleadoModule,
@@ -68,7 +74,10 @@ import { PrestamoModule } from './prestamo/prestamo.module';
   providers: [
     PrismaService,
     // Toda la API exige token salvo las rutas marcadas con @Public()
+    { provide: APP_GUARD, useClass: ThrottlerGuard },
     { provide: APP_GUARD, useClass: AuthGuard },
+    // Después de autenticar, valida el rol exigido por @Roles()
+    { provide: APP_GUARD, useClass: RolesGuard },
   ],
 })
 export class AppModule {}

@@ -98,7 +98,12 @@ export class Asistencia implements OnInit, OnDestroy {
     onLazyLoad(event: TableLazyLoadEvent) {
         this.filasPorPagina = event.rows ?? this.filasPorPagina;
         this.paginaActual = Math.floor((event.first ?? 0) / this.filasPorPagina) + 1;
-        this.loadAsistencias();
+        // La tabla emite onLazyLoad durante su primera detección de cambios; cambiar
+        // cargandoTabla en ese mismo ciclo provoca NG0100 (ExpressionChanged). Se difiere un tick.
+        setTimeout(() => {
+            this.loadAsistencias();
+            this.cdr.markForCheck();
+        });
     }
 
     cargarEmpleados(): void {

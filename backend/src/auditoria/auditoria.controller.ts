@@ -2,10 +2,12 @@ import { Controller, Get, Query, UseGuards } from '@nestjs/common';
 import { AuditoriaService } from './auditoria.service';
 import { AuthGuard } from 'src/login/login.guard';
 import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
+import { Roles, ROLES_SEGURIDAD } from 'src/common/roles';
 
 @ApiTags('Auditoría')
 @ApiBearerAuth()
 @UseGuards(AuthGuard)
+@Roles(...ROLES_SEGURIDAD)
 @Controller('auditoria')
 export class AuditoriaController {
   constructor(private readonly auditoriaService: AuditoriaService) {}

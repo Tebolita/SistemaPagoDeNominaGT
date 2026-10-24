@@ -33,9 +33,11 @@ export class CreateMovimientoFinancieroDto {
   @MaxLength(100)
   Referencia?: string;
 
+  // Lo fija el servidor con el usuario del token (no repudio); lo enviado por el cliente se ignora
+  @IsOptional()
   @IsInt()
   @IsPositive()
-  IdUsuarioRegistra: number;
+  IdUsuarioRegistra?: number;
 
   @IsOptional()
   @IsInt()

@@ -1,12 +1,11 @@
 import { inject } from '@angular/core';
 import { Router, UrlTree } from '@angular/router';
+import { haySesion, limpiarSesion } from './sesion';
 
 export function authGuard(): boolean | UrlTree {
-  const token = localStorage.getItem('access_token');
-  if (token) {
+  if (haySesion()) {
     return true;
   }
-
-  const router = inject(Router);
-  return router.parseUrl('/login');
+  limpiarSesion();
+  return inject(Router).parseUrl('/login');
 }

@@ -11,6 +11,7 @@ import { LoginService } from '../services/login.service';
 import { LoginRequest, LoginResponse } from '../models/login.model';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { guardarSesion } from '../sesion';
 
 @Component({
   selector: 'app-login',
@@ -79,14 +80,8 @@ export class Login implements OnInit {
 
     this.authService.signIn(payload).subscribe({
       next: (res: LoginResponse) => {
-          localStorage.setItem('access_token', res.access_token);
-          if (res.role)     localStorage.setItem('user_role', res.role);
-          if (res.username) localStorage.setItem('username', res.username);
-          // Decodificar JWT para obtener el IdUsuario (sub)
-          try {
-            const payload = JSON.parse(atob(res.access_token.split('.')[1]));
-            if (payload.sub) localStorage.setItem('id_usuario', String(payload.sub));
-          } catch {}
+          // El token queda en la cookie httpOnly; aquí solo los datos para la interfaz
+          guardarSesion(res);
           this.router.navigate(['/home/inicio']);
       },
       error: (err) => {

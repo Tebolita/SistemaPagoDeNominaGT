@@ -1,7 +1,9 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query, ParseIntPipe } from '@nestjs/common';
 import { ProductoServicioService } from './producto-servicio.service';
 import { CreateProductoServicioDto, UpdateProductoServicioDto } from './dto/producto-servicio.dto';
+import { Roles, ROLES_VENTAS_FINANZAS } from 'src/common/roles';
 
+@Roles(...ROLES_VENTAS_FINANZAS)
 @Controller('producto-servicio')
 export class ProductoServicioController {
   constructor(private readonly productoServicioService: ProductoServicioService) {}

@@ -7,30 +7,45 @@ import {
   UseGuards,
   Get,
   Request,
+  Res,
 } from '@nestjs/common';
+import type { Response } from 'express';
+import { COOKIE_SESION, opcionesCookieSesion } from 'src/common/sesion-cookie';
 import { LoginService } from './login.service';
 import { ValidateLoginDto } from './dto/validate-login.dto';
 import { AuthGuard } from './login.guard';
 import { Public } from './public.decorator';
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { Throttle } from '@nestjs/throttler';
+import type { RequestConUsuario } from 'src/common/request-con-usuario';
 
 @Controller('login')
 export class LoginController {
   constructor(private readonly loginService: LoginService) {}
 
   @Public()
+  // Máximo 10 intentos de login por minuto y por IP (LOGIN_THROTTLE_LIMIT), además del bloqueo por cuenta
+  @Throttle({ default: { limit: Number(process.env.LOGIN_THROTTLE_LIMIT ?? 10), ttl: 60000 } })
   @HttpCode(HttpStatus.OK)
   @Post('login')
-  signIn(@Body() singIn: ValidateLoginDto, @Request() req) {
-    const ip        = req.headers['x-forwarded-for']?.split(',')[0]?.trim() ?? req.socket?.remoteAddress;
+  async signIn(
+    @Body() singIn: ValidateLoginDto,
+    @Request() req: RequestConUsuario,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    // Con 'trust proxy', Express resuelve la IP real desde X-Forwarded-For
+    const ip        = req.ip;
     const userAgent = req.headers['user-agent'];
-    return this.loginService.SignIn(singIn.Username, singIn.Contrasena, singIn.Clave, ip, userAgent);
+    const sesion = await this.loginService.SignIn(singIn.Username, singIn.Contrasena, singIn.Clave, ip, userAgent);
+    // El navegador guarda el JWT en una cookie httpOnly; el cuerpo lo conserva para clientes de API
+    res.cookie(COOKIE_SESION, sesion.access_token, opcionesCookieSesion());
+    return sesion;
   }
 
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
   @Get('profile')
-  getProfile(@Request() req) {
+  getProfile(@Request() req: RequestConUsuario) {
     return req.user;
   }
 
@@ -38,9 +53,12 @@ export class LoginController {
   @UseGuards(AuthGuard)
   @Post('logout')
   @HttpCode(HttpStatus.OK)
-  logout(@Request() req) {
-    const ip        = req.headers['x-forwarded-for']?.split(',')[0]?.trim() ?? req.socket?.remoteAddress;
+  logout(@Request() req: RequestConUsuario, @Res({ passthrough: true }) res: Response) {
+    // Con 'trust proxy', Express resuelve la IP real desde X-Forwarded-For
+    const ip        = req.ip;
     const userAgent = req.headers['user-agent'];
-    return this.loginService.logout(req.user.sub, req.user.username, ip, userAgent);
+    const { maxAge: _maxAge, ...opciones } = opcionesCookieSesion();
+    res.clearCookie(COOKIE_SESION, opciones);
+    return this.loginService.logout(req.user!.sub, req.user!.username, ip, userAgent);
   }
 }

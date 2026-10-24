@@ -9,6 +9,7 @@ import { ConfigFirmanteService } from '../config-firmante/config-firmante.servic
 import { CorreoService } from '../correo/correo.service';
 import { CreateNominaDto } from './dto/create-nomina.dto';
 import { UpdateNominaDto } from './dto/update-nomina.dto';
+import { calcularIsrMensual, calcularPagoHorasExtra } from './calculos-nomina';
 
 const FIRMA_INCLUDE = {
   where: { Activo: true },
@@ -342,20 +343,13 @@ export class NominaService {
 
     const salarioMensual = salarioBase;
     const descuentoIGSS = salarioMensual * igssEmpleado;
-    // ── ISR asalariados (Decreto 10-2012, arts. 72 y 73) ──────────────────
-    // Renta imponible anual = salario anual − deducción sin comprobación − cuotas IGSS del año.
-    // Bono 14, aguinaldo y bonificación incentivo son rentas exentas y no se incluyen.
-    // Tramo 1: tasa 1 hasta el límite; tramo 2: importe fijo del tramo 1 + tasa 2 sobre el excedente.
-    const salarioAnualizado = salarioMensual * 12;
-    const rentaImponible = Math.max(
-      0,
-      salarioAnualizado - isrDeduccionAnual - descuentoIGSS * 12,
-    );
-    const isrAnual =
-      rentaImponible <= isrLimiteTramo1
-        ? rentaImponible * isrTasa1
-        : isrLimiteTramo1 * isrTasa1 + (rentaImponible - isrLimiteTramo1) * isrTasa2;
-    const isr = isrAnual / 12;
+    // ISR asalariados (Decreto 10-2012, arts. 72 y 73): ver calculos-nomina.ts
+    const isr = calcularIsrMensual(salarioMensual, descuentoIGSS, {
+      tasa1: isrTasa1,
+      tasa2: isrTasa2,
+      limiteTramo1: isrLimiteTramo1,
+      deduccionAnual: isrDeduccionAnual,
+    });
 
     const descuentoIRTRA = salarioMensual * irtra;
     const descuentoINTECAP = salarioMensual * intecap;
@@ -364,18 +358,16 @@ export class NominaService {
     const bono14    = salarioMensual * bono14Porcentaje;
     const aguinaldo = salarioMensual * aguinaldoPorcentaje;
 
-    // ── Horas extra (Guatemala: valor/hora × 1.5 × horas trabajadas) ─────
+    // Horas extra (Guatemala: valor/hora × 1.5 × horas trabajadas)
     let horasExtrasTotal = 0;
     let pagoHorasExtras  = 0;
     let valorHoraExtra   = 0;
 
     if (mes && anio && horasExtraPct > 0) {
       horasExtrasTotal = await this.getHorasExtras(idEmpleado, mes, anio);
-      if (horasExtrasTotal > 0) {
-        const valorHoraNormal = salarioMensual / 30 / horasLaboralesDia;
-        valorHoraExtra  = Number((valorHoraNormal * (1 + horasExtraPct)).toFixed(4));
-        pagoHorasExtras = Number((horasExtrasTotal * valorHoraExtra).toFixed(2));
-      }
+      ({ valorHoraExtra, pagoHorasExtras } = calcularPagoHorasExtra(
+        salarioMensual, horasExtrasTotal, horasExtraPct, horasLaboralesDia,
+      ));
     }
 
     const totalIngresos = salarioMensual + bono14 + aguinaldo + bonoProd + pagoHorasExtras;

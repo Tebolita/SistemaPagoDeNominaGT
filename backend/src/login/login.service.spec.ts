@@ -77,4 +77,16 @@ describe('LoginService.SignIn', () => {
 
     await expect(service.SignIn('nadie', 'x', 1)).rejects.toThrow('Tu usuario no es valido');
   });
+
+  // Bloqueo por fuerza bruta (ISO 25010 – Seguridad)
+  describe('bloqueo por intentos fallidos', () => {
+    it('tras 5 contraseñas incorrectas responde 429 aunque la siguiente sea correcta', async () => {
+      usuarios.findOne.mockResolvedValue(usuarioBase);
+      for (let i = 0; i < 5; i++) {
+        await expect(service.SignIn('ana', 'mala', 1234)).rejects.toBeInstanceOf(UnauthorizedException);
+      }
+      await expect(service.SignIn('ana', 'Correcta.1', 1234)).rejects.toMatchObject({ status: 429 });
+      expect(jwt.signAsync).not.toHaveBeenCalled();
+    });
+  });
 });

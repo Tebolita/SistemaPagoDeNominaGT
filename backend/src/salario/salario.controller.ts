@@ -13,12 +13,14 @@ import { SalarioService } from './salario.service';
 import { CreateSalarioDto } from './dto/create-salario.dto';
 import { UpdateSalarioDto } from './dto/update-salario.dto';
 import { AuthGuard } from '../login/login.guard';
+import { Roles, ROLES_RRHH } from 'src/common/roles';
 
 @Controller('salario')
 @UseGuards(AuthGuard)
 export class SalarioController {
   constructor(private readonly salarioService: SalarioService) {}
 
+  @Roles(...ROLES_RRHH)
   @Post()
   create(@Body() createSalarioDto: CreateSalarioDto) {
     return this.salarioService.create(createSalarioDto);
@@ -44,6 +46,7 @@ export class SalarioController {
     return this.salarioService.findOne(id);
   }
 
+  @Roles(...ROLES_RRHH)
   @Patch(':id')
   update(
     @Param('id', ParseIntPipe) id: number,
@@ -52,6 +55,7 @@ export class SalarioController {
     return this.salarioService.update(id, updateSalarioDto);
   }
 
+  @Roles(...ROLES_RRHH)
   @Delete(':id')
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.salarioService.remove(id);

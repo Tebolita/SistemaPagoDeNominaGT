@@ -13,6 +13,7 @@ import { CreateParametroGlobalDto } from './dto/create-parametro-global.dto';
 import { UpdateParametroGlobalDto } from './dto/update-parametro-global.dto';
 import { SimularParametroDto } from './dto/simular-parametro.dto';
 import { AuthGuard } from '../login/login.guard';
+import { Roles, ROLES_RRHH } from 'src/common/roles';
 
 @Controller('parametro-global')
 export class ParametroGlobalController {
@@ -20,6 +21,7 @@ export class ParametroGlobalController {
     private readonly parametroGlobalService: ParametroGlobalService,
   ) {}
 
+  @Roles(...ROLES_RRHH)
   @Post()
   @UseGuards(AuthGuard)
   create(@Body() createParametroGlobalDto: CreateParametroGlobalDto) {
@@ -44,6 +46,7 @@ export class ParametroGlobalController {
     return this.parametroGlobalService.findByName(nombre);
   }
 
+  @Roles(...ROLES_RRHH)
   @Patch(':id')
   @UseGuards(AuthGuard)
   update(
@@ -53,6 +56,7 @@ export class ParametroGlobalController {
     return this.parametroGlobalService.update(+id, updateParametroGlobalDto);
   }
 
+  @Roles(...ROLES_RRHH)
   @Delete(':id')
   @UseGuards(AuthGuard)
   remove(@Param('id') id: string) {

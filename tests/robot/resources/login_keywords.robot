@@ -18,6 +18,7 @@ Cerrar Navegador
 
 Limpiar Sesion
     Execute Javascript    window.localStorage.clear();
+    Delete All Cookies
     Go To    ${FRONT_URL}/login
     Wait Until Element Is Visible    ${INPUT_USER}
 
@@ -38,8 +39,11 @@ Iniciar Sesion
 
 Debe Estar En El Inicio
     Wait Until Location Contains    /home/inicio
+    # La sesión vive en una cookie httpOnly: en localStorage solo queda su vigencia, nunca el JWT
+    ${expira}=    Execute Javascript    return window.localStorage.getItem('sesion_expira');
+    Should Not Be Empty    ${expira}    No se registró la sesión en el navegador
     ${token}=    Execute Javascript    return window.localStorage.getItem('access_token');
-    Should Not Be Empty    ${token}    No se guardó el access_token en localStorage
+    Should Be Equal    ${token}    ${None}    El JWT no debe quedar en localStorage
 
 Debe Mostrar Error
     [Arguments]    ${mensaje}

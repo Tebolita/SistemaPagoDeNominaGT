@@ -1,15 +1,19 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, ParseIntPipe, Request } from '@nestjs/common';
+import type { RequestConUsuario } from 'src/common/request-con-usuario';
 import { MovimientoFinancieroService } from './movimiento-financiero.service';
 import { leerPaginacion } from 'src/common/paginacion';
 import { CreateMovimientoFinancieroDto, UpdateMovimientoFinancieroDto } from './dto/movimiento-financiero.dto';
+import { Roles, ROLES_VENTAS_FINANZAS } from 'src/common/roles';
 
+@Roles(...ROLES_VENTAS_FINANZAS)
 @Controller('movimiento-financiero')
 export class MovimientoFinancieroController {
   constructor(private readonly movimientoService: MovimientoFinancieroService) {}
 
   @Post()
-  create(@Body() createMovimientoDto: CreateMovimientoFinancieroDto) {
-    return this.movimientoService.create(createMovimientoDto);
+  create(@Request() req: RequestConUsuario, @Body() createMovimientoDto: CreateMovimientoFinancieroDto) {
+    // El usuario que registra sale del JWT, no del cuerpo de la petición
+    return this.movimientoService.create({ ...createMovimientoDto, IdUsuarioRegistra: req.user!.sub });
   }
 
   @Get()
